@@ -23,6 +23,12 @@ class ClienteController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'roles' => ['@'],
+                        ],
+                    ],
                     'delete' => ['POST'],
                 ],
             ],
