@@ -9,7 +9,8 @@ use yii\widgets\ActiveForm;
 ?>
 
 <div class="atividade-form">
-
+<div class="box box-primary">
+        <div class="box-header with-border">
     <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'projeto_id')->textInput() ?>
@@ -49,9 +50,11 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'modificado')->textInput() ?>
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($model->isNewRecord ? 'Criar' : 'Atualizar', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
 
+</div>
+</div>
 </div>

@@ -12,6 +12,7 @@ use app\assets\AppAsset;
 use yii\helpers\Url;
 
 AppAsset::register($this);
+$usuario = Yii::$app->db->createCommand('SELECT * FROM user WHERE id='.Yii::$app->user->getId())->queryOne(); 
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -153,8 +154,10 @@ AppAsset::register($this);
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <img src="resources/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
-              <span class="hidden-xs">Alexander Pierce</span>
+              <!-- <img src="resources/dist/img/user2-160x160.jpg" class="user-image" alt="User Image"> -->
+              <span class="hidden-xs"><?= $usuario['email'] ?>
+                
+              </span>
             </a>
             <ul class="dropdown-menu">
               <!-- User image -->
@@ -212,34 +215,27 @@ AppAsset::register($this);
       <!-- Sidebar user panel -->
       <div class="user-panel">
         <div class="pull-left image">
-          <img src="resources/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+          <img src="resources/dist/img/logo_hcn.png" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
-          <p>Alexander Pierce</p>
-          <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+          <p>Olá, <?= split(' ',$usuario['nome'])[0]?></p>
+          <!-- <a href="#"><i class="fa fa-circle text-success"></i> Online</a> -->
         </div>
       </div>
-      <!-- search form -->
-      <form action="#" method="get" class="sidebar-form">
-        <div class="input-group">
-          <input type="text" name="q" class="form-control" placeholder="Search...">
-              <span class="input-group-btn">
-                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
-                </button>
-              </span>
-        </div>
-      </form>
-      <!-- /.search form -->
+      
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree">
-        <li class="header">MAIN NAVIGATION</li>
+        <li class="header">MENU PRINCIPAL</li>
         
         <li><a href="<?= Url::to(['agenda/index']) ?>"><i class="fa fa-calendar"></i> <span>Agenda</span></a></li>
         <li><a href="<?= Url::to(['cliente/index']) ?>"><i class="fa fa-handshake-o"></i> <span>Clientes</span></a></li>
         <li><a href="<?= Url::to(['contato/index']) ?>"><i class="fa fa-address-book"></i> <span>Contatos</span></a></li>
-        <li><a href="<?= Url::to(['executante/index']) ?>"><i class="fa fa-vcard"></i> <span>Executantes</span></a></li>
+        <li><a href="<?= Url::to(['executante/index']) ?>"><i class="fa fa-wrench"></i> <span>Executantes</span></a></li>
+        <li><a href="<?= Url::to(['tipoexecutante/index']) ?>"><i class="fa fa-vcard"></i> <span>Tipos de Executantes</span></a></li>
         <li><a href="<?= Url::to(['projeto/index']) ?>"><i class="fa fa-folder-open"></i> <span>Projetos</span></a></li>
-        <li><a href="<?= Url::to(['documento/index']) ?>"><i class="fa fa-file"></i> <span>Documentos</span></a></li>
+        <li><a href="<?= Url::to(['atividade/index']) ?>"><i class="fa fa-hourglass-half"></i> <span>Atividades</span></a></li>
+        <li><a href="<?= Url::to(['escopo/index']) ?>"><i class="fa fa-university"></i> <span>Escopo</span></a></li>
+        <!-- <li><a href="<?= Url::to(['documento/index']) ?>"><i class="fa fa-file"></i> <span>Documentos</span></a></li> -->
         <li><a href="<?= Url::to(['config/index']) ?>"><i class="fa fa-cog"></i> <span>Configurações</span></a></li>
         
           </ul>

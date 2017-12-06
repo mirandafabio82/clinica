@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\TipoExecutante */
 
-$this->title = 'Create Tipo Executante';
+$this->title = 'Tipo de Executante';
 $this->params['breadcrumbs'][] = ['label' => 'Tipo Executantes', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

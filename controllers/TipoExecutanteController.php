@@ -12,7 +12,7 @@ use yii\filters\VerbFilter;
 /**
  * TipoExecutanteController implements the CRUD actions for TipoExecutante model.
  */
-class TipoExecutanteController extends Controller
+class TipoexecutanteController extends Controller
 {
     /**
      * @inheritdoc

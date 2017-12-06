@@ -55,7 +55,7 @@ class Cliente extends \yii\db\ActiveRecord
             'site' => 'Site',
             'cnpj' => 'Cnpj',
             'cidade' => 'Cidade',
-            'uf' => 'Uf',
+            'uf' => 'UF',
             'criado' => 'Criado',
             'modificado' => 'Modificado',
         ];

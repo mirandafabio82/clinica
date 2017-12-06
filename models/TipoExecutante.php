@@ -29,7 +29,6 @@ class TipoExecutante extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id'], 'required'],
             [['id'], 'integer'],
             [['cargo', 'valor_hora'], 'string', 'max' => 45],
         ];

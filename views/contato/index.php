@@ -16,8 +16,10 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Contato', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Novo Contato', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
+    <div class="box box-primary">
+        <div class="box-header with-border">
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -26,18 +28,34 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'usuario_id',
             'cliente_id',
-            'nome',
+            [
+              'header' => 'nome',              
+              'format' => 'raw',
+               'value' => function ($data) {
+
+                   return Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.$data->usuario_id)->queryScalar();
+               },
+            ],
             'tratamento',
             'site',
-            // 'contato',
-            // 'setor',
-            // 'email:email',
-            // 'telefone',
-            // 'celular',
-            // 'criado',
+            'contato',
+            'setor',
+            [
+              'header' => 'email',              
+              'format' => 'raw',
+               'value' => function ($data) {
+
+                   return Yii::$app->db->createCommand('SELECT email FROM user WHERE id='.$data->usuario_id)->queryScalar();
+               },
+            ],
+            'telefone',
+            'celular',
+            'criado',
             // 'modificado',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
+</div>
+</div>
 </div>

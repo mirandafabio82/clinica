@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\search\AgendaSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Agendas';
+$this->title = 'Agenda';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="agenda-index">
@@ -16,8 +16,10 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Agenda', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Novo Evento', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
+    <div class="box box-primary">
+        <div class="box-header with-border">
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -37,4 +39,6 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
+</div>
+</div>
 </div>

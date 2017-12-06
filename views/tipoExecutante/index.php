@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\search\TipoExecutanteSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Tipo Executantes';
+$this->title = 'Tipos de Executantes';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="tipo-executante-index">
@@ -16,19 +16,22 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Tipo Executante', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Novo Tipo de Executante', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
+    <div class="box box-primary">
+        <div class="box-header with-border">
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
             'cargo',
             'valor_hora',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
+</div>
+</div>
 </div>

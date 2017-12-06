@@ -16,8 +16,10 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Cliente', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Novo Cliente', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
+    <div class="box box-primary">
+        <div class="box-header with-border">
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -29,11 +31,13 @@ $this->params['breadcrumbs'][] = $this->title;
             'site',
             'cnpj',
             'cidade',
-            // 'uf',
-            // 'criado',
+            'uf',
+            'criado',
             // 'modificado',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn', 'header' => 'Ações'],
         ],
     ]); ?>
+        </div>
+    </div>
 </div>

@@ -9,11 +9,9 @@ use Yii;
  *
  * @property integer $usuario_id
  * @property integer $tipo_executante_id
- * @property string $nome
  * @property string $cidade
  * @property string $uf
  * @property string $cpf
- * @property string $email
  * @property string $telefone
  * @property string $celular
  * @property string $criado
@@ -41,8 +39,8 @@ class Executante extends \yii\db\ActiveRecord
             [['usuario_id', 'tipo_executante_id'], 'required'],
             [['usuario_id', 'tipo_executante_id'], 'integer'],
             [['criado', 'modificado'], 'safe'],
-            [['nome', 'cpf'], 'string', 'max' => 45],
-            [['cidade', 'email'], 'string', 'max' => 255],
+            [['cpf'], 'string', 'max' => 45],
+            [['cidade'], 'string', 'max' => 255],
             [['uf'], 'string', 'max' => 2],
             [['telefone', 'celular'], 'string', 'max' => 15],
             [['tipo_executante_id'], 'exist', 'skipOnError' => true, 'targetClass' => TipoExecutante::className(), 'targetAttribute' => ['tipo_executante_id' => 'id']],
@@ -55,13 +53,11 @@ class Executante extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'usuario_id' => 'Usuario ID',
-            'tipo_executante_id' => 'Tipo Executante ID',
-            'nome' => 'Nome',
+            'usuario_id' => 'ID',
+            'tipo_executante_id' => 'Tipo de Executante',
             'cidade' => 'Cidade',
-            'uf' => 'Uf',
+            'uf' => 'UF',
             'cpf' => 'Cpf',
-            'email' => 'Email',
             'telefone' => 'Telefone',
             'celular' => 'Celular',
             'criado' => 'Criado',

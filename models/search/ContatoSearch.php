@@ -19,7 +19,7 @@ class ContatoSearch extends Contato
     {
         return [
             [['usuario_id', 'cliente_id'], 'integer'],
-            [['nome', 'tratamento', 'site', 'contato', 'setor', 'email', 'telefone', 'celular', 'criado', 'modificado'], 'safe'],
+            [['tratamento', 'site', 'contato', 'setor', 'telefone', 'celular', 'criado', 'modificado'], 'safe'],
         ];
     }
 
@@ -65,12 +65,10 @@ class ContatoSearch extends Contato
             'modificado' => $this->modificado,
         ]);
 
-        $query->andFilterWhere(['like', 'nome', $this->nome])
-            ->andFilterWhere(['like', 'tratamento', $this->tratamento])
+        $query->andFilterWhere(['like', 'tratamento', $this->tratamento])
             ->andFilterWhere(['like', 'site', $this->site])
             ->andFilterWhere(['like', 'contato', $this->contato])
             ->andFilterWhere(['like', 'setor', $this->setor])
-            ->andFilterWhere(['like', 'email', $this->email])
             ->andFilterWhere(['like', 'telefone', $this->telefone])
             ->andFilterWhere(['like', 'celular', $this->celular]);
 

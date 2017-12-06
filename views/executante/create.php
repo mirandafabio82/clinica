@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\Executante */
 
-$this->title = 'Create Executante';
+$this->title = 'Executante';
 $this->params['breadcrumbs'][] = ['label' => 'Executantes', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -16,6 +16,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= $this->render('_form', [
         'model' => $model,
+        'user' => $user,
+        'listTipos' => $listTipos
     ]) ?>
 
 </div>

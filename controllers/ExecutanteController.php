@@ -4,10 +4,12 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Executante;
+use app\models\DBUser;
 use app\models\search\ExecutanteSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
 
 /**
  * ExecutanteController implements the CRUD actions for Executante model.
@@ -64,12 +66,41 @@ class ExecutanteController extends Controller
     public function actionCreate()
     {
         $model = new Executante();
+        $user = new DBUser();
+        $tipos_executantes = Yii::$app->db->createCommand('SELECT id, cargo FROM tipo_executante')->queryAll();
+        $listTipos = ArrayHelper::map($tipos_executantes,'id','cargo');
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->usuario_id]);
-        } else {
+        if ($_POST) {
+            $connection = \Yii::$app->db;
+            $transaction = $connection->beginTransaction();
+            try{
+                $model->setAttributes($_POST['Executante']);
+
+                $user->setAttributes($_POST['DBUser']);
+                $user->username = $user->email;               
+                $user->save();
+
+                $model->usuario_id = $user->id;
+                $model->criado = date('Y-m-d h:m:s');
+                $model->save();
+
+                $auth = \Yii::$app->authManager;
+                $authorRole = $auth->getRole('executante');
+                $auth->assign($authorRole, $user->getId());  
+
+                $transaction->commit();
+                return $this->redirect(['view', 'id' => $model->usuario_id]);                
+            }
+            catch(Exception $e){
+                $transaction->rollBack();
+                throw $e;
+            }
+        }
+        else {
             return $this->render('create', [
                 'model' => $model,
+                'user' => $user,
+                'listTipos' => $listTipos
             ]);
         }
     }
@@ -83,12 +114,41 @@ class ExecutanteController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $user = new DBUser();
+        $tipos_executantes = Yii::$app->db->createCommand('SELECT id, cargo FROM tipo_executante')->queryAll();
+        $listTipos = ArrayHelper::map($tipos_executantes,'id','cargo');
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->usuario_id]);
-        } else {
-            return $this->render('update', [
+        if ($_POST) {
+            $connection = \Yii::$app->db;
+            $transaction = $connection->beginTransaction();
+            try{
+                $model->setAttributes($_POST['Contato']);
+
+                $user->setAttributes($_POST['DBUser']);
+                $user->username = $user->email;               
+                $user->save();
+
+                $model->usuario_id = $user->id;
+                $model->criado = date('Y-m-d h:m:s');
+                $model->save();
+
+                $auth = \Yii::$app->authManager;
+                $authorRole = $auth->getRole('contato');
+                $auth->assign($authorRole, $user->getId());  
+
+                $transaction->commit();
+                return $this->redirect(['view', 'id' => $model->usuario_id]);                
+            }
+            catch(Exception $e){
+                $transaction->rollBack();
+                throw $e;
+            }
+        }
+        else {
+            return $this->render('create', [
                 'model' => $model,
+                'user' => $user,
+                'listClientes' => $listClientes
             ]);
         }
     }

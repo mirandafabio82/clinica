@@ -11,17 +11,18 @@ use yii\widgets\ActiveForm;
 <div class="tipo-executante-form">
 
     <?php $form = ActiveForm::begin(); ?>
-
-    <?= $form->field($model, 'id')->textInput() ?>
+    <div class="box box-primary">
+        <div class="box-header with-border">
 
     <?= $form->field($model, 'cargo')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'valor_hora')->textInput(['maxlength' => true]) ?>
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($model->isNewRecord ? 'Cadastrar' : 'Atualizar', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
-
+    </div>
+    </div>
     <?php ActiveForm::end(); ?>
 
 </div>

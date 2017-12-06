@@ -4,10 +4,14 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Contato;
+use app\models\Cliente;
+use app\models\DBUser;
 use app\models\search\ContatoSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
+use yii\db\ActiveRecord;
 
 /**
  * ContatoController implements the CRUD actions for Contato model.
@@ -63,13 +67,43 @@ class ContatoController extends Controller
      */
     public function actionCreate()
     {
+        
         $model = new Contato();
+        $user = new DBUser();
+        $clientes = Yii::$app->db->createCommand('SELECT id, nome FROM cliente')->queryAll();
+        $listClientes = ArrayHelper::map($clientes,'id','nome');
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->usuario_id]);
-        } else {
+        if ($_POST) {
+            $connection = \Yii::$app->db;
+            $transaction = $connection->beginTransaction();
+            try{
+                $model->setAttributes($_POST['Contato']);
+
+                $user->setAttributes($_POST['DBUser']);
+                $user->username = $user->email;               
+                $user->save();
+
+                $model->usuario_id = $user->id;
+                $model->criado = date('Y-m-d h:m:s');
+                $model->save();
+
+                $auth = \Yii::$app->authManager;
+                $authorRole = $auth->getRole('contato');
+                $auth->assign($authorRole, $user->getId());  
+
+                $transaction->commit();
+                return $this->redirect(['view', 'id' => $model->usuario_id]);                
+            }
+            catch(Exception $e){
+                $transaction->rollBack();
+                throw $e;
+            }
+        }
+        else {
             return $this->render('create', [
                 'model' => $model,
+                'user' => $user,
+                'listClientes' => $listClientes
             ]);
         }
     }
@@ -83,12 +117,41 @@ class ContatoController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $user = new DBUser();
+        $clientes = Yii::$app->db->createCommand('SELECT id, nome FROM cliente')->queryAll();
+        $listClientes = ArrayHelper::map($clientes,'id','nome');
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->usuario_id]);
-        } else {
-            return $this->render('update', [
+        if ($_POST) {
+            $connection = \Yii::$app->db;
+            $transaction = $connection->beginTransaction();
+            try{
+                $model->setAttributes($_POST['Contato']);
+
+                $user->setAttributes($_POST['DBUser']);
+                $user->username = $user->email;               
+                $user->save();
+
+                $model->usuario_id = $user->id;
+                $model->criado = date('Y-m-d h:m:s');
+                $model->save();
+
+                $auth = \Yii::$app->authManager;
+                $authorRole = $auth->getRole('contato');
+                $auth->assign($authorRole, $user->getId());  
+
+                $transaction->commit();
+                return $this->redirect(['view', 'id' => $model->usuario_id]);                
+            }
+            catch(Exception $e){
+                $transaction->rollBack();
+                throw $e;
+            }
+        }
+        else {
+            return $this->render('create', [
                 'model' => $model,
+                'user' => $user,
+                'listClientes' => $listClientes
             ]);
         }
     }

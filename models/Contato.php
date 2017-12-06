@@ -9,12 +9,10 @@ use Yii;
  *
  * @property integer $usuario_id
  * @property integer $cliente_id
- * @property string $nome
  * @property string $tratamento
  * @property string $site
  * @property string $contato
  * @property string $setor
- * @property string $email
  * @property string $telefone
  * @property string $celular
  * @property string $criado
@@ -39,10 +37,10 @@ class Contato extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['usuario_id', 'cliente_id'], 'required'],
-            [['usuario_id', 'cliente_id'], 'integer'],
+            [['cliente_id'], 'required'],
+            [['cliente_id'], 'integer'],
             [['criado', 'modificado'], 'safe'],
-            [['nome', 'tratamento', 'site', 'contato', 'setor', 'email'], 'string', 'max' => 255],
+            [['tratamento', 'site', 'contato', 'setor'], 'string', 'max' => 255],
             [['telefone', 'celular'], 'string', 'max' => 15],
             [['cliente_id'], 'exist', 'skipOnError' => true, 'targetClass' => Cliente::className(), 'targetAttribute' => ['cliente_id' => 'id']],
         ];
@@ -54,14 +52,12 @@ class Contato extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'usuario_id' => 'Usuario ID',
-            'cliente_id' => 'Cliente ID',
-            'nome' => 'Nome',
+            'usuario_id' => 'ID',
+            'cliente_id' => 'Cliente',
             'tratamento' => 'Tratamento',
             'site' => 'Site',
             'contato' => 'Contato',
             'setor' => 'Setor',
-            'email' => 'Email',
             'telefone' => 'Telefone',
             'celular' => 'Celular',
             'criado' => 'Criado',

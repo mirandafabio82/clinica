@@ -19,7 +19,7 @@ class ExecutanteSearch extends Executante
     {
         return [
             [['usuario_id', 'tipo_executante_id'], 'integer'],
-            [['nome', 'cidade', 'uf', 'cpf', 'email', 'telefone', 'celular', 'criado', 'modificado'], 'safe'],
+            [['cidade', 'uf', 'cpf','telefone', 'celular', 'criado', 'modificado'], 'safe'],
         ];
     }
 
@@ -65,11 +65,9 @@ class ExecutanteSearch extends Executante
             'modificado' => $this->modificado,
         ]);
 
-        $query->andFilterWhere(['like', 'nome', $this->nome])
-            ->andFilterWhere(['like', 'cidade', $this->cidade])
+        $query->andFilterWhere(['like', 'cidade', $this->cidade])
             ->andFilterWhere(['like', 'uf', $this->uf])
-            ->andFilterWhere(['like', 'cpf', $this->cpf])
-            ->andFilterWhere(['like', 'email', $this->email])
+            ->andFilterWhere(['like', 'cpf', $this->cpf])            
             ->andFilterWhere(['like', 'telefone', $this->telefone])
             ->andFilterWhere(['like', 'celular', $this->celular]);
 
