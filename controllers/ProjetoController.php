@@ -123,7 +123,7 @@ class ProjetoController extends Controller
         $nomes = Yii::$app->db->createCommand('SELECT id, nome FROM projeto_nome')->queryAll();
         $listNomes = ArrayHelper::map($nomes,'id','nome');
 
-        $contatos = Yii::$app->db->createCommand('SELECT id, nome FROM contato JOIN user ON contato.usuario_id = user.id')->queryAll();
+        $contatos = Yii::$app->db->createCommand('SELECT id, nome FROM contato JOIN user ON contato.usuario_id = user.id WHERE cliente_id='.$model->cliente_id)->queryAll();
         $listContatos = ArrayHelper::map($contatos,'id','nome');
 
         $escopo = Yii::$app->db->createCommand('SELECT id, nome FROM escopo')->queryAll();
@@ -131,6 +131,9 @@ class ProjetoController extends Controller
 
         $status = Yii::$app->db->createCommand('SELECT id, status FROM projeto_status')->queryAll();
         $listStatus = ArrayHelper::map($status,'id','status');
+
+        $plantas = Yii::$app->db->createCommand('SELECT id, nome FROM planta WHERE site_id='.$model->site)->queryAll();
+        $listPlantas = ArrayHelper::map($plantas,'id','nome');
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -142,7 +145,8 @@ class ProjetoController extends Controller
                 'listEscopo' => $listEscopo,
                 'listSites' => $listSites,
                 'listNomes' => $listNomes,
-                'listStatus' => $listStatus
+                'listStatus' => $listStatus,
+                'listPlantas' => $listPlantas
             ]);
         }
     }

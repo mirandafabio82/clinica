@@ -117,11 +117,20 @@ $("#projeto-site").change(function(ev){
 
           <?= $form->field($model, 'cliente_id')->dropDownList($listClientes,['prompt'=>'Selecione um Cliente']) ?>
 
-          <?= $form->field($model, 'contato_id')->dropDownList(['prompt'=>'Selecione um Contato']) ?>
+          <?php if($model->isNewRecord){ ?>
+            <?= $form->field($model, 'contato_id')->dropDownList(['prompt'=>'Selecione um Contato']) ?>
+          <?php } else{ ?>
+            <?= $form->field($model, 'contato_id')->dropDownList($listContatos,['prompt'=>'Selecione um Contato']) ?>
+           <?php } ?>
 
           <?= $form->field($model, 'site')->dropDownList($listSites,['prompt'=>'Selecione um Site']) ?>
 
-          <?= $form->field($model, 'planta')->dropDownList(['prompt'=>'Selecione uma Planta']) ?>
+          <?php if($model->isNewRecord){ ?>
+              <?= $form->field($model, 'planta')->dropDownList(['prompt'=>'Selecione uma Planta']) ?>
+            
+           <?php } else{ ?>
+              <?= $form->field($model, 'planta')->dropDownList($listPlantas,['prompt'=>'Selecione uma Planta']) ?>
+           <?php } ?>
 
           <?= $form->field($model, 'codigo')->textInput(['maxlength' => true]) ?>    
         </div>
