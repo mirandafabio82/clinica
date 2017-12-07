@@ -21,8 +21,6 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'contato_id') ?>
 
-    <?= $form->field($model, 'escopo_id') ?>
-
     <?= $form->field($model, 'descricao') ?>
 
     <?php // echo $form->field($model, 'codigo') ?>
@@ -48,8 +46,6 @@ use yii\widgets\ActiveForm;
     <?php // echo $form->field($model, 'celular') ?>
 
     <?php // echo $form->field($model, 'email') ?>
-
-    <?php // echo $form->field($model, 'documentos') ?>
 
     <?php // echo $form->field($model, 'proposta') ?>
 

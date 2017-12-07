@@ -3,17 +3,17 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\Agenda;
-use app\models\search\AgendaSearch;
+use app\models\Planta;
+use app\models\search\PlantaSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 
 /**
- * AgendaController implements the CRUD actions for Agenda model.
+ * PlantaController implements the CRUD actions for Planta model.
  */
-class AgendaController extends Controller
+class PlantaController extends Controller
 {
     /**
      * @inheritdoc
@@ -31,12 +31,12 @@ class AgendaController extends Controller
     }
 
     /**
-     * Lists all Agenda models.
+     * Lists all Planta models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new AgendaSearch();
+        $searchModel = new PlantaSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -46,7 +46,7 @@ class AgendaController extends Controller
     }
 
     /**
-     * Displays a single Agenda model.
+     * Displays a single Planta model.
      * @param integer $id
      * @return mixed
      */
@@ -58,37 +58,28 @@ class AgendaController extends Controller
     }
 
     /**
-     * Creates a new Agenda model.
+     * Creates a new Planta model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Agenda();
-
-        $projetos = Yii::$app->db->createCommand('SELECT projeto.id, nome FROM projeto JOIN projeto_nome')->queryAll();
-        $listProjetos = ArrayHelper::map($projetos,'id','nome');
-
+        $model = new Planta();
         $sites = Yii::$app->db->createCommand('SELECT id, nome FROM site')->queryAll();
         $listSites = ArrayHelper::map($sites,'id','nome');
-
-        $status = Yii::$app->db->createCommand('SELECT id, status FROM agenda_status')->queryAll();
-        $listStatus = ArrayHelper::map($status,'id','status');
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
-                'listProjetos' => $listProjetos,
-                'listSites' => $listSites,
-                'listStatus' => $listStatus
+                'listSites' => $listSites
             ]);
         }
     }
 
     /**
-     * Updates an existing Agenda model.
+     * Updates an existing Planta model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -96,20 +87,21 @@ class AgendaController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $sites = Yii::$app->db->createCommand('SELECT id, nome FROM site')->queryAll();
+        $listSites = ArrayHelper::map($sites,'id','nome');
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
-                'listProjetos' => $listProjetos,
                 'listSites' => $listSites
             ]);
         }
     }
 
     /**
-     * Deletes an existing Agenda model.
+     * Deletes an existing Planta model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -122,15 +114,15 @@ class AgendaController extends Controller
     }
 
     /**
-     * Finds the Agenda model based on its primary key value.
+     * Finds the Planta model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Agenda the loaded model
+     * @return Planta the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Agenda::findOne($id)) !== null) {
+        if (($model = Planta::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

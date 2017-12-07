@@ -28,19 +28,24 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'usuario_id',
             [
-              'header' => 'Tipo de Executante',              
-              'format' => 'raw',
-               'value' => function ($data) {
-
-                   return Yii::$app->db->createCommand('SELECT cargo FROM tipo_executante WHERE id='.$data->tipo_executante_id)->queryScalar();
-               },
-            ],
-            [
               'header' => 'Nome',              
               'format' => 'raw',
                'value' => function ($data) {
 
                    return Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.$data->usuario_id)->queryScalar();
+               },
+            ],
+            [
+              'header' => 'Tipo',              
+              'format' => 'raw',
+               'value' => function ($data) {
+                  $executantes = Yii::$app->db->createCommand('SELECT cargo FROM tipo_executante JOIN executante_tipo ON tipo_executante.id=executante_tipo.tipo_id WHERE executante_tipo.executante_id='.$data->usuario_id)->queryAll();
+                  $tipos = '';
+                  foreach ($executantes as $key => $exec) {
+                    $tipos .= $exec['cargo'].'; ';
+                  }
+
+                   return $tipos;
                },
             ],
             'cidade',            

@@ -18,7 +18,7 @@ class ProjetoSearch extends Projeto
     public function rules()
     {
         return [
-            [['id', 'cliente_id', 'contato_id', 'escopo_id', 'documentos', 'rev_proposta', 'qtd_hh', 'qtd_dias', 'qtd_km'], 'integer'],
+            [['id', 'cliente_id', 'contato_id', 'documentos', 'rev_proposta', 'qtd_hh', 'qtd_dias', 'qtd_km'], 'integer'],
             [['descricao', 'codigo', 'site', 'planta', 'municipio', 'uf', 'cnpj', 'tratamento', 'contato', 'setor', 'fone_contato', 'celular', 'email', 'proposta', 'data_proposta', 'status', 'pendencia', 'comentarios', 'data_entrega', 'cliente_fatura', 'site_fatura', 'municipio_fatura', 'uf_fatura', 'cnpj_fatura', 'criado', 'modificado'], 'safe'],
             [['vl_hh', 'total_horas', 'vl_km', 'total_km', 'valor_proposta', 'valor_consumido', 'valor_saldo'], 'number'],
         ];
@@ -63,7 +63,6 @@ class ProjetoSearch extends Projeto
             'id' => $this->id,
             'cliente_id' => $this->cliente_id,
             'contato_id' => $this->contato_id,
-            'escopo_id' => $this->escopo_id,
             'documentos' => $this->documentos,
             'rev_proposta' => $this->rev_proposta,
             'data_proposta' => $this->data_proposta,

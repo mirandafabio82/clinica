@@ -72,11 +72,21 @@ class ProjetoController extends Controller
         $clientes = Yii::$app->db->createCommand('SELECT id, nome FROM cliente')->queryAll();
         $listClientes = ArrayHelper::map($clientes,'id','nome');
 
+        $sites = Yii::$app->db->createCommand('SELECT id, nome FROM site')->queryAll();
+        $listSites = ArrayHelper::map($sites,'id','nome');
+
+        $nomes = Yii::$app->db->createCommand('SELECT id, nome FROM projeto_nome')->queryAll();
+        $listNomes = ArrayHelper::map($nomes,'id','nome');
+
         $contatos = Yii::$app->db->createCommand('SELECT id, nome FROM contato JOIN user ON contato.usuario_id = user.id')->queryAll();
         $listContatos = ArrayHelper::map($contatos,'id','nome');
 
         $escopo = Yii::$app->db->createCommand('SELECT id, nome FROM escopo')->queryAll();
         $listEscopo = ArrayHelper::map($escopo,'id','nome');
+
+        $status = Yii::$app->db->createCommand('SELECT id, status FROM projeto_status')->queryAll();
+        $listStatus = ArrayHelper::map($status,'id','status');
+       
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -86,6 +96,9 @@ class ProjetoController extends Controller
                 'listClientes' => $listClientes,
                 'listContatos' => $listContatos,
                 'listEscopo' => $listEscopo,
+                'listSites' => $listSites,
+                'listNomes' => $listNomes,
+                'listStatus' => $listStatus
 
             ]);
         }
@@ -101,11 +114,35 @@ class ProjetoController extends Controller
     {
         $model = $this->findModel($id);
 
+        $clientes = Yii::$app->db->createCommand('SELECT id, nome FROM cliente')->queryAll();
+        $listClientes = ArrayHelper::map($clientes,'id','nome');
+
+        $sites = Yii::$app->db->createCommand('SELECT id, nome FROM site')->queryAll();
+        $listSites = ArrayHelper::map($sites,'id','nome');
+
+        $nomes = Yii::$app->db->createCommand('SELECT id, nome FROM projeto_nome')->queryAll();
+        $listNomes = ArrayHelper::map($nomes,'id','nome');
+
+        $contatos = Yii::$app->db->createCommand('SELECT id, nome FROM contato JOIN user ON contato.usuario_id = user.id')->queryAll();
+        $listContatos = ArrayHelper::map($contatos,'id','nome');
+
+        $escopo = Yii::$app->db->createCommand('SELECT id, nome FROM escopo')->queryAll();
+        $listEscopo = ArrayHelper::map($escopo,'id','nome');
+
+        $status = Yii::$app->db->createCommand('SELECT id, status FROM projeto_status')->queryAll();
+        $listStatus = ArrayHelper::map($status,'id','status');
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'listClientes' => $listClientes,
+                'listContatos' => $listContatos,
+                'listEscopo' => $listEscopo,
+                'listSites' => $listSites,
+                'listNomes' => $listNomes,
+                'listStatus' => $listStatus
             ]);
         }
     }
@@ -152,9 +189,23 @@ class ProjetoController extends Controller
         
     }
 
+    public function actionPreenchepreenchecontatos(){
+        if (Yii::$app->request->isAjax) {                 
+            echo json_encode(Yii::$app->db->createCommand('SELECT * FROM contato JOIN user ON contato.usuario_id = user.id WHERE cliente_id='.Yii::$app->request->post()['id'])->queryAll());  
+        }
+        
+    }
+
     public function actionPreencheformcontato(){
         if (Yii::$app->request->isAjax) {                 
             echo json_encode(Yii::$app->db->createCommand('SELECT * FROM contato JOIN user ON user.id = contato.usuario_id WHERE usuario_id='.Yii::$app->request->post()['id'])->queryOne());  
+        }
+        
+    }
+
+    public function actionPreencheformsite(){
+        if (Yii::$app->request->isAjax) {                 
+            echo json_encode(Yii::$app->db->createCommand('SELECT * FROM planta WHERE site_id='.Yii::$app->request->post()['id'])->queryAll());  
         }
         
     }

@@ -36,9 +36,9 @@ class Agenda extends \yii\db\ActiveRecord
     {
         return [
             [['projeto_id'], 'required'],
-            [['projeto_id'], 'integer'],
+            [['projeto_id', 'status'], 'integer'],
             [['data', 'hr_inicio', 'hr_final'], 'safe'],
-            [['local', 'quem', 'status'], 'string', 'max' => 15],
+            [['local', 'quem'], 'string', 'max' => 15],
             [['assunto'], 'string', 'max' => 80],
             [['projeto_id'], 'exist', 'skipOnError' => true, 'targetClass' => Projeto::className(), 'targetAttribute' => ['projeto_id' => 'id']],
         ];
@@ -51,7 +51,7 @@ class Agenda extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'projeto_id' => 'Projeto ID',
+            'projeto_id' => 'Nome do Projeto',
             'data' => 'Data',
             'local' => 'Local',
             'quem' => 'Quem',

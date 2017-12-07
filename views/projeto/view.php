@@ -24,14 +24,14 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ]) ?>
     </p>
-
+<div class="box box-primary">
+        <div class="box-header with-border">
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
             'id',
             'cliente_id',
             'contato_id',
-            'escopo_id',
             'descricao',
             'codigo',
             'site',
@@ -45,7 +45,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'fone_contato',
             'celular',
             'email:email',
-            'documentos',
             'proposta',
             'rev_proposta',
             'data_proposta',
@@ -72,5 +71,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'modificado',
         ],
     ]) ?>
-
+</div>
+</div>
 </div>

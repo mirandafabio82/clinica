@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Executante;
+use app\models\ExecutanteTipo;
 use app\models\DBUser;
 use app\models\search\ExecutanteSearch;
 use yii\web\Controller;
@@ -67,6 +68,8 @@ class ExecutanteController extends Controller
     {
         $model = new Executante();
         $user = new DBUser();
+        $exectipo = new ExecutanteTipo();
+
         $tipos_executantes = Yii::$app->db->createCommand('SELECT id, cargo FROM tipo_executante')->queryAll();
         $listTipos = ArrayHelper::map($tipos_executantes,'id','cargo');
 
@@ -83,6 +86,12 @@ class ExecutanteController extends Controller
                 $model->usuario_id = $user->id;
                 $model->criado = date('Y-m-d h:m:s');
                 $model->save();
+
+
+
+                foreach ($_POST['Tipos'] as $key => $tipo) {
+                    Yii::$app->db->createCommand('INSERT INTO executante_tipo (tipo_id, executante_id) VALUES ('.$tipo.', '.$model->usuario_id.')')->execute();    
+                }
 
                 $auth = \Yii::$app->authManager;
                 $authorRole = $auth->getRole('executante');

@@ -24,7 +24,6 @@ use Yii;
  * @property string $fone_contato
  * @property string $celular
  * @property string $email
- * @property integer $documentos
  * @property string $proposta
  * @property integer $rev_proposta
  * @property string $data_proposta
@@ -52,10 +51,8 @@ use Yii;
  *
  * @property Agenda[] $agendas
  * @property Atividade[] $atividades
- * @property Documento[] $documentos0
  * @property Cliente $cliente
  * @property Contato $contato0
- * @property Escopo $escopo
  */
 class Projeto extends \yii\db\ActiveRecord
 {
@@ -73,14 +70,14 @@ class Projeto extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'cliente_id', 'contato_id', 'escopo_id'], 'required'],
-            [['id', 'cliente_id', 'contato_id', 'escopo_id', 'documentos', 'rev_proposta', 'qtd_hh', 'qtd_dias', 'qtd_km'], 'integer'],
+            [['cliente_id', 'contato_id', 'projeto_nome_id', 'status'], 'required'],
+            [['id', 'cliente_id', 'contato_id', 'rev_proposta', 'qtd_hh', 'qtd_dias', 'qtd_km', 'status', 'projeto_nome_id'], 'integer'],
             [['data_proposta', 'data_entrega', 'criado', 'modificado'], 'safe'],
             [['vl_hh', 'total_horas', 'vl_km', 'total_km', 'valor_proposta', 'valor_consumido', 'valor_saldo'], 'number'],
             [['descricao'], 'string', 'max' => 500],
             [['codigo', 'contato', 'cliente_fatura'], 'string', 'max' => 12],
             [['site', 'planta', 'site_fatura'], 'string', 'max' => 10],
-            [['municipio', 'setor', 'status', 'pendencia', 'municipio_fatura'], 'string', 'max' => 20],
+            [['municipio', 'setor', 'pendencia', 'municipio_fatura'], 'string', 'max' => 20],
             [['uf', 'uf_fatura'], 'string', 'max' => 2],
             [['cnpj', 'cnpj_fatura'], 'string', 'max' => 18],
             [['tratamento'], 'string', 'max' => 7],
@@ -91,7 +88,6 @@ class Projeto extends \yii\db\ActiveRecord
             [['comentarios'], 'string', 'max' => 80],
             [['cliente_id'], 'exist', 'skipOnError' => true, 'targetClass' => Cliente::className(), 'targetAttribute' => ['cliente_id' => 'id']],
             [['contato_id'], 'exist', 'skipOnError' => true, 'targetClass' => Contato::className(), 'targetAttribute' => ['contato_id' => 'usuario_id']],
-            [['escopo_id'], 'exist', 'skipOnError' => true, 'targetClass' => Escopo::className(), 'targetAttribute' => ['escopo_id' => 'id']],
         ];
     }
 
@@ -104,7 +100,6 @@ class Projeto extends \yii\db\ActiveRecord
             'id' => 'ID',
             'cliente_id' => 'Cliente',
             'contato_id' => 'Contato',
-            'escopo_id' => 'Escopo',
             'descricao' => 'Descrição',
             'codigo' => 'Código',
             'site' => 'Site',
@@ -118,16 +113,15 @@ class Projeto extends \yii\db\ActiveRecord
             'fone_contato' => 'Fone Contato',
             'celular' => 'Celular',
             'email' => 'Email',
-            'documentos' => 'Documentos',
             'proposta' => 'Proposta',
-            'rev_proposta' => 'Rev Proposta',
-            'data_proposta' => 'Data da Proposta',
+            'rev_proposta' => 'Revisão',
+            'data_proposta' => 'Data',
             'qtd_hh' => 'Qtd Hh',
-            'vl_hh' => 'Vl Hh',
+            'vl_hh' => 'Valor Hh',
             'total_horas' => 'Total Horas',
             'qtd_dias' => 'Qtd Dias',
             'qtd_km' => 'Qtd Km',
-            'vl_km' => 'Vl Km',
+            'vl_km' => 'Valor Km',
             'total_km' => 'Total Km',
             'valor_proposta' => 'Valor da Proposta',
             'valor_consumido' => 'Valor Consumido',
@@ -135,14 +129,15 @@ class Projeto extends \yii\db\ActiveRecord
             'status' => 'Status',
             'pendencia' => 'Pendencia',
             'comentarios' => 'Comentarios',
-            'data_entrega' => 'Data Entrega',
+            'data_entrega' => 'Data de Entrega',
             'cliente_fatura' => 'Cliente Fatura',
             'site_fatura' => 'Site Fatura',
             'municipio_fatura' => 'Municipio Fatura',
-            'uf_fatura' => 'Uf Fatura',
+            'uf_fatura' => 'UF Fatura',
             'cnpj_fatura' => 'CNPJ Fatura',
             'criado' => 'Criado',
             'modificado' => 'Modificado',
+            'projeto_nome_id' => 'Projeto'
         ];
     }
 
@@ -161,14 +156,7 @@ class Projeto extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Atividade::className(), ['projeto_id' => 'id']);
     }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getDocumentos0()
-    {
-        return $this->hasMany(Documento::className(), ['projeto_id' => 'id']);
-    }
+    
 
     /**
      * @return \yii\db\ActiveQuery
@@ -186,11 +174,5 @@ class Projeto extends \yii\db\ActiveRecord
         return $this->hasOne(Contato::className(), ['usuario_id' => 'contato_id']);
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getEscopo()
-    {
-        return $this->hasOne(Escopo::className(), ['id' => 'escopo_id']);
-    }
+    
 }

@@ -18,7 +18,17 @@ use yii\widgets\ActiveForm;
         <div class="box-header with-border">
     <div class="row">       
     <div class="col-md-6">
-    <?= $form->field($model, 'tipo_executante_id')->dropDownList($listTipos,['prompt'=>'Selecione um Tipo']) ?>
+
+
+    <div id="tipoExecutantes">
+    <label>Funções</label>
+    <br>
+     <?php     
+        foreach ($listTipos as $key => $tipo) { ?>
+           <input type="checkbox" name="Tipos[<?=$key?>]" value="<?= $key?>"><?= $tipo ?>
+        <?php } ?>
+        
+    </div>
 
     <?= $form->field($user, 'nome')->textInput(['maxlength' => true]) ?>
 

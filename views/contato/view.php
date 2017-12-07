@@ -31,12 +31,10 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'usuario_id',
             'cliente_id',
-            'nome',
             'tratamento',
             'site',
             'contato',
             'setor',
-            'email:email',
             'telefone',
             'celular',
             'criado',

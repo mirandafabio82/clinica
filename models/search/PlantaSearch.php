@@ -5,12 +5,12 @@ namespace app\models\search;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Executante;
+use app\models\Planta;
 
 /**
- * ExecutanteSearch represents the model behind the search form about `app\models\Executante`.
+ * PlantaSearch represents the model behind the search form about `app\models\Planta`.
  */
-class ExecutanteSearch extends Executante
+class PlantaSearch extends Planta
 {
     /**
      * @inheritdoc
@@ -18,8 +18,8 @@ class ExecutanteSearch extends Executante
     public function rules()
     {
         return [
-            [['usuario_id'], 'integer'],
-            [['cidade', 'uf', 'cpf','telefone', 'celular', 'criado', 'modificado'], 'safe'],
+            [['id', 'site_id'], 'integer'],
+            [['nome'], 'safe'],
         ];
     }
 
@@ -41,7 +41,7 @@ class ExecutanteSearch extends Executante
      */
     public function search($params)
     {
-        $query = Executante::find();
+        $query = Planta::find();
 
         // add conditions that should always apply here
 
@@ -59,16 +59,11 @@ class ExecutanteSearch extends Executante
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'usuario_id' => $this->usuario_id,            
-            'criado' => $this->criado,
-            'modificado' => $this->modificado,
+            'id' => $this->id,
+            'site_id' => $this->site_id,
         ]);
 
-        $query->andFilterWhere(['like', 'cidade', $this->cidade])
-            ->andFilterWhere(['like', 'uf', $this->uf])
-            ->andFilterWhere(['like', 'cpf', $this->cpf])            
-            ->andFilterWhere(['like', 'telefone', $this->telefone])
-            ->andFilterWhere(['like', 'celular', $this->celular]);
+        $query->andFilterWhere(['like', 'nome', $this->nome]);
 
         return $dataProvider;
     }
