@@ -12,6 +12,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Json;
 
 /**
  * ProjetoController implements the CRUD actions for Projeto model.
@@ -41,6 +42,24 @@ class ProjetoController extends Controller
     {
         $searchModel = new ProjetoSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        if(Yii::$app->request->post('Projeto')){
+            $projeto_id = Yii::$app->request->post('editableKey');
+            $projeto = Projeto::findOne($projeto_id);
+
+            $out = Json::encode(['output'=>'', 'message'=>'']);
+            $post =[];
+            $posted = current($_POST['Projeto']);
+            $post['Projeto'] = $posted;
+
+            if($projeto->load($post)){
+                $projeto->save();
+                // $output = 'teste';
+                $out = Json::encode(['output'=>'', 'message'=>'']);
+            }
+            echo $out;
+            // return;
+        }
 
         return $this->render('index', [
             'searchModel' => $searchModel,

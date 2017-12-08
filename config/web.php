@@ -58,6 +58,15 @@ $config = [
         ],
     ],
     'params' => $params,
+    'modules' => [
+        'gridview' => [
+            'class' => 'kartik\grid\Module',            
+        ],
+        'gridviewKrajee' =>  [
+        'class' => '\kartik\grid\Module',
+        // your other grid module settings
+        ]
+    ],
 ];
 
 if (YII_ENV_DEV) {

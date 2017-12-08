@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'usuario_id',
             'cliente_id',
             [
-              'header' => 'nome',              
+              'header' => 'Nome',              
               'format' => 'raw',
                'value' => function ($data) {
 
@@ -41,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'contato',
             'setor',
             [
-              'header' => 'email',              
+              'header' => 'Email',              
               'format' => 'raw',
                'value' => function ($data) {
 

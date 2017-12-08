@@ -8,6 +8,7 @@ use app\models\search\TipoExecutanteSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 
 /**
  * TipoExecutanteController implements the CRUD actions for TipoExecutante model.
@@ -20,6 +21,17 @@ class TipoexecutanteController extends Controller
     public function behaviors()
     {
         return [
+        'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['*'],
+                'rules' => [
+                    [
+                        // 'actions' => ['index', 'view', 'create', 'update'],
+                        'allow' => true,
+                        'roles' => ['admin'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

@@ -161,16 +161,9 @@ $usuario = Yii::$app->db->createCommand('SELECT * FROM user WHERE id='.Yii::$app
             </a>
             <ul class="dropdown-menu">
               <!-- User image -->
-              <li class="user-header">
-                <img src="resources/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
-
-                <p>
-                  Alexander Pierce - Web Developer
-                  <small>Member since Nov. 2012</small>
-                </p>
-              </li>
+             
               <!-- Menu Body -->
-              <li class="user-body">
+              <!-- <li class="user-body">
                 <div class="row">
                   <div class="col-xs-4 text-center">
                     <a href="#">Followers</a>
@@ -181,7 +174,7 @@ $usuario = Yii::$app->db->createCommand('SELECT * FROM user WHERE id='.Yii::$app
                   <div class="col-xs-4 text-center">
                     <a href="#">Friends</a>
                   </div>
-                </div>
+                </div> -->
                 <!-- /.row -->
               </li>
               <!-- Menu Footer-->

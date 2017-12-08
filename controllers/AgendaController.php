@@ -9,7 +9,8 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
-
+use yii\filters\AccessControl;
+use \Datetime;
 /**
  * AgendaController implements the CRUD actions for Agenda model.
  */
@@ -21,6 +22,17 @@ class AgendaController extends Controller
     public function behaviors()
     {
         return [
+        'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['*'],
+                'rules' => [
+                    [
+                        // 'actions' => ['index', 'view', 'create', 'update'],
+                        'allow' => true,
+                        'roles' => ['admin'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -65,7 +77,7 @@ class AgendaController extends Controller
     public function actionCreate()
     {
         $model = new Agenda();
-
+        $model->data =  date('d/m/Y');
         $projetos = Yii::$app->db->createCommand('SELECT projeto.id, nome FROM projeto JOIN projeto_nome')->queryAll();
         $listProjetos = ArrayHelper::map($projetos,'id','nome');
 
@@ -75,7 +87,12 @@ class AgendaController extends Controller
         $status = Yii::$app->db->createCommand('SELECT id, status FROM agenda_status')->queryAll();
         $listStatus = ArrayHelper::map($status,'id','status');
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if($_POST){
+            $model->setAttributes($_POST['Agenda']);
+            $dat = DateTime::createFromFormat('d/m/Y', $_POST['Agenda']['data']);          
+            $model->data = date_format($dat, 'Y-m-d');
+            $model->save();
+
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
@@ -97,13 +114,28 @@ class AgendaController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        $projetos = Yii::$app->db->createCommand('SELECT projeto.id, nome FROM projeto JOIN projeto_nome')->queryAll();
+        $listProjetos = ArrayHelper::map($projetos,'id','nome');
+
+        $sites = Yii::$app->db->createCommand('SELECT id, nome FROM site')->queryAll();
+        $listSites = ArrayHelper::map($sites,'id','nome');
+
+        $status = Yii::$app->db->createCommand('SELECT id, status FROM agenda_status')->queryAll();
+        $listStatus = ArrayHelper::map($status,'id','status');
+
+        if($_POST){
+            $model->setAttributes($_POST['Agenda']);
+            $dat = DateTime::createFromFormat('d/m/Y', $_POST['Agenda']['data']);
+            $model->data = date_format($dat, 'Y-m-d');
+            $model->save();
+
             return $this->redirect(['view', 'id' => $model->id]);
-        } else {
+        }else {
             return $this->render('update', [
                 'model' => $model,
                 'listProjetos' => $listProjetos,
-                'listSites' => $listSites
+                'listSites' => $listSites,
+                'listStatus' => $listStatus
             ]);
         }
     }

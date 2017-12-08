@@ -1,7 +1,9 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
+// use yii\grid\GridView;
+use kartik\grid\GridView;
+use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\search\ProjetoSearch */
@@ -20,15 +22,19 @@ $this->params['breadcrumbs'][] = $this->title;
     </p>
     <div class="box box-primary">
         <div class="box-header with-border" style="overflow-y: scroll;">
+      
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'pjax' => true,
+        'hover' => true,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+            // ['class' => 'yii\grid\SerialColumn'],
 
-            // 'id',
+            'id',
             [
-              'header' => 'Status',              
+              'attribute' => 'status',      
+              'class' => 'kartik\grid\EditableColumn',        
               'format' => 'raw',
                'value' => function ($data) {
 
@@ -40,12 +46,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 else
                     $color = 'red';
 
-               return '<span style="color:'.$color.' ">'.$status.'</span>';
+               return '<span style="color:'.$color.' "><i class="fa fa-circle" aria-hidden="true"></i>'.$status.'</span>';
 
                },
             ],
             [
-              'header' => 'Cliente',              
+              'attribute' => 'cliente_id',   
+              'class' => 'kartik\grid\EditableColumn',           
               'format' => 'raw',
                'value' => function ($data) {
 
@@ -57,7 +64,7 @@ $this->params['breadcrumbs'][] = $this->title;
                },
             ],
             [
-              'header' => 'Contato',              
+              'attribute' => 'contato_id',              
               'format' => 'raw',
                'value' => function ($data) {
 
@@ -70,7 +77,7 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'descricao',
             'codigo',
             [
-              'header' => 'Site',              
+              'attribute' => 'site',              
               'format' => 'raw',
                'value' => function ($data) {
 
@@ -81,7 +88,7 @@ $this->params['breadcrumbs'][] = $this->title;
                },
             ],
             [
-              'header' => 'Planta',              
+              'attribute' => 'planta',              
               'format' => 'raw',
                'value' => function ($data) {
 

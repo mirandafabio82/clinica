@@ -31,9 +31,13 @@ use yii\widgets\ActiveForm;
         <div class="col-md-4"> 
         <?= $form->field($model, 'assunto')->textInput(['maxlength' => true]) ?>
     
-        <?= $form->field($model, 'hr_inicio')->textInput() ?>
+        <?= $form->field($model, 'hr_inicio')->widget(\yii\widgets\MaskedInput::className(), [
+                        'mask' => '99:99:99',
+                    ]) ?>
     
-        <?= $form->field($model, 'hr_final')->textInput() ?>
+        <?= $form->field($model, 'hr_final')->widget(\yii\widgets\MaskedInput::className(), [
+                        'mask' => '99:99:99',
+                    ]) ?>
     
         <?= $form->field($model, 'status')->dropDownList($listStatus) ?>
     </div>

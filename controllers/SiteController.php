@@ -20,13 +20,9 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout'],
+                'only' => ['logout', 'index'],
                 'rules' => [
-                    [
-                        'actions' => ['logout'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
+                    ['actions' => ['logout', 'index'],'allow' => true,'roles' => ['@']],
                 ],
             ],
             'verbs' => [
@@ -94,7 +90,7 @@ class SiteController extends Controller
     {
         Yii::$app->user->logout();
 
-        return $this->goHome();
+       return $this->redirect(['login']);
     }
 
     /**
@@ -102,7 +98,7 @@ class SiteController extends Controller
      *
      * @return Response|string
      */
-    public function actionContact()
+    /*public function actionContact()
     {
         $model = new ContactForm();
         if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
@@ -113,15 +109,15 @@ class SiteController extends Controller
         return $this->render('contact', [
             'model' => $model,
         ]);
-    }
+    }*/
 
     /**
      * Displays about page.
      *
      * @return string
      */
-    public function actionAbout()
+    /*public function actionAbout()
     {
         return $this->render('about');
-    }
+    }*/
 }

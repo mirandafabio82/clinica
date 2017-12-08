@@ -33,14 +33,15 @@ AppAsset::register($this);
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
         <![endif]-->
     </head>
-    <body background="resources/dist/img/login_background.jpg">
+    <!-- <body background="resources/dist/img/login_background.jpg"> -->
+    <body>
         <?php $this->beginBody() ?>
 
         <div class="wrap">
             <div class="container">    
             <h1 style="font-weight: 700;text-align: center">HCN Automação</h1>
                 <?= $content ?>
-                <a href="https://br.freepik.com/fotos-gratis/o-inspetor-financeiro-e-o-secretario-fazem-relatorio-calculam-ou-verificam-o-saldo-documento-de-verificacao-do-inspetor-do-servico-de-receita-federal-conceito-de-auditoria_1202418.htm">Projetado pelo Freepik</a>
+               <!--  <a href="https://br.freepik.com/fotos-gratis/o-inspetor-financeiro-e-o-secretario-fazem-relatorio-calculam-ou-verificam-o-saldo-documento-de-verificacao-do-inspetor-do-servico-de-receita-federal-conceito-de-auditoria_1202418.htm">Projetado pelo Freepik</a> -->
             </div>
         </div>
 

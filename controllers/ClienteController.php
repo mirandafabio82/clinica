@@ -8,7 +8,7 @@ use app\models\search\ClienteSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
+use yii\filters\AccessControl;
 /**
  * ClienteController implements the CRUD actions for Cliente model.
  */
@@ -20,6 +20,13 @@ class ClienteController extends Controller
     public function behaviors()
     {
         return [
+        'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['*'],
+                'rules' => [
+                    ['allow' => true,'roles' => ['admin']],                    
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
