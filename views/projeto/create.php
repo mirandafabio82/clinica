@@ -18,8 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'listClientes' => $listClientes,
         'listContatos' => $listContatos,
-        'listSites' => $listSites,
-        'listNomes' => $listNomes,
+        'listSites' => $listSites,        
         'listStatus' => $listStatus
     ]) ?>
 

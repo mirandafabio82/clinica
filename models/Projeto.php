@@ -70,8 +70,8 @@ class Projeto extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['cliente_id', 'contato_id', 'projeto_nome_id', 'status'], 'required'],
-            [['id', 'cliente_id', 'contato_id', 'rev_proposta', 'qtd_hh', 'qtd_dias', 'qtd_km', 'status', 'projeto_nome_id'], 'integer'],
+            [['cliente_id', 'contato_id', 'nome', 'status'], 'required'],
+            [['id', 'cliente_id', 'contato_id', 'rev_proposta', 'qtd_hh', 'qtd_dias', 'qtd_km', 'status'], 'integer'],
             [['data_proposta', 'data_entrega', 'criado', 'modificado'], 'safe'],
             [['vl_hh', 'total_horas', 'vl_km', 'total_km', 'valor_proposta', 'valor_consumido', 'valor_saldo'], 'number'],
             [['descricao'], 'string', 'max' => 500],
@@ -137,7 +137,7 @@ class Projeto extends \yii\db\ActiveRecord
             'cnpj_fatura' => 'CNPJ Fatura',
             'criado' => 'Criado',
             'modificado' => 'Modificado',
-            'projeto_nome_id' => 'Projeto'
+            'nome' => 'Nome'
         ];
     }
 

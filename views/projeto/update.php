@@ -19,7 +19,6 @@ $this->params['breadcrumbs'][] = 'Update';
         'listClientes' => $listClientes,
         'listContatos' => $listContatos,
         'listSites' => $listSites,
-        'listNomes' => $listNomes,
         'listStatus' => $listStatus,
         'listPlantas' => $listPlantas
     ]) ?>

@@ -226,8 +226,7 @@ $usuario = Yii::$app->db->createCommand('SELECT * FROM user WHERE id='.Yii::$app
         <li><a href="<?= Url::to(['executante/index']) ?>"><i class="fa fa-wrench"></i> <span>Executantes</span></a></li>
         <li><a href="<?= Url::to(['tipoexecutante/index']) ?>"><i class="fa fa-vcard"></i> <span>Tipos de Executantes</span></a></li>
         <li><a href="<?= Url::to(['projeto/index']) ?>"><i class="fa fa-folder-open"></i> <span>Projetos</span></a></li>
-        <li><a href="<?= Url::to(['atividade/index']) ?>"><i class="fa fa-hourglass-half"></i> <span>Atividades</span></a></li>
-        <li><a href="<?= Url::to(['projetonome/index']) ?>"><i class="fa fa-edit"></i> <span>Nome de Projeto</span></a></li>
+        <li><a href="<?= Url::to(['atividade/index']) ?>"><i class="fa fa-hourglass-half"></i> <span>Atividades</span></a></li>        
         <li><a href="<?= Url::to(['escopo/index']) ?>"><i class="fa fa-university"></i> <span>Escopo</span></a></li>
         <li><a href="<?= Url::to(['sitehcn/index']) ?>"><i class="fa fa-tasks"></i> <span>Site</span></a></li>
         <li><a href="<?= Url::to(['planta/index']) ?>"><i class="fa fa-map"></i> <span>Planta</span></a></li>

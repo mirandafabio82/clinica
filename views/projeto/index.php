@@ -12,30 +12,54 @@ use yii\widgets\Pjax;
 $this->title = 'Projetos';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
+<style>
+.kv-editable-link {
+border: 0 !important;
+background: none !important;
+-webkit-appearance: none !important;
+}
+
+</style>
+
 <div class="projeto-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p>
-        <?= Html::a('Novo Projeto', ['create'], ['class' => 'btn btn-success']) ?>
+    <!-- <p>
+        <?//= Html::a('Novo Projeto', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-    <div class="box box-primary">
-        <div class="box-header with-border" style="overflow-y: scroll;">
+     -->
       
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'pjax' => true,
+        'toolbar' =>  [
+        ['content' => Html::a('<i class="glyphicon glyphicon-plus"></i>', ['create'], ['class' => 'btn btn-success'])
+        ],
+          '{export}',
+          '{toggleData}',
+        ],
+        'export' => [
+          'fontAwesome' => true
+        ],
         'hover' => true,
+        'panel' => [
+            'type' => GridView::TYPE_PRIMARY,
+            'heading' => '<i class="fa fa-folder-open"></i>  Projetos'
+        ],
         'columns' => [
             // ['class' => 'yii\grid\SerialColumn'],
 
             'id',
+            'nome',
             [
               'attribute' => 'status',      
               'class' => 'kartik\grid\EditableColumn',        
               'format' => 'raw',
+              'contentOptions' => ['style' => 'width:8em;  min-width:8em;'],
                'value' => function ($data) {
 
                 $status = Yii::$app->db->createCommand('SELECT status FROM projeto_status WHERE id='.$data->status)->queryScalar();
@@ -46,7 +70,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 else
                     $color = 'red';
 
-               return '<span style="color:'.$color.' "><i class="fa fa-circle" aria-hidden="true"></i>'.$status.'</span>';
+               return '<span style="color:'.$color.' "><i class="fa fa-circle" aria-hidden="true"></i> '.$status.'</span>';
 
                },
             ],
@@ -54,6 +78,7 @@ $this->params['breadcrumbs'][] = $this->title;
               'attribute' => 'cliente_id',   
               'class' => 'kartik\grid\EditableColumn',           
               'format' => 'raw',
+              'contentOptions' => ['style' => 'width:10em;'],
                'value' => function ($data) {
 
                 $nome = Yii::$app->db->createCommand('SELECT nome FROM cliente WHERE id='.$data->cliente_id)->queryScalar();
@@ -66,7 +91,8 @@ $this->params['breadcrumbs'][] = $this->title;
             [
               'attribute' => 'contato_id',              
               'format' => 'raw',
-               'value' => function ($data) {
+              'contentOptions' => ['style' => 'width:10em;  min-width:10em;'],
+              'value' => function ($data) {
 
                 $nome = Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.$data->contato_id)->queryScalar();                
 
@@ -104,10 +130,17 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'tratamento',
             // 'contato',
             // 'setor',
-            'fone_contato',
-            'celular',
+            [
+              'attribute' => 'fone_contato',
+              'format' => 'raw',
+              'contentOptions' => ['style' => 'width:8em;  min-width:8em;'],
+            ],
+            [
+              'attribute' => 'celular',
+              'format' => 'raw',
+              'contentOptions' => ['style' => 'width:8em;  min-width:8em;'],
+            ],
             'email:email',
-            'documentos',
             'proposta',
             'rev_proposta',
             'data_proposta',
@@ -136,6 +169,4 @@ $this->params['breadcrumbs'][] = $this->title;
 
         ],
     ]); ?>
-</div>
-</div>
 </div>

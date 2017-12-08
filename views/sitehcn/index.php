@@ -1,8 +1,8 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
-
+// use yii\grid\GridView;
+use kartik\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\search\SitehcnSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -10,19 +10,24 @@ use yii\grid\GridView;
 $this->title = 'Sites';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="site-index">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <p>
-        <?= Html::a('Novo Site', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-    <div class="box box-primary">
-        <div class="box-header with-border">
-    <?= GridView::widget([
+<?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'pjax' => true,
+        'toolbar' =>  [
+        ['content' => Html::a('<i class="glyphicon glyphicon-plus"></i>', ['create'], ['class' => 'btn btn-success'])
+        ],
+          '{export}',
+          '{toggleData}',
+        ],
+        'export' => [
+          'fontAwesome' => true
+        ],
+        'hover' => true,
+        'panel' => [
+            'type' => GridView::TYPE_PRIMARY,
+            'heading' => '<i class="fa fa-tasks"></i> Sites'
+        ],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -32,6 +37,4 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
-</div>
-</div>
 </div>

@@ -113,7 +113,7 @@ $("#projeto-site").change(function(ev){
     <div class="box-header with-border">
       <div class="row">    
         <div class="col-md-2"> 
-          <?= $form->field($model, 'projeto_nome_id')->dropDownList($listNomes,['prompt'=>'Selecione um Nome Projeto']) ?>
+          <?= $form->field($model, 'nome')->textInput(['maxlength' => true]) ?>  
 
           <?= $form->field($model, 'cliente_id')->dropDownList($listClientes,['prompt'=>'Selecione um Cliente']) ?>
 

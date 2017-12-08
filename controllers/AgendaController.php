@@ -78,7 +78,7 @@ class AgendaController extends Controller
     {
         $model = new Agenda();
         $model->data =  date('d/m/Y');
-        $projetos = Yii::$app->db->createCommand('SELECT projeto.id, nome FROM projeto JOIN projeto_nome')->queryAll();
+        $projetos = Yii::$app->db->createCommand('SELECT id, nome FROM projeto')->queryAll();
         $listProjetos = ArrayHelper::map($projetos,'id','nome');
 
         $sites = Yii::$app->db->createCommand('SELECT id, nome FROM site')->queryAll();
