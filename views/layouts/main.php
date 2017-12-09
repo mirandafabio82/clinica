@@ -12,6 +12,15 @@ use app\assets\AppAsset;
 use yii\helpers\Url;
 
 AppAsset::register($this);
+
+$this->registerJs('
+  $("#logout-btn").click(function(){
+    console.log("aa");
+    $("#logout-form").submit();
+  });
+
+');
+
 $usuario = Yii::$app->db->createCommand('SELECT * FROM user WHERE id='.Yii::$app->user->getId())->queryOne(); 
 ?>
 <?php $this->beginPage() ?>
@@ -32,7 +41,7 @@ $usuario = Yii::$app->db->createCommand('SELECT * FROM user WHERE id='.Yii::$app
   <!-- Theme style -->
   <link rel="stylesheet" href="resources/dist/css/AdminLTE.min.css">
   <!-- AdminLTE Skins. Choose a skin from the css/skins
-       folder instead of downloading all of them to reduce the load. -->
+  folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="resources/dist/css/skins/_all-skins.min.css">
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -46,59 +55,43 @@ $usuario = Yii::$app->db->createCommand('SELECT * FROM user WHERE id='.Yii::$app
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
 <body class="hold-transition skin-blue fixed sidebar-mini">
-<?php $this->beginBody() ?>
+  <?php $this->beginBody() ?>
 
-<div class="wrap">
+  <div class="wrap">
     <header class="main-header">
-    <!-- Logo -->
-    <a href="plugins/index2.html" class="logo">
-      <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><b>HCN</b></span>
-      <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><b>HCN</b>Automação</span>
-    </a>
-    <!-- Header Navbar: style can be found in header.less -->
-    <nav class="navbar navbar-static-top">
-      <!-- Sidebar toggle button-->
-      <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
+      <!-- Logo -->
+      <a href="plugins/index2.html" class="logo">
+        <!-- mini logo for sidebar mini 50x50 pixels -->
+        <span class="logo-mini"><b>HCN</b></span>
+        <!-- logo for regular state and mobile devices -->
+        <span class="logo-lg"><b>HCN</b>Automação</span>
       </a>
+      <!-- Header Navbar: style can be found in header.less -->
+      <nav class="navbar navbar-static-top">
+        <!-- Sidebar toggle button-->
+        <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </a>
 
-      <div class="navbar-custom-menu">
-        <ul class="nav navbar-nav">
-          <!-- Messages: style can be found in dropdown.less-->
-        
-          
-         
-          <!-- User Account: style can be found in dropdown.less -->
-          <li class="dropdown user user-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <!-- <img src="resources/dist/img/user2-160x160.jpg" class="user-image" alt="User Image"> -->
-              <span class="hidden-xs"><?= $usuario['email'] ?>
-                
-              </span>
-            </a>
-            <ul class="dropdown-menu">
-              <!-- User image -->
-             
-              <!-- Menu Body -->
-              <!-- <li class="user-body">
-                <div class="row">
-                  <div class="col-xs-4 text-center">
-                    <a href="#">Followers</a>
-                  </div>
-                  <div class="col-xs-4 text-center">
-                    <a href="#">Sales</a>
-                  </div>
-                  <div class="col-xs-4 text-center">
-                    <a href="#">Friends</a>
-                  </div>
-                </div> -->
-                <!-- /.row -->
-              </li>
+        <div class="navbar-custom-menu">
+          <ul class="nav navbar-nav">
+            <!-- Messages: style can be found in dropdown.less-->
+
+
+
+            <!-- User Account: style can be found in dropdown.less -->
+            <li class="dropdown user user-menu">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <!-- <img src="resources/dist/img/user2-160x160.jpg" class="user-image" alt="User Image"> -->
+                <span class="hidden-xs"><?= $usuario['email'] ?>
+
+                </span>
+              </a>
+              <ul class="dropdown-menu">               
+              
               <!-- Menu Footer-->
               <li class="user-footer">
                 <div class="pull-left">
@@ -113,17 +106,13 @@ $usuario = Yii::$app->db->createCommand('SELECT * FROM user WHERE id='.Yii::$app
                 </div>
               </li>
             </ul>
-          </li>
-          <!-- Control Sidebar Toggle Button -->
-          <!-- <li>
-            <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
-          </li> -->
+          </li>          
         </ul>
       </div>
     </nav>
   </header>
 
-    <!-- Left side column. contains the sidebar -->
+  <!-- Left side column. contains the sidebar -->
   <aside class="main-sidebar">
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
@@ -154,35 +143,45 @@ $usuario = Yii::$app->db->createCommand('SELECT * FROM user WHERE id='.Yii::$app
         <li><a href="<?= Url::to(['planta/index']) ?>"><i class="fa fa-map"></i> <span>Planta</span></a></li>
         <!-- <li><a href="<?= Url::to(['documento/index']) ?>"><i class="fa fa-file"></i> <span>Documentos</span></a></li> -->
         <li><a href="<?= Url::to(['config/index']) ?>"><i class="fa fa-cog"></i> <span>Configurações</span></a></li>
-        <li><a href="<?= Url::to(['config/index']) ?>"><i class="fa fa-sign-out"></i> <span>Sair</span></a></li>
-        
-          </ul>
-        </li>
+         <?php
+                  echo Html::beginForm(Url::base().'/index.php?r=site/logout', 'post');
+                  echo Html::submitButton('<i class="fa fa-sign-out"></i> Sair', ['class' => 'btn btn-default btn-flat']);
+                  echo Html::endForm();
+                  ?>
+        <!-- <li><a href="#" id="logout-btn">
+          <form action="/hcn/web/index.php?r=site/logout" method="post" id="logout-form">
+          <input type="hidden" name="_csrf" value="Zwn6I2VPoAByPuAdYypoNsW3T1cgQAYa4ik2F6OhrxkkUL5VIB_OMiINrl80HTJm8uF4IXokaEzRRX4v8pXbIA==">
+                 <i class="fa fa-sign-out"></i> <span> Sair</span>
+        </form>
+      </a></li> -->
         
       </ul>
-    </section>
-    <!-- /.sidebar -->
-  </aside>
+    </li>
 
-  <!-- Content Wrapper. Contains page content -->
-            <div class="content-wrapper">
+  </ul>
+</section>
+<!-- /.sidebar -->
+</aside>
 
-                <!-- Main content -->
-                <section class="container-fluid" style="padding-top: 20px;">
-                <?= $content ?>      
-                </section>
-                <!-- /.content -->
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
 
-            </div>
+  <!-- Main content -->
+  <section class="container-fluid" style="padding-top: 20px;">
+    <?= $content ?>      
+  </section>
+  <!-- /.content -->
+
 </div>
 
 <footer class="footer">
-    <div class="container">
-        <p class="pull-left">Todos os direitos reservados &copy; <span style="color: #3c8dbc">HCN </span><?= date('Y') ?></p>
+  <div class="container">
+    <p class="pull-left">Todos os direitos reservados &copy; <span style="color: #3c8dbc">HCN </span><?= date('Y') ?></p>
 
-        <p class="pull-right">Desenvolvido por <span style="color: #3c8dbc">F-Sistemas </span></p>
-    </div>
+    <p class="pull-right">Desenvolvido por <span style="color: #3c8dbc">F-Sistemas </span></p>
+  </div>
 </footer>
+</div>
 
 <!-- jQuery 3 -->
 <script src="plugins/jquery/dist/jquery.min.js"></script>
