@@ -12,7 +12,14 @@ $this->title = 'Agenda';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="agenda-index">
+<style>
+.kv-editable-link {
+border: 0 !important;
+background: none !important;
+-webkit-appearance: none !important;
+}
 
+</style>
     
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -33,17 +40,48 @@ $this->params['breadcrumbs'][] = $this->title;
             'heading' => '<i class="fa fa-calendar"></i> Agenda'
         ],
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
+            // ['class' => 'yii\grid\SerialColumn'],
             'id',
-            'projeto_id',
+            [
+                'attribute' => 'projeto_id',
+                'value' => function($data){
+                    return Yii::$app->db->createCommand('SELECT nome FROM projeto WHERE id='.$data->projeto_id)->queryScalar();
+                }
+            ],            
+            [
+              'attribute' => 'status',      
+              'class' => 'kartik\grid\EditableColumn',        
+              'format' => 'raw',
+              'contentOptions' => ['style' => 'width:8em;  min-width:8em;'],
+               'value' => function ($data) {
+
+                $status = Yii::$app->db->createCommand('SELECT status FROM agenda_status WHERE id='.$data->status)->queryScalar();
+                if($data->status==1)
+                    $color = 'blue';
+                else if($data->status==2)
+                    $color = 'green';
+                else if($data->status==3)
+                    $color = 'red';
+                else if($data->status==4)
+                    $color = 'yellow';
+                else 
+                    $color = 'orange';
+
+               return '<span style="color:'.$color.' "><i class="fa fa-circle" aria-hidden="true"></i> '.$status.'</span>';
+
+               },
+            ],
             'data',
-            'local',
+            [
+                'attribute' => 'site',
+                'value' => function($data){
+                    return Yii::$app->db->createCommand('SELECT nome FROM site WHERE id='.$data->local)->queryScalar();
+                }
+            ],         
             'quem',
-            // 'assunto',
-            // 'hr_inicio',
-            // 'hr_final',
-            // 'status',
+            'assunto',
+            'hr_inicio',
+            'hr_final',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

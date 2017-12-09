@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'heading' => '<i class="fa fa-handshake-o"></i> Clientes'
         ],
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+            // ['class' => 'yii\grid\SerialColumn'],
 
             'id',
             'nome',

@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'heading' => '<i class="fa fa-wrench"></i> Executantes'
         ],
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+            // ['class' => 'yii\grid\SerialColumn'],
 
             'usuario_id',
             [

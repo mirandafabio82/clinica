@@ -52,7 +52,7 @@ class Contato extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'usuario_id' => 'ID',
+            'usuario_id' => 'Nome',
             'cliente_id' => 'Cliente',
             'tratamento' => 'Tratamento',
             'site' => 'Site',

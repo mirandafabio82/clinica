@@ -42,7 +42,7 @@ class Planta extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'site_id' => 'Site ID',
+            'site_id' => 'Site',
             'nome' => 'Nome',
         ];
     }

@@ -30,10 +30,15 @@ $this->params['breadcrumbs'][] = $this->title;
             'heading' => '<i class="fa fa-map"></i> Plantas'
         ],
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+            // ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'site_id',
+            [
+                'attribute' => 'site_id',
+                'value' => function($data){
+                    return Yii::$app->db->createCommand('SELECT nome FROM planta WHERE site_id='.$data->site_id)->queryScalar();
+                }
+            ],
             'nome',
 
             ['class' => 'yii\grid\ActionColumn'],

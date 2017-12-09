@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'heading' => '<i class="fa fa-tasks"></i> Sites'
         ],
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+            // ['class' => 'yii\grid\SerialColumn'],
 
             'id',
             'nome',

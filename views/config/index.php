@@ -33,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'heading' => '<i class="fa fa-cog"></i> Configurações'
         ],
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+            // ['class' => 'yii\grid\SerialColumn'],
 
             'id',
             'vl_hh',

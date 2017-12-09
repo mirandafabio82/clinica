@@ -30,8 +30,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'heading' => '<i class="fa fa-vcard"></i> Tipos de Executante'
         ],
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
+            // ['class' => 'yii\grid\SerialColumn'],
+            'id',
             'cargo',
             'valor_hora',
 

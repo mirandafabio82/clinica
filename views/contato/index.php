@@ -32,15 +32,19 @@ $this->params['breadcrumbs'][] = $this->title;
             'heading' => '<i class="fa fa-address-book"></i> Contatos'
         ],
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+            // ['class' => 'yii\grid\SerialColumn'],
 
-            'usuario_id',
-            'cliente_id',
             [
-              'header' => 'Nome',              
+              'attribute' => 'cliente_id',              
               'format' => 'raw',
                'value' => function ($data) {
-
+                   return Yii::$app->db->createCommand('SELECT nome FROM cliente WHERE id='.$data->cliente_id)->queryScalar();
+               },
+            ],
+            [
+              'attribute' => 'usuario_id',              
+              'format' => 'raw',
+               'value' => function ($data) {
                    return Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.$data->usuario_id)->queryScalar();
                },
             ],

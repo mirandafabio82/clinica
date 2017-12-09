@@ -67,8 +67,8 @@ class Atividade extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'projeto_id' => 'Projeto ID',
-            'executante_id' => 'Executante ID',
+            'projeto_id' => 'Projeto',
+            'executante_id' => 'Executante',
             'local' => 'Local',
             'acao' => 'Acao',
             'data' => 'Data',
