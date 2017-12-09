@@ -5,12 +5,12 @@ namespace app\models\search;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\TipoExecutante;
+use app\models\Tipoexecutante;
 
 /**
  * TipoExecutanteSearch represents the model behind the search form about `app\models\TipoExecutante`.
  */
-class TipoExecutanteSearch extends TipoExecutante
+class TipoexecutanteSearch extends Tipoexecutante
 {
     /**
      * @inheritdoc

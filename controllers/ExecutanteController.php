@@ -169,7 +169,7 @@ class ExecutanteController extends Controller
             return $this->render('create', [
                 'model' => $model,
                 'user' => $user,
-                'listClientes' => $listClientes
+                'listTipos' => $listTipos
             ]);
         }
     }

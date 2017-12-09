@@ -3,8 +3,8 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\TipoExecutante;
-use app\models\search\TipoExecutanteSearch;
+use app\models\Tipoexecutante;
+use app\models\search\TipoexecutanteSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -47,7 +47,7 @@ class TipoexecutanteController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new TipoExecutanteSearch();
+        $searchModel = new TipoexecutanteSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -75,7 +75,7 @@ class TipoexecutanteController extends Controller
      */
     public function actionCreate()
     {
-        $model = new TipoExecutante();
+        $model = new Tipoexecutante();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -127,7 +127,7 @@ class TipoexecutanteController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = TipoExecutante::findOne($id)) !== null) {
+        if (($model = Tipoexecutante::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

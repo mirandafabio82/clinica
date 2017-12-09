@@ -13,7 +13,7 @@ use Yii;
  *
  * @property Executante[] $executantes
  */
-class TipoExecutante extends \yii\db\ActiveRecord
+class Tipoexecutante extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc

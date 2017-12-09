@@ -154,6 +154,7 @@ $usuario = Yii::$app->db->createCommand('SELECT * FROM user WHERE id='.Yii::$app
         <li><a href="<?= Url::to(['planta/index']) ?>"><i class="fa fa-map"></i> <span>Planta</span></a></li>
         <!-- <li><a href="<?= Url::to(['documento/index']) ?>"><i class="fa fa-file"></i> <span>Documentos</span></a></li> -->
         <li><a href="<?= Url::to(['config/index']) ?>"><i class="fa fa-cog"></i> <span>Configurações</span></a></li>
+        <li><a href="<?= Url::to(['config/index']) ?>"><i class="fa fa-sign-out"></i> <span>Sair</span></a></li>
         
           </ul>
         </li>
