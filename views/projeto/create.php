@@ -22,7 +22,9 @@ $this->params['breadcrumbs'][] = $this->title;
         'listEscopo' => $listEscopo,
         'listDisciplina' => $listDisciplina,
         'searchModel' => $searchModel,
-           'dataProvider' => $dataProvider,
+        'dataProvider' => $dataProvider,
+        'escopoDataProvider' => $escopoDataProvider,
+        'searchEscopo' => $searchEscopo
     ]) ?>
 
 </div>

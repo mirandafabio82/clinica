@@ -7,6 +7,7 @@ use app\models\Projeto;
 use app\models\Cliente;
 use app\models\Contato;
 use app\models\Escopo;
+use app\models\search\EscopoSearch;
 use app\models\search\ProjetoSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -111,6 +112,9 @@ class ProjetoController extends Controller
 
         $status = Yii::$app->db->createCommand('SELECT id, status FROM projeto_status')->queryAll();
         $listStatus = ArrayHelper::map($status,'id','status');
+
+        $searchEscopo = new EscopoSearch();
+        $escopoDataProvider = $searchEscopo->search(Yii::$app->request->queryParams);
        
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -127,6 +131,8 @@ class ProjetoController extends Controller
                 'listDisciplina' => $listDisciplina,
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
+                'escopoDataProvider' => $escopoDataProvider,
+                'searchEscopo' => $searchEscopo
 
             ]);
         }
@@ -169,6 +175,10 @@ class ProjetoController extends Controller
         $plantas = Yii::$app->db->createCommand('SELECT id, nome FROM planta WHERE site_id='.$model->site)->queryAll();
         $listPlantas = ArrayHelper::map($plantas,'id','nome');
 
+        $searchEscopo = new EscopoSearch();
+        $escopoDataProvider = $searchEscopo->search(Yii::$app->request->queryParams);
+        $escopoDataProvider->query->where('projeto_id='.$model->id);
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
@@ -183,7 +193,9 @@ class ProjetoController extends Controller
                 'listPlantas' => $listPlantas,
                 'listDisciplina' => $listDisciplina,
                 'searchModel' => $searchModel,
-                'dataProvider' => $dataProvider,    
+                'dataProvider' => $dataProvider,
+                'escopoDataProvider' => $escopoDataProvider,
+                'searchEscopo' => $searchEscopo
             ]);
         }
     }

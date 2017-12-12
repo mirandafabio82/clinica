@@ -287,22 +287,37 @@ $("#projeto-site").change(function(ev){
         </div>
 
       </div>
+    <div class="row">
+    <div class="col-md-12"> 
+       <h4>Fatura</h4>
+          <div class="col-md-2">
+            <?= $form->field($model, 'cliente_fatura')->textInput(['maxlength' => true]) ?>
+          </div>
+          <div class="col-md-2">
+            <?= $form->field($model, 'site_fatura')->textInput(['maxlength' => true]) ?>
+          </div>           
 
-      
+          <div class="col-md-2">
+            <?= $form->field($model, 'uf_fatura')->textInput(['maxlength' => true]) ?>
+          </div>
+          <div class="col-md-2">
+            <?= $form->field($model, 'municipio_fatura')->textInput(['maxlength' => true]) ?>
+          </div>
+          <div class="col-md-2">
+            <?= $form->field($model, 'cnpj_fatura')->textInput(['maxlength' => true]) ?>
+          </div>
+        </div>
+      </div>
       <div class="row">      
         
           <div class="col-md-6"> 
           <div class="col-md-12">
+          Projetos
           <?= GridView::widget([
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
-            'pjax' => true,
-            
-            'export' => [
-            'fontAwesome' => true
-            ],
-            'hover' => true,
-            
+            'pjax' => true,                        
+            'hover' => true,            
             'columns' => [
             // ['class' => 'yii\grid\SerialColumn'],
 
@@ -376,32 +391,45 @@ $("#projeto-site").change(function(ev){
             ]); ?>
             </div>
             </div>
-            <div class="col-md-4"> 
+
+            <div class="col-md-6"> 
+            Escopo
+            <?= GridView::widget([
+            'dataProvider' => $escopoDataProvider,
+            'filterModel' => $searchEscopo,
+            'pjax' => true,
             
-          </div>
+            'export' => [
+            'fontAwesome' => true
+            ],
+            'hover' => true,
+            
+            'columns' => [
+            // ['class' => 'yii\grid\SerialColumn'],
 
-          <h4>Fatura</h4>
-          <div class="col-md-2">
-            <?= $form->field($model, 'cliente_fatura')->textInput(['maxlength' => true]) ?>
+            // 'id',
+            /*[
+              'class' => 'yii\grid\ActionColumn',
+              'template' => '{update} {delete}',    
+              'contentOptions' => ['style' => 'width:5em;  min-width:5em;'],
+            ],*/
+            'atividademodelo_id',
+            'projeto_id',
+            'item',
+            'nome',
+            'descricao',
+            'horas',
+            'executado',
+            ]
+            ]); ?>
           </div>
-          <div class="col-md-2">
-            <?= $form->field($model, 'site_fatura')->textInput(['maxlength' => true]) ?>
-          </div>           
-
-          <div class="col-md-2">
-            <?= $form->field($model, 'uf_fatura')->textInput(['maxlength' => true]) ?>
           </div>
-          <div class="col-md-2">
-            <?= $form->field($model, 'municipio_fatura')->textInput(['maxlength' => true]) ?>
-          </div>
-          <div class="col-md-2">
-            <?= $form->field($model, 'cnpj_fatura')->textInput(['maxlength' => true]) ?>
-          </div>
-          </div>
+          
+         
         </div>
       </div>
     </div>
-
+    
 
     <?php ActiveForm::end(); ?>
 

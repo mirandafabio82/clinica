@@ -24,6 +24,8 @@ $this->params['breadcrumbs'][] = 'Update';
         'listDisciplina' => $listDisciplina,
         'searchModel' => $searchModel,
         'dataProvider' => $dataProvider,
+        'escopoDataProvider' => $escopoDataProvider,
+        'searchEscopo' => $searchEscopo
     ]) ?>
 
 </div>

@@ -18,7 +18,7 @@ class EscopoSearch extends Escopo
     public function rules()
     {
         return [
-            [['id', 'item', 'horas', 'executado', 'interno'], 'integer'],
+            [['id', 'item', 'horas', 'executado', 'interno', 'projeto_id'], 'integer'],
             [['nome', 'descricao', 'criado', 'modificado'], 'safe'],
         ];
     }

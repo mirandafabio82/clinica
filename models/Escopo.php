@@ -35,7 +35,7 @@ class Escopo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['item', 'horas', 'executado', 'interno'], 'integer'],
+            [['item', 'horas', 'executado', 'interno', 'projeto_id', 'atividademodelo_id'], 'integer'],
             [['criado', 'modificado'], 'safe'],
             [['nome'], 'string', 'max' => 255],
             [['descricao'], 'string', 'max' => 160],
