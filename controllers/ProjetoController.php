@@ -115,7 +115,7 @@ class ProjetoController extends Controller
 
         $searchEscopo = new EscopoSearch();
         $escopoDataProvider = $searchEscopo->search(Yii::$app->request->queryParams);
-       
+        $escopoDataProvider->query->join('join','atividademodelo', 'atividademodelo.id=escopo.atividademodelo_id')->where('isPrioritaria=1');
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -177,7 +177,7 @@ class ProjetoController extends Controller
 
         $searchEscopo = new EscopoSearch();
         $escopoDataProvider = $searchEscopo->search(Yii::$app->request->queryParams);
-        $escopoDataProvider->query->where('projeto_id='.$model->id);
+        $escopoDataProvider->query->join('join','atividademodelo', 'atividademodelo.id=escopo.atividademodelo_id')->where('projeto_id='.$model->id.' OR isPrioritaria=1');
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);

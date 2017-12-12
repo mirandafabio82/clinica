@@ -146,11 +146,13 @@ $usuario = Yii::$app->db->createCommand('SELECT * FROM user WHERE id='.Yii::$app
         <li><a href="<?= Url::to(['atividademodelo/index']) ?>"><i class="fa fa-map"></i> <span>Atividades</span></a></li>
         <!-- <li><a href="<?= Url::to(['documento/index']) ?>"><i class="fa fa-file"></i> <span>Documentos</span></a></li> -->
         <li><a href="<?= Url::to(['config/index']) ?>"><i class="fa fa-cog"></i> <span>Configurações</span></a></li>
+        <li><a>
          <?php
-                  echo Html::beginForm(Url::base().'/index.php?r=site/logout', 'post');
-                  echo Html::submitButton('<i class="fa fa-sign-out"></i> Sair', ['class' => 'btn btn-default btn-flat']);
-                  echo Html::endForm();
-                  ?>
+              echo Html::beginForm(Url::base().'/index.php?r=site/logout', 'post');
+              echo Html::submitButton('<li><i class="fa fa-sign-out"></i> Sair<li>', ['class' => 'btn-flat', 'style'=>'border: 0 !important; background: none !important; -webkit-appearance: none !important;'] );
+              echo Html::endForm();
+          ?>
+        </a></li>
         <!-- <li><a href="#" id="logout-btn">
           <form action="/hcn/web/index.php?r=site/logout" method="post" id="logout-form">
           <input type="hidden" name="_csrf" value="Zwn6I2VPoAByPuAdYypoNsW3T1cgQAYa4ik2F6OhrxkkUL5VIB_OMiINrl80HTJm8uF4IXokaEzRRX4v8pXbIA==">

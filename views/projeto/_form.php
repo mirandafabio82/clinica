@@ -13,7 +13,7 @@ use yii\widgets\Pjax;
 $this->registerJs('
 
   $( document ).ready(function() {
-    console.log("aa");
+    
     $("input").removeClass("form-control");
     $(".messages-inline").text("");
   });
@@ -425,7 +425,7 @@ $("#projeto-site").change(function(ev){
           </div>
           </div>
           
-         
+         </div>
         </div>
       </div>
     </div>
