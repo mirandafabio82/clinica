@@ -36,6 +36,8 @@ use yii\widgets\ActiveForm;
     
     <?= $form->field($model, 'cidade')->textInput(['maxlength' => true]) ?>
 
+    <?= $form->field($model, 'endereco')->textInput(['maxlength' => true]) ?>
+
     </div>
     <div class="col-md-6">
 

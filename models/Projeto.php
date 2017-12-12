@@ -24,6 +24,7 @@ use Yii;
  * @property string $fone_contato
  * @property string $celular
  * @property string $email
+ * @property string $documenstos
  * @property string $proposta
  * @property integer $rev_proposta
  * @property string $data_proposta
@@ -38,6 +39,7 @@ use Yii;
  * @property string $valor_consumido
  * @property string $valor_saldo
  * @property string $status
+ * @property string $data_pendencia
  * @property string $pendencia
  * @property string $comentarios
  * @property string $data_entrega
@@ -70,8 +72,8 @@ class Projeto extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['cliente_id', 'contato_id', 'nome', 'status'], 'required'],
-            [['id', 'cliente_id', 'contato_id', 'rev_proposta', 'qtd_hh', 'qtd_dias', 'qtd_km', 'status'], 'integer'],
+            [['cliente_id', 'contato_id', 'nome', 'status', 'escopo_id'], 'required'],
+            [['id', 'cliente_id', 'contato_id', 'rev_proposta', 'qtd_hh', 'qtd_dias', 'qtd_km', 'status', 'documentos'], 'integer'],
             [['data_proposta', 'data_entrega', 'criado', 'modificado'], 'safe'],
             [['vl_hh', 'total_horas', 'vl_km', 'total_km', 'valor_proposta', 'valor_consumido', 'valor_saldo'], 'number'],
             [['descricao'], 'string', 'max' => 500],
@@ -137,7 +139,10 @@ class Projeto extends \yii\db\ActiveRecord
             'cnpj_fatura' => 'CNPJ Fatura',
             'criado' => 'Criado',
             'modificado' => 'Modificado',
-            'nome' => 'Nome'
+            'nome' => 'Nome',
+            'documentos' => 'Qtd Documentos',
+            'data_pendencia' => 'Data Resp Pendência',
+            'escopo_id' => 'Escopo'
         ];
     }
 

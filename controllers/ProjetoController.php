@@ -88,6 +88,9 @@ class ProjetoController extends Controller
     {
         $model = new Projeto();
 
+        $searchModel = new ProjetoSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
         $clientes = Yii::$app->db->createCommand('SELECT id, nome FROM cliente')->queryAll();
         $listClientes = ArrayHelper::map($clientes,'id','nome');
 
@@ -100,8 +103,11 @@ class ProjetoController extends Controller
         $contatos = Yii::$app->db->createCommand('SELECT id, nome FROM contato JOIN user ON contato.usuario_id = user.id')->queryAll();
         $listContatos = ArrayHelper::map($contatos,'id','nome');
 
-        $escopo = Yii::$app->db->createCommand('SELECT id, nome FROM escopo')->queryAll();
+        $escopo = Yii::$app->db->createCommand('SELECT id, nome FROM escopopadrao')->queryAll();
         $listEscopo = ArrayHelper::map($escopo,'id','nome');
+
+        $disciplina = Yii::$app->db->createCommand('SELECT id, nome FROM disciplina')->queryAll();
+        $listDisciplina = ArrayHelper::map($disciplina,'id','nome');
 
         $status = Yii::$app->db->createCommand('SELECT id, status FROM projeto_status')->queryAll();
         $listStatus = ArrayHelper::map($status,'id','status');
@@ -117,7 +123,10 @@ class ProjetoController extends Controller
                 'listEscopo' => $listEscopo,
                 'listSites' => $listSites,
                 'listNomes' => $listNomes,
-                'listStatus' => $listStatus
+                'listStatus' => $listStatus,
+                'listDisciplina' => $listDisciplina,
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
 
             ]);
         }
@@ -133,6 +142,9 @@ class ProjetoController extends Controller
     {
         $model = $this->findModel($id);
 
+        $searchModel = new ProjetoSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
         $clientes = Yii::$app->db->createCommand('SELECT id, nome FROM cliente')->queryAll();
         $listClientes = ArrayHelper::map($clientes,'id','nome');
 
@@ -145,8 +157,11 @@ class ProjetoController extends Controller
         $contatos = Yii::$app->db->createCommand('SELECT id, nome FROM contato JOIN user ON contato.usuario_id = user.id WHERE cliente_id='.$model->cliente_id)->queryAll();
         $listContatos = ArrayHelper::map($contatos,'id','nome');
 
-        $escopo = Yii::$app->db->createCommand('SELECT id, nome FROM escopo')->queryAll();
+        $escopo = Yii::$app->db->createCommand('SELECT id, nome FROM escopopadrao')->queryAll();
         $listEscopo = ArrayHelper::map($escopo,'id','nome');
+
+        $disciplina = Yii::$app->db->createCommand('SELECT id, nome FROM disciplina')->queryAll();
+        $listDisciplina = ArrayHelper::map($disciplina,'id','nome');
 
         $status = Yii::$app->db->createCommand('SELECT id, status FROM projeto_status')->queryAll();
         $listStatus = ArrayHelper::map($status,'id','status');
@@ -165,7 +180,10 @@ class ProjetoController extends Controller
                 'listSites' => $listSites,
                 'listNomes' => $listNomes,
                 'listStatus' => $listStatus,
-                'listPlantas' => $listPlantas
+                'listPlantas' => $listPlantas,
+                'listDisciplina' => $listDisciplina,
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,    
             ]);
         }
     }

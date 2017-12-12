@@ -38,7 +38,7 @@ class Executante extends \yii\db\ActiveRecord
             [['usuario_id'], 'integer'],
             [['criado', 'modificado'], 'safe'],
             [['cpf'], 'string', 'max' => 45],
-            [['cidade'], 'string', 'max' => 255],
+            [['cidade', 'endereco'], 'string', 'max' => 255],
             [['uf'], 'string', 'max' => 2],
             [['telefone', 'celular'], 'string', 'max' => 15],
            
@@ -59,6 +59,7 @@ class Executante extends \yii\db\ActiveRecord
             'celular' => 'Celular',
             'criado' => 'Criado',
             'modificado' => 'Modificado',
+            'endereco' => 'Endereço'
         ];
     }
 

@@ -12,14 +12,17 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="projeto-create">
 
-    <h1><?= Html::encode($this->title) ?></h1>
 
     <?= $this->render('_form', [
         'model' => $model,
         'listClientes' => $listClientes,
         'listContatos' => $listContatos,
         'listSites' => $listSites,        
-        'listStatus' => $listStatus
+        'listStatus' => $listStatus,
+        'listEscopo' => $listEscopo,
+        'listDisciplina' => $listDisciplina,
+        'searchModel' => $searchModel,
+           'dataProvider' => $dataProvider,
     ]) ?>
 
 </div>

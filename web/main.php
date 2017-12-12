@@ -131,25 +131,22 @@ $usuario = Yii::$app->db->createCommand('SELECT * FROM user WHERE id='.Yii::$app
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">MENU PRINCIPAL</li>
         
-        <li><a href="<?= Url::to(['projeto/index']) ?>"><i class="fa fa-folder-open"></i> <span>Projetos</span></a></li>
-        <li><a href="<?= Url::to(['atividade/index']) ?>"><i class="fa fa-hourglass-half"></i> <span>Atividades</span></a></li>        
+        <li><a href="<?= Url::to(['agenda/index']) ?>"><i class="fa fa-calendar"></i> <span>Agenda</span></a></li>
         <li><a href="<?= Url::to(['cliente/index']) ?>"><i class="fa fa-handshake-o"></i> <span>Clientes</span></a></li>
         <li><a href="<?= Url::to(['contato/index']) ?>"><i class="fa fa-address-book"></i> <span>Contatos</span></a></li>
         <li><a href="<?= Url::to(['executante/index']) ?>"><i class="fa fa-wrench"></i> <span>Executantes</span></a></li>
-        <li><a href="<?= Url::to(['agenda/index']) ?>"><i class="fa fa-calendar"></i> <span>Agenda</span></a></li>
         <li><a href="<?= Url::to(['tipoexecutante/index']) ?>"><i class="fa fa-vcard"></i> <span>Tipos de Executantes</span></a></li>
+        <li><a href="<?= Url::to(['projeto/index']) ?>"><i class="fa fa-folder-open"></i> <span>Projetos</span></a></li>
+        <li><a href="<?= Url::to(['atividade/index']) ?>"><i class="fa fa-hourglass-half"></i> <span>Atividades</span></a></li>        
         <!-- <li><a href="<?//= Url::to(['escopo/index']) ?>"><i class="fa fa-university"></i> <span>Escopo</span></a></li> -->
         <li><a href="<?= Url::to(['sitehcn/index']) ?>"><i class="fa fa-tasks"></i> <span>Site</span></a></li>
-        <li><a href="<?= Url::to(['planta/index']) ?>"><i class="fa fa-map"></i> <span>Área</span></a></li>
-        <li><a href="<?= Url::to(['disciplina/index']) ?>"><i class="fa fa-tasks"></i> <span>Disciplina</span></a></li>
-        <li><a href="<?= Url::to(['escopopadrao/index']) ?>"><i class="fa fa-map"></i> <span>Escopo</span></a></li>
-        <li><a href="<?= Url::to(['atividademodelo/index']) ?>"><i class="fa fa-map"></i> <span>Atividades</span></a></li>
-        <!-- <li><a href="<?= Url::to(['documento/index']) ?>"><i class="fa fa-file"></i> <span>Documentos</span></a></li> -->
+        <li><a href="<?= Url::to(['planta/index']) ?>"><i class="fa fa-map"></i> <span>Planta</span></a></li>
+        <!-- <li><a href="<?//= Url::to(['documento/index']) ?>"><i class="fa fa-file"></i> <span>Documentos</span></a></li> -->
         <li><a href="<?= Url::to(['config/index']) ?>"><i class="fa fa-cog"></i> <span>Configurações</span></a></li>
          <?php
-                  echo Html::beginForm(Url::base().'/index.php?r=site/logout', 'post');
+                  /*echo Html::beginForm(Url::base().'/index.php?r=site/logout', 'post');
                   echo Html::submitButton('<i class="fa fa-sign-out"></i> Sair', ['class' => 'btn btn-default btn-flat']);
-                  echo Html::endForm();
+                  echo Html::endForm();*/
                   ?>
         <!-- <li><a href="#" id="logout-btn">
           <form action="/hcn/web/index.php?r=site/logout" method="post" id="logout-form">

@@ -5,12 +5,12 @@ namespace app\models\search;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Tipoexecutante;
+use app\models\Atividademodelo;
 
 /**
- * TipoExecutanteSearch represents the model behind the search form about `app\models\TipoExecutante`.
+ * AtividademodeloSearch represents the model behind the search form about `app\models\Atividademodelo`.
  */
-class TipoexecutanteSearch extends Tipoexecutante
+class AtividademodeloSearch extends Atividademodelo
 {
     /**
      * @inheritdoc
@@ -19,7 +19,8 @@ class TipoexecutanteSearch extends Tipoexecutante
     {
         return [
             [['id'], 'integer'],
-            [['cargo', 'valor_hora', 'valor_pago'], 'safe'],
+            [['nome'], 'safe'],
+            [['isPrioritaria', 'isEntregavel'], 'integer'],
         ];
     }
 
@@ -41,7 +42,7 @@ class TipoexecutanteSearch extends Tipoexecutante
      */
     public function search($params)
     {
-        $query = TipoExecutante::find();
+        $query = Atividademodelo::find();
 
         // add conditions that should always apply here
 
@@ -62,8 +63,7 @@ class TipoexecutanteSearch extends Tipoexecutante
             'id' => $this->id,
         ]);
 
-        $query->andFilterWhere(['like', 'cargo', $this->cargo])
-            ->andFilterWhere(['like', 'valor_hora', $this->valor_hora]);
+        $query->andFilterWhere(['like', 'nome', $this->nome]);
 
         return $dataProvider;
     }

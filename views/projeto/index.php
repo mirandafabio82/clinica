@@ -62,15 +62,9 @@ background: none !important;
               'contentOptions' => ['style' => 'width:8em;  min-width:8em;'],
                'value' => function ($data) {
 
-                $status = Yii::$app->db->createCommand('SELECT status FROM projeto_status WHERE id='.$data->status)->queryScalar();
-                if($data->status==1)
-                    $color = 'blue';
-                else if($data->status==2)
-                    $color = 'green';
-                else
-                    $color = 'red';
-
-               return '<span style="color:'.$color.' "><i class="fa fa-circle" aria-hidden="true"></i> '.$status.'</span>';
+                $status = Yii::$app->db->createCommand('SELECT status, cor FROM projeto_status WHERE id='.$data->status)->queryOne();
+                
+               return '<span style="color:'.$status['cor'].' "><i class="fa fa-circle" aria-hidden="true"></i> '.$status['status'].'</span>';
 
                },
             ],
