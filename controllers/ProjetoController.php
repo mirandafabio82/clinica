@@ -118,7 +118,7 @@ class ProjetoController extends Controller
         $escopoDataProvider->query->join('join','atividademodelo', 'atividademodelo.id=escopo.atividademodelo_id')->where('isPrioritaria=1');
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['create', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -180,7 +180,7 @@ class ProjetoController extends Controller
         $escopoDataProvider->query->join('join','atividademodelo', 'atividademodelo.id=escopo.atividademodelo_id')->where('projeto_id='.$model->id.' OR isPrioritaria=1');
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['create', 'id' => $model->id]);
         } else {
             return $this->render('update', [
                 'model' => $model,

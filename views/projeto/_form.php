@@ -18,6 +18,31 @@ $this->registerJs('
     $(".messages-inline").text("");
   });
 
+  $("#Automação_checkbox").change(function(ev){
+    if($(this).prop("checked")){
+      $("#disciplina_Automação_div").removeAttr("hidden");
+    }else{
+      $("#disciplina_Automação_div").attr("hidden", "hidden");
+    }
+  });
+
+  $("#Processo_checkbox").change(function(ev){
+    if($(this).prop("checked")){
+      $("#disciplina_Processo_div").removeAttr("hidden");
+    }else{
+      $("#disciplina_Processo_div").attr("hidden", "hidden");
+    }
+  });
+
+  $("#Instrumentação_checkbox").change(function(ev){
+    if($(this).prop("checked")){
+      $("#disciplina_Instrumentação_div").removeAttr("hidden");
+    }else{
+      $("#disciplina_Instrumentação_div").attr("hidden", "hidden");
+    }
+  });
+
+
   $("#projeto-cliente_id").change(function(ev){
     var id = $(this).val();    
     $.ajax({ 
@@ -136,11 +161,22 @@ $("#projeto-site").change(function(ev){
         <div class="col-md-4">
           <?= $form->field($model, 'descricao')->textarea(['maxlength' => true]) ?>
         </div>
-        <div class="col-md-2">
-          <?= $form->field($model, 'escopo_id')->dropDownList($listEscopo,['prompt'=>'Selecione um Escopo']) ?>
-        </div>
-        <div class="col-md-2">
-          <?= $form->field($model, 'escopo_id')->dropDownList($listEscopo,['prompt'=>'Selecione uma Disciplina']) ?>
+
+        <div class="col-md-6">
+        <b> Disciplinas </b>
+        <br>
+          <?php     
+        foreach ($listDisciplina as $key => $disciplina) { ?>
+           <input type="checkbox" name="Disciplinas[<?=$disciplina?>]" id="<?=$disciplina?>_checkbox" value="<?= $key?>"><?= $disciplina ?>
+           <br>
+            <div style="margin-left: 1em" id="disciplina_<?=$disciplina?>_div" hidden>
+           <?php     
+            foreach ($listEscopo as $key => $escopo) { ?>
+                <input type="checkbox" name="Escopos[<?=$disciplina."-".$key?>]" value="<?= $key?>"><?= $escopo ?>
+            <?php } ?>
+            </div>
+          
+        <?php } ?>
         </div>
         
       </div>
@@ -413,12 +449,36 @@ $("#projeto-site").change(function(ev){
               'template' => '{update} {delete}',    
               'contentOptions' => ['style' => 'width:5em;  min-width:5em;'],
             ],*/
-            'atividademodelo_id',
-            'projeto_id',
+
             'item',
-            'nome',
-            'descricao',
-            'horas',
+           /* [
+              'attribute' => 'atividademodelo_id',
+              'contentOptions' => ['style' => 'width:20em;  min-width:20em;'],
+              'value' => function($data){
+                return Yii::$app->db->createCommand('SELECT nome FROM atividademodelo WHERE id='.$data->atividademodelo_id)->queryScalar();
+              }
+            ],*/
+            'descricao',            
+            [
+              'attribute' => 'horas_tp',
+              'contentOptions' => ['style' => 'width:3em;  min-width:3em;'],
+            ],
+            [
+              'attribute' => 'horas_ej',
+              'contentOptions' => ['style' => 'width:3em;  min-width:3em;'],
+            ],
+            [
+              'attribute' => 'horas_es',
+              'contentOptions' => ['style' => 'width:3em;  min-width:3em;'],
+            ],
+            [
+              'attribute' => 'horas_ep',
+              'contentOptions' => ['style' => 'width:3em;  min-width:3em;'],
+            ],
+            [
+              'attribute' => 'horas_ee',
+              'contentOptions' => ['style' => 'width:3em;  min-width:3em;'],
+            ],
             'executado',
             ]
             ]); ?>

@@ -20,7 +20,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'descricao')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'horas')->textInput() ?>
+    <?= $form->field($model, 'horas_tp')->textInput() ?>
 
     <?= $form->field($model, 'executado')->textInput() ?>
 

@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\Atividademodelo */
 
-$this->title = 'Create Atividademodelo';
+$this->title = 'Modelo de Atividade';
 $this->params['breadcrumbs'][] = ['label' => 'Atividademodelos', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -16,6 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= $this->render('_form', [
         'model' => $model,
+        'listEscopo' => $listEscopo
     ]) ?>
 
 </div>

@@ -18,7 +18,7 @@ class EscopoSearch extends Escopo
     public function rules()
     {
         return [
-            [['id', 'item', 'horas', 'executado', 'interno', 'projeto_id'], 'integer'],
+            [['id', 'item', 'horas_tp', 'horas_tp', 'horas_ej', 'horas_ep', 'horas_es', 'horas_ee', 'executado', 'interno', 'projeto_id', 'atividademodelo_id'], 'integer'],
             [['nome', 'descricao', 'criado', 'modificado'], 'safe'],
         ];
     }
@@ -61,11 +61,16 @@ class EscopoSearch extends Escopo
         $query->andFilterWhere([
             'id' => $this->id,
             'item' => $this->item,
-            'horas' => $this->horas,
+            'horas_tp' => $this->horas_tp,
+            'horas_ej' => $this->horas_ej,
+            'horas_es' => $this->horas_es,
+            'horas_ep'=> $this->horas_ep,
+            'horas_ee' => $this->horas_ee,
             'executado' => $this->executado,
             'interno' => $this->interno,
             'criado' => $this->criado,
             'modificado' => $this->modificado,
+            'atividademodelo_id' => $this->atividademodelo_id,
         ]);
 
         $query->andFilterWhere(['like', 'nome', $this->nome])

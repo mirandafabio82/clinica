@@ -8,6 +8,7 @@ use app\models\search\AtividademodeloSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
 
 /**
  * AtividademodeloController implements the CRUD actions for Atividademodelo model.
@@ -65,11 +66,15 @@ class AtividademodeloController extends Controller
     {
         $model = new Atividademodelo();
 
+        $escopo = Yii::$app->db->createCommand('SELECT id, nome FROM escopopadrao')->queryAll();
+        $listEscopo = ArrayHelper::map($escopo,'id','nome');
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
+                'listEscopo' => $listEscopo
             ]);
         }
     }
@@ -84,11 +89,15 @@ class AtividademodeloController extends Controller
     {
         $model = $this->findModel($id);
 
+        $escopo = Yii::$app->db->createCommand('SELECT id, nome FROM escopopadrao')->queryAll();
+        $listEscopo = ArrayHelper::map($escopo,'id','nome');
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'listEscopo' => $listEscopo
             ]);
         }
     }
