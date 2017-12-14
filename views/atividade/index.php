@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'hover' => true,
         'panel' => [
             'type' => GridView::TYPE_PRIMARY,
-            'heading' => '<i class="fa fa-hourglass-half"></i> Atividades'
+            'heading' => '<i class="fa fa-hourglass-half"></i> Gerenciamento das Atividades'
         ],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],

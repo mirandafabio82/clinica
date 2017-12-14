@@ -131,8 +131,6 @@ class ProjetoController extends Controller
                         $processos = isset($escopos['Processo']) ? $escopos['Processo'] : array();
                         $instrumentacoes = isset($escopos['Instrumentação']) ? $escopos['Instrumentação'] : array();
 
-
-
                         foreach ($automacoes as $key => $automacao) {
                             $atvmodelos = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE escopopadrao_id='.$automacao.' AND disciplina_id = 1')->queryAll();
                             

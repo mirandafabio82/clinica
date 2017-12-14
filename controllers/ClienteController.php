@@ -82,7 +82,7 @@ class ClienteController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['create']);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -106,7 +106,7 @@ class ClienteController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['create']);
         } else {
             return $this->render('update', [
                 'model' => $model,

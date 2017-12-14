@@ -72,7 +72,7 @@ class Projeto extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['cliente_id', 'contato_id', 'nome', 'status'], 'required'],
+            [['cliente_id', 'contato_id', 'nome', 'status', 'site', 'planta'], 'required'],
             [['id', 'cliente_id', 'contato_id', 'rev_proposta', 'qtd_hh', 'qtd_dias', 'qtd_km', 'status', 'documentos'], 'integer'],
             [['data_proposta', 'data_entrega', 'criado', 'modificado'], 'safe'],
             [['vl_hh', 'total_horas', 'vl_km', 'total_km', 'valor_proposta', 'valor_consumido', 'valor_saldo'], 'number'],

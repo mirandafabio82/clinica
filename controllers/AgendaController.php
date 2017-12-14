@@ -76,6 +76,9 @@ class AgendaController extends Controller
      */
     public function actionCreate()
     {
+         $searchModel = new AgendaSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
         $model = new Agenda();
         $model->data =  date('d/m/Y');
         $projetos = Yii::$app->db->createCommand('SELECT id, nome FROM projeto')->queryAll();
@@ -93,13 +96,15 @@ class AgendaController extends Controller
             $model->data = date_format($dat, 'Y-m-d');
             $model->save();
 
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['create']);
         } else {
             return $this->render('create', [
                 'model' => $model,
                 'listProjetos' => $listProjetos,
                 'listSites' => $listSites,
-                'listStatus' => $listStatus
+                'listStatus' => $listStatus,
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
             ]);
         }
     }
@@ -112,6 +117,9 @@ class AgendaController extends Controller
      */
     public function actionUpdate($id)
     {
+         $searchModel = new AgendaSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
         $model = $this->findModel($id);
 
         $projetos = Yii::$app->db->createCommand('SELECT projeto.id, nome FROM projeto JOIN projeto_nome')->queryAll();
@@ -129,13 +137,15 @@ class AgendaController extends Controller
             $model->data = date_format($dat, 'Y-m-d');
             $model->save();
 
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['create']);
         }else {
             return $this->render('update', [
                 'model' => $model,
                 'listProjetos' => $listProjetos,
                 'listSites' => $listSites,
-                'listStatus' => $listStatus
+                'listStatus' => $listStatus,
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
             ]);
         }
     }

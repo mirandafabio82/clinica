@@ -78,6 +78,9 @@ class ExecutanteController extends Controller
      */
     public function actionCreate()
     {
+        $searchModel = new ExecutanteSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
         $model = new Executante();
         $user = new DBUser();
         $exectipo = new ExecutanteTipo();
@@ -110,7 +113,7 @@ class ExecutanteController extends Controller
                 $auth->assign($authorRole, $user->getId());  
 
                 $transaction->commit();
-                return $this->redirect(['view', 'id' => $model->usuario_id]);                
+                return $this->redirect(['create']);                
             }
             catch(Exception $e){
                 $transaction->rollBack();
@@ -121,7 +124,9 @@ class ExecutanteController extends Controller
             return $this->render('create', [
                 'model' => $model,
                 'user' => $user,
-                'listTipos' => $listTipos
+                'listTipos' => $listTipos,
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
             ]);
         }
     }
@@ -134,6 +139,9 @@ class ExecutanteController extends Controller
      */
     public function actionUpdate($id)
     {
+        $searchModel = new ExecutanteSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
         $model = $this->findModel($id);
         $user = new DBUser();
         $tipos_executantes = Yii::$app->db->createCommand('SELECT id, cargo FROM tipo_executante')->queryAll();
@@ -158,7 +166,7 @@ class ExecutanteController extends Controller
                 $auth->assign($authorRole, $user->getId());  
 
                 $transaction->commit();
-                return $this->redirect(['view', 'id' => $model->usuario_id]);                
+                return $this->redirect(['create']);                
             }
             catch(Exception $e){
                 $transaction->rollBack();
@@ -169,7 +177,9 @@ class ExecutanteController extends Controller
             return $this->render('create', [
                 'model' => $model,
                 'user' => $user,
-                'listTipos' => $listTipos
+                'listTipos' => $listTipos,
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
             ]);
         }
     }

@@ -12,11 +12,12 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="planta-create">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
+  
     <?= $this->render('_form', [
         'model' => $model,
-        'listSites' => $listSites
+        'listSites' => $listSites,
+        'searchModel' => $searchModel,
+        'dataProvider' => $dataProvider,
     ]) ?>
 
 </div>

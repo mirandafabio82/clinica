@@ -2,12 +2,44 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-
+use kartik\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $model app\models\TipoExecutante */
 /* @var $form yii\widgets\ActiveForm */
 ?>
+<?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+        'pjax' => true,
+        'toolbar' =>  [
+        ['content' => Html::a('<i class="glyphicon glyphicon-plus"></i>', ['create'], ['class' => 'btn btn-success'])
+        ],
+          '{export}',
+          '{toggleData}',
+        ],
+        'export' => [
+          'fontAwesome' => true
+        ],
+        'hover' => true,
+        'panel' => [
+            'type' => GridView::TYPE_PRIMARY,
+            'heading' => '<i class="fa fa-vcard"></i> Tipos de Executante'
+        ],
+        'columns' => [
+            // ['class' => 'yii\grid\SerialColumn'],
+            [
+              'class' => 'yii\grid\ActionColumn',
+              'template' => '{update} {delete}',    
+              'contentOptions' => ['style' => 'width:5em;  min-width:5em;'],
+            ],
+            'id',
+            'cargo',
+            'valor_hora',
+            'valor_pago',
 
+            // ['class' => 'yii\grid\ActionColumn'],
+        ],
+    ]); ?>
 <div class="tipo-executante-form">
 
     <?php $form = ActiveForm::begin(); ?>

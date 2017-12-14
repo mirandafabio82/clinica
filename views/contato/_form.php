@@ -2,13 +2,73 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-
+use kartik\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $model app\models\Contato */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
 <?php $this->head() ?>
+
+<?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+        'pjax' => true,
+        'toolbar' =>  [
+        ['content' => Html::a('<i class="glyphicon glyphicon-plus"></i>', ['create'], ['class' => 'btn btn-success'])
+        ],
+          '{export}',
+          '{toggleData}',
+        ],
+        'export' => [
+          'fontAwesome' => true
+        ],
+        'hover' => true,
+        'panel' => [
+            'type' => GridView::TYPE_PRIMARY,
+            'heading' => '<i class="fa fa-address-book"></i> Contatos'
+        ],
+        'columns' => [
+            // ['class' => 'yii\grid\SerialColumn'],
+            [
+              'class' => 'yii\grid\ActionColumn',
+              'template' => '{update} {delete}',    
+              'contentOptions' => ['style' => 'width:5em;  min-width:5em;'],
+            ],
+            [
+              'attribute' => 'cliente_id',              
+              'format' => 'raw',
+               'value' => function ($data) {
+                   return Yii::$app->db->createCommand('SELECT nome FROM cliente WHERE id='.$data->cliente_id)->queryScalar();
+               },
+            ],
+            [
+              'attribute' => 'usuario_id',              
+              'format' => 'raw',
+               'value' => function ($data) {
+                   return Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.$data->usuario_id)->queryScalar();
+               },
+            ],
+            'tratamento',
+            'site',
+            'contato',
+            'setor',
+            [
+              'header' => 'Email',              
+              'format' => 'raw',
+               'value' => function ($data) {
+
+                   return Yii::$app->db->createCommand('SELECT email FROM user WHERE id='.$data->usuario_id)->queryScalar();
+               },
+            ],
+            'telefone',
+            'celular',
+            'criado',
+            // 'modificado',
+
+            // ['class' => 'yii\grid\ActionColumn'],
+        ],
+    ]); ?>
 
 <div class="contato-form">
 

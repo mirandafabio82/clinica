@@ -20,7 +20,12 @@ use kartik\grid\GridView;
         ],
         'columns' => [
             // ['class' => 'yii\grid\SerialColumn'],
-
+        
+            [
+              'class' => 'yii\grid\ActionColumn',
+              'template' => '{update} {delete}',    
+              'contentOptions' => ['style' => 'width:5em;  min-width:5em;'],
+            ],
             'id',
             'nome',
             'site',
@@ -30,7 +35,7 @@ use kartik\grid\GridView;
             'criado',
             // 'modificado',
 
-            ['class' => 'yii\grid\ActionColumn', 'header' => 'Ações'],
+            // ['class' => 'yii\grid\ActionColumn', 'header' => 'Ações'],
         ],
     ]); ?>
 <div class="cliente-form">

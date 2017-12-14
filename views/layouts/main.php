@@ -134,18 +134,18 @@ $usuario = Yii::$app->db->createCommand('SELECT * FROM user WHERE id='.Yii::$app
         <li><a href="<?= Url::to(['projeto/create']) ?>"><i class="fa fa-folder-open"></i> <span>Projetos</span></a></li>
         <li><a href="<?= Url::to(['atividademodelo/create']) ?>"><i class="fa fa-map"></i> <span>Atividades Modelo</span></a></li>
         <li><a href="<?= Url::to(['cliente/create']) ?>"><i class="fa fa-handshake-o"></i> <span>Clientes</span></a></li>
-        <li><a href="<?= Url::to(['contato/index']) ?>"><i class="fa fa-address-book"></i> <span>Contatos</span></a></li>
-        <li><a href="<?= Url::to(['agenda/index']) ?>"><i class="fa fa-calendar"></i> <span>Agenda</span></a></li>
-        <li><a href="<?= Url::to(['executante/index']) ?>"><i class="fa fa-wrench"></i> <span>Executantes</span></a></li>
-        <li><a href="<?= Url::to(['tipoexecutante/index']) ?>"><i class="fa fa-vcard"></i> <span>Tipos de Executantes</span></a></li>
+        <li><a href="<?= Url::to(['contato/create']) ?>"><i class="fa fa-address-book"></i> <span>Contatos</span></a></li>
+        <li><a href="<?= Url::to(['agenda/create']) ?>"><i class="fa fa-calendar"></i> <span>Agenda</span></a></li>
+        <li><a href="<?= Url::to(['executante/create']) ?>"><i class="fa fa-wrench"></i> <span>Executantes</span></a></li>
+        <li><a href="<?= Url::to(['tipoexecutante/create']) ?>"><i class="fa fa-vcard"></i> <span>Tipos de Executantes</span></a></li>
         <!-- <li><a href="<?//= Url::to(['escopo/index']) ?>"><i class="fa fa-university"></i> <span>Escopo</span></a></li> -->
-        <li><a href="<?= Url::to(['sitehcn/index']) ?>"><i class="fa fa-tasks"></i> <span>Site</span></a></li>
-        <li><a href="<?= Url::to(['planta/index']) ?>"><i class="fa fa-map"></i> <span>Área</span></a></li>
+        <li><a href="<?= Url::to(['sitehcn/create']) ?>"><i class="fa fa-tasks"></i> <span>Sites</span></a></li>
+        <li><a href="<?= Url::to(['planta/create']) ?>"><i class="fa fa-map"></i> <span>Áreas</span></a></li>
         <!-- <li><a href="<?//= Url::to(['disciplina/index']) ?>"><i class="fa fa-tasks"></i> <span>Disciplina</span></a></li> -->
         <!-- <li><a href="<?//= Url::to(['escopopadrao/index']) ?>"><i class="fa fa-map"></i> <span>Escopo</span></a></li> -->
-        <!-- <li><a href="<?= Url::to(['documento/index']) ?>"><i class="fa fa-file"></i> <span>Documentos</span></a></li> -->
+        <!-- <li><a href="<?//= Url::to(['documento/index']) ?>"><i class="fa fa-file"></i> <span>Documentos</span></a></li> -->
         <li><a href="<?= Url::to(['atividade/index']) ?>"><i class="fa fa-hourglass-half"></i> <span>Gerenciamento das Atividades</span></a></li>        
-        <li><a href="<?= Url::to(['config/index']) ?>"><i class="fa fa-cog"></i> <span>Configurações</span></a></li>
+        <li><a href="<?= Url::to(['config/create']) ?>"><i class="fa fa-cog"></i> <span>Configurações</span></a></li>
         <li><a>
          <?php
               echo Html::beginForm(Url::base().'/index.php?r=site/logout', 'post');

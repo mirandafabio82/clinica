@@ -12,12 +12,13 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="contato-create">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
+   
     <?= $this->render('_form', [
         'model' => $model,
         'user' => $user,
-        'listClientes' => $listClientes
+        'listClientes' => $listClientes,
+        'searchModel' => $searchModel,
+        'dataProvider' => $dataProvider,
     ]) ?>
 
 </div>

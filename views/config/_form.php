@@ -2,12 +2,42 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-
+use kartik\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $model app\models\Config */
 /* @var $form yii\widgets\ActiveForm */
 ?>
+ <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+        'pjax' => true,
+        'toolbar' =>  [
+        ['content' => Html::a('<i class="glyphicon glyphicon-plus"></i>', ['create'], ['class' => 'btn btn-success'])
+        ],
+          '{export}',
+          '{toggleData}',
+        ],
+        'export' => [
+          'fontAwesome' => true
+        ],
+        'hover' => true,
+        'panel' => [
+            'type' => GridView::TYPE_PRIMARY,
+            'heading' => '<i class="fa fa-cog"></i> Configurações'
+        ],
+        'columns' => [
+            // ['class' => 'yii\grid\SerialColumn'],
 
+            'id',
+            'vl_hh',
+            'vl_km',
+            'qtd_km_dia',
+            // 'pasta',
+            'ultimo_bm',
+
+            // ['class' => 'yii\grid\ActionColumn'],
+        ],
+    ]); ?>
 <div class="config-form">
 
     <?php $form = ActiveForm::begin(); ?>

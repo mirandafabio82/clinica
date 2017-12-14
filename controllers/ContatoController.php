@@ -79,6 +79,8 @@ class ContatoController extends Controller
      */
     public function actionCreate()
     {
+        $searchModel = new ContatoSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         
         $model = new Contato();
         $user = new DBUser();
@@ -104,7 +106,7 @@ class ContatoController extends Controller
                 $auth->assign($authorRole, $user->getId());  
 
                 $transaction->commit();
-                return $this->redirect(['view', 'id' => $model->usuario_id]);                
+                return $this->redirect(['create', 'id' => $model->usuario_id]);                
             }
             catch(Exception $e){
                 $transaction->rollBack();
@@ -115,7 +117,9 @@ class ContatoController extends Controller
             return $this->render('create', [
                 'model' => $model,
                 'user' => $user,
-                'listClientes' => $listClientes
+                'listClientes' => $listClientes,
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
             ]);
         }
     }
@@ -128,6 +132,9 @@ class ContatoController extends Controller
      */
     public function actionUpdate($id)
     {
+        $searchModel = new ContatoSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
         $model = $this->findModel($id);
         $user = new DBUser();
         $clientes = Yii::$app->db->createCommand('SELECT id, nome FROM cliente')->queryAll();
@@ -163,7 +170,9 @@ class ContatoController extends Controller
             return $this->render('create', [
                 'model' => $model,
                 'user' => $user,
-                'listClientes' => $listClientes
+                'listClientes' => $listClientes,
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
             ]);
         }
     }

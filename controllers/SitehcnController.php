@@ -75,13 +75,18 @@ class SitehcnController extends Controller
      */
     public function actionCreate()
     {
+        $searchModel = new SitehcnSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
         $model = new Site();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['create']);
         } else {
             return $this->render('create', [
                 'model' => $model,
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
             ]);
         }
     }
@@ -94,13 +99,18 @@ class SitehcnController extends Controller
      */
     public function actionUpdate($id)
     {
+        $searchModel = new SitehcnSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['create']);
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
             ]);
         }
     }

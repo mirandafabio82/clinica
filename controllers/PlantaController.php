@@ -76,16 +76,21 @@ class PlantaController extends Controller
      */
     public function actionCreate()
     {
+        $searchModel = new PlantaSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
         $model = new Planta();
         $sites = Yii::$app->db->createCommand('SELECT id, nome FROM site')->queryAll();
         $listSites = ArrayHelper::map($sites,'id','nome');
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['create']);
         } else {
             return $this->render('create', [
                 'model' => $model,
-                'listSites' => $listSites
+                'listSites' => $listSites,
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
             ]);
         }
     }
@@ -98,16 +103,21 @@ class PlantaController extends Controller
      */
     public function actionUpdate($id)
     {
+        $searchModel = new PlantaSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
         $model = $this->findModel($id);
         $sites = Yii::$app->db->createCommand('SELECT id, nome FROM site')->queryAll();
         $listSites = ArrayHelper::map($sites,'id','nome');
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['create']);
         } else {
             return $this->render('update', [
                 'model' => $model,
-                'listSites' => $listSites
+                'listSites' => $listSites,
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
             ]);
         }
     }

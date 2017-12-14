@@ -13,6 +13,15 @@ use kartik\grid\GridView;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'toolbar' =>  [
+        ['content' => Html::a('<i class="glyphicon glyphicon-plus"></i>', ['create'], ['class' => 'btn btn-success'])
+        ],
+          '{export}',
+          '{toggleData}',
+        ],
+        'export' => [
+          'fontAwesome' => true
+        ],
         'pjax' => true,        
         
         'hover' => true,
@@ -22,6 +31,11 @@ use kartik\grid\GridView;
         ],
         'columns' => [
             
+            [
+              'class' => 'yii\grid\ActionColumn',
+              'template' => '{update} {delete}',    
+              'contentOptions' => ['style' => 'width:5em;  min-width:5em;'],
+            ],
             'id',
             'nome',
             [
@@ -37,11 +51,6 @@ use kartik\grid\GridView;
                 }
             ],
 
-            [
-              'class' => 'yii\grid\ActionColumn',
-              'template' => '{update} {delete}',    
-              'contentOptions' => ['style' => 'width:5em;  min-width:5em;'],
-            ],
         ],
     ]); ?>
     <?php $form = ActiveForm::begin(); ?>
