@@ -66,15 +66,38 @@ class AtividademodeloController extends Controller
     {
         $model = new Atividademodelo();
 
+        $searchModel = new AtividademodeloSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
         $escopo = Yii::$app->db->createCommand('SELECT id, nome FROM escopopadrao')->queryAll();
         $listEscopo = ArrayHelper::map($escopo,'id','nome');
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $disciplina = Yii::$app->db->createCommand('SELECT id, nome FROM disciplina')->queryAll();
+        $listDisciplina = ArrayHelper::map($disciplina,'id','nome');
+
+        
+
+        if ($model->load(Yii::$app->request->post()) ) {
+
+            $model->setAttributes($_POST['Atividademodelo']);
+
+            if(isset($_POST['Atividademodelo']['isPrioritaria'])){
+                $model->isPrioritaria = 1;
+            }
+            if(isset($_POST['Atividademodelo']['isEntregavel'])){
+                $model->isEntregavel = 1;
+            }
+
+            $model->save();
+
+            return $this->redirect(['create', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
-                'listEscopo' => $listEscopo
+                'listEscopo' => $listEscopo,
+                'listDisciplina' => $listDisciplina,
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
             ]);
         }
     }
@@ -89,15 +112,43 @@ class AtividademodeloController extends Controller
     {
         $model = $this->findModel($id);
 
+        $searchModel = new AtividademodeloSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
         $escopo = Yii::$app->db->createCommand('SELECT id, nome FROM escopopadrao')->queryAll();
         $listEscopo = ArrayHelper::map($escopo,'id','nome');
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $disciplina = Yii::$app->db->createCommand('SELECT id, nome FROM disciplina')->queryAll();
+        $listDisciplina = ArrayHelper::map($disciplina,'id','nome');
+
+        
+
+        if ($model->load(Yii::$app->request->post()) ) {
+            
+            $model->setAttributes($_POST['Atividademodelo']);
+            if(isset($_POST['Atividademodelo']['isPrioritaria'])){
+                $model->isPrioritaria = 1;
+            }
+            else{
+                $model->isPrioritaria = 0;   
+            }
+            if(isset($_POST['Atividademodelo']['isEntregavel'])){
+                $model->isEntregavel = 1;
+            }
+            else{
+                $model->isPrioritaria = 0;   
+            }
+
+            $model->save();
+
+            return $this->redirect(['create', 'id' => $model->id]);
         } else {
-            return $this->render('update', [
+            return $this->render('create', [
                 'model' => $model,
-                'listEscopo' => $listEscopo
+                'listEscopo' => $listEscopo,
+                'listDisciplina' => $listDisciplina,
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
             ]);
         }
     }

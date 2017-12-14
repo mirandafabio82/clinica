@@ -132,8 +132,8 @@ $usuario = Yii::$app->db->createCommand('SELECT * FROM user WHERE id='.Yii::$app
         <li class="header">MENU PRINCIPAL</li>
         
         <li><a href="<?= Url::to(['projeto/create']) ?>"><i class="fa fa-folder-open"></i> <span>Projetos</span></a></li>
-        <li><a href="<?= Url::to(['atividademodelo/create']) ?>"><i class="fa fa-map"></i> <span>Atividades</span></a></li>
-        <li><a href="<?= Url::to(['cliente/index']) ?>"><i class="fa fa-handshake-o"></i> <span>Clientes</span></a></li>
+        <li><a href="<?= Url::to(['atividademodelo/create']) ?>"><i class="fa fa-map"></i> <span>Atividades Modelo</span></a></li>
+        <li><a href="<?= Url::to(['cliente/create']) ?>"><i class="fa fa-handshake-o"></i> <span>Clientes</span></a></li>
         <li><a href="<?= Url::to(['contato/index']) ?>"><i class="fa fa-address-book"></i> <span>Contatos</span></a></li>
         <li><a href="<?= Url::to(['agenda/index']) ?>"><i class="fa fa-calendar"></i> <span>Agenda</span></a></li>
         <li><a href="<?= Url::to(['executante/index']) ?>"><i class="fa fa-wrench"></i> <span>Executantes</span></a></li>

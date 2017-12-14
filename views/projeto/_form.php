@@ -172,7 +172,7 @@ $("#projeto-site").change(function(ev){
             <div style="margin-left: 1em" id="disciplina_<?=$disciplina?>_div" hidden>
            <?php     
             foreach ($listEscopo as $key => $escopo) { ?>
-                <input type="checkbox" name="Escopos[<?=$disciplina."-".$key?>]" value="<?= $key?>"><?= $escopo ?>
+                <input type="checkbox" name="Escopos[<?=$disciplina."][".$key?>]" value="<?= $key?>"><?= $escopo ?>
             <?php } ?>
             </div>
           
@@ -344,9 +344,69 @@ $("#projeto-site").change(function(ev){
           </div>
         </div>
       </div>
-      <div class="row">      
+      <div class="row">   
+
+      <div class="col-md-12"> 
+            <?= Html::submitButton($model->isNewRecord ? 'Add Escopo' : 'Add Escopo', ['class' => $model->isNewRecord ? 'btn btn-primary' : 'btn btn-primary']) ?>
+              <br>
+            Escopo
+            <?= GridView::widget([
+            'dataProvider' => $escopoDataProvider,
+            'filterModel' => $searchEscopo,
+            'pjax' => true,
+            
+            'export' => [
+            'fontAwesome' => true
+            ],
+            'hover' => true,
+            
+            'columns' => [           
+            [
+              'attribute' => 'descricao',                 
+              'contentOptions' => ['style' => 'width:30em;  min-width:30em;'],
+            ],
+            [
+              'attribute' => 'atividademodelo_id', 
+              'value'=> function($data){
+                return Yii::$app->db->createCommand('SELECT disciplina.nome FROM disciplina JOIN atividademodelo ON atividademodelo.disciplina_id=disciplina.id WHERE atividademodelo.id='.$data->atividademodelo_id)->queryScalar();
+              } ,               
+              
+            ],            
+            [
+              'attribute' => 'horas_tp', 
+              'class' => 'kartik\grid\EditableColumn',    
+              'contentOptions' => ['style' => 'width:3em;  min-width:3em;'],
+            ],
+            [
+              'attribute' => 'horas_ej', 
+              'class' => 'kartik\grid\EditableColumn',    
+              'contentOptions' => ['style' => 'width:3em;  min-width:3em;'],
+            ],
+            [
+              'attribute' => 'horas_es', 
+              'class' => 'kartik\grid\EditableColumn',    
+              'contentOptions' => ['style' => 'width:3em;  min-width:3em;'],
+            ],
+            [
+              'attribute' => 'horas_ep', 
+              'class' => 'kartik\grid\EditableColumn',    
+              'contentOptions' => ['style' => 'width:3em;  min-width:3em;'],
+            ],
+            [
+              'attribute' => 'horas_ee', 
+              'class' => 'kartik\grid\EditableColumn',    
+              'contentOptions' => ['style' => 'width:3em;  min-width:3em;'],
+            ],
+            [
+              'attribute' => 'executado', 
+              'class' => 'kartik\grid\EditableColumn',    
+              'contentOptions' => ['style' => 'width:3em;  min-width:3em;'],
+            ],
+            ]
+            ]); ?>
+          </div>   
         
-          <div class="col-md-6"> 
+          <div class="col-md-12"> 
           <div class="col-md-12">
           Projetos
           <?= GridView::widget([
@@ -428,61 +488,8 @@ $("#projeto-site").change(function(ev){
             </div>
             </div>
 
-            <div class="col-md-6"> 
-            Escopo
-            <?= GridView::widget([
-            'dataProvider' => $escopoDataProvider,
-            'filterModel' => $searchEscopo,
-            'pjax' => true,
-            
-            'export' => [
-            'fontAwesome' => true
-            ],
-            'hover' => true,
-            
-            'columns' => [
-            // ['class' => 'yii\grid\SerialColumn'],
 
-            // 'id',
-            /*[
-              'class' => 'yii\grid\ActionColumn',
-              'template' => '{update} {delete}',    
-              'contentOptions' => ['style' => 'width:5em;  min-width:5em;'],
-            ],*/
-
-            'item',
-           /* [
-              'attribute' => 'atividademodelo_id',
-              'contentOptions' => ['style' => 'width:20em;  min-width:20em;'],
-              'value' => function($data){
-                return Yii::$app->db->createCommand('SELECT nome FROM atividademodelo WHERE id='.$data->atividademodelo_id)->queryScalar();
-              }
-            ],*/
-            'descricao',            
-            [
-              'attribute' => 'horas_tp',
-              'contentOptions' => ['style' => 'width:3em;  min-width:3em;'],
-            ],
-            [
-              'attribute' => 'horas_ej',
-              'contentOptions' => ['style' => 'width:3em;  min-width:3em;'],
-            ],
-            [
-              'attribute' => 'horas_es',
-              'contentOptions' => ['style' => 'width:3em;  min-width:3em;'],
-            ],
-            [
-              'attribute' => 'horas_ep',
-              'contentOptions' => ['style' => 'width:3em;  min-width:3em;'],
-            ],
-            [
-              'attribute' => 'horas_ee',
-              'contentOptions' => ['style' => 'width:3em;  min-width:3em;'],
-            ],
-            'executado',
-            ]
-            ]); ?>
-          </div>
+            
           </div>
           
          </div>

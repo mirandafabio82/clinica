@@ -115,10 +115,70 @@ class ProjetoController extends Controller
 
         $searchEscopo = new EscopoSearch();
         $escopoDataProvider = $searchEscopo->search(Yii::$app->request->queryParams);
-        $escopoDataProvider->query->join('join','atividademodelo', 'atividademodelo.id=escopo.atividademodelo_id')->where('isPrioritaria=1');
+        $escopoDataProvider->query->join('join','atividademodelo', 'atividademodelo.id=escopo.atividademodelo_id')->where('1=2');
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['create', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            try{
+                $connection = \Yii::$app->db;
+                $transaction = $connection->beginTransaction();
+
+                $model->setAttributes($_POST['Projeto']);                
+
+                if($model->save()){
+                    if(isset($_POST['Escopos'])){
+                        $escopos = $_POST['Escopos'];
+                        $automacoes = isset($escopos['Automação']) ? $escopos['Automação'] : array();
+                        $processos = isset($escopos['Processo']) ? $escopos['Processo'] : array();
+                        $instrumentacoes = isset($escopos['Instrumentação']) ? $escopos['Instrumentação'] : array();
+
+
+
+                        foreach ($automacoes as $key => $automacao) {
+                            $atvmodelos = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE escopopadrao_id='.$automacao.' AND disciplina_id = 1')->queryAll();
+                            
+                            foreach ($atvmodelos as $key => $atv) {
+                                $escopo_model = new Escopo();
+                                $escopo_model->projeto_id = $model->id;
+                                $escopo_model->atividademodelo_id = $atv['id'];
+                                $escopo_model->nome = $atv['nome'];
+                                $escopo_model->descricao = $atv['nome'];
+                                $escopo_model->save();
+                            }
+                        }
+                        foreach ($processos as $key => $processo) {
+                            $atvmodelos = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE escopopadrao_id='.$processo.' AND disciplina_id = 2')->queryAll();
+
+                            foreach ($atvmodelos as $key => $atv) {
+                                $escopo_model = new Escopo();
+                                $escopo_model->projeto_id = $model->id;
+                                $escopo_model->atividademodelo_id = $atv['id'];
+                                $escopo_model->nome = $atv['nome'];
+                                $escopo_model->descricao = $atv['nome'];
+                                $escopo_model->save();
+                            }
+                        }
+                        foreach ($instrumentacoes as $key => $instrumentacao) {
+                            $atvmodelos = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE escopopadrao_id='.$instrumentacao.' AND disciplina_id = 2')->queryAll();
+
+                            foreach ($atvmodelos as $key => $atv) {
+                                $escopo_model = new Escopo();
+                                $escopo_model->projeto_id = $model->id;
+                                $escopo_model->atividademodelo_id = $atv['id'];
+                                $escopo_model->nome = $atv['nome'];
+                                $escopo_model->descricao = $atv['nome'];
+                                $escopo_model->save();
+                            }
+                        }
+                    }                    
+                }
+
+                $transaction->commit();
+                return $this->redirect(['update', 'id' => $model->id]);
+            }
+            catch(Exception $e){
+                $transaction->rollBack();
+                throw $e;
+            }
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -177,10 +237,82 @@ class ProjetoController extends Controller
 
         $searchEscopo = new EscopoSearch();
         $escopoDataProvider = $searchEscopo->search(Yii::$app->request->queryParams);
-        $escopoDataProvider->query->join('join','atividademodelo', 'atividademodelo.id=escopo.atividademodelo_id')->where('projeto_id='.$model->id.' OR isPrioritaria=1');
+        $escopoDataProvider->query->join('join','atividademodelo', 'atividademodelo.id=escopo.atividademodelo_id')->where('projeto_id='.$model->id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['create', 'id' => $model->id]);
+          if ($model->load(Yii::$app->request->post())) {
+            try{
+                $connection = \Yii::$app->db;
+                $transaction = $connection->beginTransaction();
+
+                $model->setAttributes($_POST['Projeto']);                
+
+                if($model->save()){                        
+                    if(isset($_POST['Escopos'])){
+                        $escopos = $_POST['Escopos'];
+                        $automacoes = isset($escopos['Automação']) ? $escopos['Automação'] : array();
+                        $processos = isset($escopos['Processo']) ? $escopos['Processo'] : array();
+                        $instrumentacoes = isset($escopos['Instrumentação']) ? $escopos['Instrumentação'] : array();
+
+
+                        foreach ($automacoes as $key => $automacao) {
+                            $atvmodelos = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE escopopadrao_id='.$automacao.' AND disciplina_id = 1')->queryAll();
+                            
+                            foreach ($atvmodelos as $key => $atv) {
+                                $existeEscopo = Yii::$app->db->createCommand('SELECT id FROM escopo WHERE projeto_id='.$model->id.' AND atividademodelo_id='.$atv['id'])->queryScalar();
+                                if(!$existeEscopo){
+                                    $escopo_model = new Escopo();
+                                    $escopo_model->projeto_id = $model->id;
+                                    $escopo_model->atividademodelo_id = $atv['id'];
+                                    $escopo_model->nome = $atv['nome'];
+                                    $escopo_model->descricao = $atv['nome'];
+                                    $escopo_model->save();
+                                }
+                            }
+                        }
+                        foreach ($processos as $key => $processo) {
+                            $atvmodelos = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE escopopadrao_id='.$processo.' AND disciplina_id = 2')->queryAll();
+
+                            foreach ($atvmodelos as $key => $atv) {
+                                $existeEscopo = Yii::$app->db->createCommand('SELECT id FROM escopo WHERE projeto_id='.$model->id.' AND atividademodelo_id='.$atv['id'])->queryScalar();
+                                if(!$existeEscopo){
+                                    $escopo_model = new Escopo();
+                                    $escopo_model->projeto_id = $model->id;
+                                    $escopo_model->atividademodelo_id = $atv['id'];
+                                    $escopo_model->nome = $atv['nome'];
+                                    $escopo_model->descricao = $atv['nome'];
+                                    $escopo_model->save();
+                                }
+                            }
+                        }
+                        foreach ($instrumentacoes as $key => $instrumentacao) {
+                            $atvmodelos = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE escopopadrao_id='.$instrumentacao.' AND disciplina_id = 3')->queryAll();
+
+                            foreach ($atvmodelos as $key => $atv) {
+                                $existeEscopo = Yii::$app->db->createCommand('SELECT id FROM escopo WHERE projeto_id='.$model->id.' AND atividademodelo_id='.$atv['id'])->queryScalar();
+                                if(!$existeEscopo){
+                                    $escopo_model = new Escopo();
+                                    $escopo_model->projeto_id = $model->id;
+                                    $escopo_model->atividademodelo_id = $atv['id'];
+                                    $escopo_model->nome = $atv['nome'];
+                                    $escopo_model->descricao = $atv['nome'];
+                                    $escopo_model->save();
+                                }
+                            }
+                        }
+                    }                    
+                }
+
+                $transaction->commit();
+                return $this->redirect(['update', 'id' => $model->id]);
+            }
+            catch(Exception $e){
+                $transaction->rollBack();
+                throw $e;
+            }
+            catch(Exception $e){
+                $transaction->rollBack();
+                throw $e;
+            }
         } else {
             return $this->render('update', [
                 'model' => $model,

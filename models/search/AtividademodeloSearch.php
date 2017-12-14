@@ -48,6 +48,9 @@ class AtividademodeloSearch extends Atividademodelo
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [
+                'pageSize' => 5,
+            ],
         ]);
 
         $this->load($params);
