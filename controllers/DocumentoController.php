@@ -137,13 +137,46 @@ class DocumentoController extends Controller
         $searchModel = new DocumentoSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['create']);
-        } else {
+        $projetos = Yii::$app->db->createCommand('SELECT id, nome FROM projeto')->queryAll();
+        $listProjetos = ArrayHelper::map($projetos,'id','nome');
+
+        if (isset($_POST['Documento'])) {           
+            try{
+                $connection = \Yii::$app->db;
+                $transaction = $connection->beginTransaction();
+                $model->setAttributes($_POST['Documento']);
+
+
+                if(UploadedFile::getInstance($model,'path') != null){
+
+                    $nomeOriginal = UploadedFile::getInstance($model,'path')->name;
+                    $extensao = explode('.', $nomeOriginal)[1];
+                    
+                    if (!is_dir(Yii::$app->basePath . '/web/uploaded-files/' . $model->projeto_id)) {
+                        mkdir(Yii::$app->basePath . '/web/uploaded-files/' . $model->projeto_id);
+                    }
+
+                    $model->path = UploadedFile::getInstance($model,'path');                
+                    $model->path->name = $model->path->name;                
+                    $rnd = rand(0,9999);               
+                    $fileName = "{$model->nome}-{$nomeOriginal}";                
+                    $model->path->saveAs(Yii::$app->basePath.'/web/uploaded-files/'.$model->projeto_id.'/'.$fileName);                
+                    $model->path = $fileName;
+                }
+                $model->save();
+                $transaction->commit();
+                return $this->redirect(['create']);
+            }
+            catch(Exception $e){
+                $transaction->rollBack();
+                throw $e;
+            } 
+            }else {
             return $this->render('update', [
                 'model' => $model,
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
+                'listProjetos' => $listProjetos
             ]);
         }
     }
