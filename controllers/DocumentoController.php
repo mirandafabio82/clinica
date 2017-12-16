@@ -11,6 +11,7 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\web\UploadedFile;
+use \Datetime;
 
 /**
  * DocumentoController implements the CRUD actions for Documento model.
@@ -107,6 +108,8 @@ class DocumentoController extends Controller
                     $model->path->saveAs(Yii::$app->basePath.'/web/uploaded-files/'.$model->projeto_id.'/'.$fileName);                
                     $model->path = $fileName;
                 }
+                $dat = DateTime::createFromFormat('d/m/Y', $_POST['Documento']['data']);          
+                $model->data = date_format($dat, 'Y-m-d');
                 $model->save();
                 $transaction->commit();
                 return $this->redirect(['create']);
@@ -163,6 +166,8 @@ class DocumentoController extends Controller
                     $model->path->saveAs(Yii::$app->basePath.'/web/uploaded-files/'.$model->projeto_id.'/'.$fileName);                
                     $model->path = $fileName;
                 }
+                $dat = DateTime::createFromFormat('d/m/Y', $_POST['Agenda']['data']);          
+                $model->data = date_format($dat, 'Y-m-d');
                 $model->save();
                 $transaction->commit();
                 return $this->redirect(['create']);
