@@ -12,10 +12,12 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="documento-create">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
+  
     <?= $this->render('_form', [
         'model' => $model,
+        'searchModel' => $searchModel,
+        'dataProvider' => $dataProvider,
+        'listProjetos' => $listProjetos
     ]) ?>
 
 </div>

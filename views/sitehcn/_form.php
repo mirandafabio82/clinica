@@ -11,15 +11,7 @@ use kartik\grid\GridView;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'pjax' => true,
-        'toolbar' =>  [
-        ['content' => Html::a('<i class="glyphicon glyphicon-plus"></i>', ['create'], ['class' => 'btn btn-success'])
-        ],
-          '{export}',
-          '{toggleData}',
-        ],
-        'export' => [
-          'fontAwesome' => true
-        ],
+        
         'hover' => true,
         'panel' => [
             'type' => GridView::TYPE_PRIMARY,

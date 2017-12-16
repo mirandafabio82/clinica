@@ -11,6 +11,7 @@ use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use yii\filters\AccessControl;
 use \Datetime;
+use yii\helpers\Json;
 /**
  * AgendaController implements the CRUD actions for Agenda model.
  */
@@ -90,6 +91,24 @@ class AgendaController extends Controller
         $status = Yii::$app->db->createCommand('SELECT id, status FROM agenda_status')->queryAll();
         $listStatus = ArrayHelper::map($status,'id','status');
 
+
+        if(Yii::$app->request->post('editableKey')){
+            $agenda_id = Yii::$app->request->post('editableKey');
+            $agenda = Agenda::findOne($agenda_id);
+
+            $out = Json::encode(['output'=>'', 'message'=>'']);
+            $post =[];
+            $posted = current($_POST['Agenda']);
+            $post['Agenda'] = $posted;
+
+            if($agenda->load($post)){
+                $agenda->save();
+                // $output = 'teste';
+                $out = Json::encode(['output'=>'', 'message'=>'']);
+            }
+            echo $out;
+            return $this->redirect(['create']);
+        }
         if($_POST){
             $model->setAttributes($_POST['Agenda']);
             $dat = DateTime::createFromFormat('d/m/Y', $_POST['Agenda']['data']);          
@@ -122,7 +141,7 @@ class AgendaController extends Controller
 
         $model = $this->findModel($id);
 
-        $projetos = Yii::$app->db->createCommand('SELECT projeto.id, nome FROM projeto JOIN projeto_nome')->queryAll();
+        $projetos = Yii::$app->db->createCommand('SELECT projeto.id, nome FROM projeto')->queryAll();
         $listProjetos = ArrayHelper::map($projetos,'id','nome');
 
         $sites = Yii::$app->db->createCommand('SELECT id, nome FROM site')->queryAll();
@@ -131,6 +150,23 @@ class AgendaController extends Controller
         $status = Yii::$app->db->createCommand('SELECT id, status FROM agenda_status')->queryAll();
         $listStatus = ArrayHelper::map($status,'id','status');
 
+        if(Yii::$app->request->post('editableKey')){
+            $agenda_id = Yii::$app->request->post('editableKey');
+            $agenda = Agenda::findOne($agenda_id);
+
+            $out = Json::encode(['output'=>'', 'message'=>'']);
+            $post =[];
+            $posted = current($_POST['Agenda']);
+            $post['Agenda'] = $posted;
+
+            if($agenda->load($post)){
+                $agenda->save();
+                // $output = 'teste';
+                $out = Json::encode(['output'=>'', 'message'=>'']);
+            }
+            echo $out;
+            return $this->redirect(['create']);
+        }
         if($_POST){
             $model->setAttributes($_POST['Agenda']);
             $dat = DateTime::createFromFormat('d/m/Y', $_POST['Agenda']['data']);
@@ -150,6 +186,11 @@ class AgendaController extends Controller
         }
     }
 
+     //habilitar ajax
+    public function beforeAction($action) {
+        $this->enableCsrfValidation = false;
+        return parent::beforeAction($action);
+    }
     /**
      * Deletes an existing Agenda model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
@@ -158,9 +199,10 @@ class AgendaController extends Controller
      */
     public function actionDelete($id)
     {
+
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['create']);
     }
 
     /**

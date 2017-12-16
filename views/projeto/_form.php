@@ -367,11 +367,24 @@ $("#projeto-site").change(function(ev){
             ],
             [
               'attribute' => 'atividademodelo_id', 
+              'header' => 'Disciplina',
               'value'=> function($data){
                 return Yii::$app->db->createCommand('SELECT disciplina.nome FROM disciplina JOIN atividademodelo ON atividademodelo.disciplina_id=disciplina.id WHERE atividademodelo.id='.$data->atividademodelo_id)->queryScalar();
-              } ,               
+              },              
               
-            ],            
+            ],     
+            [ //isso so existe por causa do bug do editable nao pegar a primeira coluna
+                'class'=>'kartik\grid\EditableColumn',
+                    'contentOptions' => ['style' => 'max-width:0px;'],
+              'attribute' => 'id',
+              'header' => '&nbsp;',
+                'width'=>'0px',
+              'hidden' => true,
+              'content' => function($data){
+                return '&nbsp;';
+              },
+              
+            ],     
             [
               'attribute' => 'horas_tp', 
               'class' => 'kartik\grid\EditableColumn',    
@@ -420,26 +433,25 @@ $("#projeto-site").change(function(ev){
             // 'id',
             [
               'class' => 'yii\grid\ActionColumn',
-              'template' => '{update} {delete}',    
+              'template' => '{update}',    
               'contentOptions' => ['style' => 'width:5em;  min-width:5em;'],
             ],
             'nome',
             [
-            'attribute' => 'status',      
-            'class' => 'kartik\grid\EditableColumn',        
-            'format' => 'raw',
-            'contentOptions' => ['style' => 'width:8em;  min-width:8em;'],
-            'value' => function ($data) {
+              'attribute' => 'status',      
+              'class' => 'kartik\grid\EditableColumn',        
+              'format' => 'raw',
+              'contentOptions' => ['style' => 'width:8em;  min-width:8em;'],
+              'value' => function ($data) {
 
-              $status = Yii::$app->db->createCommand('SELECT status, cor FROM projeto_status WHERE id='.$data->status)->queryOne();
+                $status = Yii::$app->db->createCommand('SELECT status, cor FROM projeto_status WHERE id='.$data->status)->queryOne();
 
-              return '<span style="color:'.$status['cor'].' "><i class="fa fa-circle" aria-hidden="true"></i> '.$status['status'].'</span>';
+                return '<span style="color:'.$status['cor'].' "><i class="fa fa-circle" aria-hidden="true"></i> '.$status['status'].'</span>';
 
-            },
+              },
             ],
             [
             'attribute' => 'cliente_id',   
-            'class' => 'kartik\grid\EditableColumn',           
             'format' => 'raw',
             'contentOptions' => ['style' => 'width:10em;'],
             'value' => function ($data) {

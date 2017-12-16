@@ -176,6 +176,11 @@ class ContatoController extends Controller
             ]);
         }
     }
+    //habilitar ajax
+    public function beforeAction($action) {
+        $this->enableCsrfValidation = false;
+        return parent::beforeAction($action);
+    }
 
     /**
      * Deletes an existing Contato model.
@@ -185,9 +190,17 @@ class ContatoController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        
+        $projeto = Yii::$app->db->createCommand('SELECT id FROM projeto WHERE contato_id='.$id)->queryScalar();
+        if(empty($projeto)){
+            $this->findModel($id)->delete();
+        }
+        else{
+            //botar uma mensagem (setFlash)
+            echo 'Existe um projeto utilizando este contato';
+        }
 
-        return $this->redirect(['index']);
+        return $this->redirect(['create']);
     }
 
     /**

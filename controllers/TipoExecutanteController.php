@@ -114,6 +114,11 @@ class TipoexecutanteController extends Controller
             ]);
         }
     }
+     //habilitar ajax
+    public function beforeAction($action) {
+        $this->enableCsrfValidation = false;
+        return parent::beforeAction($action);
+    }
 
     /**
      * Deletes an existing TipoExecutante model.
@@ -123,9 +128,17 @@ class TipoexecutanteController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        
+        $executante = Yii::$app->db->createCommand('SELECT tipo_id FROM executante_tipo WHERE tipo_id='.$id)->queryScalar();
+        if(empty($executante)){
+            $this->findModel($id)->delete();
+        }
+        else{
+            //botar uma mensagem (setFlash)
+            echo 'Existe um Executante utilizando este tipo';
+        }
 
-        return $this->redirect(['index']);
+        return $this->redirect(['create']);
     }
 
     /**

@@ -15,15 +15,7 @@ use kartik\grid\GridView;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'pjax' => true,
-        'toolbar' =>  [
-        ['content' => Html::a('<i class="glyphicon glyphicon-plus"></i>', ['create'], ['class' => 'btn btn-success'])
-        ],
-          '{export}',
-          '{toggleData}',
-        ],
-        'export' => [
-          'fontAwesome' => true
-        ],
+        
         'hover' => true,
         'panel' => [
             'type' => GridView::TYPE_PRIMARY,
@@ -77,24 +69,27 @@ use kartik\grid\GridView;
     <div class="box box-primary">
     <div class="box-header with-border">
     <div class="row">
-    <div class="col-md-4">    
+    <div class="col-md-3">    
         <?= $form->field($model, 'projeto_id')->dropDownList($listProjetos,['prompt'=>'Selecione um Projeto']) ?>
     
         <?= $form->field($model, 'data')->widget(\yii\widgets\MaskedInput::className(), [
                         'mask' => '99/99/9999',
                     ]) ?>
     
+        </div>
+        <div class="col-md-3"> 
         <?= $form->field($model, 'local')->dropDownList($listSites,['prompt'=>'Selecione um Site']) ?>
     
         <?= $form->field($model, 'quem')->textInput(['maxlength' => true]) ?>
         </div>
-        <div class="col-md-4"> 
+        <div class="col-md-3"> 
         <?= $form->field($model, 'assunto')->textInput(['maxlength' => true]) ?>
     
         <?= $form->field($model, 'hr_inicio')->widget(\yii\widgets\MaskedInput::className(), [
                         'mask' => '99:99:99',
                     ]) ?>
-    
+        </div>
+        <div class="col-md-3"> 
         <?= $form->field($model, 'hr_final')->widget(\yii\widgets\MaskedInput::className(), [
                         'mask' => '99:99:99',
                     ]) ?>

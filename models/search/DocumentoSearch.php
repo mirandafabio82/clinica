@@ -18,7 +18,7 @@ class DocumentoSearch extends Documento
     public function rules()
     {
         return [
-            [['id', 'projeto_id', 'cliente_id', 'revisao'], 'integer'],
+            [['id', 'projeto_id', 'revisao'], 'integer'],
             [['nome', 'data', 'tipo', 'criado', 'modificado'], 'safe'],
         ];
     }
@@ -60,8 +60,7 @@ class DocumentoSearch extends Documento
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'projeto_id' => $this->projeto_id,
-            'cliente_id' => $this->cliente_id,
+            'projeto_id' => $this->projeto_id,            
             'revisao' => $this->revisao,
             'data' => $this->data,
             'criado' => $this->criado,

@@ -60,7 +60,7 @@ $usuario = Yii::$app->db->createCommand('SELECT * FROM user WHERE id='.Yii::$app
   <div class="wrap">
     <header class="main-header">
       <!-- Logo -->
-      <a href="plugins/index2.html" class="logo">
+      <a href="index.php" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
         <span class="logo-mini"><b>HCN</b></span>
         <!-- logo for regular state and mobile devices -->
@@ -132,7 +132,7 @@ $usuario = Yii::$app->db->createCommand('SELECT * FROM user WHERE id='.Yii::$app
         <li class="header">MENU PRINCIPAL</li>
         
         <li><a href="<?= Url::to(['projeto/create']) ?>"><i class="fa fa-folder-open"></i> <span>Projetos</span></a></li>
-        <li><a href="<?= Url::to(['atividademodelo/create']) ?>"><i class="fa fa-map"></i> <span>Atividades Modelo</span></a></li>
+        <li><a href="<?= Url::to(['atividademodelo/create']) ?>"><i class="fa fa-tablet"></i> <span>Atividades Modelo</span></a></li>
         <li><a href="<?= Url::to(['cliente/create']) ?>"><i class="fa fa-handshake-o"></i> <span>Clientes</span></a></li>
         <li><a href="<?= Url::to(['contato/create']) ?>"><i class="fa fa-address-book"></i> <span>Contatos</span></a></li>
         <li><a href="<?= Url::to(['agenda/create']) ?>"><i class="fa fa-calendar"></i> <span>Agenda</span></a></li>
@@ -143,7 +143,7 @@ $usuario = Yii::$app->db->createCommand('SELECT * FROM user WHERE id='.Yii::$app
         <li><a href="<?= Url::to(['planta/create']) ?>"><i class="fa fa-map"></i> <span>Áreas</span></a></li>
         <!-- <li><a href="<?//= Url::to(['disciplina/index']) ?>"><i class="fa fa-tasks"></i> <span>Disciplina</span></a></li> -->
         <!-- <li><a href="<?//= Url::to(['escopopadrao/index']) ?>"><i class="fa fa-map"></i> <span>Escopo</span></a></li> -->
-        <!-- <li><a href="<?//= Url::to(['documento/index']) ?>"><i class="fa fa-file"></i> <span>Documentos</span></a></li> -->
+        <li><a href="<?= Url::to(['documento/create']) ?>"><i class="fa fa-file"></i> <span>Documentos</span></a></li>
         <li><a href="<?= Url::to(['atividade/index']) ?>"><i class="fa fa-hourglass-half"></i> <span>Gerenciamento das Atividades</span></a></li>        
         <li><a href="<?= Url::to(['config/create']) ?>"><i class="fa fa-cog"></i> <span>Configurações</span></a></li>
         <li><a>

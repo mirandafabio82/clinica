@@ -36,8 +36,8 @@ class Documento extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['projeto_id', 'cliente_id'], 'required'],
-            [['projeto_id', 'cliente_id', 'revisao'], 'integer'],
+            [['projeto_id'], 'required'],
+            [['projeto_id', 'revisao'], 'integer'],
             [['data', 'criado', 'modificado'], 'safe'],
             [['nome', 'tipo'], 'string', 'max' => 20],
             [['projeto_id'], 'exist', 'skipOnError' => true, 'targetClass' => Projeto::className(), 'targetAttribute' => ['projeto_id' => 'id']],
@@ -51,8 +51,7 @@ class Documento extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'projeto_id' => 'Projeto ID',
-            'cliente_id' => 'Cliente ID',
+            'projeto_id' => 'Projeto',            
             'nome' => 'Nome',
             'revisao' => 'Revisao',
             'data' => 'Data',

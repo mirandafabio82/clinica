@@ -116,6 +116,12 @@ class ClienteController extends Controller
         }
     }
 
+    //habilitar ajax
+    public function beforeAction($action) {
+        $this->enableCsrfValidation = false;
+        return parent::beforeAction($action);
+    }
+
     /**
      * Deletes an existing Cliente model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
@@ -124,9 +130,17 @@ class ClienteController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+       $projeto = Yii::$app->db->createCommand('SELECT id FROM projeto WHERE cliente_id='.$id)->queryScalar();
+        if(empty($projeto)){
+            Yii::$app->db->createCommand('DELETE FROM contato WHERE cliente_id='.$id)->execute();
+            $this->findModel($id)->delete();
+        }
+        else{
+            //botar uma mensagem (setFlash)
+            echo 'Existe um projeto utilizando este contato';
+        }
 
-        return $this->redirect(['index']);
+        return $this->redirect(['create']);
     }
 
     /**

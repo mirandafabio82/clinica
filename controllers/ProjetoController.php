@@ -92,6 +92,24 @@ class ProjetoController extends Controller
         $searchModel = new ProjetoSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+        if(Yii::$app->request->post('editableKey')){
+            $projeto_id = Yii::$app->request->post('editableKey');
+            $projeto = Projeto::findOne($projeto_id);
+
+            $out = Json::encode(['output'=>'', 'message'=>'']);
+            $post =[];
+            $posted = current($_POST['Projeto']);
+            $post['Projeto'] = $posted;
+
+            if($projeto->load($post)){
+                $projeto->save();
+                // $output = 'teste';
+                $out = Json::encode(['output'=>'', 'message'=>'']);
+            }
+            echo $out;
+            return $this->redirect(['create']);
+        }
+
         $clientes = Yii::$app->db->createCommand('SELECT id, nome FROM cliente')->queryAll();
         $listClientes = ArrayHelper::map($clientes,'id','nome');
 
@@ -208,6 +226,47 @@ class ProjetoController extends Controller
 
         $searchModel = new ProjetoSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+
+        if(Yii::$app->request->post('editableKey')){
+            if(isset($_POST['Escopo'])){
+
+                $escopo_id = Yii::$app->request->post('editableKey');
+                $escopo = Escopo::findOne($escopo_id);
+
+                $out = Json::encode(['output'=>'', 'message'=>'']);
+                $post =[];
+                $posted = current($_POST['Escopo']);
+                $post['Escopo'] = $posted;
+
+                if($escopo->load($post)){
+                    $escopo->save();
+                    // $output = 'teste';
+                    $out = Json::encode(['output'=>'', 'message'=>'']);
+                }
+                echo $out;
+                return $this->redirect(['update', 'id' => $model->id]);
+            }
+            if(isset($_POST['Projeto'])){
+
+                $projeto_id = Yii::$app->request->post('editableKey');
+                $projeto = Projeto::findOne($projeto_id);
+
+                $out = Json::encode(['output'=>'', 'message'=>'']);
+                $post =[];
+                $posted = current($_POST['Projeto']);
+                $post['Projeto'] = $posted;
+
+                if($projeto->load($post)){
+                    $projeto->save();
+                    // $output = 'teste';
+                    $out = Json::encode(['output'=>'', 'message'=>'']);
+                }
+                echo $out;
+                return $this->redirect(['update', 'id' => $model->id]);
+            }
+
+        }
 
         $clientes = Yii::$app->db->createCommand('SELECT id, nome FROM cliente')->queryAll();
         $listClientes = ArrayHelper::map($clientes,'id','nome');

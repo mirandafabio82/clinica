@@ -29,6 +29,7 @@ class Planta extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['site_id'], 'required'],
             [['site_id'], 'integer'],
             [['nome'], 'string', 'max' => 255],
             [['site_id'], 'exist', 'skipOnError' => true, 'targetClass' => Site::className(), 'targetAttribute' => ['site_id' => 'id']],

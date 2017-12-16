@@ -122,6 +122,11 @@ class PlantaController extends Controller
         }
     }
 
+    //habilitar ajax
+    public function beforeAction($action) {
+        $this->enableCsrfValidation = false;
+        return parent::beforeAction($action);
+    }
     /**
      * Deletes an existing Planta model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
@@ -130,9 +135,18 @@ class PlantaController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        Yii::$app->controller->enableCsrfValidation = false;
+        $projeto = Yii::$app->db->createCommand('SELECT id FROM projeto WHERE planta='.$id)->queryScalar();
+        if(empty($projeto)){
+            $this->findModel($id)->delete();
+        }
+        else{
+            //botar uma mensagem (setFlash)
+            echo 'Existe um projeto utilizando esta área';
+        }
 
-        return $this->redirect(['index']);
+
+        return $this->redirect(['create']);
     }
 
     /**

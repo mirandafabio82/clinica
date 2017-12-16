@@ -183,6 +183,11 @@ class ExecutanteController extends Controller
             ]);
         }
     }
+     //habilitar ajax
+    public function beforeAction($action) {
+        $this->enableCsrfValidation = false;
+        return parent::beforeAction($action);
+    }   
 
     /**
      * Deletes an existing Executante model.
@@ -192,9 +197,18 @@ class ExecutanteController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $atividade = Yii::$app->db->createCommand('SELECT id FROM atividade WHERE executante_id='.$id)->queryScalar();
+        
+        if(empty($atividade)){
+            Yii::$app->db->createCommand('DELETE FROM executante_tipo WHERE executante_id='.$id)->execute();
+            $this->findModel($id)->delete();
+        }
+        else{
+            //botar uma mensagem (setFlash)
+            echo 'Existe uma atividade utilizando este executante';
+        }
 
-        return $this->redirect(['index']);
+        return $this->redirect(['create']);
     }
 
     /**

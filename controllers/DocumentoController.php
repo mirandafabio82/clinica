@@ -9,6 +9,8 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\helpers\ArrayHelper;
+use yii\web\UploadedFile;
 
 /**
  * DocumentoController implements the CRUD actions for Documento model.
@@ -76,12 +78,49 @@ class DocumentoController extends Controller
     public function actionCreate()
     {
         $model = new Documento();
+        $searchModel = new DocumentoSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $projetos = Yii::$app->db->createCommand('SELECT id, nome FROM projeto')->queryAll();
+        $listProjetos = ArrayHelper::map($projetos,'id','nome');
+
+        if (isset($_POST['Documento'])) {           
+            try{
+                $connection = \Yii::$app->db;
+                $transaction = $connection->beginTransaction();
+                $model->setAttributes($_POST['Documento']);
+
+
+                if(UploadedFile::getInstance($model,'path') != null){
+
+                    $nomeOriginal = UploadedFile::getInstance($model,'path')->name;
+                    $extensao = explode('.', $nomeOriginal)[1];
+                    
+                    if (!is_dir(Yii::$app->basePath . '/web/uploaded-files/' . $model->projeto_id)) {
+                        mkdir(Yii::$app->basePath . '/web/uploaded-files/' . $model->projeto_id);
+                    }
+
+                    $model->path = UploadedFile::getInstance($model,'path');                
+                    $model->path->name = $model->path->name;                
+                    $rnd = rand(0,9999);               
+                    $fileName = "{$model->nome}-{$nomeOriginal}";                
+                    $model->path->saveAs(Yii::$app->basePath.'/web/uploaded-files/'.$model->projeto_id.'/'.$fileName);                
+                    $model->path = $fileName;
+                }
+                $model->save();
+                $transaction->commit();
+                return $this->redirect(['create']);
+            }
+            catch(Exception $e){
+                $transaction->rollBack();
+                throw $e;
+            }            
         } else {
             return $this->render('create', [
                 'model' => $model,
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+                'listProjetos' => $listProjetos
             ]);
         }
     }
@@ -95,14 +134,23 @@ class DocumentoController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $searchModel = new DocumentoSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['create']);
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
             ]);
         }
+    }
+     //habilitar ajax
+    public function beforeAction($action) {
+        $this->enableCsrfValidation = false;
+        return parent::beforeAction($action);
     }
 
     /**
@@ -115,7 +163,7 @@ class DocumentoController extends Controller
     {
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['create']);
     }
 
     /**
