@@ -39,7 +39,8 @@ use kartik\grid\GridView;
                          [                                 // link options
                          'title'=>'Go!',
                          'target'=>'_blank',
-                         'class' => 'linksWithTarget'
+                         'class' => 'linksWithTarget',
+                         'data-pjax'=>"0"
                        ]
                         );
                 }
