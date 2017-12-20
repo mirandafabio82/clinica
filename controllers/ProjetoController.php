@@ -93,21 +93,25 @@ class ProjetoController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         if(Yii::$app->request->post('editableKey')){
-            $projeto_id = Yii::$app->request->post('editableKey');
-            $projeto = Projeto::findOne($projeto_id);
+            try{
+                $projeto_id = Yii::$app->request->post('editableKey');
+                $projeto = Projeto::findOne($projeto_id);
 
-            $out = Json::encode(['output'=>'', 'message'=>'']);
-            $post =[];
-            $posted = current($_POST['Projeto']);
-            $post['Projeto'] = $posted;
-
-            if($projeto->load($post)){
+                $out = Json::encode(['output'=>'', 'message'=>'']);
+                $post =[];
+                $posted = current($_POST['Projeto']);
+                $post['Projeto'] = $posted;                
                 $projeto->save();
+               
                 // $output = 'teste';
                 $out = Json::encode(['output'=>'', 'message'=>'']);
+                
+                echo $out;
+                return $this->redirect(['create']);
             }
-            echo $out;
-            return $this->redirect(['create']);
+            catch(Exception $e){
+                throw $e;
+            }
         }
 
         $clientes = Yii::$app->db->createCommand('SELECT id, CONCAT(nome," - " ,site) as nome FROM cliente')->queryAll();
@@ -235,10 +239,10 @@ class ProjetoController extends Controller
 
         $searchModel = new ProjetoSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-    
+
         if(Yii::$app->request->post('editableKey')){
              
-            if(isset($_POST['Escopo'])){
+            /*if(isset($_POST['Escopo'])){
 
                 $escopo_id = Yii::$app->request->post('editableKey');
                 $escopo = Escopo::findOne($escopo_id);
@@ -255,7 +259,7 @@ class ProjetoController extends Controller
                 }
                 echo $out;
                 return $this->redirect(['update', 'id' => $model->id]);
-            }
+            }*/
             if(isset($_POST['Projeto'])){
                
                 $projeto_id = Yii::$app->request->post('editableKey');
@@ -301,27 +305,38 @@ class ProjetoController extends Controller
 
         $escopoArray = Yii::$app->db->createCommand('SELECT * FROM escopo WHERE projeto_id='.$model->id)->queryAll();
 
-        $executantes_tp = Yii::$app->db->createCommand('SELECT executante.usuario_id, nome FROM executante JOIN executante_tipo ON executante_tipo.executante_id=executante.usuario_id JOIN tipo_executante ON executante_tipo.tipo_id=tipo_executante.id JOIN user ON user.id=executante.usuario_id WHERE tipo_executante.id =1')->queryAll();
-        $listExecutantes_tp = ArrayHelper::map($executantes_tp,'id','nome'); 
+        $executantes_tp = Yii::$app->db->createCommand('SELECT executante.usuario_id as exec_id, nome FROM executante JOIN executante_tipo ON executante_tipo.executante_id=executante.usuario_id JOIN tipo_executante ON executante_tipo.tipo_id=tipo_executante.id JOIN user ON user.id=executante.usuario_id WHERE tipo_executante.id =1')->queryAll();
+        $listExecutantes_tp = ArrayHelper::map($executantes_tp,'exec_id','nome'); 
 
-        $executantes_ej = Yii::$app->db->createCommand('SELECT executante.usuario_id, nome FROM executante JOIN executante_tipo ON executante_tipo.executante_id=executante.usuario_id JOIN tipo_executante ON executante_tipo.tipo_id=tipo_executante.id JOIN user ON user.id=executante.usuario_id WHERE tipo_executante.id =2')->queryAll();
-        $listExecutantes_ej = ArrayHelper::map($executantes_ej,'id','nome'); 
+        $executantes_ej = Yii::$app->db->createCommand('SELECT executante.usuario_id as exec_id, nome FROM executante JOIN executante_tipo ON executante_tipo.executante_id=executante.usuario_id JOIN tipo_executante ON executante_tipo.tipo_id=tipo_executante.id JOIN user ON user.id=executante.usuario_id WHERE tipo_executante.id =2')->queryAll();
+        $listExecutantes_ej = ArrayHelper::map($executantes_ej,'exec_id','nome'); 
 
-        $executantes_ep = Yii::$app->db->createCommand('SELECT executante.usuario_id, nome FROM executante JOIN executante_tipo ON executante_tipo.executante_id=executante.usuario_id JOIN tipo_executante ON executante_tipo.tipo_id=tipo_executante.id JOIN user ON user.id=executante.usuario_id WHERE tipo_executante.id =3')->queryAll();
-        $listExecutantes_ep = ArrayHelper::map($executantes_ep,'id','nome');
+        $executantes_ep = Yii::$app->db->createCommand('SELECT executante.usuario_id as exec_id, nome FROM executante JOIN executante_tipo ON executante_tipo.executante_id=executante.usuario_id JOIN tipo_executante ON executante_tipo.tipo_id=tipo_executante.id JOIN user ON user.id=executante.usuario_id WHERE tipo_executante.id =3')->queryAll();
+        $listExecutantes_ep = ArrayHelper::map($executantes_ep,'exec_id','nome');
 
-        $executantes_es = Yii::$app->db->createCommand('SELECT executante.usuario_id, nome FROM executante JOIN executante_tipo ON executante_tipo.executante_id=executante.usuario_id JOIN tipo_executante ON executante_tipo.tipo_id=tipo_executante.id JOIN user ON user.id=executante.usuario_id WHERE tipo_executante.id =4')->queryAll();
-        $listExecutantes_es = ArrayHelper::map($executantes_es,'id','nome'); 
+        $executantes_es = Yii::$app->db->createCommand('SELECT executante.usuario_id as exec_id, nome FROM executante JOIN executante_tipo ON executante_tipo.executante_id=executante.usuario_id JOIN tipo_executante ON executante_tipo.tipo_id=tipo_executante.id JOIN user ON user.id=executante.usuario_id WHERE tipo_executante.id =4')->queryAll();
+        $listExecutantes_es = ArrayHelper::map($executantes_es,'exec_id','nome'); 
 
-        $executantes_ee = Yii::$app->db->createCommand('SELECT executante.usuario_id, nome FROM executante JOIN executante_tipo ON executante_tipo.executante_id=executante.usuario_id JOIN tipo_executante ON executante_tipo.tipo_id=tipo_executante.id JOIN user ON user.id=executante.usuario_id WHERE tipo_executante.id =5')->queryAll();
-        $listExecutantes_ee = ArrayHelper::map($executantes_ee,'id','nome'); 
+        $executantes_ee = Yii::$app->db->createCommand('SELECT executante.usuario_id as exec_id, nome FROM executante JOIN executante_tipo ON executante_tipo.executante_id=executante.usuario_id JOIN tipo_executante ON executante_tipo.tipo_id=tipo_executante.id JOIN user ON user.id=executante.usuario_id WHERE tipo_executante.id =5')->queryAll();
+        $listExecutantes_ee = ArrayHelper::map($executantes_ee,'exec_id','nome'); 
 
         
         $searchEscopo = new EscopoSearch();
         $escopoDataProvider = $searchEscopo->search(Yii::$app->request->queryParams);
         $escopoDataProvider->query->join('join','atividademodelo', 'atividademodelo.id=escopo.atividademodelo_id')->where('projeto_id='.$model->id);
 
+        //atualizando os valores de hora e executante do escopo
+        if(isset($_POST['Escopo'])){
 
+            foreach ($_POST['Escopo'] as $key => $esc) {
+                $escopo = Escopo::findIdentity($key);
+                if(!empty($escopo)){
+                    
+                    $escopo->setAttributes($_POST['Escopo'][$key]);
+                    $escopo->save();
+                }
+            }
+        }
 
           if ($model->load(Yii::$app->request->post())) {
             try{

@@ -313,7 +313,7 @@ $("#projeto-contato_id").change(function(ev){
         'mask' => '99/99/9999',])->textInput(['maxlength' => true,'style'=>'width:5em']) ?>
       </div>
     </div>
-    </div>
+    
 
     <div class="row">
       <div class="col-md-10">
@@ -352,85 +352,91 @@ $("#projeto-contato_id").change(function(ev){
       <?= Html::submitButton($model->isNewRecord ? 'Add Escopo' : 'Add Escopo', ['class' => $model->isNewRecord ? 'btn btn-primary' : 'btn btn-primary']) ?>
       </div>
       </div>
+      </div>
       <?php ActiveForm::end(); ?>
 
       <?php
       if(!$model->isNewRecord){ ?>
      <!-- escopo -->
-     <?php $form2 = ActiveForm::begin(); ?>
-     <?= Html::submitButton('Salvar', ['class' =>'btn btn-primary']) ?>
-
      <div class="box box-primary">
     <div class="box-header with-border">
+     <div class="form-group">
+       <?php $form2 = ActiveForm::begin(); ?>
+       <?= Html::submitButton('Salvar Escopo', ['class' =>'btn btn-primary']) ?>
+     </div>
      <div class="col-md-12">
       Escopo  
       <br>
       <div class="row">
-      <div class="col-md-1">
+      <div class="col-md-2">
         <label> Descrição </label>
       </div>
-      <div class="col-md-1">
+      <div class="col-md-1" style="margin-left: -1em;margin-right: 2em">
         <label> Disciplina </label>
       </div>
-      <div class="col-md-2">
+      <div class="col-md-2" style="margin-left: -2em">
         <label> horas_TP </label>
       </div>
-      <div class="col-md-2">
+      <div class="col-md-2" style="margin-left: -2em">
         <label> horas_EJ </label>
       </div>
-      <div class="col-md-2">
+      <div class="col-md-2" style="margin-left: -2em">
         <label> horas_EP </label>
       </div>
-      <div class="col-md-2">
+      <div class="col-md-2" style="margin-left: -2em">
         <label> horas_ES </label>
       </div>
-      <div class="col-md-2">
+      <div class="col-md-2" style="margin-left: -2em">
         <label> horas_EE </label>
       </div>
       </div>
 
-      <div style="height: 20em; overflow-y: scroll;">
+      <div style="height: 30em; overflow-y: scroll;">
         <?php foreach ($escopoArray as $key => $esc) { 
           $escopoModel =  Escopo::findOne($esc['id']);
         ?>
           <div class="row" >
-          <hr>          
-          <div class="col-md-1">
+                   
+          <div class="col-md-2">
             <label> <?= $esc['descricao'] ?> </label>
           </div>
-          <div class="col-md-1">
+          <div class="col-md-1" style="margin-left: -1em;margin-right: 2em">
             <label> <?= Yii::$app->db->createCommand('SELECT disciplina.nome FROM disciplina JOIN atividademodelo ON atividademodelo.disciplina_id=disciplina.id WHERE atividademodelo.id='.$esc['atividademodelo_id'])->queryScalar() ?> </label>
           </div>
-          <div class="col-md-2">
-            <?= $form2->field($escopoModel, 'horas_tp')->textInput(['style'=>'width:6em', 'name' => 'aaa'])->label(false) ?> 
-            <?= $form2->field($escopoModel, 'exe_tp_id')->dropDownList($listExecutantes_tp)->label(false) ?>          
+          <div class="col-md-2" style="margin-left: -2em">
+            <?= $form2->field($escopoModel, 'horas_tp')->textInput(['style'=>'', 'name' => 'Escopo['.$esc["id"].'][horas_tp]'])->label(false) ?> 
+            <?= $form2->field($escopoModel, 'exe_tp_id')->dropDownList($listExecutantes_tp,['prompt'=>'Selecione um Executante', 'name' => 'Escopo['.$esc["id"].'][exe_tp_id]', 'value'=>$esc['exe_tp_id']])->label(false) ?>          
           </div>
-          <div class="col-md-2">
-             <?= $form2->field($escopoModel, 'horas_ej')->textInput(['style'=>'width:6em', 'name' => 'aaa'])->label(false) ?> 
-             <?= $form2->field($escopoModel, 'exe_ej_id')->dropDownList($listExecutantes_ej)->label(false) ?>         
+          <div class="col-md-2" style="margin-left: -2em">
+             <?= $form2->field($escopoModel, 'horas_ej')->textInput(['style'=>'', 'name' =>'Escopo['.$esc["id"].'][horas_ej]'])->label(false) ?> 
+             <?= $form2->field($escopoModel, 'exe_ej_id')->dropDownList($listExecutantes_ej,['prompt'=>'Selecione um Executante', 'name' => 'Escopo['.$esc["id"].'][exe_ej_id]', 'value'=>$esc['exe_ej_id']])->label(false) ?>         
           </div>
-          <div class="col-md-2">
-             <?= $form2->field($escopoModel, 'horas_ep')->textInput(['style'=>'width:6em', 'name' => 'aaa'])->label(false) ?>
-             <?= $form2->field($escopoModel, 'exe_ep_id')->dropDownList($listExecutantes_ep)->label(false) ?>          
+          <div class="col-md-2" style="margin-left: -2em">
+             <?= $form2->field($escopoModel, 'horas_ep')->textInput(['style'=>'', 'name' => 'Escopo['.$esc["id"].'][horas_ep]'])->label(false) ?>
+             <?= $form2->field($escopoModel, 'exe_ep_id')->dropDownList($listExecutantes_ep,['prompt'=>'Selecione um Executante', 'name' => 'Escopo['.$esc["id"].'][exe_ep_id]', 'value'=>$esc['exe_ep_id']])->label(false) ?>          
           </div>
-          <div class="col-md-2">
-             <?= $form->field($escopoModel, 'horas_es')->textInput(['style'=>'width:6em', 'name' => 'aaa'])->label(false) ?>
-             <?= $form2->field($escopoModel, 'exe_es_id')->dropDownList($listExecutantes_es)->label(false) ?>          
+          <div class="col-md-2" style="margin-left: -2em">
+             <?= $form->field($escopoModel, 'horas_es')->textInput(['style'=>'', 'name' => 'Escopo['.$esc["id"].'][horas_es]'])->label(false) ?>
+             <?= $form2->field($escopoModel, 'exe_es_id')->dropDownList($listExecutantes_es,['prompt'=>'Selecione um Executante', 'name' => 'Escopo['.$esc["id"].'][exe_es_id]', 'value'=>$esc['exe_es_id']])->label(false) ?>          
           </div>
-          <div class="col-md-2">
-             <?= $form2->field($escopoModel, 'horas_ee')->textInput(['style'=>'width:6em', 'name' => 'aaa'])->label(false) ?>
-             <?= $form2->field($escopoModel, 'exe_ee_id')->dropDownList($listExecutantes_ee)->label(false) ?>          
+          <div class="col-md-2" style="margin-left: -2em">
+             <?= $form2->field($escopoModel, 'horas_ee')->textInput(['style'=>'', 'name' => 'Escopo['.$esc["id"].'][horas_ee]'])->label(false) ?>
+             <?= $form2->field($escopoModel, 'exe_ee_id')->dropDownList($listExecutantes_ee,['prompt'=>'Selecione um Executante', 'name' => 'Escopo['.$esc["id"].'][exe_ee_id]', 'value'=>$esc['exe_ee_id']])->label(false) ?>          
           </div>
           </div>
           <br>
-      
-      <?php }} ?>
+
+      <?php } ?>
       </div>
       </div>
       </div>
     </div>
 
     <?php ActiveForm::end(); ?>
+      <?php } ?>
+
+    <div class="box box-primary">
+    <div class="box-header with-border">
       <div class="row">   
           <div class="col-md-12"> 
           <div class="col-md-12">
@@ -518,7 +524,8 @@ $("#projeto-contato_id").change(function(ev){
             </div>
             </div>
 
-
+            </div>
+            </div>
             
           </div>
           

@@ -77,4 +77,10 @@ class Escopo extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Projeto::className(), ['escopo_id' => 'id']);
     }
+
+    public static function findIdentity($id)
+    {
+        return static::findOne($id);
+    }
+
 }
