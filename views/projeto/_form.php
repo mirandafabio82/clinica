@@ -4,6 +4,8 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
+use yii\helpers\ArrayHelper;
+use app\models\Escopo;
 /* @var $this yii\web\View */
 /* @var $model app\models\Projeto */
 /* @var $form yii\widgets\ActiveForm */
@@ -56,7 +58,7 @@ $this->registerJs('
        $("#projeto-municipio").val(resposta["cidade"]);
        $("#projeto-cnpj").val(resposta["cnpj"]);
        $("#projeto-codigo").val(resposta["codigo"]);
-           // $("#projeto-site").val(resposta["site"]);
+       $("#projeto-site").val(resposta["site"]);
      },
      error: function(){
       console.log("failure");
@@ -108,7 +110,7 @@ $("#projeto-contato_id").change(function(ev){
 });
 });
 
-$("#projeto-site").change(function(ev){
+/*$("#projeto-site").change(function(ev){
   var id = $(this).val();    
   $.ajax({ 
     url: "index.php?r=projeto/preencheformsite",
@@ -132,7 +134,7 @@ $("#projeto-site").change(function(ev){
     console.log("failure");
   }
 });
-});
+});*/
 ');
 ?>
 
@@ -155,6 +157,10 @@ $("#projeto-site").change(function(ev){
   <div class="box box-primary">
     <div class="box-header with-border">
       <div class="row">    
+      <div class="col-md-2"> 
+        <input type="radio" name="Projeto[tipo]" value="A" checked> Autorização de Serviço<br>
+        <input type="radio" name="Projeto[tipo]" value="P"> Proposta<br>
+      </div>
         <div class="col-md-2"> 
           <?= $form->field($model, 'nome')->textInput(['maxlength' => true]) ?>  
         </div>
@@ -162,7 +168,7 @@ $("#projeto-site").change(function(ev){
           <?= $form->field($model, 'descricao')->textarea(['maxlength' => true]) ?>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-4">
         <b> Disciplinas </b>
         <br>
           <?php     
@@ -190,16 +196,12 @@ $("#projeto-site").change(function(ev){
         </div>
 
         <div class="col-md-2">
-          <?= $form->field($model, 'site')->dropDownList($listSites,['prompt'=>'Selecione um Site']) ?>
+          <?= $form->field($model, 'site')->textInput(['maxlength' => true]) ?>
         </div>
 
         <div class="col-md-2">
-          <?php if($model->isNewRecord){ ?>
-          <?= $form->field($model, 'planta')->dropDownList(['prompt'=>'Selecione uma Área'])->label('Área') ?>
-
-          <?php } else{ ?>
-          <?= $form->field($model, 'planta')->dropDownList($listPlantas,['prompt'=>'Selecione uma Área'])->label('Área') ?>
-          <?php } ?>
+          
+          <?= $form->field($model, 'planta')->textInput(['maxlength' => true]) ?>
         </div>
 
         <div class="col-md-1" style="width: 1em">
@@ -259,16 +261,16 @@ $("#projeto-site").change(function(ev){
         'mask' => '99/99/9999',
         ])->textInput(['style'=>'width:6em']) ?>
       </div>
-      <div class="col-md-1">
-        <?= $form->field($model, 'qtd_hh')->textInput(['style'=>'width:4em']) ?>
+      <!-- <div class="col-md-1">
+        <?//= $form->field($model, 'qtd_hh')->textInput(['style'=>'width:4em']) ?>
       </div>
       <div class="col-md-1">
-        <?= $form->field($model, 'vl_hh')->textInput(['maxlength' => true,'style'=>'width:6em']) ?>
+        <?//= $form->field($model, 'vl_hh')->textInput(['maxlength' => true,'style'=>'width:6em']) ?>
       </div>
       <div class="col-md-2">
-        <?= $form->field($model, 'total_horas')->textInput(['maxlength' => true]) ?>
+        <?//= $form->field($model, 'total_horas')->textInput(['maxlength' => true]) ?>
       </div>
-    </div>
+    </div> -->
 
     <div class="row">
       <div class="col-md-1">
@@ -280,6 +282,9 @@ $("#projeto-site").change(function(ev){
       <div class="col-md-1">
         <?= $form->field($model, 'vl_km')->textInput(['maxlength' => true, 'style'=>'width:6em']) ?>
       </div>
+      </div>
+      </div>
+      <div class="row">
       <div class="col-md-2">
         <?= $form->field($model, 'total_km')->textInput(['maxlength' => true]) ?>
       </div>
@@ -307,7 +312,7 @@ $("#projeto-site").change(function(ev){
         <?= $form->field($model, 'data_pendencia')->widget(\yii\widgets\MaskedInput::className(), [
         'mask' => '99/99/9999',])->textInput(['maxlength' => true,'style'=>'width:5em']) ?>
       </div>
-
+    </div>
     </div>
 
     <div class="row">
@@ -321,104 +326,112 @@ $("#projeto-site").change(function(ev){
           'mask' => '99/99/9999',
           ]) ?>
         </div>
+        </div>
 
-      </div>
-    <div class="row">
-    <div class="col-md-12"> 
+   <!-- <div class="row">
+     <div class="col-md-12"> 
        <h4>Fatura</h4>
           <div class="col-md-2">
-            <?= $form->field($model, 'cliente_fatura')->textInput(['maxlength' => true]) ?>
+            <?//= $form->field($model, 'cliente_fatura')->textInput(['maxlength' => true]) ?>
           </div>
           <div class="col-md-2">
-            <?= $form->field($model, 'site_fatura')->textInput(['maxlength' => true]) ?>
+            <?//= $form->field($model, 'site_fatura')->textInput(['maxlength' => true]) ?>
           </div>           
 
           <div class="col-md-2">
-            <?= $form->field($model, 'uf_fatura')->textInput(['maxlength' => true]) ?>
+            <?//= $form->field($model, 'uf_fatura')->textInput(['maxlength' => true]) ?>
           </div>
           <div class="col-md-2">
-            <?= $form->field($model, 'municipio_fatura')->textInput(['maxlength' => true]) ?>
+            <?//= $form->field($model, 'municipio_fatura')->textInput(['maxlength' => true]) ?>
           </div>
           <div class="col-md-2">
-            <?= $form->field($model, 'cnpj_fatura')->textInput(['maxlength' => true]) ?>
+            <?//= $form->field($model, 'cnpj_fatura')->textInput(['maxlength' => true]) ?>
           </div>
-        </div>
-      </div>
-      <div class="row">   
-
-      <div class="col-md-12"> 
-            <?= Html::submitButton($model->isNewRecord ? 'Add Escopo' : 'Add Escopo', ['class' => $model->isNewRecord ? 'btn btn-primary' : 'btn btn-primary']) ?>
-              <br>
-            Escopo
-            <?= GridView::widget([
-            'dataProvider' => $escopoDataProvider,
-            'filterModel' => $searchEscopo,
-            'pjax' => true,
-            
-            'export' => [
-            'fontAwesome' => true
-            ],
-            'hover' => true,
-            
-            'columns' => [           
-            [
-              'attribute' => 'descricao',                 
-              'contentOptions' => ['style' => 'width:30em;  min-width:30em;'],
-            ],
-            [
-              'attribute' => 'atividademodelo_id', 
-              'header' => 'Disciplina',
-              'value'=> function($data){
-                return Yii::$app->db->createCommand('SELECT disciplina.nome FROM disciplina JOIN atividademodelo ON atividademodelo.disciplina_id=disciplina.id WHERE atividademodelo.id='.$data->atividademodelo_id)->queryScalar();
-              },              
-              
-            ],     
-            [ //isso so existe por causa do bug do editable nao pegar a primeira coluna
-                'class'=>'kartik\grid\EditableColumn',
-                    'contentOptions' => ['style' => 'max-width:0px;'],
-              'attribute' => 'id',
-              'header' => '&nbsp;',
-                'width'=>'0px',
-              'hidden' => true,
-              'content' => function($data){
-                return '&nbsp;';
-              },
-              
-            ],     
-            [
-              'attribute' => 'horas_tp', 
-              'class' => 'kartik\grid\EditableColumn',    
-              'contentOptions' => ['style' => 'width:3em;  min-width:3em;'],
-            ],
-            [
-              'attribute' => 'horas_ej', 
-              'class' => 'kartik\grid\EditableColumn',    
-              'contentOptions' => ['style' => 'width:3em;  min-width:3em;'],
-            ],
-            [
-              'attribute' => 'horas_es', 
-              'class' => 'kartik\grid\EditableColumn',    
-              'contentOptions' => ['style' => 'width:3em;  min-width:3em;'],
-            ],
-            [
-              'attribute' => 'horas_ep', 
-              'class' => 'kartik\grid\EditableColumn',    
-              'contentOptions' => ['style' => 'width:3em;  min-width:3em;'],
-            ],
-            [
-              'attribute' => 'horas_ee', 
-              'class' => 'kartik\grid\EditableColumn',    
-              'contentOptions' => ['style' => 'width:3em;  min-width:3em;'],
-            ],
-            [
-              'attribute' => 'executado', 
-              'class' => 'kartik\grid\EditableColumn',    
-              'contentOptions' => ['style' => 'width:3em;  min-width:3em;'],
-            ],
-            ]
-            ]); ?>
-          </div>   
         
+      </div></div> -->
+      <?= Html::submitButton($model->isNewRecord ? 'Add Escopo' : 'Add Escopo', ['class' => $model->isNewRecord ? 'btn btn-primary' : 'btn btn-primary']) ?>
+      </div>
+      </div>
+      <?php ActiveForm::end(); ?>
+
+      <?php
+      if(!$model->isNewRecord){ ?>
+     <!-- escopo -->
+     <?php $form2 = ActiveForm::begin(); ?>
+     <?= Html::submitButton('Salvar', ['class' =>'btn btn-primary']) ?>
+
+     <div class="box box-primary">
+    <div class="box-header with-border">
+     <div class="col-md-12">
+      Escopo  
+      <br>
+      <div class="row">
+      <div class="col-md-1">
+        <label> Descrição </label>
+      </div>
+      <div class="col-md-1">
+        <label> Disciplina </label>
+      </div>
+      <div class="col-md-2">
+        <label> horas_TP </label>
+      </div>
+      <div class="col-md-2">
+        <label> horas_EJ </label>
+      </div>
+      <div class="col-md-2">
+        <label> horas_EP </label>
+      </div>
+      <div class="col-md-2">
+        <label> horas_ES </label>
+      </div>
+      <div class="col-md-2">
+        <label> horas_EE </label>
+      </div>
+      </div>
+
+      <div style="height: 20em; overflow-y: scroll;">
+        <?php foreach ($escopoArray as $key => $esc) { 
+          $escopoModel =  Escopo::findOne($esc['id']);
+        ?>
+          <div class="row" >
+          <hr>          
+          <div class="col-md-1">
+            <label> <?= $esc['descricao'] ?> </label>
+          </div>
+          <div class="col-md-1">
+            <label> <?= Yii::$app->db->createCommand('SELECT disciplina.nome FROM disciplina JOIN atividademodelo ON atividademodelo.disciplina_id=disciplina.id WHERE atividademodelo.id='.$esc['atividademodelo_id'])->queryScalar() ?> </label>
+          </div>
+          <div class="col-md-2">
+            <?= $form2->field($escopoModel, 'horas_tp')->textInput(['style'=>'width:6em', 'name' => 'aaa'])->label(false) ?> 
+            <?= $form2->field($escopoModel, 'exe_tp_id')->dropDownList($listExecutantes_tp)->label(false) ?>          
+          </div>
+          <div class="col-md-2">
+             <?= $form2->field($escopoModel, 'horas_ej')->textInput(['style'=>'width:6em', 'name' => 'aaa'])->label(false) ?> 
+             <?= $form2->field($escopoModel, 'exe_ej_id')->dropDownList($listExecutantes_ej)->label(false) ?>         
+          </div>
+          <div class="col-md-2">
+             <?= $form2->field($escopoModel, 'horas_ep')->textInput(['style'=>'width:6em', 'name' => 'aaa'])->label(false) ?>
+             <?= $form2->field($escopoModel, 'exe_ep_id')->dropDownList($listExecutantes_ep)->label(false) ?>          
+          </div>
+          <div class="col-md-2">
+             <?= $form->field($escopoModel, 'horas_es')->textInput(['style'=>'width:6em', 'name' => 'aaa'])->label(false) ?>
+             <?= $form2->field($escopoModel, 'exe_es_id')->dropDownList($listExecutantes_es)->label(false) ?>          
+          </div>
+          <div class="col-md-2">
+             <?= $form2->field($escopoModel, 'horas_ee')->textInput(['style'=>'width:6em', 'name' => 'aaa'])->label(false) ?>
+             <?= $form2->field($escopoModel, 'exe_ee_id')->dropDownList($listExecutantes_ee)->label(false) ?>          
+          </div>
+          </div>
+          <br>
+      
+      <?php }} ?>
+      </div>
+      </div>
+      </div>
+    </div>
+
+    <?php ActiveForm::end(); ?>
+      <div class="row">   
           <div class="col-md-12"> 
           <div class="col-md-12">
           Projetos
@@ -449,6 +462,11 @@ $("#projeto-site").change(function(ev){
                 return '<span style="color:'.$status['cor'].' "><i class="fa fa-circle" aria-hidden="true"></i> '.$status['status'].'</span>';
 
               },
+
+              'editableOptions' => [
+              'inputType' => \kartik\editable\Editable::INPUT_DROPDOWN_LIST,
+              'data' => $listStatus                
+              ]
             ],
             [
             'attribute' => 'cliente_id',   
@@ -510,5 +528,5 @@ $("#projeto-site").change(function(ev){
     </div>
     
 
-    <?php ActiveForm::end(); ?>
+    
 

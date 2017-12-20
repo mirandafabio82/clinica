@@ -27,12 +27,13 @@ use kartik\grid\GridView;
               'template' => '{update} {delete}',    
               'contentOptions' => ['style' => 'width:5em;  min-width:5em;'],
             ],
-            'id',
+
+            
             [
-                'attribute' => 'nome',
+                'attribute' => 'path',
                 'format' => 'raw',
                 'value' => function($data){
-                    $nome = Yii::$app->db->createCommand('SELECT nome FROM documento WHERE id ='.$data->id)->queryScalar(); 
+                    $nome = Yii::$app->db->createCommand('SELECT path FROM documento WHERE id ='.$data->id)->queryScalar(); 
                     return Html::a(
                         $nome, 
                         Yii::$app->basePath.'/web/uploaded-files/'.$data->projeto_id.'/'.$data->path,
@@ -52,6 +53,23 @@ use kartik\grid\GridView;
                     return Yii::$app->db->createCommand('SELECT nome FROM projeto WHERE id ='.$data->projeto_id)->queryScalar();
                 },
             ],
+            [
+                'header' => 'Área',
+                'format' => 'raw',
+                'value' => function($data){
+                    $area = Yii::$app->db->createCommand('SELECT planta FROM projeto WHERE id ='.$data->projeto_id)->queryScalar(); 
+                    return $area;
+
+                }
+            ],
+            [
+                'header' => 'Descrição do Projeto',
+                'format' => 'raw',
+                'value' => function($data){
+                    return Yii::$app->db->createCommand('SELECT descricao FROM projeto WHERE id ='.$data->projeto_id)->queryScalar();
+                },
+            ],
+
             'revisao',
             'data',
             'tipo',
@@ -70,9 +88,7 @@ use kartik\grid\GridView;
      <div class="row">       
         <div class="col-md-4">
     <?= $form->field($model, 'projeto_id')->dropDownList($listProjetos,['prompt'=>'Selecione um Projeto']) ?>
-
-    <?= $form->field($model, 'nome')->textInput(['maxlength' => true]) ?>
-    
+ 
     <?= $form->field($model, 'path')->fileInput(); ?>
     </div>
     <div class="col-md-2">

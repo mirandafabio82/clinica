@@ -26,13 +26,13 @@ use kartik\grid\GridView;
               'template' => '{update} {delete}',    
               'contentOptions' => ['style' => 'width:5em;  min-width:5em;'],
             ],
-            'id',
+            
             'nome',
             'site',
             'cnpj',
-            'cidade',
             'uf',
-            'criado',
+            'cidade',
+            
             // 'modificado',
 
             // ['class' => 'yii\grid\ActionColumn', 'header' => 'Ações'],
@@ -49,6 +49,9 @@ use kartik\grid\GridView;
                     <?= $form->field($model, 'nome')->textInput(['maxlength' => true]) ?>
                 </div>
                 <div class="col-md-2">
+                    <?= $form->field($model, 'email')->textInput(['maxlength' => true])  ?>
+                </div>
+                <div class="col-md-2">
                     <?= $form->field($model, 'codigo')->textInput(['maxlength' => true])  ?>
                 </div>
                 <div class="col-md-2">
@@ -61,14 +64,27 @@ use kartik\grid\GridView;
                     ]) ?>
                 </div>
                 <div class="col-md-1">
-                    <?= $form->field($model, 'uf')->textInput(['maxlength' => true]) ?>            
+                    <?= $form->field($model, 'uf')->textInput(['maxlength' => true, 'style' => 'text-transform: uppercase']) ?>            
                 </div>   
                 <div class="col-md-2">
                     <?= $form->field($model, 'cidade')->textInput(['maxlength' => true])  ?>
                 </div>
 
-                 <div class="col-md-12">
+                 <div class="col-md-2">
+                    <?= $form->field($model, 'bairro')->textInput(['maxlength' => true])  ?>
+                </div>
+
+                <div class="col-md-2">
+                    <?= $form->field($model, 'cep')->textInput(['maxlength' => true])  ?>
+                </div>
+
+                <div class="col-md-4">
                     <?= $form->field($model, 'endereco')->textInput(['maxlength' => true])  ?>
+                </div>
+
+                
+                <div class="col-md-2">
+                    <?= $form->field($model, 'insc_municipal')->textInput(['maxlength' => true])  ?>
                 </div>
 
             </div>

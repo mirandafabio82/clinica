@@ -28,7 +28,7 @@ use kartik\grid\GridView;
               'template' => '{update} {delete}',    
               'contentOptions' => ['style' => 'width:5em;  min-width:5em;'],
             ],
-            'id',
+            
             'nome',
             [
                 'attribute'=>'isPrioritaria',

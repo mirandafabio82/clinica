@@ -143,7 +143,9 @@ class ExecutanteController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         $model = $this->findModel($id);
-        $user = new DBUser();
+        $user = DBUser::find()->where(['id' => $id])->one(); 
+        $beforeSenha = $user->password;
+
         $tipos_executantes = Yii::$app->db->createCommand('SELECT id, cargo FROM tipo_executante')->queryAll();
         $listTipos = ArrayHelper::map($tipos_executantes,'id','cargo');
 
@@ -151,19 +153,24 @@ class ExecutanteController extends Controller
             $connection = \Yii::$app->db;
             $transaction = $connection->beginTransaction();
             try{
-                $model->setAttributes($_POST['Contato']);
+                $model->setAttributes($_POST['Executante']);
 
-                $user->setAttributes($_POST['DBUser']);
-                $user->username = $user->email;               
+                $user->load(Yii::$app->request->post());
+                $user->username = $_POST['DBUser']['email'];
+                $user->email = $_POST['DBUser']['email']; 
+                $user->password = $_POST['DBUser']['password'];    
+                
                 $user->save();
+
+                if(empty($_POST['DBUser']['password'])){                   
+                    Yii::$app->db->createCommand('UPDATE user SET password="'.$beforeSenha.'" WHERE id='.$user->id)->execute();   
+                }       
 
                 $model->usuario_id = $user->id;
                 $model->criado = date('Y-m-d h:m:s');
                 $model->save();
 
-                $auth = \Yii::$app->authManager;
-                $authorRole = $auth->getRole('contato');
-                $auth->assign($authorRole, $user->getId());  
+               
 
                 $transaction->commit();
                 return $this->redirect(['create']);                

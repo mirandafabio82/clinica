@@ -15,7 +15,7 @@ use kartik\grid\GridView;
         'hover' => true,
         'panel' => [
             'type' => GridView::TYPE_PRIMARY,
-            'heading' => '<i class="fa fa-vcard"></i> Tipos de Executante'
+            'heading' => '<i class="fa fa-vcard"></i> Especialidades'
         ],
         'columns' => [
             // ['class' => 'yii\grid\SerialColumn'],
@@ -24,8 +24,9 @@ use kartik\grid\GridView;
               'template' => '{update} {delete}',    
               'contentOptions' => ['style' => 'width:5em;  min-width:5em;'],
             ],
-            'id',
+            // 'id',
             'cargo',
+            'codigo',
             'valor_hora',
             'valor_pago',
 
@@ -40,9 +41,12 @@ use kartik\grid\GridView;
 
     <?= $form->field($model, 'cargo')->textInput(['maxlength' => true]) ?>
 
+    <?= $form->field($model, 'codigo')->textInput(['maxlength' => true]) ?>
+    
     <?= $form->field($model, 'valor_hora')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'valor_pago')->textInput(['maxlength' => true]) ?>
+
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Cadastrar' : 'Atualizar', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

@@ -80,7 +80,7 @@ class Projeto extends \yii\db\ActiveRecord
             [['codigo', 'contato', 'cliente_fatura'], 'string', 'max' => 12],
             [['site', 'planta', 'site_fatura'], 'string', 'max' => 10],
             [['municipio', 'setor', 'pendencia', 'municipio_fatura'], 'string', 'max' => 20],
-            [['uf', 'uf_fatura'], 'string', 'max' => 2],
+            [['uf', 'uf_fatura', 'tipo'], 'string', 'max' => 2],
             [['cnpj', 'cnpj_fatura'], 'string', 'max' => 18],
             [['tratamento'], 'string', 'max' => 7],
             [['fone_contato'], 'string', 'max' => 15],
@@ -139,7 +139,7 @@ class Projeto extends \yii\db\ActiveRecord
             'cnpj_fatura' => 'CNPJ Fatura',
             'criado' => 'Criado',
             'modificado' => 'Modificado',
-            'nome' => 'Nome',
+            'nome' => 'Projeto',
             'documentos' => 'Qtd Documentos',
             'data_pendencia' => 'Data Resp Pendência',
             

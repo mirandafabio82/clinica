@@ -37,7 +37,7 @@ class Cliente extends \yii\db\ActiveRecord
         return [
             [['nome', 'cnpj'], 'required'],
             [['criado', 'modificado'], 'safe'],
-            [['nome', 'cidade', 'endereco'], 'string', 'max' => 255],
+            [['nome', 'cidade', 'endereco', 'bairro', 'cep','email', 'insc_municipal'], 'string', 'max' => 255],
             [['site', 'codigo'], 'string', 'max' => 45],
             [['cnpj'], 'string', 'max' => 18],
             [['uf'], 'string', 'max' => 2],
@@ -59,7 +59,11 @@ class Cliente extends \yii\db\ActiveRecord
             'criado' => 'Criado',
             'modificado' => 'Modificado',
             'codigo' => 'Código',
-            'endereco' => 'Endereço'
+            'endereco' => 'Endereço',
+            'bairro' => 'Bairro',
+            'cep' => 'CEP',
+            'email' => 'Email',
+            'insc_municipal' => 'Insc. Municipal'
         ];
     }
 

@@ -153,6 +153,12 @@ class AtividademodeloController extends Controller
         }
     }
 
+    //habilitar ajax
+    public function beforeAction($action) {
+        $this->enableCsrfValidation = false;
+        return parent::beforeAction($action);
+    }
+
     /**
      * Deletes an existing Atividademodelo model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
@@ -163,7 +169,7 @@ class AtividademodeloController extends Controller
     {
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['create']);
     }
 
     /**

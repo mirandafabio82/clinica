@@ -102,14 +102,23 @@ class DocumentoController extends Controller
                     }
 
                     $model->path = UploadedFile::getInstance($model,'path');                
-                    $model->path->name = $model->path->name;                
-                    $rnd = rand(0,9999);               
-                    $fileName = "{$model->nome}-{$nomeOriginal}";                
+                    $model->path->name = $model->path->name;     
+
+                    $fileName = "{$nomeOriginal}";  
+                    $model->nome = $fileName;              
+                    
                     $model->path->saveAs(Yii::$app->basePath.'/web/uploaded-files/'.$model->projeto_id.'/'.$fileName);                
                     $model->path = $fileName;
                 }
                 $dat = DateTime::createFromFormat('d/m/Y', $_POST['Documento']['data']);          
                 $model->data = date_format($dat, 'Y-m-d');
+
+                $qtdDocs = count(scandir(Yii::$app->basePath.'/web/uploaded-files/'.$model->projeto_id)) - 2;
+
+                //atualiza qtd documentos no projeto
+                Yii::$app->db->createCommand('UPDATE projeto SET documentos='.$qtdDocs)->execute();
+
+
                 $model->save();
                 $transaction->commit();
                 return $this->redirect(['create']);

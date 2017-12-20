@@ -84,7 +84,7 @@ class ContatoController extends Controller
         
         $model = new Contato();
         $user = new DBUser();
-        $clientes = Yii::$app->db->createCommand('SELECT id, nome FROM cliente')->queryAll();
+        $clientes = Yii::$app->db->createCommand('SELECT id, CONCAT(nome," - " ,site) as nome FROM cliente')->queryAll();
         $listClientes = ArrayHelper::map($clientes,'id','nome');
 
         if ($_POST) {
@@ -136,8 +136,11 @@ class ContatoController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         $model = $this->findModel($id);
-        $user = new DBUser();
-        $clientes = Yii::$app->db->createCommand('SELECT id, nome FROM cliente')->queryAll();
+        $user = DBUser::find()->where(['id' => $id])->one(); 
+        $beforeSenha = $user->password;
+
+
+        $clientes = Yii::$app->db->createCommand('SELECT id, CONCAT(nome," - " ,site) as nome FROM cliente')->queryAll();
         $listClientes = ArrayHelper::map($clientes,'id','nome');
 
         if ($_POST) {
@@ -146,20 +149,25 @@ class ContatoController extends Controller
             try{
                 $model->setAttributes($_POST['Contato']);
 
-                $user->setAttributes($_POST['DBUser']);
-                $user->username = $user->email;               
+                $user->load(Yii::$app->request->post());
+                $user->username = $_POST['DBUser']['email'];
+                $user->email = $_POST['DBUser']['email']; 
+                $user->password = $_POST['DBUser']['password'];    
+                
                 $user->save();
+
+                if(empty($_POST['DBUser']['password'])){                   
+                    Yii::$app->db->createCommand('UPDATE user SET password="'.$beforeSenha.'" WHERE id='.$user->id)->execute();   
+                }             
 
                 $model->usuario_id = $user->id;
                 $model->criado = date('Y-m-d h:m:s');
                 $model->save();
 
-                $auth = \Yii::$app->authManager;
-                $authorRole = $auth->getRole('contato');
-                $auth->assign($authorRole, $user->getId());  
+                
 
                 $transaction->commit();
-                return $this->redirect(['view', 'id' => $model->usuario_id]);                
+                return $this->redirect(['create']);                
             }
             catch(Exception $e){
                 $transaction->rollBack();

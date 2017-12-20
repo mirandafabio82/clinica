@@ -19,7 +19,7 @@ class TipoexecutanteSearch extends Tipoexecutante
     {
         return [
             [['id'], 'integer'],
-            [['cargo', 'valor_hora', 'valor_pago'], 'safe'],
+            [['cargo', 'valor_hora', 'valor_pago', 'codigo'], 'safe'],
         ];
     }
 
@@ -63,7 +63,8 @@ class TipoexecutanteSearch extends Tipoexecutante
         ]);
 
         $query->andFilterWhere(['like', 'cargo', $this->cargo])
-            ->andFilterWhere(['like', 'valor_hora', $this->valor_hora]);
+            ->andFilterWhere(['like', 'valor_hora', $this->valor_hora])
+            ->andFilterWhere(['like', 'codigo', $this->codigo]);
 
         return $dataProvider;
     }

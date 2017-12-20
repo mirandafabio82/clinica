@@ -110,7 +110,7 @@ class ProjetoController extends Controller
             return $this->redirect(['create']);
         }
 
-        $clientes = Yii::$app->db->createCommand('SELECT id, nome FROM cliente')->queryAll();
+        $clientes = Yii::$app->db->createCommand('SELECT id, CONCAT(nome," - " ,site) as nome FROM cliente')->queryAll();
         $listClientes = ArrayHelper::map($clientes,'id','nome');
 
         $sites = Yii::$app->db->createCommand('SELECT id, nome FROM site')->queryAll();
@@ -135,14 +135,23 @@ class ProjetoController extends Controller
         $escopoDataProvider = $searchEscopo->search(Yii::$app->request->queryParams);
         $escopoDataProvider->query->join('join','atividademodelo', 'atividademodelo.id=escopo.atividademodelo_id')->where('1=2');
 
+
         if ($model->load(Yii::$app->request->post())) {
             try{
                 $connection = \Yii::$app->db;
                 $transaction = $connection->beginTransaction();
 
-                $model->setAttributes($_POST['Projeto']);                
+                $model->setAttributes($_POST['Projeto']); 
+                if($model->tipo == "P"){
+                    $model->proposta = '(PTC)'.'-'.$model->codigo.'-'.$model->site.'-'.$model->rev_proposta;
+                }
+                else{
+                    $model->proposta = '(AS)'.'-'.$model->codigo.'-'.$model->site;
+                }
+                
 
-                if($model->save()){
+                if($model->save()){       
+
                     if(isset($_POST['Escopos'])){
                         $escopos = $_POST['Escopos'];
                         $automacoes = isset($escopos['Automação']) ? $escopos['Automação'] : array();
@@ -222,13 +231,13 @@ class ProjetoController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        $model = $this->findModel($id);        
 
         $searchModel = new ProjetoSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-
+    
         if(Yii::$app->request->post('editableKey')){
+             
             if(isset($_POST['Escopo'])){
 
                 $escopo_id = Yii::$app->request->post('editableKey');
@@ -248,7 +257,7 @@ class ProjetoController extends Controller
                 return $this->redirect(['update', 'id' => $model->id]);
             }
             if(isset($_POST['Projeto'])){
-
+               
                 $projeto_id = Yii::$app->request->post('editableKey');
                 $projeto = Projeto::findOne($projeto_id);
 
@@ -268,7 +277,8 @@ class ProjetoController extends Controller
 
         }
 
-        $clientes = Yii::$app->db->createCommand('SELECT id, nome FROM cliente')->queryAll();
+ 
+        $clientes = Yii::$app->db->createCommand('SELECT id, CONCAT(nome," - " ,site) as nome FROM cliente')->queryAll();
         $listClientes = ArrayHelper::map($clientes,'id','nome');
 
         $sites = Yii::$app->db->createCommand('SELECT id, nome FROM site')->queryAll();
@@ -289,19 +299,42 @@ class ProjetoController extends Controller
         $status = Yii::$app->db->createCommand('SELECT id, status FROM projeto_status')->queryAll();
         $listStatus = ArrayHelper::map($status,'id','status');
 
-        $plantas = Yii::$app->db->createCommand('SELECT id, nome FROM planta WHERE site_id='.$model->site)->queryAll();
-        $listPlantas = ArrayHelper::map($plantas,'id','nome');
+        $escopoArray = Yii::$app->db->createCommand('SELECT * FROM escopo WHERE projeto_id='.$model->id)->queryAll();
 
+        $executantes_tp = Yii::$app->db->createCommand('SELECT executante.usuario_id, nome FROM executante JOIN executante_tipo ON executante_tipo.executante_id=executante.usuario_id JOIN tipo_executante ON executante_tipo.tipo_id=tipo_executante.id JOIN user ON user.id=executante.usuario_id WHERE tipo_executante.id =1')->queryAll();
+        $listExecutantes_tp = ArrayHelper::map($executantes_tp,'id','nome'); 
+
+        $executantes_ej = Yii::$app->db->createCommand('SELECT executante.usuario_id, nome FROM executante JOIN executante_tipo ON executante_tipo.executante_id=executante.usuario_id JOIN tipo_executante ON executante_tipo.tipo_id=tipo_executante.id JOIN user ON user.id=executante.usuario_id WHERE tipo_executante.id =2')->queryAll();
+        $listExecutantes_ej = ArrayHelper::map($executantes_ej,'id','nome'); 
+
+        $executantes_ep = Yii::$app->db->createCommand('SELECT executante.usuario_id, nome FROM executante JOIN executante_tipo ON executante_tipo.executante_id=executante.usuario_id JOIN tipo_executante ON executante_tipo.tipo_id=tipo_executante.id JOIN user ON user.id=executante.usuario_id WHERE tipo_executante.id =3')->queryAll();
+        $listExecutantes_ep = ArrayHelper::map($executantes_ep,'id','nome');
+
+        $executantes_es = Yii::$app->db->createCommand('SELECT executante.usuario_id, nome FROM executante JOIN executante_tipo ON executante_tipo.executante_id=executante.usuario_id JOIN tipo_executante ON executante_tipo.tipo_id=tipo_executante.id JOIN user ON user.id=executante.usuario_id WHERE tipo_executante.id =4')->queryAll();
+        $listExecutantes_es = ArrayHelper::map($executantes_es,'id','nome'); 
+
+        $executantes_ee = Yii::$app->db->createCommand('SELECT executante.usuario_id, nome FROM executante JOIN executante_tipo ON executante_tipo.executante_id=executante.usuario_id JOIN tipo_executante ON executante_tipo.tipo_id=tipo_executante.id JOIN user ON user.id=executante.usuario_id WHERE tipo_executante.id =5')->queryAll();
+        $listExecutantes_ee = ArrayHelper::map($executantes_ee,'id','nome'); 
+
+        
         $searchEscopo = new EscopoSearch();
         $escopoDataProvider = $searchEscopo->search(Yii::$app->request->queryParams);
         $escopoDataProvider->query->join('join','atividademodelo', 'atividademodelo.id=escopo.atividademodelo_id')->where('projeto_id='.$model->id);
+
+
 
           if ($model->load(Yii::$app->request->post())) {
             try{
                 $connection = \Yii::$app->db;
                 $transaction = $connection->beginTransaction();
 
-                $model->setAttributes($_POST['Projeto']);                
+                $model->setAttributes($_POST['Projeto']);      
+                if($model->tipo == "P"){
+                    $model->proposta = '(PTC)'.'-'.$model->codigo.'-'.$model->site.'-'.$model->rev_proposta;
+                }
+                else{
+                    $model->proposta = '(AS)'.'-'.$model->codigo.'-'.$model->site;
+                }
 
                 if($model->save()){                        
                     if(isset($_POST['Escopos'])){
@@ -379,12 +412,17 @@ class ProjetoController extends Controller
                 'listSites' => $listSites,
                 'listNomes' => $listNomes,
                 'listStatus' => $listStatus,
-                'listPlantas' => $listPlantas,
                 'listDisciplina' => $listDisciplina,
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
                 'escopoDataProvider' => $escopoDataProvider,
-                'searchEscopo' => $searchEscopo
+                'searchEscopo' => $searchEscopo,
+                'escopoArray' => $escopoArray,
+                'listExecutantes_tp' => $listExecutantes_tp,
+                'listExecutantes_ej' => $listExecutantes_ej,
+                'listExecutantes_ep' => $listExecutantes_ep,
+                'listExecutantes_es' => $listExecutantes_es,
+                'listExecutantes_ee' => $listExecutantes_ee,
             ]);
         }
     }
@@ -397,9 +435,12 @@ class ProjetoController extends Controller
      */
     public function actionDelete($id)
     {
+        $projeto = Yii::$app->db->createCommand('SELECT id FROM projeto WHERE cliente_id='.$id)->queryScalar();
+        if(empty($projeto)){
+        }
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['create']);
     }
 
     /**

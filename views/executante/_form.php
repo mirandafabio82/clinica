@@ -28,7 +28,7 @@ use kartik\grid\GridView;
               'template' => '{update} {delete}',    
               'contentOptions' => ['style' => 'width:5em;  min-width:5em;'],
             ],
-            'usuario_id',
+            
             [
               'header' => 'Nome',              
               'format' => 'raw',
@@ -41,16 +41,16 @@ use kartik\grid\GridView;
               'header' => 'Tipo',              
               'format' => 'raw',
                'value' => function ($data) {
-                  $executantes = Yii::$app->db->createCommand('SELECT cargo FROM tipo_executante JOIN executante_tipo ON tipo_executante.id=executante_tipo.tipo_id WHERE executante_tipo.executante_id='.$data->usuario_id)->queryAll();
+                  $executantes = Yii::$app->db->createCommand('SELECT cargo, codigo FROM tipo_executante JOIN executante_tipo ON tipo_executante.id=executante_tipo.tipo_id WHERE executante_tipo.executante_id='.$data->usuario_id)->queryAll();
                   $tipos = '';
                   foreach ($executantes as $key => $exec) {
-                    $tipos .= $exec['cargo'].'; ';
+                    $tipos .= $exec['cargo'].' ('.$exec['codigo'].'); ';
                   }
 
                    return $tipos;
                },
             ],
-            'cidade',            
+                       
             // 'cpf',
             [
               'header' => 'Email',              
@@ -62,7 +62,7 @@ use kartik\grid\GridView;
             ],
             'telefone',
             'celular',
-            'criado',
+            
             // 'modificado',
 
             // ['class' => 'yii\grid\ActionColumn'],
@@ -75,7 +75,7 @@ use kartik\grid\GridView;
     <div class="box box-primary">
         <div class="box-header with-border">
     <div class="row">       
-    <div class="col-md-6">
+    <div class="col-md-4">
 
 
     <div id="tipoExecutantes">
@@ -87,30 +87,65 @@ use kartik\grid\GridView;
         <?php } ?>
         
     </div>
-
+  </div>
+    <div class="col-md-3">
     <?= $form->field($user, 'nome')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'uf')->textInput(['maxlength' => true]) ?>
-    
-    <?= $form->field($model, 'cidade')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'endereco')->textInput(['maxlength' => true]) ?>
-
     </div>
-    <div class="col-md-6">
-
+    <div class="col-md-2">
+    <?= $form->field($user, 'email')->textInput(['maxlength' => true]) ?>
+    </div>
+    <div class="col-md-2">
+    <?= $form->field($user, 'password')->passwordInput(['maxlength' => true]) ?>
+    </div>
+    <div class="col-md-2">
     <?= $form->field($model, 'cpf')->widget(\yii\widgets\MaskedInput::className(), [
                         'mask' => '999.999.999-99',
                     ]) ?>
-    <?= $form->field($user, 'email')->textInput(['maxlength' => true]) ?>
-
+    </div>
+    <div class="col-md-2">
+    <?= $form->field($model, 'cnpj')->widget(\yii\widgets\MaskedInput::className(), [
+                        'mask' => '99.999.999/9999-99',
+                    ]) ?> 
+    </div>
+     <div class="col-md-2">
     <?= $form->field($model, 'telefone')->widget(\yii\widgets\MaskedInput::className(), [
                         'mask' => '(99) 9999-9999',
                     ]) ?>
-
+    </div>
+    <div class="col-md-2">
     <?= $form->field($model, 'celular')->widget(\yii\widgets\MaskedInput::className(), [
                         'mask' => '(99) 99999-9999',
                     ]) ?>
+    </div>
+    <div class="col-md-1">
+    <?= $form->field($model, 'uf')->textInput(['maxlength' => true]) ?>
+    </div>
+    <div class="col-md-2">
+    <?= $form->field($model, 'cidade')->textInput(['maxlength' => true]) ?>
+    </div>
+    <div class="col-md-3">
+    <?= $form->field($model, 'endereco')->textInput(['maxlength' => true]) ?>
+    </div>
+    
+    <div class="col-md-3">   
+    <?= $form->field($model, 'nome_empresa')->textInput(['maxlength' => true]) ?>  
+    </div>
+    <div class="col-md-2">
+    <?= $form->field($model, 'insc_municipal')->textInput(['maxlength' => true]) ?>      
+    </div>
+    <div class="col-md-4">
+    <?= $form->field($model, 'endereco_empresa')->textInput(['maxlength' => true]) ?>        
+    </div>
+    
+   
+    <div class="col-md-1">
+    <?= $form->field($model, 'vl_hh')->textInput(['maxlength' => true]) ?>
+    </div>
+    <div class="col-md-1">
+    <?= $form->field($model, 'vl_km')->textInput(['maxlength' => true]) ?>
+    </div>
+    <div class="col-md-1">
+    <?= $form->field($model, 'qtd_km_dia')->textInput(['maxlength' => true]) ?>
     </div>
     </div>
     <div class="form-group">

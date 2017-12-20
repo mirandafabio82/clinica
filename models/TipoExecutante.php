@@ -30,7 +30,7 @@ class Tipoexecutante extends \yii\db\ActiveRecord
     {
         return [
             [['id'], 'integer'],
-            [['cargo', 'valor_hora', 'valor_pago'], 'string', 'max' => 45],
+            [['cargo', 'valor_hora', 'valor_pago', 'codigo'], 'string', 'max' => 45],
         ];
     }
 
@@ -43,6 +43,7 @@ class Tipoexecutante extends \yii\db\ActiveRecord
             'id' => 'ID',
             'cargo' => 'Cargo',
             'valor_hora' => 'Valor Hora',
+            'codigo' => 'Código'
         ];
     }
 

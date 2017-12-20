@@ -41,7 +41,7 @@ class DBUser extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'username' => 'Username',
-            'password' => 'Password',
+            'password' => 'Senha',
             'authKey' => 'Auth Key',
             'accessToken' => 'Access Token',
             'nome' => 'Nome',
@@ -55,6 +55,16 @@ class DBUser extends \yii\db\ActiveRecord
     public function getId()
     {
         return $this->id;
+    }    
+
+    /**
+     * @inheritdoc
+     */
+    public function beforeSave($insert)
+    {
+       $this->password = sha1($this->password);
+
+       return parent::beforeSave($insert);
     }    
 
 }

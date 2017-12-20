@@ -28,7 +28,7 @@ use kartik\grid\GridView;
               'template' => '{update} {delete}',    
               'contentOptions' => ['style' => 'width:5em;  min-width:5em;'],
             ],
-            'id',
+            
             [
                 'attribute' => 'projeto_id',
                 'value' => function($data){
@@ -47,6 +47,10 @@ use kartik\grid\GridView;
                return '<span style="color:'.$status['cor'].' "><i class="fa fa-circle" aria-hidden="true"></i> '.$status['status'].'</span>';
 
                },
+                'editableOptions' => [
+              'inputType' => \kartik\editable\Editable::INPUT_DROPDOWN_LIST,
+              'data' => $listStatus                
+              ]
             ],
             'data',
             [

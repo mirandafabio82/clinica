@@ -19,13 +19,18 @@ $this->params['breadcrumbs'][] = 'Update';
         'listContatos' => $listContatos,
         'listSites' => $listSites,
         'listStatus' => $listStatus,
-        'listPlantas' => $listPlantas,
         'listEscopo' => $listEscopo,
         'listDisciplina' => $listDisciplina,
         'searchModel' => $searchModel,
         'dataProvider' => $dataProvider,
         'escopoDataProvider' => $escopoDataProvider,
-        'searchEscopo' => $searchEscopo
+        'searchEscopo' => $searchEscopo,
+        'escopoArray' => $escopoArray,
+        'listExecutantes_tp' => $listExecutantes_tp,
+        'listExecutantes_ej' => $listExecutantes_ej,
+        'listExecutantes_ep' => $listExecutantes_ep,
+        'listExecutantes_es' => $listExecutantes_es,
+        'listExecutantes_ee' => $listExecutantes_ee,
     ]) ?>
 
 </div>
