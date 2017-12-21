@@ -197,6 +197,8 @@ $usuario = Yii::$app->db->createCommand('SELECT * FROM user WHERE id='.Yii::$app
 <!-- AdminLTE App -->
 <script src="resources/dist/js/adminlte.min.js"></script>
 <!-- AdminLTE for demo purposes -->
+<!-- MaskMoney -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-maskmoney/3.0.2/jquery.maskMoney.min.js"></script>
 <!-- <script src="resources/dist/js/demo.js"></script> -->
 <?php $this->endBody() ?>
 </body>

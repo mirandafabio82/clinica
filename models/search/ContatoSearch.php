@@ -19,7 +19,7 @@ class ContatoSearch extends Contato
     {
         return [
             [['usuario_id', 'cliente_id'], 'integer'],
-            [['tratamento', 'site', 'contato', 'setor', 'telefone', 'celular', 'criado', 'modificado'], 'safe'],
+            [['tratamento', 'site', 'contato', 'setor', 'criado', 'modificado'], 'safe'],
         ];
     }
 

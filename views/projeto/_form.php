@@ -6,6 +6,7 @@ use kartik\grid\GridView;
 use yii\widgets\Pjax;
 use yii\helpers\ArrayHelper;
 use app\models\Escopo;
+use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $model app\models\Projeto */
 /* @var $form yii\widgets\ActiveForm */
@@ -137,7 +138,17 @@ $("#projeto-contato_id").change(function(ev){
 });*/
 ');
 ?>
+<?php
+$this->registerJs("
 
+    $('td').click(function (e) {
+        var id = $(this).closest('tr').attr('data-key');
+        if(e.target == this)
+            location.href = '" . Url::to(['projeto/update']) . "&id='+id;
+    });
+
+");
+?>
 <!-- mask so funciona com isso -->
 <?php $this->head() ?>
 
@@ -452,7 +463,7 @@ $("#projeto-contato_id").change(function(ev){
             // 'id',
             [
               'class' => 'yii\grid\ActionColumn',
-              'template' => '{update}',    
+              'template' => '{delete}',    
               'contentOptions' => ['style' => 'width:5em;  min-width:5em;'],
             ],
             'nome',

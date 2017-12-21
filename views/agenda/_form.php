@@ -3,12 +3,23 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\grid\GridView;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Agenda */
 /* @var $form yii\widgets\ActiveForm */
 ?>
+<?php
+$this->registerJs("
 
+    $('td').click(function (e) {
+        var id = $(this).closest('tr').attr('data-key');
+        if(e.target == this)
+            location.href = '" . Url::to(['agenda/update']) . "&id='+id;
+    });
+
+");
+?>
 <!-- mask so funciona com isso -->
 <?php $this->head() ?>
     <?= GridView::widget([
@@ -25,7 +36,7 @@ use kartik\grid\GridView;
             // ['class' => 'yii\grid\SerialColumn'],
             [
               'class' => 'yii\grid\ActionColumn',
-              'template' => '{update} {delete}',    
+              'template' => '{delete}',    
               'contentOptions' => ['style' => 'width:5em;  min-width:5em;'],
             ],
             

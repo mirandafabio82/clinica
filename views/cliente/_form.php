@@ -3,17 +3,33 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\grid\GridView;
+use yii\helpers\Url;
+
 /* @var $this yii\web\View */
 /* @var $model app\models\Cliente */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 <!-- mask so funciona com isso -->
 <?php $this->head() ?>
+<?php
+$this->registerJs("
+
+    $('td').click(function (e) {
+        var id = $(this).closest('tr').attr('data-key');
+        if(e.target == this)
+            location.href = '" . Url::to(['cliente/update']) . "&id='+id;
+    });
+
+");
+?>
 <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'pjax' => true,        
         'hover' => true,
+        /*'rowOptions' => function ($model, $key, $index, $grid) {
+                return ['id' => $model['id'], 'onclick' => 'window.location = "index.php?r=cliente/update&id="+this.id'];
+        },*/
         'panel' => [
             'type' => GridView::TYPE_PRIMARY,
             'heading' => '<i class="fa fa-handshake-o"></i> Clientes'
@@ -23,7 +39,7 @@ use kartik\grid\GridView;
         
             [
               'class' => 'yii\grid\ActionColumn',
-              'template' => '{update} {delete}',    
+              'template' => '{delete}',    
               'contentOptions' => ['style' => 'width:5em;  min-width:5em;'],
             ],
             
@@ -45,7 +61,7 @@ use kartik\grid\GridView;
            <div class="cliente-form">
             <?php $form = ActiveForm::begin(); ?>
             <div class="row">
-                <div class="col-md-3">           
+                <div class="col-md-4">           
                     <?= $form->field($model, 'nome')->textInput(['maxlength' => true]) ?>
                 </div>
                 <div class="col-md-2">
@@ -78,7 +94,7 @@ use kartik\grid\GridView;
                     <?= $form->field($model, 'cep')->textInput(['maxlength' => true])  ?>
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <?= $form->field($model, 'endereco')->textInput(['maxlength' => true])  ?>
                 </div>
 

@@ -3,11 +3,23 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\grid\GridView;
+use yii\helpers\Url;
+
 /* @var $this yii\web\View */
 /* @var $model app\models\Executante */
 /* @var $form yii\widgets\ActiveForm */
 ?>
+<?php
+$this->registerJs("
 
+    $('td').click(function (e) {
+        var id = $(this).closest('tr').attr('data-key');
+        if(e.target == this)
+            location.href = '" . Url::to(['executante/update']) . "&id='+id;
+    });
+
+");
+?>
 <!-- mask so funciona com isso -->
 <?php $this->head() ?>
 
@@ -15,7 +27,9 @@ use kartik\grid\GridView;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'pjax' => true,
-        
+        'rowOptions' => function ($model, $key, $index, $grid) {
+                return ['id' => $model['usuario_id'], 'onclick' => 'window.location = "index.php?r=executante/update&id="+this.id'];
+        },
         'hover' => true,
         'panel' => [
             'type' => GridView::TYPE_PRIMARY,
@@ -25,7 +39,7 @@ use kartik\grid\GridView;
             // ['class' => 'yii\grid\SerialColumn'],
             [
               'class' => 'yii\grid\ActionColumn',
-              'template' => '{update} {delete}',    
+              'template' => '{delete}',    
               'contentOptions' => ['style' => 'width:5em;  min-width:5em;'],
             ],
             
@@ -138,13 +152,13 @@ use kartik\grid\GridView;
     </div>
     
    
-    <div class="col-md-1">
+    <div class="col-md-2">
     <?= $form->field($model, 'vl_hh')->textInput(['maxlength' => true]) ?>
     </div>
-    <div class="col-md-1">
+    <div class="col-md-2">
     <?= $form->field($model, 'vl_km')->textInput(['maxlength' => true]) ?>
     </div>
-    <div class="col-md-1">
+    <div class="col-md-2">
     <?= $form->field($model, 'qtd_km_dia')->textInput(['maxlength' => true]) ?>
     </div>
     </div>

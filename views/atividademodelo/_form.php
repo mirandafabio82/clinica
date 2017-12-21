@@ -3,12 +3,22 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\grid\GridView;
-
+use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $model app\models\Atividademodelo */
 /* @var $form yii\widgets\ActiveForm */
 ?>
+<?php
+$this->registerJs("
 
+    $('td').click(function (e) {
+        var id = $(this).closest('tr').attr('data-key');
+        if(e.target == this)
+            location.href = '" . Url::to(['atividademodelo/update']) . "&id='+id;
+    });
+
+");
+?>
 <div class="atividademodelo-form">
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -25,11 +35,23 @@ use kartik\grid\GridView;
             
             [
               'class' => 'yii\grid\ActionColumn',
-              'template' => '{update} {delete}',    
+              'template' => ' {delete}',    
               'contentOptions' => ['style' => 'width:5em;  min-width:5em;'],
             ],
             
             'nome',
+            [
+                'attribute'=>'disciplina_id',
+                'value'=>function($data){
+                    return Yii::$app->db->createCommand('SELECT nome FROM disciplina WHERE id='.$data->escopopadrao_id)->queryScalar();
+                }
+            ],
+            [
+                'attribute'=>'escopopadrao_id',
+                'value'=>function($data){
+                    return Yii::$app->db->createCommand('SELECT nome FROM escopopadrao WHERE id='.$data->escopopadrao_id)->queryScalar();
+                }
+            ],
             [
                 'attribute'=>'isPrioritaria',
                 'value'=>function($data){

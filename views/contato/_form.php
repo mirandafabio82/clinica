@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\grid\GridView;
+use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $model app\models\Contato */
 /* @var $form yii\widgets\ActiveForm */
@@ -15,6 +16,17 @@ $this->registerJs('
   });
 ');
 ?>
+<?php
+$this->registerJs("
+
+    $('td').click(function (e) {
+        var id = $(this).closest('tr').attr('data-key');
+        if(e.target == this)
+            location.href = '" . Url::to(['contato/update']) . "&id='+id;
+    });
+
+");
+?>
 
 <?php $this->head() ?>
 
@@ -22,7 +34,9 @@ $this->registerJs('
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'pjax' => true,
-        
+        'rowOptions' => function ($model, $key, $index, $grid) {
+                return ['id' => $model['usuario_id'], 'onclick' => 'window.location = "index.php?r=contato/update&id="+this.id'];
+        },
         'hover' => true,
         'panel' => [
             'type' => GridView::TYPE_PRIMARY,
@@ -32,7 +46,7 @@ $this->registerJs('
             // ['class' => 'yii\grid\SerialColumn'],
             [
               'class' => 'yii\grid\ActionColumn',
-              'template' => '{update} {delete}',    
+              'template' => '{delete}',    
               'contentOptions' => ['style' => 'width:5em;  min-width:5em;'],
             ],
             [

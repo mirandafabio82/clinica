@@ -19,7 +19,7 @@ class ClienteSearch extends Cliente
     {
         return [
             [['id'], 'integer'],
-            [['nome', 'site', 'cnpj', 'cidade', 'uf', 'criado', 'modificado'], 'safe'],
+            [['nome', 'cnpj', 'criado', 'modificado'], 'safe'],
         ];
     }
 
@@ -67,11 +67,9 @@ class ClienteSearch extends Cliente
             'modificado' => $this->modificado,
         ]);
 
-        $query->andFilterWhere(['like', 'nome', $this->nome])
-            ->andFilterWhere(['like', 'site', $this->site])
-            ->andFilterWhere(['like', 'cnpj', $this->cnpj])
-            ->andFilterWhere(['like', 'cidade', $this->cidade])
-            ->andFilterWhere(['like', 'uf', $this->uf]);
+        $query->andFilterWhere(['like', 'nome', $this->nome])            
+            ->andFilterWhere(['like', 'cnpj', $this->cnpj]);
+            
 
         return $dataProvider;
     }
