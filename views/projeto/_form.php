@@ -526,8 +526,8 @@ $this->registerJs("
             'format' => 'raw',
             'contentOptions' => ['style' => 'width:10em;'],
             'value' => function ($data) {
-
-              $nome = Yii::$app->db->createCommand('SELECT nome FROM cliente WHERE id='.$data->cliente_id)->queryScalar();
+              if(isset($data->cliente_id) && !empty($data->cliente_id))
+                $nome = Yii::$app->db->createCommand('SELECT nome FROM cliente WHERE id='.$data->cliente_id)->queryScalar();
 
 
               return $nome;
@@ -539,8 +539,8 @@ $this->registerJs("
             'format' => 'raw',
             'contentOptions' => ['style' => 'width:10em;  min-width:10em;'],
             'value' => function ($data) {
-
-              $nome = Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.$data->contato_id)->queryScalar();                
+              if(isset($data->contato_id) && !empty($data->contato_id))
+                $nome = Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.$data->contato_id)->queryScalar();                
 
               return $nome;
 
