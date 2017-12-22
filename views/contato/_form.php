@@ -52,6 +52,7 @@ $this->registerJs("
               'attribute' => 'usuario_id',              
               'format' => 'raw',
                'value' => function ($data) {
+                if(isset($data->usuario_id) && !empty($data->usuario_id))
                    return Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.$data->usuario_id)->queryScalar();
                },
             ],            
@@ -59,7 +60,7 @@ $this->registerJs("
               'attribute' => 'cliente_id',              
               'format' => 'raw',
                'value' => function ($data) {
-                 if(isset($data->cliente_id))
+                 if(isset($data->cliente_id) && !empty($data->cliente_id))
                    return Yii::$app->db->createCommand('SELECT nome FROM cliente WHERE id='.$data->cliente_id)->queryScalar();
                },
             ],
