@@ -37,7 +37,7 @@ class Contato extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['cliente_id'], 'required'],
+            // [['cliente_id'], 'required'],
             [['cliente_id'], 'integer'],
             [['criado', 'modificado'], 'safe'],
             [['tratamento', 'site', 'contato', 'setor'], 'string', 'max' => 255],

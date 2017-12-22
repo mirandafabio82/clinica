@@ -13,6 +13,7 @@ use kartik\grid\GridView;
 <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'options' => ['style' => 'font-size:12px;'],
         'pjax' => true,
         
         'hover' => true,

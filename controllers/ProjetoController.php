@@ -198,6 +198,8 @@ class ProjetoController extends Controller
                                 $escopo_model->save();
                             }
                         }
+
+                     
                     }                    
                 }
 
@@ -236,6 +238,7 @@ class ProjetoController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);        
+
 
         $searchModel = new ProjetoSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -325,17 +328,33 @@ class ProjetoController extends Controller
         $escopoDataProvider = $searchEscopo->search(Yii::$app->request->queryParams);
         $escopoDataProvider->query->join('join','atividademodelo', 'atividademodelo.id=escopo.atividademodelo_id')->where('projeto_id='.$model->id);
 
-        //atualizando os valores de hora e executante do escopo
+         //atualizando os valores de hora e executante do escopo
         if(isset($_POST['Escopo'])){
+            
+            $totalHoras = 0;
 
             foreach ($_POST['Escopo'] as $key => $esc) {
+                $totalHoras = $totalHoras + $esc['horas_tp'] 
+                                            + $esc['horas_ej'] 
+                                            + $esc['horas_ep']
+                                            + $esc['horas_es']
+                                            + $esc['horas_ee'];
+            }
+            
+            
+           Yii::$app->db->createCommand('UPDATE projeto SET total_horas='.$totalHoras.' WHERE id='.$model->id)->execute();
+           $model->total_horas = $totalHoras;
+            
+            foreach ($_POST['Escopo'] as $key => $esc) {
+
                 $escopo = Escopo::findIdentity($key);
-                if(!empty($escopo)){
-                    
+                if(!empty($escopo)){                   
+
                     $escopo->setAttributes($_POST['Escopo'][$key]);
                     $escopo->save();
                 }
             }
+           
         }
 
           if ($model->load(Yii::$app->request->post())) {

@@ -25,6 +25,7 @@ $this->registerJs("
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'options' => ['style' => 'font-size:12px;'],
         'pjax' => true,
         
         'hover' => true,
@@ -43,6 +44,7 @@ $this->registerJs("
             [
                 'attribute' => 'projeto_id',
                 'value' => function($data){
+                    if(isset($data->projeto_id))
                     return Yii::$app->db->createCommand('SELECT nome FROM projeto WHERE id='.$data->projeto_id)->queryScalar();
                 }
             ],            
@@ -67,6 +69,7 @@ $this->registerJs("
             [
                 'attribute' => 'site',
                 'value' => function($data){
+                    if(isset($data->local) && !empty($data->local))
                     return Yii::$app->db->createCommand('SELECT nome FROM site WHERE id='.$data->local)->queryScalar();
                 }
             ],         

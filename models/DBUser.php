@@ -62,7 +62,7 @@ class DBUser extends \yii\db\ActiveRecord
      */
     public function beforeSave($insert)
     {
-       $this->password = sha1($this->password);
+       // $this->password = sha1($this->password);
 
        return parent::beforeSave($insert);
     }    

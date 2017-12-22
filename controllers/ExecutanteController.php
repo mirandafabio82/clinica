@@ -233,4 +233,11 @@ class ExecutanteController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
+    public function actionPreenchehora()
+    {
+        if (Yii::$app->request->isAjax) {                 
+            echo json_encode(Yii::$app->db->createCommand('SELECT valor_hora FROM tipo_executante WHERE id='.Yii::$app->request->post()['id'])->queryScalar());  
+        }
+    }
 }

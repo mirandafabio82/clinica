@@ -52,7 +52,7 @@ class Executante extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'usuario_id' => 'ID',           
+            'usuario_id' => 'Nome',           
             'cidade' => 'Cidade',
             'uf' => 'UF',
             'cpf' => 'Cpf',
@@ -61,9 +61,14 @@ class Executante extends \yii\db\ActiveRecord
             'criado' => 'Criado',
             'modificado' => 'Modificado',
             'endereco' => 'Endereço',
-            'vl_hh' => 'Valor Horas',
+            'vl_hh_tp' => 'Valor Horas (TP)',
+            'vl_hh_ej' => 'Valor Horas (EJ)',
+            'vl_hh_ep' => 'Valor Horas (EP)',
+            'vl_hh_es' => 'Valor Horas (ES)',
+            'vl_hh_ee' => 'Valor Horas (EE)',
             'vl_km' => 'Valor KM',
-            'qtd_km_dia' => 'Qtd. Km Dia'
+            'qtd_km_dia' => 'Qtd. Km Dia',
+            'tipo_id' => 'Tipos'
         ];
     }
 

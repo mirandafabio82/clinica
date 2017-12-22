@@ -23,7 +23,7 @@ $this->registerJs("
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
-        
+        'options' => ['style' => 'font-size:12px;'],
         'pjax' => true,        
         
         'hover' => true,
@@ -43,13 +43,15 @@ $this->registerJs("
             [
                 'attribute'=>'disciplina_id',
                 'value'=>function($data){
-                    return Yii::$app->db->createCommand('SELECT nome FROM disciplina WHERE id='.$data->escopopadrao_id)->queryScalar();
+                    if(isset($data->escopopadrao_id))
+                        return Yii::$app->db->createCommand('SELECT nome FROM disciplina WHERE id='.$data->escopopadrao_id)->queryScalar();
                 }
             ],
             [
                 'attribute'=>'escopopadrao_id',
                 'value'=>function($data){
-                    return Yii::$app->db->createCommand('SELECT nome FROM escopopadrao WHERE id='.$data->escopopadrao_id)->queryScalar();
+                    if(isset($data->escopopadrao_id))
+                        return Yii::$app->db->createCommand('SELECT nome FROM escopopadrao WHERE id='.$data->escopopadrao_id)->queryScalar();
                 }
             ],
             [

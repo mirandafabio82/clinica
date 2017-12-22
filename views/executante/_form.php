@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\grid\GridView;
 use yii\helpers\Url;
-
+use kartik\money\MaskMoney;
 /* @var $this yii\web\View */
 /* @var $model app\models\Executante */
 /* @var $form yii\widgets\ActiveForm */
@@ -18,6 +18,88 @@ $this->registerJs("
             location.href = '" . Url::to(['executante/update']) . "&id='+id;
     });
 
+    function preencheHora(elemento){
+      var id = elemento.val();
+      
+      $.ajax({ 
+          url: 'index.php?r=executante/preenchehora',
+          data: {id: id},
+          type: 'POST',
+          success: function(response){          
+            valor = response.split('\"')[1];
+          if(id==1){
+            $('#executante-vl_hh_tp-disp').val('R$ '+valor);
+          } 
+          else if(id==2){
+            $('#executante-vl_hh_ej-disp').val('R$ '+valor);
+          }
+           else if(id==3){
+            $('#executante-vl_hh_ep-disp').val('R$ '+valor);
+          } 
+           else if(id==4){
+            $('#executante-vl_hh_es-disp').val('R$ '+valor);
+          } 
+           else{ //5
+            $('#executante-vl_hh_ee-disp').val('R$ '+valor);
+          }  
+         },
+         error: function(){
+          console.log('failure');
+        }
+      });
+    }
+
+    $('.tipo-1').change(function(){
+      
+      if($(this).prop('checked')){
+          $('#div_hh_tp').removeAttr('hidden');
+          preencheHora($(this));
+          
+      }else{
+        $('#div_hh_tp').attr('hidden', 'hidden');
+      }
+    });
+
+     $('.tipo-2').change(function(){
+      
+      if($(this).prop('checked')){
+      $('#div_hh_ej').removeAttr('hidden');
+      preencheHora($(this));
+      }else{
+        $('#div_hh_ej').attr('hidden', 'hidden');
+      }
+    });
+
+     $('.tipo-3').change(function(){
+      
+      if($(this).prop('checked')){
+      $('#div_hh_ep').removeAttr('hidden');
+      preencheHora($(this));
+      }else{
+        $('#div_hh_ep').attr('hidden', 'hidden');
+      }
+    });
+
+     $('.tipo-4').change(function(){
+      
+      if($(this).prop('checked')){
+      $('#div_hh_es').removeAttr('hidden');
+      preencheHora($(this));
+      }else{
+        $('#div_hh_es').attr('hidden', 'hidden');
+      }
+    });
+
+     $('.tipo-5').change(function(){
+      
+      if($(this).prop('checked')){
+      $('#div_hh_ee').removeAttr('hidden');
+      preencheHora($(this));
+      }else{
+        $('#div_hh_ee').attr('hidden', 'hidden');
+      }
+    });
+
 ");
 ?>
 <!-- mask so funciona com isso -->
@@ -27,9 +109,8 @@ $this->registerJs("
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'pjax' => true,
-        'rowOptions' => function ($model, $key, $index, $grid) {
-                return ['id' => $model['usuario_id'], 'onclick' => 'window.location = "index.php?r=executante/update&id="+this.id'];
-        },
+        'options' => ['style' => 'font-size:12px;'],
+        
         'hover' => true,
         'panel' => [
             'type' => GridView::TYPE_PRIMARY,
@@ -44,7 +125,7 @@ $this->registerJs("
             ],
             
             [
-              'header' => 'Nome',              
+              'attribute' => 'usuario_id',              
               'format' => 'raw',
                'value' => function ($data) {
 
@@ -97,7 +178,7 @@ $this->registerJs("
     <br>
      <?php     
         foreach ($listTipos as $key => $tipo) { ?>
-           <input type="checkbox" name="Tipos[<?=$key?>]" value="<?= $key?>"><?= $tipo ?>
+           <input type="checkbox" name="Tipos[<?=$key?>]" value="<?= $key?>" class="tipo-<?=$key?>"><?= $tipo ?>
         <?php } ?>
         
     </div>
@@ -152,11 +233,77 @@ $this->registerJs("
     </div>
     
    
-    <div class="col-md-2">
-    <?= $form->field($model, 'vl_hh')->textInput(['maxlength' => true]) ?>
+    <div class="col-md-2" id="div_hh_tp" hidden>
+    <?= $form->field($model, 'vl_hh_tp')->textInput(['maxlength' => true])->widget(MaskMoney::classname(), [
+          'pluginOptions' => [
+              'prefix' => 'R$ ',
+              'thousands' => '.',
+              'decimal' => ',',
+              // 'suffix' => ' ¢',
+              'allowNegative' => false
+
+          ]
+      ]); ?>
+    </div>
+    <div class="col-md-2" id="div_hh_ej" hidden>
+    <?= $form->field($model, 'vl_hh_ej')->textInput(['maxlength' => true])->widget(MaskMoney::classname(), [
+          'pluginOptions' => [
+              'prefix' => 'R$ ',
+              'thousands' => '.',
+              'decimal' => ',',
+              // 'suffix' => ' ¢',
+              'allowNegative' => false
+
+          ]
+      ]); ?>
+    </div>
+    <div class="col-md-2" id="div_hh_ep" hidden>
+    <?= $form->field($model, 'vl_hh_ep')->textInput(['maxlength' => true])->widget(MaskMoney::classname(), [
+          'pluginOptions' => [
+              'prefix' => 'R$ ',
+              'thousands' => '.',
+              'decimal' => ',',
+              // 'suffix' => ' ¢',
+              'allowNegative' => false
+
+          ]
+      ]); ?>
+    </div>
+    <div class="col-md-2" id="div_hh_es" hidden> 
+    <?= $form->field($model, 'vl_hh_es')->textInput(['maxlength' => true])->widget(MaskMoney::classname(), [
+          'pluginOptions' => [
+              'prefix' => 'R$ ',
+              'thousands' => '.',
+              'decimal' => ',',
+              // 'suffix' => ' ¢',
+              'allowNegative' => false
+
+          ]
+      ]); ?>
+    </div>
+    <div class="col-md-2" id="div_hh_ee" hidden>
+    <?= $form->field($model, 'vl_hh_ee')->textInput(['maxlength' => true])->widget(MaskMoney::classname(), [
+          'pluginOptions' => [
+              'prefix' => 'R$ ',
+              'thousands' => '.',
+              'decimal' => ',',
+              // 'suffix' => ' ¢',
+              'allowNegative' => false
+
+          ]
+      ]); ?>
     </div>
     <div class="col-md-2">
-    <?= $form->field($model, 'vl_km')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'vl_km')->textInput(['maxlength' => true])->widget(MaskMoney::classname(), [
+          'pluginOptions' => [
+              'prefix' => 'R$ ',
+              'thousands' => '.',
+              'decimal' => ',',
+              // 'suffix' => ' ¢',
+              'allowNegative' => false
+
+          ]
+      ]); ?>
     </div>
     <div class="col-md-2">
     <?= $form->field($model, 'qtd_km_dia')->textInput(['maxlength' => true]) ?>

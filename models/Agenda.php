@@ -35,7 +35,7 @@ class Agenda extends \yii\db\ActiveRecord
     public function rules()
     {
         return [       
-            [['projeto_id'], 'required'],     
+            // [['projeto_id'], 'required'],     
             [['projeto_id', 'status'], 'integer'],
             [['data', 'hr_inicio', 'hr_final'], 'safe'],
             [['local', 'quem'], 'string', 'max' => 15],

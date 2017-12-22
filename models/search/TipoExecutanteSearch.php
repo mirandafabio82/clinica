@@ -19,7 +19,7 @@ class TipoexecutanteSearch extends Tipoexecutante
     {
         return [
             [['id'], 'integer'],
-            [['cargo', 'valor_hora', 'valor_pago', 'codigo'], 'safe'],
+            // [['cargo', 'valor_hora', 'valor_pago', 'codigo'], 'safe'],
         ];
     }
 

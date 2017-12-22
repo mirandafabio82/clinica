@@ -19,7 +19,7 @@ class AtividademodeloSearch extends Atividademodelo
     {
         return [
             [['id'], 'integer'],
-            [['nome'], 'safe'],
+            [['escopopadrao_id', 'disciplina_id'], 'safe'],
             [['isPrioritaria', 'isEntregavel'], 'integer'],
         ];
     }
@@ -66,7 +66,8 @@ class AtividademodeloSearch extends Atividademodelo
             'id' => $this->id,
         ]);
 
-        $query->andFilterWhere(['like', 'nome', $this->nome]);
+        $query->andFilterWhere(['like', 'escopopadrao_id', $this->escopopadrao_id])
+              ->andFilterWhere(['like', 'disciplina_id', $this->disciplina_id]);
 
         return $dataProvider;
     }

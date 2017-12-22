@@ -36,7 +36,7 @@ class Documento extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['projeto_id'], 'required'],
+            // [['projeto_id'], 'required'],
             [['projeto_id', 'revisao'], 'integer'],
             [['data', 'criado', 'modificado'], 'safe'],
             [['nome', 'tipo'], 'string', 'max' => 20],

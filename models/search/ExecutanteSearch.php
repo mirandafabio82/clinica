@@ -19,7 +19,7 @@ class ExecutanteSearch extends Executante
     {
         return [
             [['usuario_id'], 'integer'],
-            [['cidade', 'uf', 'cpf','telefone', 'celular', 'criado', 'modificado'], 'safe'],
+            [['usuario_id'], 'safe'],
         ];
     }
 

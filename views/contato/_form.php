@@ -34,9 +34,8 @@ $this->registerJs("
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'pjax' => true,
-        'rowOptions' => function ($model, $key, $index, $grid) {
-                return ['id' => $model['usuario_id'], 'onclick' => 'window.location = "index.php?r=contato/update&id="+this.id'];
-        },
+        'options' => ['style' => 'font-size:12px;'],
+        
         'hover' => true,
         'panel' => [
             'type' => GridView::TYPE_PRIMARY,
@@ -60,6 +59,7 @@ $this->registerJs("
               'attribute' => 'cliente_id',              
               'format' => 'raw',
                'value' => function ($data) {
+                 if(isset($data->cliente_id))
                    return Yii::$app->db->createCommand('SELECT nome FROM cliente WHERE id='.$data->cliente_id)->queryScalar();
                },
             ],

@@ -7,6 +7,7 @@ use yii\widgets\Pjax;
 use yii\helpers\ArrayHelper;
 use app\models\Escopo;
 use yii\helpers\Url;
+use kartik\money\MaskMoney;
 /* @var $this yii\web\View */
 /* @var $model app\models\Projeto */
 /* @var $form yii\widgets\ActiveForm */
@@ -299,16 +300,44 @@ $this->registerJs("
       <div class="col-md-2">
         <?= $form->field($model, 'total_km')->textInput(['maxlength' => true]) ?>
       </div>
-      <div class="col-md-1">
-        <?= $form->field($model, 'valor_proposta')->textInput(['maxlength' => true,'style'=>'width:6em']) ?>
+      
+      <div class="col-md-2">
+        <?= $form->field($model, 'valor_proposta')->textInput(['maxlength' => true,'style'=>'width:1em'])->widget(MaskMoney::classname(), [
+          'pluginOptions' => [
+              'prefix' => 'R$ ',
+              'thousands' => '.',
+              'decimal' => ',',
+              // 'suffix' => ' ¢',
+              'allowNegative' => false
+
+          ]
+      ]); ?>
 
       </div>
-      <div class="col-md-1">
-        <?= $form->field($model, 'valor_consumido')->textInput(['maxlength' => true,'style'=>'width:6em']) ?>
+      <div class="col-md-2">
+        <?= $form->field($model, 'valor_consumido')->textInput(['maxlength' => true,'style'=>'width:6em'])->widget(MaskMoney::classname(), [
+          'pluginOptions' => [
+              'prefix' => 'R$ ',
+              'thousands' => '.',
+              'decimal' => ',',
+              // 'suffix' => ' ¢',
+              'allowNegative' => false
+
+          ]
+      ]); ?>
 
       </div>
-      <div class="col-md-1">
-        <?= $form->field($model, 'valor_saldo')->textInput(['maxlength' => true,'style'=>'width:6em']) ?>
+      <div class="col-md-2">
+        <?= $form->field($model, 'valor_saldo')->textInput(['maxlength' => true,'style'=>'width:6em'])->widget(MaskMoney::classname(), [
+          'pluginOptions' => [
+              'prefix' => 'R$ ',
+              'thousands' => '.',
+              'decimal' => ',',
+              // 'suffix' => ' ¢',
+              'allowNegative' => false
+
+          ]
+      ]); ?>
 
       </div>
       <div class="col-md-2">
@@ -319,11 +348,17 @@ $this->registerJs("
         <?= $form->field($model, 'pendencia')->textInput(['maxlength' => true,'style'=>'width:6em']) ?>
 
       </div>
-      <div class="col-md-1">
-        <?= $form->field($model, 'data_pendencia')->widget(\yii\widgets\MaskedInput::className(), [
-        'mask' => '99/99/9999',])->textInput(['maxlength' => true,'style'=>'width:5em']) ?>
       </div>
-    </div>
+      
+      <div class="row">
+        <div class="col-md-2">
+          <?= $form->field($model, 'data_pendencia')->widget(\yii\widgets\MaskedInput::className(), [
+          'mask' => '99/99/9999',])->textInput(['maxlength' => true]) ?>
+        </div>
+        <div class="col-md-2">
+          <?= $form->field($model, 'total_horas')->textInput(['maxlength' => true]) ?>
+        </div>
+      </div>
     
 
     <div class="row">
@@ -455,7 +490,8 @@ $this->registerJs("
           <?= GridView::widget([
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
-            'pjax' => true,                        
+            'pjax' => true,        
+            'options' => ['style' => 'font-size:12px;'],                
             'hover' => true,            
             'columns' => [
             // ['class' => 'yii\grid\SerialColumn'],

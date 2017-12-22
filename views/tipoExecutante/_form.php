@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\grid\GridView;
 use yii\helpers\Url;
+use kartik\money\MaskMoney;
 /* @var $this yii\web\View */
 /* @var $model app\models\TipoExecutante */
 /* @var $form yii\widgets\ActiveForm */
@@ -19,9 +20,12 @@ $this->registerJs("
 
 ");
 ?>
+<!-- mask so funciona com isso -->
+<?php $this->head() ?>
 <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'options' => ['style' => 'font-size:12px;'],
         'pjax' => true,
         
         'hover' => true,
@@ -58,10 +62,28 @@ $this->registerJs("
     <?= $form->field($model, 'codigo')->textInput(['maxlength' => true]) ?>
     </div>
         <div class="col-md-2">
-    <?= $form->field($model, 'valor_hora')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'valor_hora')->textInput(['maxlength' => true])->widget(MaskMoney::classname(), [
+          'pluginOptions' => [
+              'prefix' => 'R$ ',
+              'thousands' => '.',
+              'decimal' => ',',
+              // 'suffix' => ' ¢',
+              'allowNegative' => false
+
+          ]
+      ]); ?>
 </div>
         <div class="col-md-2">
-    <?= $form->field($model, 'valor_pago')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'valor_pago')->textInput(['maxlength' => true])->widget(MaskMoney::classname(), [
+          'pluginOptions' => [
+              'prefix' => 'R$ ',
+              'thousands' => '.',
+              'decimal' => ',',
+              // 'suffix' => ' ¢',
+              'allowNegative' => false
+
+          ]
+      ]); ?>
 </div>
 </div>
     <div class="form-group">
