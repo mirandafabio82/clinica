@@ -381,13 +381,13 @@ class ProjetoController extends Controller
 
                         
                         if(!isset($automacoes[1]))
-                         Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id NOT IN(SELECT id FROM atividademodelo WHERE escopopadrao_id=1 AND disciplina_id=1)')->execute();
+                         Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id NOT IN(SELECT id FROM atividademodelo WHERE escopopadrao_id=1 AND disciplina_id=1 AND projeto_id=) AND projeto_id='.$model->id)->execute();
 
                         if(!isset($automacoes[2]))
-                         Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id NOT IN(SELECT id FROM atividademodelo WHERE escopopadrao_id=2 AND disciplina_id=1)')->execute();
+                         Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id NOT IN(SELECT id FROM atividademodelo WHERE escopopadrao_id=2 AND disciplina_id=1) AND projeto_id='.$model->id )->execute();
 
                         if(!isset($automacoes[3]))
-                         Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id NOT IN(SELECT id FROM atividademodelo WHERE escopopadrao_id=3 AND disciplina_id=1)')->execute();
+                         Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id NOT IN(SELECT id FROM atividademodelo WHERE escopopadrao_id=3 AND disciplina_id=1) AND projeto_id='.$model->id)->execute();
 
                         foreach ($automacoes as $key => $automacao) {
                             $atvmodelos = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE escopopadrao_id='.$automacao.' AND disciplina_id = 1')->queryAll();
