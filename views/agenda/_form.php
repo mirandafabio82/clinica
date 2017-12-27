@@ -14,12 +14,20 @@ $this->registerJs("
 
     $('td').click(function (e) {
         var id = $(this).closest('tr').attr('data-key');
-        if(e.target == this)
-            location.href = '" . Url::to(['agenda/update']) . "&id='+id;
+        if(id != null){
+            if(e.target == this)
+                location.href = '" . Url::to(['agenda/update']) . "&id='+id;
+        }
     });
 
 ");
 ?>
+<style>
+.table-bordered > tbody > tr > td{
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+}
+</style>
 <!-- mask so funciona com isso -->
 <?php $this->head() ?>
     <?= GridView::widget([
@@ -65,7 +73,13 @@ $this->registerJs("
               'data' => $listStatus                
               ]
             ],
-            'data',
+            [
+                'attribute' => 'data',
+                'value' => function($data){
+                    
+                    return date_format(DateTime::createFromFormat('Y-m-d', $data->data), 'd/m/Y');
+                }
+            ], 
             [
                 'attribute' => 'site',
                 'value' => function($data){

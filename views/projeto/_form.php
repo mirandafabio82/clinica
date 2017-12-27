@@ -12,7 +12,12 @@ use kartik\money\MaskMoney;
 /* @var $model app\models\Projeto */
 /* @var $form yii\widgets\ActiveForm */
 ?>
-
+<style>
+.table-bordered > tbody > tr > td{
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+}
+</style>
 <?php 
 $this->registerJs('
 
@@ -144,8 +149,10 @@ $this->registerJs("
 
     $('td').click(function (e) {
         var id = $(this).closest('tr').attr('data-key');
-        if(e.target == this)
-            location.href = '" . Url::to(['projeto/update']) . "&id='+id;
+        if(id != null){
+          if(e.target == this)
+              location.href = '" . Url::to(['projeto/update']) . "&id='+id;
+        }
     });
 
 ");
@@ -183,14 +190,39 @@ $this->registerJs("
         <div class="col-md-4">
         <b> Disciplinas </b>
         <br>
-          <?php     
-        foreach ($listDisciplina as $key => $disciplina) { ?>
-           <input type="checkbox" name="Disciplinas[<?=$disciplina?>]" id="<?=$disciplina?>_checkbox" value="<?= $key?>"><?= $disciplina ?>
+          <?php 
+
+        foreach ($listDisciplina as $key => $disciplina) { 
+          
+          $existeDisciplina = '';
+          if(!$model->isNewRecord)
+            $existeDisciplina = Yii::$app->db->createCommand('SELECT escopopadrao_id FROM atividademodelo JOIN escopo ON escopo.atividademodelo_id=atividademodelo.id WHERE escopopadrao_id='.$key.' AND projeto_id='.$model->id)->queryScalar();
+          ?>
+          
+           <label id="<?=$disciplina?>_checkbox"> <?=$disciplina?> </label>  
+           
+           <?php if(!$model->isNewRecord){ ?>
            <br>
-            <div style="margin-left: 1em" id="disciplina_<?=$disciplina?>_div" hidden>
+            <div style="margin-left: 1em" id="disciplina_<?=$disciplina?>_div">
+            <?php } else{?>
+            <br>
+            <div style="margin-left: 1em" id="disciplina_<?=$disciplina?>_div" >
+            <?php } ?>
            <?php     
-            foreach ($listEscopo as $key => $escopo) { ?>
-                <input type="checkbox" name="Escopos[<?=$disciplina."][".$key?>]" value="<?= $key?>"><?= $escopo ?>
+
+            foreach ($listEscopo as $key2 => $escopo) { 
+
+              $existeEscopo = '';
+              if(!$model->isNewRecord){
+                $existeEscopo = Yii::$app->db->createCommand('SELECT escopopadrao_id FROM atividademodelo JOIN escopo ON escopo.atividademodelo_id=atividademodelo.id WHERE escopopadrao_id='.$key2.' AND projeto_id='.$model->id.' AND disciplina_id='.$key)->queryScalar();
+              }
+
+              ?>
+              <?php if(!empty($existeEscopo)){ ?>
+                <input type="checkbox" name="Escopos[<?=$disciplina."][".$key2?>]" value="<?= $key2?>" checked="1"><?= $escopo ?>
+              <?php } else{ ?>
+                <input type="checkbox" name="Escopos[<?=$disciplina."][".$key2?>]" value="<?= $key2?>"><?= $escopo ?>
+              <?php } ?>
             <?php } ?>
             </div>
           
@@ -526,6 +558,7 @@ $this->registerJs("
             'format' => 'raw',
             'contentOptions' => ['style' => 'width:10em;'],
             'value' => function ($data) {
+               $nome = '';
               if(isset($data->cliente_id) && !empty($data->cliente_id))
                 $nome = Yii::$app->db->createCommand('SELECT nome FROM cliente WHERE id='.$data->cliente_id)->queryScalar();
 
@@ -539,6 +572,7 @@ $this->registerJs("
             'format' => 'raw',
             'contentOptions' => ['style' => 'width:10em;  min-width:10em;'],
             'value' => function ($data) {
+              $nome = '';
               if(isset($data->contato_id) && !empty($data->contato_id))
                 $nome = Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.$data->contato_id)->queryScalar();                
 

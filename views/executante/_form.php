@@ -9,13 +9,21 @@ use kartik\money\MaskMoney;
 /* @var $model app\models\Executante */
 /* @var $form yii\widgets\ActiveForm */
 ?>
+<style>
+.table-bordered > tbody > tr > td{
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+}
+</style>
 <?php
 $this->registerJs("
 
     $('td').click(function (e) {
         var id = $(this).closest('tr').attr('data-key');
-        if(e.target == this)
-            location.href = '" . Url::to(['executante/update']) . "&id='+id;
+        if(id != null){
+          if(e.target == this)
+              location.href = '" . Url::to(['executante/update']) . "&id='+id;
+        }
     });
 
     function preencheHora(elemento){
@@ -177,8 +185,16 @@ $this->registerJs("
     <label>Funções</label>
     <br>
      <?php     
-        foreach ($listTipos as $key => $tipo) { ?>
-           <input type="checkbox" name="Tipos[<?=$key?>]" value="<?= $key?>" class="tipo-<?=$key?>"><?= $tipo ?>
+        foreach ($listTipos as $key => $tipo) { 
+          $existeTipo = '';
+          if(!$model->isNewRecord)
+            $existeTipo = Yii::$app->db->createCommand('SELECT tipo_id FROM executante_tipo WHERE tipo_id='.$key.' AND executante_id='.$model->usuario_id)->queryScalar();
+          ?>
+          <?php if(!empty($existeTipo)){ ?>
+            <input type="checkbox" name="Tipos[<?=$key?>]" value="<?= $key?>" class="tipo-<?=$key?>" checked="1"><?= $tipo ?>
+          <?php }else{ ?>        
+            <input type="checkbox" name="Tipos[<?=$key?>]" value="<?= $key?>" class="tipo-<?=$key?>"><?= $tipo ?>
+          <?php } ?>
         <?php } ?>
         
     </div>
@@ -231,10 +247,20 @@ $this->registerJs("
     <div class="col-md-4">
     <?= $form->field($model, 'endereco_empresa')->textInput(['maxlength' => true]) ?>        
     </div>
-    
-   
+  
+  <?php
+  $existeTipo = '';
+  if(!$model->isNewRecord){
+    $existeTipo = Yii::$app->db->createCommand('SELECT tipo_id FROM executante_tipo WHERE tipo_id= 1 AND executante_id='.$model->usuario_id)->queryScalar();
+  }
+
+  if(!empty($existeTipo)){
+   ?>
+    <div class="col-md-2" id="div_hh_tp">
+    <?php } else{ ?>
     <div class="col-md-2" id="div_hh_tp" hidden>
-    <?= $form->field($model, 'vl_hh_tp')->textInput(['maxlength' => true])->widget(MaskMoney::classname(), [
+    <?php } ?>
+    <?= $form->field($model, 'vl_hh_tp')->textInput(['maxlength' => true, 'name'=>'Executante[vl_hh_tp]'])->widget(MaskMoney::classname(), [
           'pluginOptions' => [
               'prefix' => 'R$ ',
               'thousands' => '.',
@@ -245,8 +271,20 @@ $this->registerJs("
           ]
       ]); ?>
     </div>
+    
+    <?php
+  $existeTipo = '';
+  if(!$model->isNewRecord){
+    $existeTipo = Yii::$app->db->createCommand('SELECT tipo_id FROM executante_tipo WHERE tipo_id= 2 AND executante_id='.$model->usuario_id)->queryScalar();
+  }
+
+  if(!empty($existeTipo)){
+   ?>
+    <div class="col-md-2" id="div_hh_ej">
+    <?php } else{ ?>
     <div class="col-md-2" id="div_hh_ej" hidden>
-    <?= $form->field($model, 'vl_hh_ej')->textInput(['maxlength' => true])->widget(MaskMoney::classname(), [
+    <?php } ?>
+    <?= $form->field($model, 'vl_hh_ej')->textInput(['maxlength' => true, 'name'=>'Executante[vl_hh_ej]'])->widget(MaskMoney::classname(), [
           'pluginOptions' => [
               'prefix' => 'R$ ',
               'thousands' => '.',
@@ -257,8 +295,20 @@ $this->registerJs("
           ]
       ]); ?>
     </div>
+
+    <?php
+  $existeTipo = '';
+  if(!$model->isNewRecord){
+    $existeTipo = Yii::$app->db->createCommand('SELECT tipo_id FROM executante_tipo WHERE tipo_id= 3 AND executante_id='.$model->usuario_id)->queryScalar();
+  }
+
+  if(!empty($existeTipo)){
+   ?>
+    <div class="col-md-2" id="div_hh_ep">
+    <?php } else{ ?>
     <div class="col-md-2" id="div_hh_ep" hidden>
-    <?= $form->field($model, 'vl_hh_ep')->textInput(['maxlength' => true])->widget(MaskMoney::classname(), [
+    <?php } ?>
+    <?= $form->field($model, 'vl_hh_ep')->textInput(['maxlength' => true, 'name'=>'Executante[vl_hh_ep]'])->widget(MaskMoney::classname(), [
           'pluginOptions' => [
               'prefix' => 'R$ ',
               'thousands' => '.',
@@ -269,8 +319,19 @@ $this->registerJs("
           ]
       ]); ?>
     </div>
-    <div class="col-md-2" id="div_hh_es" hidden> 
-    <?= $form->field($model, 'vl_hh_es')->textInput(['maxlength' => true])->widget(MaskMoney::classname(), [
+    <?php
+  $existeTipo = '';
+  if(!$model->isNewRecord){
+    $existeTipo = Yii::$app->db->createCommand('SELECT tipo_id FROM executante_tipo WHERE tipo_id= 4 AND executante_id='.$model->usuario_id)->queryScalar();
+  }
+
+  if(!empty($existeTipo)){
+   ?>
+    <div class="col-md-2" id="div_hh_es">
+    <?php } else{ ?>
+    <div class="col-md-2" id="div_hh_es" hidden>
+    <?php } ?> 
+    <?= $form->field($model, 'vl_hh_es')->textInput(['maxlength' => true, 'name'=>'Executante[vl_hh_es]'])->widget(MaskMoney::classname(), [
           'pluginOptions' => [
               'prefix' => 'R$ ',
               'thousands' => '.',
@@ -281,8 +342,19 @@ $this->registerJs("
           ]
       ]); ?>
     </div>
+    <?php
+  $existeTipo = '';
+  if(!$model->isNewRecord){
+    $existeTipo = Yii::$app->db->createCommand('SELECT tipo_id FROM executante_tipo WHERE tipo_id= 5 AND executante_id='.$model->usuario_id)->queryScalar();
+  }
+
+  if(!empty($existeTipo)){
+   ?>
+    <div class="col-md-2" id="div_hh_ee">
+    <?php } else{ ?>
     <div class="col-md-2" id="div_hh_ee" hidden>
-    <?= $form->field($model, 'vl_hh_ee')->textInput(['maxlength' => true])->widget(MaskMoney::classname(), [
+    <?php } ?>
+    <?= $form->field($model, 'vl_hh_ee')->textInput(['maxlength' => true, 'name'=>'Executante[vl_hh_ee]'])->widget(MaskMoney::classname(), [
           'pluginOptions' => [
               'prefix' => 'R$ ',
               'thousands' => '.',

@@ -90,6 +90,7 @@ class Projeto extends \yii\db\ActiveRecord
             [['comentarios'], 'string', 'max' => 80],
             [['cliente_id'], 'exist', 'skipOnError' => true, 'targetClass' => Cliente::className(), 'targetAttribute' => ['cliente_id' => 'id']],
             [['contato_id'], 'exist', 'skipOnError' => true, 'targetClass' => Contato::className(), 'targetAttribute' => ['contato_id' => 'usuario_id']],
+            [['nome'], 'string', 'max' => 255],
         ];
     }
 

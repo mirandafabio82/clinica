@@ -7,6 +7,12 @@ use kartik\grid\GridView;
 /* @var $model app\models\Config */
 /* @var $form yii\widgets\ActiveForm */
 ?>
+<style>
+.table-bordered > tbody > tr > td{
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+}
+</style>
  <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,

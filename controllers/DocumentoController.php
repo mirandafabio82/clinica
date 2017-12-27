@@ -148,7 +148,7 @@ class DocumentoController extends Controller
         $model = $this->findModel($id);
         $searchModel = new DocumentoSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
+        $model->data = date_format(DateTime::createFromFormat('Y-m-d', $model->data), 'd/m/Y');
         $projetos = Yii::$app->db->createCommand('SELECT id, nome FROM projeto')->queryAll();
         $listProjetos = ArrayHelper::map($projetos,'id','nome');
 

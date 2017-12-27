@@ -13,12 +13,20 @@ $this->registerJs("
 
     $('td').click(function (e) {
         var id = $(this).closest('tr').attr('data-key');
-        if(e.target == this)
-            location.href = '" . Url::to(['atividademodelo/update']) . "&id='+id;
+        if(id != null){
+            if(e.target == this)
+                location.href = '" . Url::to(['atividademodelo/update']) . "&id='+id;
+        }
     });
 
 ");
 ?>
+<style>
+.table-bordered > tbody > tr > td{
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+}
+</style>
 <div class="atividademodelo-form">
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -63,7 +71,7 @@ $this->registerJs("
             [
                 'attribute'=>'isEntregavel',
                 'value'=>function($data){
-                    return $data->isPrioritaria==1 ? 'Sim' : 'Não';
+                    return $data->isEntregavel==1 ? 'Sim' : 'Não';
                 }
             ],
 
@@ -76,10 +84,12 @@ $this->registerJs("
     <?= $form->field($model, 'nome')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'escopopadrao_id')->dropDownList($listEscopo,['prompt'=>'Selecione um Escopo']) ?>
     <?= $form->field($model, 'disciplina_id')->dropDownList($listDisciplina,['prompt'=>'Selecione uma Displina']) ?>
-    <input type="checkbox" name="Atividademodelo[isPrioritaria]">Atividade Prioritária
+    <?= $form->field($model,'isPrioritaria')->checkBox() ?>
+    <?= $form->field($model,'isEntregavel')->checkBox() ?>
+    <!-- <input type="checkbox" name="Atividademodelo[isPrioritaria]">Atividade Prioritária
     <br>
     <input type="checkbox" name="Atividademodelo[isEntregavel]">Atividade Entregável
-
+ -->
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Cadastrar' : 'Atualizar', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>

@@ -16,12 +16,20 @@ $this->registerJs("
 
     $('td').click(function (e) {
         var id = $(this).closest('tr').attr('data-key');
-        if(e.target == this)
-            location.href = '" . Url::to(['cliente/update']) . "&id='+id;
+        if(id != null){
+            if(e.target == this)
+                location.href = '" . Url::to(['cliente/update']) . "&id='+id;
+        }
     });
 
 ");
 ?>
+<style>
+.table-bordered > tbody > tr > td{
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+}
+</style>
 <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,

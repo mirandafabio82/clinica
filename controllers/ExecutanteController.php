@@ -170,6 +170,15 @@ class ExecutanteController extends Controller
                 $model->criado = date('Y-m-d h:m:s');
                 $model->save();
 
+                Yii::$app->db->createCommand('DELETE FROM executante_tipo WHERE executante_id='.$model->usuario_id)->execute();
+
+                                            
+                foreach ($_POST['Tipos'] as $key => $tipo) {
+                    $executanteTipo = new ExecutanteTipo();
+                    $executanteTipo->executante_id = $model->usuario_id;
+                    $executanteTipo->tipo_id = $tipo;                    
+                    $executanteTipo->save();
+                }
                
 
                 $transaction->commit();

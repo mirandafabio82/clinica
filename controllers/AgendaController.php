@@ -140,7 +140,7 @@ class AgendaController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         $model = $this->findModel($id);
-
+        $model->data = date_format(DateTime::createFromFormat('Y-m-d', $model->data), 'd/m/Y');
         $projetos = Yii::$app->db->createCommand('SELECT projeto.id, nome FROM projeto')->queryAll();
         $listProjetos = ArrayHelper::map($projetos,'id','nome');
 

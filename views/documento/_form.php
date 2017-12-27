@@ -3,13 +3,32 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\grid\GridView;
+use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $model app\models\Documento */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 <!-- mask so funciona com isso -->
 <?php $this->head() ?>
+<style>
+.table-bordered > tbody > tr > td{
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+}
+</style>
+<?php
+$this->registerJs("
 
+    $('td').click(function (e) {
+        var id = $(this).closest('tr').attr('data-key');
+        if(id != null){
+          if(e.target == this)
+              location.href = '" . Url::to(['documento/update']) . "&id='+id;
+        }
+    });
+
+");
+?>
 <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -25,7 +44,7 @@ use kartik\grid\GridView;
             // ['class' => 'yii\grid\SerialColumn'],
             [
               'class' => 'yii\grid\ActionColumn',
-              'template' => '{update} {delete}',    
+              'template' => '{delete}',    
               'contentOptions' => ['style' => 'width:5em;  min-width:5em;'],
             ],
 
@@ -72,7 +91,13 @@ use kartik\grid\GridView;
             ],
 
             'revisao',
-            'data',
+            [
+                'attribute' => 'data',
+                'value' => function($data){
+                    
+                    return date_format(DateTime::createFromFormat('Y-m-d', $data->data), 'd/m/Y');
+                }
+            ], 
             'tipo',
             // 'criado',
             // 'modificado',

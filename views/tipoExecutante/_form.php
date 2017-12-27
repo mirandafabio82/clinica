@@ -9,13 +9,21 @@ use kartik\money\MaskMoney;
 /* @var $model app\models\TipoExecutante */
 /* @var $form yii\widgets\ActiveForm */
 ?>
+<style>
+.table-bordered > tbody > tr > td{
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+}
+</style>
 <?php
 $this->registerJs("
 
     $('td').click(function (e) {
         var id = $(this).closest('tr').attr('data-key');
-        if(e.target == this)
-            location.href = '" . Url::to(['tipoexecutante/update']) . "&id='+id;
+        if(id != null){
+          if(e.target == this)
+              location.href = '" . Url::to(['tipoexecutante/update']) . "&id='+id;
+        }
     });
 
 ");

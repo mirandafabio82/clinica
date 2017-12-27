@@ -80,14 +80,7 @@ class AtividademodeloController extends Controller
         if ($model->load(Yii::$app->request->post()) ) {
 
             $model->setAttributes($_POST['Atividademodelo']);
-
-            if(isset($_POST['Atividademodelo']['isPrioritaria'])){
-                $model->isPrioritaria = 1;
-            }
-            if(isset($_POST['Atividademodelo']['isEntregavel'])){
-                $model->isEntregavel = 1;
-            }
-
+           
             $model->save();
 
             return $this->redirect(['create', 'id' => $model->id]);
@@ -120,24 +113,11 @@ class AtividademodeloController extends Controller
 
         $disciplina = Yii::$app->db->createCommand('SELECT id, nome FROM disciplina')->queryAll();
         $listDisciplina = ArrayHelper::map($disciplina,'id','nome');
-
         
 
         if ($model->load(Yii::$app->request->post()) ) {
             
-            $model->setAttributes($_POST['Atividademodelo']);
-            if(isset($_POST['Atividademodelo']['isPrioritaria'])){
-                $model->isPrioritaria = 1;
-            }
-            else{
-                $model->isPrioritaria = 0;   
-            }
-            if(isset($_POST['Atividademodelo']['isEntregavel'])){
-                $model->isEntregavel = 1;
-            }
-            else{
-                $model->isPrioritaria = 0;   
-            }
+            $model->setAttributes($_POST['Atividademodelo']);            
 
             $model->save();
 

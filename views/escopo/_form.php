@@ -7,6 +7,12 @@ use yii\widgets\ActiveForm;
 /* @var $model app\models\Escopo */
 /* @var $form yii\widgets\ActiveForm */
 ?>
+<style>
+.table-bordered > tbody > tr > td{
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+}
+</style>
 
 <div class="escopo-form">
 

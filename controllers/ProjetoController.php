@@ -175,6 +175,7 @@ class ProjetoController extends Controller
                             }
                         }
                         foreach ($processos as $key => $processo) {
+
                             $atvmodelos = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE escopopadrao_id='.$processo.' AND disciplina_id = 2')->queryAll();
 
                             foreach ($atvmodelos as $key => $atv) {
@@ -187,7 +188,8 @@ class ProjetoController extends Controller
                             }
                         }
                         foreach ($instrumentacoes as $key => $instrumentacao) {
-                            $atvmodelos = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE escopopadrao_id='.$instrumentacao.' AND disciplina_id = 2')->queryAll();
+
+                            $atvmodelos = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE escopopadrao_id='.$instrumentacao.' AND disciplina_id = 3')->queryAll();
 
                             foreach ($atvmodelos as $key => $atv) {
                                 $escopo_model = new Escopo();
@@ -263,8 +265,8 @@ class ProjetoController extends Controller
                 echo $out;
                 return $this->redirect(['update', 'id' => $model->id]);
             }*/
-            if(isset($_POST['Projeto'])){
                
+            if(isset($_POST['Projeto'])){
                 $projeto_id = Yii::$app->request->post('editableKey');
                 $projeto = Projeto::findOne($projeto_id);
 
@@ -377,12 +379,24 @@ class ProjetoController extends Controller
                         $processos = isset($escopos['Processo']) ? $escopos['Processo'] : array();
                         $instrumentacoes = isset($escopos['Instrumentação']) ? $escopos['Instrumentação'] : array();
 
+                        
+                        if(!isset($automacoes[1]))
+                         Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id NOT IN(SELECT id FROM atividademodelo WHERE escopopadrao_id=1 AND disciplina_id=1)')->execute();
+
+                        if(!isset($automacoes[2]))
+                         Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id NOT IN(SELECT id FROM atividademodelo WHERE escopopadrao_id=2 AND disciplina_id=1)')->execute();
+
+                        if(!isset($automacoes[3]))
+                         Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id NOT IN(SELECT id FROM atividademodelo WHERE escopopadrao_id=3 AND disciplina_id=1)')->execute();
 
                         foreach ($automacoes as $key => $automacao) {
                             $atvmodelos = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE escopopadrao_id='.$automacao.' AND disciplina_id = 1')->queryAll();
-                            
+
                             foreach ($atvmodelos as $key => $atv) {
                                 $existeEscopo = Yii::$app->db->createCommand('SELECT id FROM escopo WHERE projeto_id='.$model->id.' AND atividademodelo_id='.$atv['id'])->queryScalar();
+                                
+
+
                                 if(!$existeEscopo){
                                     $escopo_model = new Escopo();
                                     $escopo_model->projeto_id = $model->id;
