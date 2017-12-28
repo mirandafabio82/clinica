@@ -8,6 +8,7 @@ use yii\helpers\ArrayHelper;
 use app\models\Escopo;
 use yii\helpers\Url;
 use kartik\money\MaskMoney;
+use kartik\tabs\TabsX;
 /* @var $this yii\web\View */
 /* @var $model app\models\Projeto */
 /* @var $form yii\widgets\ActiveForm */
@@ -465,14 +466,24 @@ $this->registerJs("
        <?php $form2 = ActiveForm::begin(); ?>
        <?= Html::submitButton('Salvar Escopo', ['class' =>'btn btn-primary']) ?>
      </div>
-     <div class="col-md-12">
-      
 
-      <div style="height: 30em; overflow-y: scroll;">
-         <table style="width:100%" id="tabela-escopo">
+
+     <div class="col-md-12">      
+
+     <div style="height: 30em; overflow-y: scroll;">
+      
+    <?php 
+    $descricao ='';
+    $disciplina = '';
+    $horas_tp = '';
+    $exe_tp_id = '';
+    $horas_ej = '';
+
+    $header = ' 
+    <table style="width:100%" id="tabela-escopo">
         <tr>
           <th>Descrição</th>
-          <th>Disciplina</th> 
+           
           <th>Horas_TP</th>
           <th>TP</th>
           <th>Horas_EJ</th>
@@ -483,56 +494,82 @@ $this->registerJs("
           <th>ES</th>
           <th>Horas_EE</th>
           <th>EE</th>
-        </tr>
-        <?php foreach ($escopoArray as $key => $esc) { 
-          $escopoModel =  Escopo::findOne($esc['id']);
-          
-        ?>
-        <tr>
-          <td style="font-size: 10px">
-          <?= $esc['descricao'] ?>
-          </td>
-          <td style="font-size: 10px">
-          <?= Yii::$app->db->createCommand('SELECT disciplina.nome FROM disciplina JOIN atividademodelo ON atividademodelo.disciplina_id=disciplina.id WHERE atividademodelo.id='.$esc['atividademodelo_id'])->queryScalar() ?>            
-          </td> 
-          <td style="font-size: 12px">
-            <?= $form2->field($escopoModel, 'horas_tp')->textInput(['style'=>'', 'name' => 'Escopo['.$esc["id"].'][horas_tp]'])->label(false) ?>
-            
-          </td>
-          <td style="font-size: 12px" title="<?=!empty($esc['exe_tp_id']) ? Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.$esc['exe_tp_id'])->queryScalar() : ''?>">
-            <?= $form2->field($escopoModel, 'exe_tp_id')->dropDownList($listExecutantes_tp,['prompt'=>'Selecione um Executante', 'name' => 'Escopo['.$esc["id"].'][exe_tp_id]', 'value'=>$esc['exe_tp_id']])->label(false) ?>            
-          </td>
-          
-          <td style="font-size: 12px">
-            <?= $form2->field($escopoModel, 'horas_ej')->textInput(['style'=>'', 'name' =>'Escopo['.$esc["id"].'][horas_ej]'])->label(false) ?> 
-          </td>
-          <td style="font-size: 12px"  title="<?=!empty($esc['exe_ej_id']) ? Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.$esc['exe_ej_id'])->queryScalar() : ''?>">
-            <?= $form2->field($escopoModel, 'exe_ej_id')->dropDownList($listExecutantes_ej,['prompt'=>'Selecione um Executante', 'name' => 'Escopo['.$esc["id"].'][exe_ej_id]', 'value'=>$esc['exe_ej_id']])->label(false) ?>            
-          </td>
-          <td style="font-size: 12px">
-            <?= $form2->field($escopoModel, 'horas_ep')->textInput(['style'=>'', 'name' => 'Escopo['.$esc["id"].'][horas_ep]'])->label(false) ?>
-          </td>
-          <td style="font-size: 12px"  title="<?=!empty($esc['exe_ep_id']) ? Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.$esc['exe_ep_id'])->queryScalar() : ''?>">
-            <?= $form2->field($escopoModel, 'exe_ep_id')->dropDownList($listExecutantes_ep,['prompt'=>'Selecione um Executante', 'name' => 'Escopo['.$esc["id"].'][exe_ep_id]', 'value'=>$esc['exe_ep_id']])->label(false) ?>            
-          </td>
-          <td style="font-size: 12px">
-            <?= $form->field($escopoModel, 'horas_es')->textInput(['style'=>'', 'name' => 'Escopo['.$esc["id"].'][horas_es]'])->label(false) ?>
-          </td>
-          <td style="font-size: 12px"  title="<?=!empty($esc['exe_es_id']) ? Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.$esc['exe_es_id'])->queryScalar() : ''?>">
-            <?= $form2->field($escopoModel, 'exe_es_id')->dropDownList($listExecutantes_es,['prompt'=>'Selecione um Executante', 'name' => 'Escopo['.$esc["id"].'][exe_es_id]', 'value'=>$esc['exe_es_id']])->label(false) ?>            
-          </td>
-          <td style="font-size: 12px">
-            <?= $form2->field($escopoModel, 'horas_ee')->textInput(['style'=>'', 'name' => 'Escopo['.$esc["id"].'][horas_ee]'])->label(false) ?>
-          </td>
-          <td style="font-size: 12px"  title="<?=!empty($esc['exe_ee_id']) ? Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.$esc['exe_ee_id'])->queryScalar() : ''?>">
-            <?= $form2->field($escopoModel, 'exe_ee_id')->dropDownList($listExecutantes_ee,['prompt'=>'Selecione um Executante', 'name' => 'Escopo['.$esc["id"].'][exe_ee_id]', 'value'=>$esc['exe_ee_id']])->label(false) ?>            
-          </td>
+        </tr> ';
 
-        </tr>
-                
-        
-        <?php } ?>    
-      </table>
+    $bodyA = '';
+    $bodyP = '';
+    $bodyI = '';
+    foreach ($escopoArray as $key => $esc) { 
+        $escopoModel =  Escopo::findOne($esc['id']);     
+       
+       //==============================COLUNAS========================================================
+      $descricao = '<tr><td style="font-size: 10px">'.$esc['descricao'].'</td>'; 
+      
+      $disciplina = '<td style="font-size: 10px">'.Yii::$app->db->createCommand('SELECT disciplina.nome FROM disciplina JOIN atividademodelo ON atividademodelo.disciplina_id=disciplina.id WHERE atividademodelo.id='.$esc['atividademodelo_id'])->queryScalar().'</td>';
+
+      $horas_tp = '<td style="font-size: 10px">'.$form2->field($escopoModel, 'horas_tp')->textInput(['style'=>'', 'name' => 'Escopo['.$esc["id"].'][horas_tp]'])->label(false).'</td>';  
+      
+      $exe_tp_id = '<td style="font-size: 10px">'.$form2->field($escopoModel, 'exe_tp_id')->dropDownList($listExecutantes_tp,['prompt'=>'Selecione um Executante', 'name' => 'Escopo['.$esc["id"].'][exe_tp_id]', 'value'=>$esc['exe_tp_id']])->label(false).'</td>';    
+
+      $horas_ej = '<td style="font-size: 10px">'.$form2->field($escopoModel, 'horas_ej')->textInput(['style'=>'', 'name' =>'Escopo['.$esc["id"].'][horas_ej]'])->label(false).'</td>'; 
+
+      $exe_ej_id = '<td style="font-size: 10px">'.$form2->field($escopoModel, 'exe_ej_id')->dropDownList($listExecutantes_ej,['prompt'=>'Selecione um Executante', 'name' => 'Escopo['.$esc["id"].'][exe_ej_id]', 'value'=>$esc['exe_ej_id']])->label(false).'</td>';
+
+      $horas_ep = '<td style="font-size: 10px">'.$form2->field($escopoModel, 'horas_ep')->textInput(['style'=>'', 'name' =>'Escopo['.$esc["id"].'][horas_ep]'])->label(false).'</td>';
+
+      $exe_ep_id = '<td style="font-size: 10px">'.$form2->field($escopoModel, 'exe_ep_id')->dropDownList($listExecutantes_ep,['prompt'=>'Selecione um Executante', 'name' => 'Escopo['.$esc["id"].'][exe_ep_id]', 'value'=>$esc['exe_ep_id']])->label(false).'</td>';
+
+      $horas_es = '<td style="font-size: 10px">'.$form2->field($escopoModel, 'horas_es')->textInput(['style'=>'', 'name' =>'Escopo['.$esc["id"].'][horas_es]'])->label(false).'</td>';
+
+      $exe_es_id = '<td style="font-size: 10px">'.$form2->field($escopoModel, 'exe_es_id')->dropDownList($listExecutantes_es,['prompt'=>'Selecione um Executante', 'name' => 'Escopo['.$esc["id"].'][exe_es_id]', 'value'=>$esc['exe_es_id']])->label(false).'</td>';
+
+      $horas_ee = '<td style="font-size: 10px">'.$form2->field($escopoModel, 'horas_ee')->textInput(['style'=>'', 'name' =>'Escopo['.$esc["id"].'][horas_ee]'])->label(false).'</td>';
+
+      $exe_ee_id = '<td style="font-size: 10px">'.$form2->field($escopoModel, 'exe_ee_id')->dropDownList($listExecutantes_ee,['prompt'=>'Selecione um Executante', 'name' => 'Escopo['.$esc["id"].'][exe_ee_id]', 'value'=>$esc['exe_ee_id']])->label(false).'</td></tr>';
+
+      $disciplina_id = Yii::$app->db->createCommand('SELECT disciplina_id FROM atividademodelo WHERE id='.$esc['atividademodelo_id'])->queryScalar();
+      
+      if($disciplina_id == 1){
+        $bodyA .=  $descricao./*' '.$disciplina.*/' '.$horas_tp.' '.$exe_tp_id.' '.$horas_ej.' '.$exe_ej_id.' '.$horas_ep.' '.$exe_ep_id.' '.$horas_es.' '.$exe_es_id.' '.$horas_ee.' '.$exe_ee_id;  
+      }
+      if($disciplina_id == 2){
+        $bodyP .=  $descricao./*' '.$disciplina.*/' '.$horas_tp.' '.$exe_tp_id.' '.$horas_ej.' '.$exe_ej_id.' '.$horas_ep.' '.$exe_ep_id.' '.$horas_es.' '.$exe_es_id.' '.$horas_ee.' '.$exe_ee_id;  
+      }
+      if($disciplina_id == 3){
+        $bodyI .=  $descricao./*' '.$disciplina.*/' '.$horas_tp.' '.$exe_tp_id.' '.$horas_ej.' '.$exe_ej_id.' '.$horas_ep.' '.$exe_ep_id.' '.$horas_es.' '.$exe_es_id.' '.$horas_ee.' '.$exe_ee_id;  
+      }       
+          
+ } 
+    $automacao = $header.''.$bodyA.'</table>';
+    $processo = $header.''.$bodyP.'</table>';
+    $instrumentacao = $header.''.$bodyI.'</table>';
+
+$items = [
+[
+    'label'=>'Automação',
+    'content'=>$automacao,
+    'active'=>true
+],
+[
+    'label'=>'Processo',
+    'content'=>$processo,        
+],
+[
+    'label'=>'Instrumentação',
+    'content'=>$instrumentacao,        
+],
+/*[
+    'label'=>'<i class="glyphicon glyphicon-king"></i> Disabled',
+    'headerOptions' => ['class'=>'disabled']
+],*/
+]; 
+echo TabsX::widget([
+    'items'=>$items,
+    'position'=>TabsX::POS_ABOVE,
+    'encodeLabels'=>false
+]);
+        ?>    
+      
       </div>
       </div>
       </div>

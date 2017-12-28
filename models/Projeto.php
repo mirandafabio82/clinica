@@ -106,7 +106,7 @@ class Projeto extends \yii\db\ActiveRecord
             'descricao' => 'Descrição',
             'codigo' => 'Código',
             'site' => 'Site',
-            'planta' => 'Planta',
+            'planta' => 'Área',
             'municipio' => 'Municipio',
             'uf' => 'UF',
             'cnpj' => 'CNPJ',
