@@ -26,6 +26,9 @@ $this->registerJs("
   padding-top: 0px !important;
   padding-bottom: 0px !important;
 }
+.pagination{
+    margin: 0px;
+}
 </style>
 <div class="atividademodelo-form">
     <?= GridView::widget([
@@ -80,12 +83,21 @@ $this->registerJs("
     <?php $form = ActiveForm::begin(); ?>
      <div class="box box-primary">
     <div class="box-header with-border">
-     
-    <?= $form->field($model, 'nome')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'escopopadrao_id')->dropDownList($listEscopo,['prompt'=>'Selecione um Escopo']) ?>
-    <?= $form->field($model, 'disciplina_id')->dropDownList($listDisciplina,['prompt'=>'Selecione uma Displina']) ?>
-    <?= $form->field($model,'isPrioritaria')->checkBox() ?>
-    <?= $form->field($model,'isEntregavel')->checkBox() ?>
+     <div class="row">
+         <div class="col-md-4">  
+        <?= $form->field($model, 'nome')->textInput(['maxlength' => true]) ?>
+        </div>
+        <div class="col-md-2"> 
+        <?= $form->field($model, 'disciplina_id')->dropDownList($listDisciplina,['prompt'=>'Selecione uma Displina']) ?>
+        </div>
+        <div class="col-md-2"> 
+        <?= $form->field($model, 'escopopadrao_id')->dropDownList($listEscopo,['prompt'=>'Selecione um Escopo']) ?>
+        </div>
+        <div class="col-md-2"> 
+        <?= $form->field($model,'isPrioritaria')->checkBox() ?>        
+        <?= $form->field($model,'isEntregavel')->checkBox() ?>
+        </div>
+    </div>
     <!-- <input type="checkbox" name="Atividademodelo[isPrioritaria]">Atividade Prioritária
     <br>
     <input type="checkbox" name="Atividademodelo[isEntregavel]">Atividade Entregável

@@ -89,7 +89,7 @@ class ProjetoController extends Controller
     public function actionCreate()
     {
         $model = new Projeto();
-
+        $model->tipo = 'A';
         $searchModel = new ProjetoSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 

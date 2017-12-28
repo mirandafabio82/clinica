@@ -35,6 +35,9 @@ $this->registerJs("
   padding-top: 0px !important;
   padding-bottom: 0px !important;
 }
+.pagination{
+    margin: 0px;
+}
 </style>
 
 <?php $this->head() ?>

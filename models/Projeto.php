@@ -143,6 +143,7 @@ class Projeto extends \yii\db\ActiveRecord
             'nome' => 'Projeto',
             'documentos' => 'Qtd Documentos',
             'data_pendencia' => 'Data Resp Pendência',
+            'tipo' => '',
             
         ];
     }

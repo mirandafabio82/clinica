@@ -165,8 +165,8 @@ $this->registerJs("
   .control-label{
     font-size:10px;
   }
-</style>
-<style>
+
+
 #tabela-escopo {
     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
     border-collapse: collapse;
@@ -189,6 +189,20 @@ $this->registerJs("
     background-color: #337ab7;
     color: white;
 }
+
+/*thead {   
+    display:table;
+   
+    width:100%;
+}
+tbody {
+    height:350px;
+    overflow:auto;
+    overflow-x:hidden;
+    display:block;
+    
+}
+*/
 
 
 </style>
@@ -480,6 +494,7 @@ $this->registerJs("
 
     $header = ' 
     <table style="width:100%" id="tabela-escopo">
+    <thead>
         <tr>
           <th>Descrição</th>
            
@@ -493,7 +508,8 @@ $this->registerJs("
           <th>ES</th>
           <th>Horas_EE</th>
           <th>EE</th>
-        </tr> ';
+        </tr>
+        </thead> ';
 
     $bodyA = '';
     $bodyP = '';
