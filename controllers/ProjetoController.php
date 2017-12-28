@@ -14,6 +14,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
+use \Datetime;
 
 /**
  * ProjetoController implements the CRUD actions for Projeto model.
@@ -239,8 +240,11 @@ class ProjetoController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);        
-
+        $model = $this->findModel($id); 
+        if(!empty($model->data_pendencia))
+            $model->data_pendencia = date_format(DateTime::createFromFormat('Y-m-d', $model->data_pendencia), 'd/m/Y');
+        if(!empty($model->data_entrega))
+            $model->data_entrega = date_format(DateTime::createFromFormat('Y-m-d', $model->data_entrega), 'd/m/Y');
 
         $searchModel = new ProjetoSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);

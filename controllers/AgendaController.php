@@ -109,10 +109,12 @@ class AgendaController extends Controller
             echo $out;
             return $this->redirect(['create']);
         }
-        if($_POST){
+        if($_POST){            
             $model->setAttributes($_POST['Agenda']);
-            $dat = DateTime::createFromFormat('d/m/Y', $_POST['Agenda']['data']);          
-            $model->data = date_format($dat, 'Y-m-d');
+            if(!empty($_POST['Agenda']['data'])){
+                $dat = DateTime::createFromFormat('d/m/Y', $_POST['Agenda']['data']);          
+                $model->data = date_format($dat, 'Y-m-d');
+            }
             $model->save();
 
             return $this->redirect(['create']);
@@ -169,8 +171,10 @@ class AgendaController extends Controller
         }
         if($_POST){
             $model->setAttributes($_POST['Agenda']);
-            $dat = DateTime::createFromFormat('d/m/Y', $_POST['Agenda']['data']);
-            $model->data = date_format($dat, 'Y-m-d');
+            if(isset($_POST['Agenda']['data'])){
+                $dat = DateTime::createFromFormat('d/m/Y', $_POST['Agenda']['data']);
+                $model->data = date_format($dat, 'Y-m-d');
+            }
             $model->save();
 
             return $this->redirect(['create']);

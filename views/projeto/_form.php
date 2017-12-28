@@ -189,6 +189,8 @@ $this->registerJs("
     background-color: #337ab7;
     color: white;
 }
+
+
 </style>
 <div class="projeto-form">
 
@@ -201,8 +203,8 @@ $this->registerJs("
     <div class="box-header with-border">
       <div class="row">    
       <div class="col-md-2"> 
-        <input type="radio" name="Projeto[tipo]" value="A" checked> Autorização de Serviço<br>
-        <input type="radio" name="Projeto[tipo]" value="P"> Proposta<br>
+      <?= $form->field($model, 'tipo')->radioList(array('A'=>'Autorização de Serviço','P'=>'Proposta')); ?>
+        
       </div>
         <div class="col-md-2"> 
           <?= $form->field($model, 'nome')->textInput(['maxlength' => true]) ?>  
@@ -418,7 +420,7 @@ $this->registerJs("
     
 
     <div class="row">
-      <div class="col-md-10">
+      <div class="col-md-8">
         <?= $form->field($model, 'comentarios')->textarea(['maxlength' => true]) ?>
 
       </div>
@@ -468,10 +470,7 @@ $this->registerJs("
      </div>
 
 
-     <div class="col-md-12">      
-
-     <div style="height: 30em; overflow-y: scroll;">
-      
+     
     <?php 
     $descricao ='';
     $disciplina = '';
@@ -540,9 +539,9 @@ $this->registerJs("
       }       
           
  } 
-    $automacao = $header.''.$bodyA.'</table>';
-    $processo = $header.''.$bodyP.'</table>';
-    $instrumentacao = $header.''.$bodyI.'</table>';
+    $automacao = '<div style="height: 30em; overflow-y: scroll;">'.$header.''.$bodyA.'</table></div>';
+    $processo = '<div style="height: 30em; overflow-y: scroll;">'.$header.''.$bodyP.'</table></div>';
+    $instrumentacao = '<div style="height: 30em; overflow-y: scroll;">'.$header.''.$bodyI.'</table></div>';
 
 $items = [
 [
@@ -563,17 +562,20 @@ $items = [
     'headerOptions' => ['class'=>'disabled']
 ],*/
 ]; 
+?>
+<div class="col-md-12">      
+
+<?php
 echo TabsX::widget([
     'items'=>$items,
     'position'=>TabsX::POS_ABOVE,
     'encodeLabels'=>false
 ]);
-        ?>    
-      
-      </div>
-      </div>
-      </div>
-    </div>
+ ?>    
+ 
+  </div>
+  </div>
+</div>
 
     <?php ActiveForm::end(); ?>
       <?php } ?>

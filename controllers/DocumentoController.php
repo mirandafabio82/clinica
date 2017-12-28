@@ -79,6 +79,7 @@ class DocumentoController extends Controller
     public function actionCreate()
     {
         $model = new Documento();
+        $model->data = date('d/m/Y');
         $searchModel = new DocumentoSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -110,18 +111,24 @@ class DocumentoController extends Controller
                     $model->path->saveAs(Yii::$app->basePath.'/web/uploaded-files/'.$model->projeto_id.'/'.$fileName);                
                     $model->path = $fileName;
                 }
-                $dat = DateTime::createFromFormat('d/m/Y', $_POST['Documento']['data']);          
-                $model->data = date_format($dat, 'Y-m-d');
+                if(!empty($_POST['Documento']['data'])){ 
+                    $dat = DateTime::createFromFormat('d/m/Y', $_POST['Documento']['data']);          
+                    $model->data = date_format($dat, 'Y-m-d');
+                }
 
                 $qtdDocs = count(scandir(Yii::$app->basePath.'/web/uploaded-files/'.$model->projeto_id)) - 2;
-
+               
                 //atualiza qtd documentos no projeto
-                Yii::$app->db->createCommand('UPDATE projeto SET documentos='.$qtdDocs)->execute();
-
+                Yii::$app->db->createCommand('UPDATE projeto SET documentos='.$qtdDocs.' WHERE id='.$model->projeto_id)->execute();
 
                 $model->save();
                 $transaction->commit();
-                return $this->redirect(['create']);
+                return $this->render('create', [
+                'model' => $model,
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+                'listProjetos' => $listProjetos
+            ]);
             }
             catch(Exception $e){
                 $transaction->rollBack();
@@ -175,8 +182,11 @@ class DocumentoController extends Controller
                     $model->path->saveAs(Yii::$app->basePath.'/web/uploaded-files/'.$model->projeto_id.'/'.$fileName);                
                     $model->path = $fileName;
                 }
-                $dat = DateTime::createFromFormat('d/m/Y', $_POST['Agenda']['data']);          
-                $model->data = date_format($dat, 'Y-m-d');
+                if(!empty($_POST['Documento']['data'])){                    
+                    $dat = DateTime::createFromFormat('d/m/Y', $_POST['Documento']['data']);          
+                    $model->data = date_format($dat, 'Y-m-d');
+                }
+
                 $model->save();
                 $transaction->commit();
                 return $this->redirect(['create']);

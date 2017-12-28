@@ -76,7 +76,7 @@ $this->registerJs("
             [
                 'attribute' => 'data',
                 'value' => function($data){
-                    
+                    if(!empty($data->data))
                     return date_format(DateTime::createFromFormat('Y-m-d', $data->data), 'd/m/Y');
                 }
             ], 
