@@ -18,7 +18,7 @@ class EscopoSearch extends Escopo
     public function rules()
     {
         return [
-            [['id', 'item', 'horas_tp', 'horas_tp', 'horas_ej', 'horas_ep', 'horas_es', 'horas_ee', 'executado', 'interno', 'projeto_id', 'atividademodelo_id'], 'integer'],
+            [['id', 'item', 'horas_tp', 'horas_tp', 'horas_ej', 'horas_ep', 'horas_es', 'horas_ee', 'executado', 'qtd', 'projeto_id', 'atividademodelo_id'], 'integer'],
             [['nome', 'descricao', 'criado', 'modificado'], 'safe'],
         ];
     }
@@ -70,7 +70,7 @@ class EscopoSearch extends Escopo
             'horas_ep'=> $this->horas_ep,
             'horas_ee' => $this->horas_ee,
             'executado' => $this->executado,
-            'interno' => $this->interno,
+            'qtd' => $this->qtd,
             'criado' => $this->criado,
             'modificado' => $this->modificado,
             'atividademodelo_id' => $this->atividademodelo_id,

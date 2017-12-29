@@ -9,6 +9,8 @@ use app\models\Escopo;
 use yii\helpers\Url;
 use kartik\money\MaskMoney;
 use kartik\tabs\TabsX;
+use kartik\popover\PopoverX;
+
 /* @var $this yii\web\View */
 /* @var $model app\models\Projeto */
 /* @var $form yii\widgets\ActiveForm */
@@ -206,6 +208,102 @@ tbody {
 
 
 </style>
+<div class="box box-primary">
+    <div class="box-header with-border">
+      <div class="row">   
+          <div class="col-md-12"> 
+          <div class="col-md-12">
+          Projetos
+          <?= GridView::widget([
+            'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+            'pjax' => true,        
+            'options' => ['style' => 'font-size:12px;'],                
+            'hover' => true,            
+            'columns' => [
+            // ['class' => 'yii\grid\SerialColumn'],
+
+            // 'id',
+            [
+              'class' => 'yii\grid\ActionColumn',
+              'template' => '{delete}',    
+              'contentOptions' => ['style' => 'width:5em;  min-width:5em;'],
+            ],
+            'nome',
+            [
+              'attribute' => 'status',      
+              'class' => 'kartik\grid\EditableColumn',        
+              'format' => 'raw',
+              'contentOptions' => ['style' => 'width:8em;  min-width:8em;'],
+              'value' => function ($data) {
+
+                $status = Yii::$app->db->createCommand('SELECT status, cor FROM projeto_status WHERE id='.$data->status)->queryOne();
+
+                return '<span style="color:'.$status['cor'].' "><i class="fa fa-circle" aria-hidden="true"></i> '.$status['status'].'</span>';
+
+              },
+
+              'editableOptions' => [
+              'inputType' => \kartik\editable\Editable::INPUT_DROPDOWN_LIST,
+              'data' => $listStatus                
+              ]
+            ],
+            [
+            'attribute' => 'cliente_id',   
+            'format' => 'raw',
+            'contentOptions' => ['style' => 'width:10em;'],
+            'value' => function ($data) {
+               $nome = '';
+              if(isset($data->cliente_id) && !empty($data->cliente_id))
+                $nome = Yii::$app->db->createCommand('SELECT nome FROM cliente WHERE id='.$data->cliente_id)->queryScalar();
+
+
+              return $nome;
+
+            },
+            ],
+            [
+            'attribute' => 'contato_id',              
+            'format' => 'raw',
+            'contentOptions' => ['style' => 'width:10em;  min-width:10em;'],
+            'value' => function ($data) {
+              $nome = '';
+              if(isset($data->contato_id) && !empty($data->contato_id))
+                $nome = Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.$data->contato_id)->queryScalar();                
+
+              return $nome;
+
+            },
+            ],
+            // 'descricao',
+            'codigo',            
+            'municipio',
+            'uf',
+            
+            // 'tratamento',
+            // 'contato',
+            // 'setor',
+            [
+            'attribute' => 'fone_contato',
+            'format' => 'raw',
+            'contentOptions' => ['style' => 'width:8em;  min-width:8em;'],
+            ],
+            [
+            'attribute' => 'celular',
+            'format' => 'raw',
+            'contentOptions' => ['style' => 'width:8em;  min-width:8em;'],
+            ],
+            'email:email',
+           
+            ],
+            ]); ?>
+            </div>
+            </div>
+
+            </div>
+            </div>
+            
+          </div>
 <div class="projeto-form">
 
   <?php $form = ActiveForm::begin(); ?>
@@ -497,30 +595,47 @@ tbody {
     <thead>
         <tr>
           <th>Descrição</th>
-           
-          <th>Horas_TP</th>
-          <th>TP</th>
-          <th>Horas_EJ</th>
-          <th>EJ</th>
-          <th>Horas_EP</th>
-          <th>EP</th>
-          <th>Horas_ES</th>
-          <th>ES</th>
-          <th>Horas_EE</th>
+          <th>Qtd</>
+          <th colspan="5" style="text-align:  center;">Horas</th>
+        </tr>
+        <tr>
+          <th></th>
+          <th></th>
           <th>EE</th>
+          <th>ES</th>
+          <th>EP</th>
+          <th>EJ</th>
+          <th>TP</th>
         </tr>
         </thead> ';
 
     $bodyA = '';
     $bodyP = '';
     $bodyI = '';
+    $exe_tp ='';
+    $exe_ej ='';
+    $exe_ep ='';
+    $exe_es ='';
+    $exe_ee ='';
     foreach ($escopoArray as $key => $esc) { 
-        $escopoModel =  Escopo::findOne($esc['id']);     
-       
+        $escopoModel =  Escopo::findOne($esc['id']);  
+        if(!empty($exe_tp))
+          $exe_tp = Yii::$app->db->createCommand('SELECT nome FROM executante WHERE id='.$esc['exe_tp_id'])->queryScalar();
+        if(!empty($exe_ej))
+          $exe_ej = Yii::$app->db->createCommand('SELECT nome FROM executante WHERE id='.$esc['exe_ej_id'])->queryScalar();
+        if(!empty($exe_ep))
+          $exe_ep = Yii::$app->db->createCommand('SELECT nome FROM executante WHERE id='.$esc['exe_ep_id'])->queryScalar();
+        if(!empty($exe_es))
+          $exe_es = Yii::$app->db->createCommand('SELECT nome FROM executante WHERE id='.$esc['exe_es_id'])->queryScalar();
+        if(!empty($exe_ee))
+          $exe_ee = Yii::$app->db->createCommand('SELECT nome FROM executante WHERE id='.$esc['exe_ee_id'])->queryScalar();
+
        //==============================COLUNAS========================================================
       $descricao = '<tr><td style="font-size: 10px">'.$esc['descricao'].'</td>'; 
       
       $disciplina = '<td style="font-size: 10px">'.Yii::$app->db->createCommand('SELECT disciplina.nome FROM disciplina JOIN atividademodelo ON atividademodelo.disciplina_id=disciplina.id WHERE atividademodelo.id='.$esc['atividademodelo_id'])->queryScalar().'</td>';
+
+      $qtd = '<td style="font-size: 10px">'.$form2->field($escopoModel, 'qtd')->textInput(['style'=>'', 'name' => 'Escopo['.$esc["id"].'][qtd]'])->label(false).'</td>'; 
 
       $horas_tp = '<td style="font-size: 10px">'.$form2->field($escopoModel, 'horas_tp')->textInput(['style'=>'', 'name' => 'Escopo['.$esc["id"].'][horas_tp]'])->label(false).'</td>';  
       
@@ -545,13 +660,13 @@ tbody {
       $disciplina_id = Yii::$app->db->createCommand('SELECT disciplina_id FROM atividademodelo WHERE id='.$esc['atividademodelo_id'])->queryScalar();
       
       if($disciplina_id == 1){
-        $bodyA .=  $descricao./*' '.$disciplina.*/' '.$horas_tp.' '.$exe_tp_id.' '.$horas_ej.' '.$exe_ej_id.' '.$horas_ep.' '.$exe_ep_id.' '.$horas_es.' '.$exe_es_id.' '.$horas_ee.' '.$exe_ee_id;  
+        $bodyA .=  $descricao.' '.$qtd.' '.$horas_ee./*' '.$exe_ee_id.*/' '.$horas_es./*' '.$exe_es_id.*/' '.$horas_ep./*' '.$exe_ep_id.*/' '.$horas_ej./*' '.$exe_ej_id.*/' '.$horas_tp/*.' '.$exe_tp_id*/;  
       }
       if($disciplina_id == 2){
-        $bodyP .=  $descricao./*' '.$disciplina.*/' '.$horas_tp.' '.$exe_tp_id.' '.$horas_ej.' '.$exe_ej_id.' '.$horas_ep.' '.$exe_ep_id.' '.$horas_es.' '.$exe_es_id.' '.$horas_ee.' '.$exe_ee_id;  
+        $bodyP .=  $descricao.' '.$qtd.' '.$horas_ee./*' '.$exe_ee_id.*/' '.$horas_es./*' '.$exe_es_id.*/' '.$horas_ep./*' '.$exe_ep_id.*/' '.$horas_ej./*' '.$exe_ej_id.*/' '.$horas_tp/*.' '.$exe_tp_id*/;
       }
       if($disciplina_id == 3){
-        $bodyI .=  $descricao./*' '.$disciplina.*/' '.$horas_tp.' '.$exe_tp_id.' '.$horas_ej.' '.$exe_ej_id.' '.$horas_ep.' '.$exe_ep_id.' '.$horas_es.' '.$exe_es_id.' '.$horas_ee.' '.$exe_ee_id;  
+        $bodyI .=  $descricao.' '.$qtd.' '.$horas_ee./*' '.$exe_ee_id.*/' '.$horas_es./*' '.$exe_es_id.*/' '.$horas_ep./*' '.$exe_ep_id.*/' '.$horas_ej./*' '.$exe_ej_id.*/' '.$horas_tp/*.' '.$exe_tp_id*/; 
       }       
           
  } 
@@ -559,19 +674,36 @@ tbody {
     $processo = '<div style="height: 30em; overflow-y: scroll;">'.$header.''.$bodyP.'</table></div>';
     $instrumentacao = '<div style="height: 30em; overflow-y: scroll;">'.$header.''.$bodyI.'</table></div>';
 
+    if(!empty($bodyA))
+      $visibleA = true;
+    else
+      $visibleA = false;
+    if(!empty($bodyP))
+      $visibleP = true;
+    else
+      $visibleP = false;
+    if(!empty($bodyI))
+      $visibleI = true;
+    else
+      $visibleI = false;
+
+
 $items = [
 [
     'label'=>'Automação',
     'content'=>$automacao,
-    'active'=>true
+    'active'=>true,
+    'visible' => $visibleA
 ],
 [
     'label'=>'Processo',
-    'content'=>$processo,        
+    'content'=>$processo,   
+    'visible' => $visibleP     
 ],
 [
     'label'=>'Instrumentação',
-    'content'=>$instrumentacao,        
+    'content'=>$instrumentacao, 
+    'visible' => $visibleI       
 ],
 /*[
     'label'=>'<i class="glyphicon glyphicon-king"></i> Disabled',
@@ -596,102 +728,8 @@ echo TabsX::widget([
     <?php ActiveForm::end(); ?>
       <?php } ?>
 
-    <div class="box box-primary">
-    <div class="box-header with-border">
-      <div class="row">   
-          <div class="col-md-12"> 
-          <div class="col-md-12">
-          Projetos
-          <?= GridView::widget([
-            'dataProvider' => $dataProvider,
-            'filterModel' => $searchModel,
-            'pjax' => true,        
-            'options' => ['style' => 'font-size:12px;'],                
-            'hover' => true,            
-            'columns' => [
-            // ['class' => 'yii\grid\SerialColumn'],
+    
 
-            // 'id',
-            [
-              'class' => 'yii\grid\ActionColumn',
-              'template' => '{delete}',    
-              'contentOptions' => ['style' => 'width:5em;  min-width:5em;'],
-            ],
-            'nome',
-            [
-              'attribute' => 'status',      
-              'class' => 'kartik\grid\EditableColumn',        
-              'format' => 'raw',
-              'contentOptions' => ['style' => 'width:8em;  min-width:8em;'],
-              'value' => function ($data) {
-
-                $status = Yii::$app->db->createCommand('SELECT status, cor FROM projeto_status WHERE id='.$data->status)->queryOne();
-
-                return '<span style="color:'.$status['cor'].' "><i class="fa fa-circle" aria-hidden="true"></i> '.$status['status'].'</span>';
-
-              },
-
-              'editableOptions' => [
-              'inputType' => \kartik\editable\Editable::INPUT_DROPDOWN_LIST,
-              'data' => $listStatus                
-              ]
-            ],
-            [
-            'attribute' => 'cliente_id',   
-            'format' => 'raw',
-            'contentOptions' => ['style' => 'width:10em;'],
-            'value' => function ($data) {
-               $nome = '';
-              if(isset($data->cliente_id) && !empty($data->cliente_id))
-                $nome = Yii::$app->db->createCommand('SELECT nome FROM cliente WHERE id='.$data->cliente_id)->queryScalar();
-
-
-              return $nome;
-
-            },
-            ],
-            [
-            'attribute' => 'contato_id',              
-            'format' => 'raw',
-            'contentOptions' => ['style' => 'width:10em;  min-width:10em;'],
-            'value' => function ($data) {
-              $nome = '';
-              if(isset($data->contato_id) && !empty($data->contato_id))
-                $nome = Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.$data->contato_id)->queryScalar();                
-
-              return $nome;
-
-            },
-            ],
-            // 'descricao',
-            'codigo',            
-            'municipio',
-            'uf',
-            
-            // 'tratamento',
-            // 'contato',
-            // 'setor',
-            [
-            'attribute' => 'fone_contato',
-            'format' => 'raw',
-            'contentOptions' => ['style' => 'width:8em;  min-width:8em;'],
-            ],
-            [
-            'attribute' => 'celular',
-            'format' => 'raw',
-            'contentOptions' => ['style' => 'width:8em;  min-width:8em;'],
-            ],
-            'email:email',
-           
-            ],
-            ]); ?>
-            </div>
-            </div>
-
-            </div>
-            </div>
-            
-          </div>
           
          </div>
         </div>
