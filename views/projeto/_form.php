@@ -149,6 +149,45 @@ $("#projeto-contato_id").change(function(ev){
 ?>
 <?php
 $this->registerJs("
+    $('.poptp').change(function(){
+      var linha = this.name.split(']')[0];
+      linha = linha.split('[')[1];
+      console.log(linha);
+     $(\"#escopotp-\"+linha).val($(this).val());
+      console.log(this.name);
+    });
+
+    $('.popej').change(function(){
+      var linha = this.name.split(']')[0];
+      linha = linha.split('[')[1];
+      console.log(linha);
+     $(\"#escopoej-\"+linha).val($(this).val());
+      console.log(this.name);
+    });
+
+    $('.popep').change(function(){
+      var linha = this.name.split(']')[0];
+      linha = linha.split('[')[1];
+      console.log(linha);
+     $(\"#escopoep-\"+linha).val($(this).val());
+      console.log(this.name);
+    });
+
+    $('.popes').change(function(){
+      var linha = this.name.split(']')[0];
+      linha = linha.split('[')[1];
+      console.log(linha);
+     $(\"#escopoes-\"+linha).val($(this).val());
+      console.log(this.name);
+    });
+
+    $('.popee').change(function(){
+      var linha = this.name.split(']')[0];
+      linha = linha.split('[')[1];
+      console.log(linha);
+     $(\"#escopoee-\"+linha).val($(this).val());
+      console.log(this.name);
+    });
 
     $('td').click(function (e) {
         var id = $(this).closest('tr').attr('data-key');
@@ -592,11 +631,12 @@ tbody {
 
     $header = ' 
     <table style="width:100%" id="tabela-escopo">
+    <col width="600">
     <thead>
         <tr>
-          <th>Descrição</th>
+          <th width="5em" style="text-align:center;">Descrição</th>
           <th>Qtd</>
-          <th colspan="5" style="text-align:  center;">Horas</th>
+          <th colspan="6" style="text-align:center;">Horas</th>
         </tr>
         <tr>
           <th></th>
@@ -606,6 +646,7 @@ tbody {
           <th>EP</th>
           <th>EJ</th>
           <th>TP</th>
+          <th>Total</th>
         </tr>
         </thead> ';
 
@@ -635,38 +676,85 @@ tbody {
       
       $disciplina = '<td style="font-size: 10px">'.Yii::$app->db->createCommand('SELECT disciplina.nome FROM disciplina JOIN atividademodelo ON atividademodelo.disciplina_id=disciplina.id WHERE atividademodelo.id='.$esc['atividademodelo_id'])->queryScalar().'</td>';
 
-      $qtd = '<td style="font-size: 10px">'.$form2->field($escopoModel, 'qtd')->textInput(['style'=>'', 'name' => 'Escopo['.$esc["id"].'][qtd]'])->label(false).'</td>'; 
+      $isEntregavel = Yii::$app->db->createCommand('SELECT isEntregavel FROM atividademodelo WHERE atividademodelo.id='.$esc['atividademodelo_id'])->queryScalar();
+      $qtd='<td style="font-size: 10px; padding: 1px;"></td>';
 
-      $horas_tp = '<td style="font-size: 10px">'.$form2->field($escopoModel, 'horas_tp')->textInput(['style'=>'', 'name' => 'Escopo['.$esc["id"].'][horas_tp]'])->label(false).'</td>';  
+      if($isEntregavel){
+        $qtd = '<td style="font-size: 10px; padding: 1px;">'.$form2->field($escopoModel, 'qtd')->textInput(['style'=>' width:4em', 'name' => 'Escopo['.$esc["id"].'][qtd]', 'type' => 'number'])->label(false).'</td>'; 
+      }
       
-      $exe_tp_id = '<td style="font-size: 10px">'.$form2->field($escopoModel, 'exe_tp_id')->dropDownList($listExecutantes_tp,['prompt'=>'Selecione um Executante', 'name' => 'Escopo['.$esc["id"].'][exe_tp_id]', 'value'=>$esc['exe_tp_id']])->label(false).'</td>';    
+      $contentTP = '<p class="text-justify">' .$form2->field($escopoModel, 'exe_tp_id')->dropDownList($listExecutantes_tp,['name' => 'Escopo['.$esc["id"].'][exe_tp_id]', 'value'=>$esc['exe_tp_id'], 'class'=> 'form-control poptp'])->label(false) .'</p>';
+      $popTP = PopoverX::widget([
+        'placement' => PopoverX::ALIGN_TOP,
+        'content' => $contentTP,
+        'toggleButton' => ['label'=>'<i class="fa fa-caret-up" aria-hidden="true"></i>', 'class'=>'btn btn-default', 'style'=>'padding:1px'],
+      ]);
 
-      $horas_ej = '<td style="font-size: 10px">'.$form2->field($escopoModel, 'horas_ej')->textInput(['style'=>'', 'name' =>'Escopo['.$esc["id"].'][horas_ej]'])->label(false).'</td>'; 
+      $contentEJ = '<p class="text-justify">' .$form2->field($escopoModel, 'exe_ej_id')->dropDownList($listExecutantes_ej,['name' => 'Escopo['.$esc["id"].'][exe_ej_id]', 'value'=>$esc['exe_ej_id'], 'class'=> 'form-control popej'])->label(false) .'</p>';
+      $popEJ = PopoverX::widget([
+        'placement' => PopoverX::ALIGN_TOP,
+        'content' => $contentEJ,
+        'toggleButton' => ['label'=>'<i class="fa fa-caret-up" aria-hidden="true"></i>', 'class'=>'btn btn-default', 'style'=>'padding:1px'],
+      ]);
 
-      $exe_ej_id = '<td style="font-size: 10px">'.$form2->field($escopoModel, 'exe_ej_id')->dropDownList($listExecutantes_ej,['prompt'=>'Selecione um Executante', 'name' => 'Escopo['.$esc["id"].'][exe_ej_id]', 'value'=>$esc['exe_ej_id']])->label(false).'</td>';
+      $contentEP = '<p class="text-justify">' .$form2->field($escopoModel, 'exe_ep_id')->dropDownList($listExecutantes_ep,['name' => 'Escopo['.$esc["id"].'][exe_ep_id]', 'value'=>$esc['exe_ep_id'], 'class'=> 'form-control popep'])->label(false) .'</p>';
+      $popEP = PopoverX::widget([
+        'placement' => PopoverX::ALIGN_TOP,
+        'content' => $contentEP,
+        'toggleButton' => ['label'=>'<i class="fa fa-caret-up" aria-hidden="true"></i>', 'class'=>'btn btn-default', 'style'=>'padding:1px'],
+      ]);
 
-      $horas_ep = '<td style="font-size: 10px">'.$form2->field($escopoModel, 'horas_ep')->textInput(['style'=>'', 'name' =>'Escopo['.$esc["id"].'][horas_ep]'])->label(false).'</td>';
+      $contentES = '<p class="text-justify">' .$form2->field($escopoModel, 'exe_es_id')->dropDownList($listExecutantes_es,['name' => 'Escopo['.$esc["id"].'][exe_es_id]', 'value'=>$esc['exe_es_id'], 'class'=> 'form-control popes'])->label(false) .'</p>';
+      $popES = PopoverX::widget([
+        'placement' => PopoverX::ALIGN_TOP,
+        'content' => $contentES,
+        'toggleButton' => ['label'=>'<i class="fa fa-caret-up" aria-hidden="true"></i>', 'class'=>'btn btn-default', 'style'=>'padding:1px'],
+      ]);
 
-      $exe_ep_id = '<td style="font-size: 10px">'.$form2->field($escopoModel, 'exe_ep_id')->dropDownList($listExecutantes_ep,['prompt'=>'Selecione um Executante', 'name' => 'Escopo['.$esc["id"].'][exe_ep_id]', 'value'=>$esc['exe_ep_id']])->label(false).'</td>';
+      $contentEE = '<p class="text-justify">' .$form2->field($escopoModel, 'exe_ee_id')->dropDownList($listExecutantes_ee,['name' => 'Escopo['.$esc["id"].'][exe_ee_id]', 'value'=>$esc['exe_ee_id'], 'class'=> 'form-control popee'])->label(false) .'</p>';
+      $popEE = PopoverX::widget([
+        'placement' => PopoverX::ALIGN_TOP,
+        'content' => $contentEE,
+        'toggleButton' => ['label'=>'<i class="fa fa-caret-up" aria-hidden="true"></i>', 'class'=>'btn btn-default', 'style'=>'padding:1px'],
+      ]);
 
-      $horas_es = '<td style="font-size: 10px">'.$form2->field($escopoModel, 'horas_es')->textInput(['style'=>'', 'name' =>'Escopo['.$esc["id"].'][horas_es]'])->label(false).'</td>';
+      $horas_tp = '<td style="font-size: 10px; padding: 1px;"><div class="row"><div class="col-md-8">'.$form2->field($escopoModel, 'horas_tp')->textInput(['style'=>'width:7em', 'name' => 'Escopo['.$esc["id"].'][horas_tp]', 'type' => 'number'])->label(false).'</div><div class="col-md-4" style="padding-left:1px">'.$popTP.'</div></td>'; 
 
-      $exe_es_id = '<td style="font-size: 10px">'.$form2->field($escopoModel, 'exe_es_id')->dropDownList($listExecutantes_es,['prompt'=>'Selecione um Executante', 'name' => 'Escopo['.$esc["id"].'][exe_es_id]', 'value'=>$esc['exe_es_id']])->label(false).'</td>';
+      echo $form2->field($escopoModel, 'exe_tp_id')->textInput(['style'=>'width:7em', 'name' => 'Escopo['.$esc["id"].'][exe_tp_id]','id' => 'escopotp-'.$esc["id"], 'type' => 'number','hidden'=>'hidden'])->label(false);
 
-      $horas_ee = '<td style="font-size: 10px">'.$form2->field($escopoModel, 'horas_ee')->textInput(['style'=>'', 'name' =>'Escopo['.$esc["id"].'][horas_ee]'])->label(false).'</td>';
+      $horas_ej = '<td style="font-size: 10px; padding: 1px;"><div class="row"><div class="col-md-8">'.$form2->field($escopoModel, 'horas_ej')->textInput(['style'=>'width:7em', 'name' =>'Escopo['.$esc["id"].'][horas_ej]', 'type' => 'number'])->label(false).'</div><div class="col-md-4" style="padding-left:1px">'.$popEJ.'</div></td>'; 
 
-      $exe_ee_id = '<td style="font-size: 10px">'.$form2->field($escopoModel, 'exe_ee_id')->dropDownList($listExecutantes_ee,['prompt'=>'Selecione um Executante', 'name' => 'Escopo['.$esc["id"].'][exe_ee_id]', 'value'=>$esc['exe_ee_id']])->label(false).'</td></tr>';
+      echo $form2->field($escopoModel, 'exe_ej_id')->textInput(['style'=>'width:7em', 'name' => 'Escopo['.$esc["id"].'][exe_ej_id]','id' => 'escopoej-'.$esc["id"], 'type' => 'number', 'hidden'=>'hidden'])->label(false);
+
+      $horas_ep = '<td style="font-size: 10px; padding: 1px;"><div class="row"><div class="col-md-8">'.$form2->field($escopoModel, 'horas_ep')->textInput(['style'=>'width:7em', 'name' =>'Escopo['.$esc["id"].'][horas_ep]', 'type' => 'number'])->label(false).'</div><div class="col-md-4" style="padding-left:1px">'.$popEP.'</div></td>';
+
+      echo $form2->field($escopoModel, 'exe_ep_id')->textInput(['style'=>'width:7em', 'name' => 'Escopo['.$esc["id"].'][exe_ep_id]','id' => 'escopoep-'.$esc["id"], 'type' => 'number', 'hidden'=>'hidden'])->label(false);
+
+      $horas_es = '<td style="font-size: 10px; padding: 1px;"><div class="row"><div class="col-md-8">'.$form2->field($escopoModel, 'horas_es')->textInput(['style'=>'width:7em', 'name' =>'Escopo['.$esc["id"].'][horas_es]', 'type' => 'number'])->label(false).'</div><div class="col-md-4" style="padding-left:1px">'.$popES.'</div></td>';
+
+      echo $form2->field($escopoModel, 'exe_es_id')->textInput(['style'=>'width:7em', 'name' => 'Escopo['.$esc["id"].'][exe_es_id]','id' => 'escopoes-'.$esc["id"], 'type' => 'number', 'hidden'=>'hidden'])->label(false);
+
+      $horas_ee = '<td style="font-size: 10px; padding: 1px;"><div class="row"><div class="col-md-8">'.$form2->field($escopoModel, 'horas_ee')->textInput(['style'=>'width:7em', 'name' =>'Escopo['.$esc["id"].'][horas_ee]', 'type' => 'number'])->label(false).'</div><div class="col-md-4" style="padding-left:1px">'.$popEE.'</div></td>';
+
+      echo $form2->field($escopoModel, 'exe_ee_id')->textInput(['style'=>'width:7em', 'name' => 'Escopo['.$esc["id"].'][exe_ee_id]','id' => 'escopoee-'.$esc["id"], 'type' => 'number', 'hidden'=>'hidden'])->label(false);
+      
 
       $disciplina_id = Yii::$app->db->createCommand('SELECT disciplina_id FROM atividademodelo WHERE id='.$esc['atividademodelo_id'])->queryScalar();
+
+      
+
+
+      $total = $esc["horas_tp"]+$esc["horas_ej"]+$esc["horas_ep"]+$esc["horas_es"]+$esc["horas_ee"];
+      $total = '<td class="total-td['.$esc['id'].']" style="font-size: 12px">'.$total.'</div>';
       
       if($disciplina_id == 1){
-        $bodyA .=  $descricao.' '.$qtd.' '.$horas_ee./*' '.$exe_ee_id.*/' '.$horas_es./*' '.$exe_es_id.*/' '.$horas_ep./*' '.$exe_ep_id.*/' '.$horas_ej./*' '.$exe_ej_id.*/' '.$horas_tp/*.' '.$exe_tp_id*/;  
+        $bodyA .=  $descricao.' '.$qtd.' '.$horas_ee./*' '.$exe_ee_id.*/' '.$horas_es./*' '.$exe_es_id.*/' '.$horas_ep./*' '.$exe_ep_id.*/' '.$horas_ej./*' '.$exe_ej_id.*/' '.$horas_tp/*.' '.$exe_tp_id*/.' '.$total;  
       }
       if($disciplina_id == 2){
-        $bodyP .=  $descricao.' '.$qtd.' '.$horas_ee./*' '.$exe_ee_id.*/' '.$horas_es./*' '.$exe_es_id.*/' '.$horas_ep./*' '.$exe_ep_id.*/' '.$horas_ej./*' '.$exe_ej_id.*/' '.$horas_tp/*.' '.$exe_tp_id*/;
+        $bodyP .=  $descricao.' '.$qtd.' '.$horas_ee./*' '.$exe_ee_id.*/' '.$horas_es./*' '.$exe_es_id.*/' '.$horas_ep./*' '.$exe_ep_id.*/' '.$horas_ej./*' '.$exe_ej_id.*/' '.$horas_tp/*.' '.$exe_tp_id*/.' '.$total;
       }
       if($disciplina_id == 3){
-        $bodyI .=  $descricao.' '.$qtd.' '.$horas_ee./*' '.$exe_ee_id.*/' '.$horas_es./*' '.$exe_es_id.*/' '.$horas_ep./*' '.$exe_ep_id.*/' '.$horas_ej./*' '.$exe_ej_id.*/' '.$horas_tp/*.' '.$exe_tp_id*/; 
+        $bodyI .=  $descricao.' '.$qtd.' '.$horas_ee./*' '.$exe_ee_id.*/' '.$horas_es./*' '.$exe_es_id.*/' '.$horas_ep./*' '.$exe_ep_id.*/' '.$horas_ej./*' '.$exe_ej_id.*/' '.$horas_tp/*.' '.$exe_tp_id*/.' '.$total; 
       }       
           
  } 
