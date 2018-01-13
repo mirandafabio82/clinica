@@ -23,7 +23,10 @@
         "kartik-v/yii2-export": "*",
         "kartik-v/yii2-widget-select2": "*",
         "kartik-v/yii2-money": "*",
-        "kartik-v/yii2-tabs-x": "*"
+        "kartik-v/yii2-tabs-x": "*",
+        "moonlandsoft/yii2-phpexcel": "*",
+        "kartik-v/yii2-mpdf": "*",
+        "mpdf/mpdf": "^7.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

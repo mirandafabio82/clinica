@@ -618,6 +618,8 @@ tbody {
      <div class="form-group">
        <?php $form2 = ActiveForm::begin(); ?>
        <?= Html::submitButton('Salvar Escopo', ['class' =>'btn btn-primary']) ?>
+
+  <input type="button" class="btn btn-primary" target="_blank" value="Gerar Relatório" onclick="window.location.href='index.php?r=projeto/gerarrelatorio&id=<?=$model->id ?>'" />
      </div>
 
 

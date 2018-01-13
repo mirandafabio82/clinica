@@ -15,7 +15,10 @@ use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 use \Datetime;
+use yii\helpers\Url;
+// use kartik\mpdf\Pdf;
 
+require_once  'C:\xampp\htdocs\hcn\vendor\autoload.php';
 /**
  * ProjetoController implements the CRUD actions for Projeto model.
  */
@@ -542,6 +545,76 @@ class ProjetoController extends Controller
         if (Yii::$app->request->isAjax) {                 
             echo json_encode(Yii::$app->db->createCommand('SELECT * FROM planta WHERE site_id='.Yii::$app->request->post()['id'])->queryAll());  
         }
+        
+    }
+
+    public function actionGerarrelatorio()
+    {
+        if($_GET['id']){
+            $projeto = Projeto::findOne($_GET['id']);
+          
+            
+            $processoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=2 AND projeto_id='.$projeto->id)->queryAll();
+            $automacaoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=1 AND projeto_id='.$projeto->id)->queryAll();
+            $instrumentacaoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=3 AND projeto_id='.$projeto->id)->queryAll();
+
+            /*return $this->render('_planilha', [
+                'projeto' => $projeto,
+            ]);*/
+
+            $capa = $this->renderPartial('relatorio\_capa', [
+                'projeto' => $projeto]);
+
+            $as = $this->renderPartial('relatorio\_as', [
+                'projeto' => $projeto]);
+
+            $processo = $this->renderPartial('relatorio\_processo', [
+                'projeto' => $projeto,
+                'escopos' => $processoArray]);
+
+            $automacao = $this->renderPartial('relatorio\_automacao', [
+                'projeto' => $projeto,
+                'escopos' => $automacaoArray]);
+
+            $instrumentacao = $this->renderPartial('relatorio\_instrumentacao', [
+                'projeto' => $projeto,
+                'escopos' => $instrumentacaoArray]);
+
+            $resumo = $this->renderPartial('relatorio\_resumo', [
+                'projeto' => $projeto]);
+
+            $ld_preliminar = $this->renderPartial('relatorio\_ldpreliminar', [
+                'projeto' => $projeto]);
+
+
+            
+            $mpdf = new \Mpdf\Mpdf();
+            $mpdf->WriteHTML($capa);
+            $mpdf->AddPage();
+            $mpdf->WriteHTML($as);
+            if(!empty($processoArray)){
+                $mpdf->AddPage();
+                $mpdf->WriteHTML($processo);
+            }
+            if(!empty($automacaoArray)){
+                $mpdf->AddPage();
+                $mpdf->WriteHTML($automacao);
+            }
+            if(!empty($instrumentacaoArray)){
+                $mpdf->AddPage();
+                $mpdf->WriteHTML($instrumentacao);
+            }
+            $mpdf->AddPage();
+            $mpdf->WriteHTML($resumo);
+            $mpdf->AddPage();
+            $mpdf->WriteHTML($ld_preliminar);
+
+            $mpdf->Output();
+        }
+
+            
+     
+        
         
     }
 }
