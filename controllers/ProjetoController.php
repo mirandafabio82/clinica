@@ -157,6 +157,14 @@ class ProjetoController extends Controller
                     $model->proposta = '(AS)'.'-'.$model->codigo.'-'.$model->site;
                 }
                 
+                if(!empty($_POST['Projeto']['data_proposta'])){
+                    $dat = DateTime::createFromFormat('d/m/Y', $_POST['Projeto']['data_proposta']);          
+                    $model->data_proposta = date_format($dat, 'Y-m-d');
+                }
+                if(!empty($_POST['Projeto']['data_pendencia'])){
+                    $dat = DateTime::createFromFormat('d/m/Y', $_POST['Projeto']['data_pendencia']);          
+                    $model->data_pendencia = date_format($dat, 'Y-m-d');
+                }
 
                 if($model->save()){       
 
@@ -244,10 +252,13 @@ class ProjetoController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id); 
+        
         if(!empty($model->data_pendencia))
             $model->data_pendencia = date_format(DateTime::createFromFormat('Y-m-d', $model->data_pendencia), 'd/m/Y');
         if(!empty($model->data_entrega))
             $model->data_entrega = date_format(DateTime::createFromFormat('Y-m-d', $model->data_entrega), 'd/m/Y');
+        if(!empty($model->data_proposta))
+            $model->data_proposta = date_format(DateTime::createFromFormat('Y-m-d', $model->data_proposta), 'd/m/Y');        
 
         $searchModel = new ProjetoSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -377,6 +388,14 @@ class ProjetoController extends Controller
                 }
                 else{
                     $model->proposta = '(AS)'.'-'.$model->codigo.'-'.$model->site;
+                }
+                if(!empty($_POST['Projeto']['data_proposta'])){
+                    $dat = DateTime::createFromFormat('d/m/Y', $_POST['Projeto']['data_proposta']);          
+                    $model->data_proposta = date_format($dat, 'Y-m-d');
+                }
+                if(!empty($_POST['Projeto']['data_pendencia'])){
+                    $dat = DateTime::createFromFormat('d/m/Y', $_POST['Projeto']['data_pendencia']);          
+                    $model->data_pendencia = date_format($dat, 'Y-m-d');
                 }
 
                 if($model->save()){                        
@@ -558,15 +577,19 @@ class ProjetoController extends Controller
             $automacaoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=1 AND projeto_id='.$projeto->id)->queryAll();
             $instrumentacaoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=3 AND projeto_id='.$projeto->id)->queryAll();
 
+            $tipoExecutanteArray = Yii::$app->db->createCommand('SELECT * FROM tipo_executante')->queryAll();
+
             /*return $this->render('_planilha', [
                 'projeto' => $projeto,
             ]);*/
+          
 
             $capa = $this->renderPartial('relatorio\_capa', [
                 'projeto' => $projeto]);
 
             $as = $this->renderPartial('relatorio\_as', [
-                'projeto' => $projeto]);
+                'projeto' => $projeto,
+                'tipo_executante' => $tipoExecutanteArray]);
 
             $processo = $this->renderPartial('relatorio\_processo', [
                 'projeto' => $projeto,

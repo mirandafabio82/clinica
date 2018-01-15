@@ -20,16 +20,16 @@ th, td {
 <table border="1" align="center">
 <tbody>
       <tr>
-            <td width="64">REV.</td>
-            <td width="73">DATA</td>
+            <td width="64" align="center">REV.</td>
+            <td width="73" align="center">DATA</td>
             <td colspan="7" width="404">DESCRIÇÃO</td>
-            <td width="64">POR</td>
+            <td width="64" align="center">POR</td>
       </tr>
       <tr>
-            <td><?=$projeto->rev_proposta?></td>
-            <td><?=$projeto->data_proposta?></td>
+            <td align="center"><?=$projeto->rev_proposta?></td>
+            <td><?=date_format(DateTime::createFromFormat('Y-m-d', $projeto->data_proposta), 'd/m/Y');?></td>
             <td colspan="7">Emiss&atilde;o Inicial</td>
-            <td>HCN</td>
+            <td align="center">HCN</td>
       </tr>
       <tr>
             <td>&nbsp;</td>
