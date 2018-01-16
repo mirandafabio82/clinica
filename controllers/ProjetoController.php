@@ -577,19 +577,35 @@ class ProjetoController extends Controller
             $automacaoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=1 AND projeto_id='.$projeto->id)->queryAll();
             $instrumentacaoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=3 AND projeto_id='.$projeto->id)->queryAll();
 
-            $tipoExecutanteArray = Yii::$app->db->createCommand('SELECT * FROM tipo_executante')->queryAll();
+            $escopos = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$projeto->id)->queryAll();
+            
+            $basico = '';
+            $detalhamento = '';
+            $config = '';
 
-            /*return $this->render('_planilha', [
-                'projeto' => $projeto,
-            ]);*/
-          
+            foreach ($escopos as $key => $escopo) {
+                if($escopo['escopopadrao_id']==1)
+                    $basico = 'checked="checked"';
+                if($escopo['escopopadrao_id']==2)
+                    $detalhamento = 'checked="checked"';
+                if($escopo['escopopadrao_id']==3)
+                    $config = 'checked="checked"';
+            }
+
+            $tipoExecutanteArray = Yii::$app->db->createCommand('SELECT * FROM tipo_executante')->queryAll();
 
             $capa = $this->renderPartial('relatorio\_capa', [
                 'projeto' => $projeto]);
 
             $as = $this->renderPartial('relatorio\_as', [
                 'projeto' => $projeto,
-                'tipo_executante' => $tipoExecutanteArray]);
+                'tipo_executante' => $tipoExecutanteArray,
+                'processo' => $processoArray,
+                'automacao' => $automacaoArray,
+                'instrumentacao' => $instrumentacaoArray,
+                'basico' => $basico,
+                'detalhamento' => $detalhamento,
+                'config' => $config]);
 
             $processo = $this->renderPartial('relatorio\_processo', [
                 'projeto' => $projeto,

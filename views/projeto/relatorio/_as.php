@@ -31,7 +31,7 @@ th, td {
             <td style="font-size: 8pt" align="center"></td>
             <td style="font-size: 8pt" align="center"><?=$projeto->nome ?></td>
             <td style="font-size: 8pt" align="center"></td>
-            <td style="font-size: 8pt" align="center"><?=$projeto->data_proposta ?></td>
+            <td style="font-size: 8pt" align="center"><?=date_format(DateTime::createFromFormat('Y-m-d', $projeto->data_proposta), 'd/m/Y'); ?></td>
             <td style="font-size: 8pt" align="center">HCN</td>
             <td style="font-size: 8pt" align="center"><?=$projeto->rev_proposta ?></td>            
       </tr>
@@ -73,8 +73,8 @@ th, td {
             <td style="font-size: 8pt" align="center" colspan="3">VALOR TOTAL</td>
       </tr>
       <tr>
-            <td style="font-size: 8pt" align="center" colspan="2">ADMINISTRAÇÃO PREÇO GLOBAL</td> 
-            <td style="font-size: 8pt" align="center" colspan="2"><input type="checkbox" name="vehicle" value="Bike">BÁSICO <input type="checkbox" name="vehicle" value="Bike">DETALHAMENTO  <input type="checkbox" name="vehicle" value="Bike">CONFIGURAÇÃO</td>                       
+            <td style="font-size: 8pt" align="center" colspan="2"><input type="checkbox"  >ADMINISTRAÇÃO <input type="checkbox"  checked="checked">PREÇO GLOBAL</td> 
+            <td style="font-size: 8pt" align="center" colspan="2"><input type="checkbox"  <?=$basico ?>>BÁSICO <input type="checkbox"  <?=$detalhamento ?>>DETALHAMENTO  <input type="checkbox"  <?=$config ?>>CONFIGURAÇÃO</td>                       
             <td style="font-size: 8pt" align="center" colspan="3"><?=$projeto->valor_proposta ?> (Valor por extenso)</td>
       </tr>
       </tbody>
@@ -83,7 +83,7 @@ th, td {
       <table border="1" align="center" width="100%" style="margin-top: 0.5em">
 	  <tbody>
       <tr style="background-color: #d3d3d3;">
-            <td style="font-size: 8pt" align="center" colspan="7">DETALHAMENTO DOS CUSTOS</td>                        
+            <td style="font-size: 8pt" align="center" colspan="8">DETALHAMENTO DOS CUSTOS</td>                        
       </tr>
       <tr style="background-color: #d3d3d3;">
             <td style="font-size: 8pt" >Categoria Profissional</td>  
@@ -94,7 +94,45 @@ th, td {
             <td style="font-size: 8pt" align="center" >TP</td>    
             <td style="font-size: 8pt" align="center" colspan="2">TOTAL</td>                   
       </tr>
-      
+      <?php 
+      $p_horas_ee=0; $p_horas_es=0; $p_horas_ep=0; $p_horas_ej=0; $p_horas_tp=0; 
+      foreach ($processo as $key => $proc) {
+      		$p_horas_ee += $proc['horas_ee'];
+      		$p_horas_es += $proc['horas_es'];
+      		$p_horas_ep += $proc['horas_ep'];
+      		$p_horas_ej += $proc['horas_ej'];
+      		$p_horas_tp += $proc['horas_tp'];
+      }
+
+      $i_horas_ee=0; $i_horas_es=0; $i_horas_ep=0; $i_horas_ej=0; $i_horas_tp=0; 
+      foreach ($instrumentacao as $key => $inst) {
+      		$i_horas_ee += $inst['horas_ee'];
+      		$i_horas_es += $inst['horas_es'];
+      		$i_horas_ep += $inst['horas_ep'];
+      		$i_horas_ej += $inst['horas_ej'];
+      		$i_horas_tp += $inst['horas_tp'];
+      }
+
+      $a_horas_ee=0; $a_horas_es=0; $a_horas_ep=0; $a_horas_ej=0; $a_horas_tp=0; 
+      foreach ($automacao as $key => $aut) {
+      		$a_horas_ee += $aut['horas_ee'];
+      		$a_horas_es += $aut['horas_es'];
+      		$a_horas_ep += $aut['horas_ep'];
+      		$a_horas_ej += $aut['horas_ej'];
+      		$a_horas_tp += $aut['horas_tp'];
+      }
+
+      $p_tot = $p_horas_ee+$p_horas_es+$p_horas_ep+$p_horas_ej+$p_horas_tp;
+      $i_tot = $i_horas_ee+$i_horas_es+$i_horas_ep+$i_horas_ej+$i_horas_tp;
+      $a_tot = $a_horas_ee+$a_horas_es+$a_horas_ep+$a_horas_ej+$a_horas_tp;
+
+      $money_proc = $p_horas_ee*$tipo_executante[4]['valor_hora']+$p_horas_es*$tipo_executante[3]['valor_hora']+$p_horas_ep*$tipo_executante[2]['valor_hora']+$p_horas_ej*$tipo_executante[1]['valor_hora']+$p_horas_tp*$tipo_executante[0]['valor_hora'];
+
+      $money_inst = $i_horas_ee*$tipo_executante[4]['valor_hora']+$i_horas_es*$tipo_executante[3]['valor_hora']+$i_horas_ep*$tipo_executante[2]['valor_hora']+$i_horas_ej*$tipo_executante[1]['valor_hora']+$i_horas_tp*$tipo_executante[0]['valor_hora'];
+
+      $money_aut = $a_horas_ee*$tipo_executante[4]['valor_hora']+$a_horas_es*$tipo_executante[3]['valor_hora']+$a_horas_ep*$tipo_executante[2]['valor_hora']+$a_horas_ej*$tipo_executante[1]['valor_hora']+$a_horas_tp*$tipo_executante[0]['valor_hora'];
+      ?>
+
       <tr style="background-color: #d3d3d3;">
             <td style="font-size: 8pt" >PU Médios (R$)</td>  
             <td style="font-size: 8pt" align="center" ><?=$tipo_executante[4]['valor_hora'] ?></td>
@@ -107,13 +145,13 @@ th, td {
       </tr>
       <tr>
             <td style="font-size: 8pt" >PROCESSO</td>  
-            <td style="font-size: 8pt" align="center" ><?=$tipo_executante[4]['valor_hora'] ?></td>
-            <td style="font-size: 8pt" align="center" ><?=$tipo_executante[3]['valor_hora'] ?></td>
-            <td style="font-size: 8pt" align="center" ><?=$tipo_executante[2]['valor_hora'] ?></td>
-            <td style="font-size: 8pt" align="center" ><?=$tipo_executante[1]['valor_hora'] ?></td> 
-            <td style="font-size: 8pt" align="center" ><?=$tipo_executante[0]['valor_hora'] ?></td>    
-            <td style="font-size: 8pt" align="center" >H/h</td> 
-            <td style="font-size: 8pt" align="center" ></td>                  
+            <td style="font-size: 8pt" align="center" ><?=$p_horas_ee ?></td>
+            <td style="font-size: 8pt" align="center" ><?=$p_horas_es ?></td>
+            <td style="font-size: 8pt" align="center" ><?=$p_horas_ep ?></td>
+            <td style="font-size: 8pt" align="center" ><?=$p_horas_ej ?></td> 
+            <td style="font-size: 8pt" align="center" ><?=$p_horas_tp ?></td>    
+            <td style="font-size: 8pt" align="center" ><?=$p_tot?></td> 
+            <td style="font-size: 8pt" align="center" ><?=$money_proc ?></td>                  
       </tr>
       <tr>
             <td style="font-size: 8pt" >TUBULAÇÃO</td>  
@@ -147,23 +185,23 @@ th, td {
       </tr>
       <tr>
             <td style="font-size: 8pt" >INSTRUMENTAÇÃO</td>  
-            <td style="font-size: 8pt" align="center" ><?=$tipo_executante[4]['valor_hora'] ?></td>
-            <td style="font-size: 8pt" align="center" ><?=$tipo_executante[3]['valor_hora'] ?></td>
-            <td style="font-size: 8pt" align="center" ><?=$tipo_executante[2]['valor_hora'] ?></td>
-            <td style="font-size: 8pt" align="center" ><?=$tipo_executante[1]['valor_hora'] ?></td> 
-            <td style="font-size: 8pt" align="center" ><?=$tipo_executante[0]['valor_hora'] ?></td>    
-            <td style="font-size: 8pt" align="center" >H/h</td> 
-            <td style="font-size: 8pt" align="center" ></td>                  
+            <td style="font-size: 8pt" align="center" ><?=$i_horas_ee ?></td>
+            <td style="font-size: 8pt" align="center" ><?=$i_horas_es ?></td>
+            <td style="font-size: 8pt" align="center" ><?=$i_horas_ep ?></td>
+            <td style="font-size: 8pt" align="center" ><?=$i_horas_ej ?></td> 
+            <td style="font-size: 8pt" align="center" ><?=$i_horas_tp ?></td>    
+            <td style="font-size: 8pt" align="center" ><?=$i_tot?></td> 
+            <td style="font-size: 8pt" align="center" ><?=$money_inst ?></td>                  
       </tr>
       <tr>
             <td style="font-size: 8pt" >AUTOMAÇÃO</td>  
-            <td style="font-size: 8pt" align="center" ><?=$tipo_executante[4]['valor_hora'] ?></td>
-            <td style="font-size: 8pt" align="center" ><?=$tipo_executante[3]['valor_hora'] ?></td>
-            <td style="font-size: 8pt" align="center" ><?=$tipo_executante[2]['valor_hora'] ?></td>
-            <td style="font-size: 8pt" align="center" ><?=$tipo_executante[1]['valor_hora'] ?></td> 
-            <td style="font-size: 8pt" align="center" ><?=$tipo_executante[0]['valor_hora'] ?></td>    
-            <td style="font-size: 8pt" align="center" >H/h</td> 
-            <td style="font-size: 8pt" align="center" ></td>                  
+            <td style="font-size: 8pt" align="center" ><?=$a_horas_ee ?></td>
+            <td style="font-size: 8pt" align="center" ><?=$a_horas_es ?></td>
+            <td style="font-size: 8pt" align="center" ><?=$a_horas_ep ?></td>
+            <td style="font-size: 8pt" align="center" ><?=$a_horas_ej ?></td> 
+            <td style="font-size: 8pt" align="center" ><?=$a_horas_tp ?></td>    
+            <td style="font-size: 8pt" align="center" ><?=$a_tot?></td> 
+            <td style="font-size: 8pt" align="center" ><?=$money_aut ?></td>                  
       </tr>
       <tr>
             <td style="font-size: 8pt" >CALDEIRARIA</td>  
@@ -187,13 +225,13 @@ th, td {
       </tr>
       <tr style="background-color: #d3d3d3;"> 
             <td style="font-size: 8pt" >TOTAL DISCIPLINAS</td>  
-            <td style="font-size: 8pt" align="center" ></td>
-            <td style="font-size: 8pt" align="center" ></td>
-            <td style="font-size: 8pt" align="center" ></td>
-            <td style="font-size: 8pt" align="center" ></td> 
-            <td style="font-size: 8pt" align="center" ></td>    
-            <td style="font-size: 8pt" align="center" ></td> 
-            <td style="font-size: 8pt" align="center" ></td>              
+            <td style="font-size: 8pt" align="center" ><?=$p_horas_ee+$i_horas_ee+$a_horas_ee?></td>
+            <td style="font-size: 8pt" align="center" ><?=$p_horas_es+$i_horas_es+$a_horas_es?></td>
+            <td style="font-size: 8pt" align="center" ><?=$p_horas_ep+$i_horas_ep+$a_horas_ep?></td>
+            <td style="font-size: 8pt" align="center" ><?=$p_horas_ej+$i_horas_ej+$a_horas_ej?></td> 
+            <td style="font-size: 8pt" align="center" ><?=$p_horas_tp+$i_horas_tp+$a_horas_tp?></td>    
+            <td style="font-size: 8pt" align="center" ><?=$p_tot+$i_tot+$a_tot ?></td> 
+            <td style="font-size: 8pt" align="center" ><?=$money_proc+$money_inst+$money_aut ?></td>              
       </tr>
       <tr> 
             <td style="font-size: 8pt" colspan="6">SUB-CONTRATAÇÃO</td>              
@@ -201,7 +239,7 @@ th, td {
       </tr>
       <tr style="background-color: #d3d3d3;"> 
             <td style="font-size: 8pt" colspan="7">SUBTOTAL</td>              
-            <td style="font-size: 8pt" align="center" ></td>              
+            <td style="font-size: 8pt" align="center" colspan="1"><?=$money_proc+$money_inst+$money_aut ?></td>              
       </tr>
       
 	</tbody>
@@ -239,14 +277,14 @@ th, td {
 	  <tbody>
 	<tbody>
 	<tr style="background-color: #d3d3d3;">
-            <td style="font-size: 8pt" colspan="10">DOCUMENTOS QUE SOLICITARAM A MUDANÇA DE OBJETO:</td>            
+            <td style="font-size: 8pt" colspan="5">DOCUMENTOS QUE SOLICITARAM A MUDANÇA DE OBJETO:</td>            
      </tr>
      <tr>
-            <td style="font-size: 8pt" align="center">E-MAIL</td> 
-            <td style="font-size: 8pt" align="center">DR-____</td>
-            <td style="font-size: 8pt" align="center">NR-____</td> 
-            <td style="font-size: 8pt" align="center">CT-____</td>        
-            <td style="font-size: 8pt" align="center">OUTROS</td>  
+            <td style="font-size: 8pt" align="center"><input type="checkbox"> E-MAIL</td> 
+            <td style="font-size: 8pt" align="center"><input type="checkbox"> DR-____</td>
+            <td style="font-size: 8pt" align="center"><input type="checkbox"> NR-____</td> 
+            <td style="font-size: 8pt" align="center"><input type="checkbox"> CT-____</td>        
+            <td style="font-size: 8pt" align="center"><input type="checkbox"> OUTROS</td>  
      </tr>
 	</tbody>
       </table>
@@ -254,20 +292,20 @@ th, td {
       <table border="1" align="center" width="100%" style="margin-top: 0.5em">
 	  <tbody>
 	<tr style="background-color: #d3d3d3;">
-            <td style="font-size: 8pt" align="center">Orçamento do Empreendimento (Devido esta M.O.)</td>
-            <td style="font-size: 8pt" align="center">Alterações no Cronograma</td>            
+            <td style="font-size: 8pt" align="center"> Orçamento do Empreendimento (Devido esta M.O.)</td>
+            <td style="font-size: 8pt" align="center"> Alterações no Cronograma</td>            
      </tr>
      <tr>
-            <td style="font-size: 8pt" >Sujeito a Acréscimo</td> 
-            <td style="font-size: 8pt" >Prazos não sofrem Alterações</td>            
+            <td style="font-size: 8pt" ><input type="checkbox"> Sujeito a Acréscimo</td> 
+            <td style="font-size: 8pt" ><input type="checkbox"> Prazos não sofrem Alterações</td>            
      </tr>
      <tr>
-            <td style="font-size: 8pt" >Sujeito a Reduções</td> 
-            <td style="font-size: 8pt" >Prazos Parciais Alterados - Prazo Final Mantido</td>            
+            <td style="font-size: 8pt" ><input type="checkbox"> Sujeito a Reduções</td> 
+            <td style="font-size: 8pt" ><input type="checkbox"> Prazos Parciais Alterados - Prazo Final Mantido</td>            
      </tr>
      <tr>
-            <td style="font-size: 8pt" >Esta M.O. não interfere no Budget</td> 
-            <td style="font-size: 8pt" >Prazos Final Alterado</td>            
+            <td style="font-size: 8pt" ><input type="checkbox"> Esta M.O. não interfere no Budget</td> 
+            <td style="font-size: 8pt" ><input type="checkbox"> Prazos Final Alterado</td>            
      </tr>
 	</tbody>
       </table>
@@ -275,22 +313,22 @@ th, td {
       <table border="1" align="center" width="100%" style="margin-top: 0.5em">
 	  <tbody>
 	<tr>
-            <td style="font-size: 8pt" colspan="10">ANEXOS</td>            
+            <td style="font-size: 8pt" colspan="2">ANEXOS</td>            
      </tr>
 	<tr>
-            <td style="font-size: 8pt" >LDP</td>
-            <td style="font-size: 8pt" >Hh POR ATIVIDADE</td>            
+            <td style="font-size: 8pt" ><input type="checkbox" checked="checked"> LDP</td>
+            <td style="font-size: 8pt" ><input type="checkbox" checked="checked"> Hh POR ATIVIDADE</td>            
      </tr>
      <tr>
-            <td style="font-size: 8pt" >CRONOGRAMA</td> 
-            <td style="font-size: 8pt" >ASC (AUTORIZAÇÃO DE SUBCONTRATAÇÃO)</td>            
+            <td style="font-size: 8pt" ><input type="checkbox"> CRONOGRAMA</td> 
+            <td style="font-size: 8pt" ><input type="checkbox"> ASC (AUTORIZAÇÃO DE SUBCONTRATAÇÃO)</td>            
      </tr>
      <tr>
-            <td style="font-size: 8pt" >PLANO DE PROJETO</td> 
-            <td style="font-size: 8pt" >OUTRO</td>            
+            <td style="font-size: 8pt" ><input type="checkbox"> PLANO DE PROJETO</td> 
+            <td style="font-size: 8pt" ><input type="checkbox"> OUTRO</td>            
      </tr>
      <tr>
-            <td style="font-size: 8pt" >GSS Nº </td> 
+            <td style="font-size: 8pt" ><input type="checkbox"> GSS Nº </td> 
             <td style="font-size: 8pt" ></td>            
      </tr>
 	</tbody>
@@ -299,7 +337,7 @@ th, td {
       <table border="1" align="center" width="100%" style="margin-top: 0.5em">
 	  <tbody>
 	<tr>
-            <td style="font-size: 8pt" colspan="10">DIAGRAMA DE REDE</td>            
+            <td style="font-size: 8pt" colspan="2">DIAGRAMA DE REDE</td>            
      </tr>
 	<tr>
             <td style="font-size: 8pt" >PROCESSO: </td>
