@@ -567,6 +567,9 @@ tbody {
         <div class="col-md-2">
           <?= $form->field($model, 'total_horas')->textInput(['maxlength' => true]) ?>
         </div>
+        <div class="col-md-2">
+          <?= $form->field($model, 'contrato')->textInput(['maxlength' => true]) ?>
+        </div>
       </div>
     
 
@@ -619,7 +622,7 @@ tbody {
        <?php $form2 = ActiveForm::begin(); ?>
        <?= Html::submitButton('Salvar Escopo', ['class' =>'btn btn-primary']) ?>
 
-      <?= Html::a('<span class="btn-label">Gerar Relatório</span>', ['gerarrelatorio', 'id' => $model->id], ['class' => 'btn btn-primary', 'target'=>'_blank']) ?>
+      <?= Html::a('<span class="btn-label">Gerar Relatório</span>', ['gerarrelatorio', 'id' => $model->id], ['class' => 'btn btn-primary', 'target'=>'_blank', 'style'=> 'float:right']) ?>
   
      </div>
 
@@ -764,6 +767,19 @@ tbody {
     $automacao = '<div style="height: 30em; overflow-y: scroll;">'.$header.''.$bodyA.'</table></div>';
     $processo = '<div style="height: 30em; overflow-y: scroll;">'.$header.''.$bodyP.'</table></div>';
     $instrumentacao = '<div style="height: 30em; overflow-y: scroll;">'.$header.''.$bodyI.'</table></div>';
+    $as = '<div>'. $form->field($model, "nota_geral")->textArea() .'</div>';
+    $resumo = '<div>'. $form->field($model, "resumo_escopo")->textArea() .'</div>
+                <div>'. $form->field($model, "resumo_exclusoes")->textArea() .'</div>
+                <div>'. $form->field($model, "resumo_premissas")->textArea() .'</div>
+                <div>'. $form->field($model, "resumo_restricoes")->textArea() .'</div>
+                <div>'. $form->field($model, "resumo_normas")->textArea() .'</div>
+                <div>'. $form->field($model, "resumo_documentos")->textArea() .'</div>
+                <div>'. $form->field($model, "resumo_itens")->textArea() .'</div>
+                <div>'. $form->field($model, "resumo_prazo")->textArea() .'</div>
+                <div>'. $form->field($model, "resumo_observacoes")->textArea() .'</div>
+    ';
+    $ld_preliminar = '';
+
 
     if(!empty($bodyA))
       $visibleA = true;
@@ -795,6 +811,18 @@ $items = [
     'label'=>'Instrumentação',
     'content'=>$instrumentacao, 
     'visible' => $visibleI       
+],
+[
+    'label'=>'AS',
+    'content'=>$as,        
+],
+[
+    'label'=>'Resumo',
+    'content'=>$resumo,        
+],
+[
+    'label'=>'LD-Preliminar',
+    'content'=>$ld_preliminar,        
 ],
 /*[
     'label'=>'<i class="glyphicon glyphicon-king"></i> Disabled',

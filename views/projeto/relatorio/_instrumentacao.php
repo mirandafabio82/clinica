@@ -10,7 +10,7 @@ th, td {
 </style>
 
 <img src="resources/dist/img/logo_hcn.png" alt="User Image" style="width: 8em">
-<img src="resources/dist/img/logo_clientes/brasken_logo.png" alt="User Image" style="float: right;width: 10em">
+<img src="logos/<?= Yii::$app->db->createCommand('SELECT cliente.logo FROM cliente JOIN projeto ON cliente.id=projeto.cliente_id WHERE projeto.cliente_id='.$projeto->cliente_id)->queryScalar()?>" alt="User Image" style="float: right;width: 10em">
 
 <div style="margin-top:-3em;font-size: 10pt;font-family: arial; font-weight: bold" line-height= "2em" align="center">ANEXO III </div>
 <div style="font-size: 10pt;font-family: arial; font-weight: bold;" line-height= "2em" align="center">ESTIMATIVA DE CUSTO POR ESPECIALIDADE</div>

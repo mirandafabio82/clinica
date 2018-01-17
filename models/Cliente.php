@@ -63,7 +63,8 @@ class Cliente extends \yii\db\ActiveRecord
             'bairro' => 'Bairro',
             'cep' => 'CEP',
             'email' => 'Email',
-            'insc_municipal' => 'Insc. Municipal'
+            'insc_municipal' => 'Insc. Municipal',
+            'logo' => 'Logo'
         ];
     }
 

@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\web\UploadedFile;
 /**
  * ClienteController implements the CRUD actions for Cliente model.
  */
@@ -82,6 +83,20 @@ class ClienteController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+              if(UploadedFile::getInstance($model,'logo') != null){
+
+                    $nomeOriginal = UploadedFile::getInstance($model,'logo')->name;
+                    $extensao = explode('.', $nomeOriginal)[1];
+                    
+                    $model->logo = UploadedFile::getInstance($model,'logo');                
+                    $model->logo->name = $model->logo->name;     
+
+                    $fileName = $model->id;  
+                    
+                    $model->logo->saveAs(Yii::$app->basePath.'/web/logos/'.$fileName.'.'.$extensao);                
+                    $model->logo = $fileName.'.'.$extensao;
+                }
+                $model->save();
             return $this->redirect(['create']);
         } else {
             return $this->render('create', [
@@ -105,7 +120,21 @@ class ClienteController extends Controller
         $searchModel = new ClienteSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) ) {
+           if(UploadedFile::getInstance($model,'logo') != null){
+
+                    $nomeOriginal = UploadedFile::getInstance($model,'logo')->name;
+                    $extensao = explode('.', $nomeOriginal)[1];
+                    
+                    $model->logo = UploadedFile::getInstance($model,'logo');                
+                    $model->logo->name = $model->logo->name;     
+
+                    $fileName = $model->id;  
+                    
+                    $model->logo->saveAs(Yii::$app->basePath.'/web/logos/'.$fileName.'.'.$extensao);                
+                    $model->logo = $fileName.'.'.$extensao;
+                }
+                $model->save();
             return $this->redirect(['create']);
         } else {
             return $this->render('update', [

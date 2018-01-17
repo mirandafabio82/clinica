@@ -10,7 +10,7 @@ th, td {
 </style>
 
 <img src="resources/dist/img/logo_hcn.png" alt="User Image" style="width: 8em">
-<img src="resources/dist/img/logo_clientes/brasken_logo.png" alt="User Image" style="float: right;width: 10em">
+<img src="logos/<?= Yii::$app->db->createCommand('SELECT cliente.logo FROM cliente JOIN projeto ON cliente.id=projeto.cliente_id WHERE projeto.cliente_id='.$projeto->cliente_id)->queryScalar()?>" alt="User Image" style="float: right;width: 10em">
 
 <div style="margin-top:7em;font-size: 30pt;font-family: arial" line-height= "2em" align="center">Autorização de Serviço </div>
 <div style="margin-top:2em;font-size: 15pt;font-family: arial" align="center">Nº HCN <?=$projeto->proposta?> </div>

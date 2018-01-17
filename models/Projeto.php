@@ -144,6 +144,17 @@ class Projeto extends \yii\db\ActiveRecord
             'documentos' => 'Qtd Documentos',
             'data_pendencia' => 'Data Resp Pendência',
             'tipo' => '',
+            'contrato'=> 'Contrato Nº',
+            'nota_geral' => 'Notas Gerais',
+            'resumo_escopo' => '1. ESCOPO',
+            'resumo_exclusoes' =>'2. EXCLUSÕES DE ESCOPO',
+            'resumo_premissas' =>'3. PREMISSAS ADOTADAS',
+            'resumo_restricoes' =>'4. RESTRIÇÕES',
+            'resumo_normas' =>'5. NORMAS E ESPECIFICAÇÕES A SEREM UTILIZADAS',
+            'resumo_documentos' =>'6. DOCUMENTOS DE REFÊRENCIA',
+            'resumo_itens' =>'7. ITENS DE COMPRA',
+            'resumo_prazo' =>'8. PRAZO',
+            'resumo_observacoes' =>'OBSERVAÇÕES'
             
         ];
     }

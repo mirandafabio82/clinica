@@ -350,7 +350,7 @@ class ProjetoController extends Controller
 
          //atualizando os valores de hora e executante do escopo
         if(isset($_POST['Escopo'])){
-            
+
             $totalHoras = 0;
 
             foreach ($_POST['Escopo'] as $key => $esc) {
@@ -373,6 +373,22 @@ class ProjetoController extends Controller
                     $escopo->setAttributes($_POST['Escopo'][$key]);
                     $escopo->save();
                 }
+            }
+            //salva resumo e outras abas
+            if(isset($_POST['Projeto'])){
+              
+                $model->setAttributes($_POST['Projeto']);
+                $model->nota_geral = $_POST['Projeto']['nota_geral'];
+                $model->resumo_escopo = $_POST['Projeto']['resumo_escopo'];
+                $model->resumo_exclusoes = $_POST['Projeto']['resumo_exclusoes'];
+                $model->resumo_premissas = $_POST['Projeto']['resumo_premissas'];
+                $model->resumo_restricoes = $_POST['Projeto']['resumo_restricoes'];
+                $model->resumo_normas = $_POST['Projeto']['resumo_normas'];
+                $model->resumo_documentos = $_POST['Projeto']['resumo_documentos'];
+                $model->resumo_itens = $_POST['Projeto']['resumo_itens'];
+                $model->resumo_prazo = $_POST['Projeto']['resumo_prazo'];
+                $model->resumo_observacoes = $_POST['Projeto']['resumo_observacoes'];
+                $model->save();
             }
            
         }

@@ -115,6 +115,10 @@ $this->registerJs("
                     <?= $form->field($model, 'insc_municipal')->textInput(['maxlength' => true])  ?>
                 </div>
 
+                <div class="col-md-2">
+                    <?= $form->field($model, 'logo')->fileInput(); ?>
+                </div>
+
             </div>
             <div class="form-group">
                 <?= Html::submitButton($model->isNewRecord ? 'Cadastrar' : 'Atualizar', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
