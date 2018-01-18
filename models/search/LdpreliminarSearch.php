@@ -5,7 +5,7 @@ namespace app\models\search;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\LdPreliminar;
+use app\models\Ldpreliminar;
 
 /**
  * LdPreliminarSearch represents the model behind the search form of `app\models\LdPreliminar`.
@@ -41,7 +41,7 @@ class LdpreliminarSearch extends LdPreliminar
      */
     public function search($params)
     {
-        $query = LdPreliminar::find();
+        $query = Ldpreliminar::find();
 
         // add conditions that should always apply here
 

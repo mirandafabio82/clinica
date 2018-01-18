@@ -20,7 +20,7 @@ use \Datetime;
 use yii\helpers\Url;
 // use kartik\mpdf\Pdf;
 
-require_once  'C:\xampp\htdocs\hcn\vendor\autoload.php';
+//require_once  'C:\xampp\htdocs\hcn\vendor\autoload.php';
 /**
  * ProjetoController implements the CRUD actions for Projeto model.
  */
@@ -661,10 +661,10 @@ class ProjetoController extends Controller
 
             $tipoExecutanteArray = Yii::$app->db->createCommand('SELECT * FROM tipo_executante')->queryAll();
 
-            $capa = $this->renderPartial('relatorio\_capa', [
+            $capa = $this->renderPartial('relatorio/_capa', [
                 'projeto' => $projeto]);
 
-            $as = $this->renderPartial('relatorio\_as', [
+            $as = $this->renderPartial('relatorio/_as', [
                 'projeto' => $projeto,
                 'tipo_executante' => $tipoExecutanteArray,
                 'processo' => $processoArray,
@@ -674,22 +674,22 @@ class ProjetoController extends Controller
                 'detalhamento' => $detalhamento,
                 'config' => $config]);
 
-            $processo = $this->renderPartial('relatorio\_processo', [
+            $processo = $this->renderPartial('relatorio/_processo', [
                 'projeto' => $projeto,
                 'escopos' => $processoArray]);
 
-            $automacao = $this->renderPartial('relatorio\_automacao', [
+            $automacao = $this->renderPartial('relatorio/_automacao', [
                 'projeto' => $projeto,
                 'escopos' => $automacaoArray]);
 
-            $instrumentacao = $this->renderPartial('relatorio\_instrumentacao', [
+            $instrumentacao = $this->renderPartial('relatorio/_instrumentacao', [
                 'projeto' => $projeto,
                 'escopos' => $instrumentacaoArray]);
 
-            $resumo = $this->renderPartial('relatorio\_resumo', [
+            $resumo = $this->renderPartial('relatorio/_resumo', [
                 'projeto' => $projeto]);
 
-            $ld_preliminar = $this->renderPartial('relatorio\_ldpreliminar', [
+            $ld_preliminar = $this->renderPartial('relatorio/_ldpreliminar', [
                 'projeto' => $projeto,
                 'ldpreliminarArray' => $ldpreliminarArray]);
 
