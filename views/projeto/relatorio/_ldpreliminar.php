@@ -27,14 +27,15 @@ th, td {
             <td style="font-size: 8pt" align="center">Nº BRASKEM</td> 
             <td style="font-size: 8pt" align="center">TÍTULO</td>            
       </tr>
+      <?php foreach ($ldpreliminarArray as $key => $ldpreliminar) {  ?>
       <tr>
-            <td style="font-size: 8pt"></td>
-            <td style="font-size: 8pt"></td>
-            <td style="font-size: 8pt"></td>
-            <td style="font-size: 8pt"></td>
+            <td style="font-size: 8pt"><?= $ldpreliminar['id'] ?></td>
+            <td style="font-size: 8pt"><?= $ldpreliminar['hcn'] ?></td>
+            <td style="font-size: 8pt"><?= $ldpreliminar['cliente'] ?></td>
+            <td style="font-size: 8pt"><?= $ldpreliminar['titulo'] ?></td>
             
       </tr>
-      
+      <?php } ?>
       
 </tbody>
 </table>

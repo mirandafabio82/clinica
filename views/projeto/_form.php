@@ -10,7 +10,7 @@ use yii\helpers\Url;
 use kartik\money\MaskMoney;
 use kartik\tabs\TabsX;
 use kartik\popover\PopoverX;
-
+use yii\bootstrap\Modal;
 /* @var $this yii\web\View */
 /* @var $model app\models\Projeto */
 /* @var $form yii\widgets\ActiveForm */
@@ -120,6 +120,13 @@ $("#projeto-contato_id").change(function(ev){
 });
 });
 
+$(".ld-create").click(function(ev){              
+    $.get("index.php?r=ldpreliminar/create",function(data){      
+            $("#modal").modal("show").find("#modalContent").html(data);
+        });
+      
+  });
+
 /*$("#projeto-site").change(function(ev){
   var id = $(this).val();    
   $.ajax({ 
@@ -189,7 +196,7 @@ $this->registerJs("
       console.log(this.name);
     });
 
-    $('td').click(function (e) {
+    $('#w0 td').click(function (e) {
         var id = $(this).closest('tr').attr('data-key');
         if(id != null){
           if(e.target == this)
@@ -197,16 +204,40 @@ $this->registerJs("
         }
     });
 
+    $('#w185 td').click(function (e) {
+      var id = $(this).closest('tr').attr('data-key');
+        if(id != null){
+          if(e.target == this)
+              $.get('index.php?r=ldpreliminar/update&id='+id,function(data){      
+                  $('#modal').modal('show').find('#modalContent').html(data);
+              });
+        }
+        
+    });
+
 ");
 ?>
 <!-- mask so funciona com isso -->
 <?php $this->head() ?>
 
+<?php 
+Modal::begin(['header' => '<h4>LD-Preliminar</h4>', 'id' => 'modal', 'size' => 'modal-lg',]);
+  echo '<div id="modalContent"></div>';
+  Modal::end();
+  ?>
 <style>
+  .form-group{
+    margin-bottom: 0;
+
+  }
+
+  .help-block {    
+     margin-bottom: 0; 
+  }
+
   .control-label{
     font-size:10px;
   }
-
 
 #tabela-escopo {
     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
@@ -216,7 +247,7 @@ $this->registerJs("
 
 #tabela-escopo td, #tabela-escopo th {
     border: 1px solid #ddd;
-    padding: 8px;
+    padding-left: 8px;
 }
 
 #tabela-escopo tr:nth-child(even){background-color: #f2f2f2;}
@@ -642,9 +673,11 @@ tbody {
         <tr>
           <th width="5em" style="text-align:center;">Descrição</th>
           <th>Qtd</>
-          <th colspan="6" style="text-align:center;">Horas</th>
+          <th>FOR</>
+          <th colspan="10" style="text-align:center;">Horas</th>
         </tr>
         <tr>
+          <th></th>
           <th></th>
           <th></th>
           <th>EE</th>
@@ -652,6 +685,10 @@ tbody {
           <th>EP</th>
           <th>EJ</th>
           <th>TP</th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
           <th>Total</th>
         </tr>
         </thead> ';
@@ -683,10 +720,12 @@ tbody {
       $disciplina = '<td style="font-size: 10px">'.Yii::$app->db->createCommand('SELECT disciplina.nome FROM disciplina JOIN atividademodelo ON atividademodelo.disciplina_id=disciplina.id WHERE atividademodelo.id='.$esc['atividademodelo_id'])->queryScalar().'</td>';
 
       $isEntregavel = Yii::$app->db->createCommand('SELECT isEntregavel FROM atividademodelo WHERE atividademodelo.id='.$esc['atividademodelo_id'])->queryScalar();
-      $qtd='<td style="font-size: 10px; padding: 1px;"></td>';
+      $qtd='<td style="font-size: 10px; padding: 1px; background-color: #337ab7"></td>';
+      $for='<td style="font-size: 10px; padding: 1px; background-color: #337ab7"></td>';
 
       if($isEntregavel){
         $qtd = '<td style="font-size: 10px; padding: 1px;">'.$form2->field($escopoModel, 'qtd')->textInput(['style'=>' width:4em', 'name' => 'Escopo['.$esc["id"].'][qtd]', 'type' => 'number'])->label(false).'</td>'; 
+        $for = '<td style="font-size: 10px; padding: 1px;">'.$form2->field($escopoModel, 'for')->textInput(['style'=>' width:4em', 'name' => 'Escopo['.$esc["id"].'][for]'])->label(false).'</td>';
       }
       
       $contentTP = '<p class="text-justify">' .$form2->field($escopoModel, 'exe_tp_id')->dropDownList($listExecutantes_tp,['name' => 'Escopo['.$esc["id"].'][exe_tp_id]', 'value'=>$esc['exe_tp_id'], 'class'=> 'form-control poptp'])->label(false) .'</p>';
@@ -724,25 +763,25 @@ tbody {
         'toggleButton' => ['label'=>'<i class="fa fa-caret-up" aria-hidden="true"></i>', 'class'=>'btn btn-default', 'style'=>'padding:1px'],
       ]);
 
-      $horas_tp = '<td style="font-size: 10px; padding: 1px;"><div class="row"><div class="col-md-8">'.$form2->field($escopoModel, 'horas_tp')->textInput(['style'=>'width:7em', 'name' => 'Escopo['.$esc["id"].'][horas_tp]', 'type' => 'number'])->label(false).'</div><div class="col-md-4" style="padding-left:1px">'.$popTP.'</div></td>'; 
+      $horas_tp = '<td style="font-size: 10px; padding: 1px;"><div class="row"><div class="col-md-8">'.$form2->field($escopoModel, 'horas_tp')->textInput(['style'=>'width:4em', 'name' => 'Escopo['.$esc["id"].'][horas_tp]', 'type' => 'number'])->label(false).'</div><div class="col-md-4" style="padding-left:1px;margin-left:-1em">'.$popTP.'</div></td>'; 
 
-      echo $form2->field($escopoModel, 'exe_tp_id')->textInput(['style'=>'width:7em', 'name' => 'Escopo['.$esc["id"].'][exe_tp_id]','id' => 'escopotp-'.$esc["id"], 'type' => 'number','hidden'=>'hidden'])->label(false);
+      echo $form2->field($escopoModel, 'exe_tp_id')->textInput(['style'=>'width:4em;', 'name' => 'Escopo['.$esc["id"].'][exe_tp_id]','id' => 'escopotp-'.$esc["id"], 'type' => 'number','hidden'=>'hidden'])->label(false);
 
-      $horas_ej = '<td style="font-size: 10px; padding: 1px;"><div class="row"><div class="col-md-8">'.$form2->field($escopoModel, 'horas_ej')->textInput(['style'=>'width:7em', 'name' =>'Escopo['.$esc["id"].'][horas_ej]', 'type' => 'number'])->label(false).'</div><div class="col-md-4" style="padding-left:1px">'.$popEJ.'</div></td>'; 
+      $horas_ej = '<td style="font-size: 10px; padding: 1px;"><div class="row"><div class="col-md-8">'.$form2->field($escopoModel, 'horas_ej')->textInput(['style'=>'width:4em', 'name' =>'Escopo['.$esc["id"].'][horas_ej]', 'type' => 'number'])->label(false).'</div><div class="col-md-4" style="padding-left:1px;margin-left:-1em">'.$popEJ.'</div></td>'; 
 
-      echo $form2->field($escopoModel, 'exe_ej_id')->textInput(['style'=>'width:7em', 'name' => 'Escopo['.$esc["id"].'][exe_ej_id]','id' => 'escopoej-'.$esc["id"], 'type' => 'number', 'hidden'=>'hidden'])->label(false);
+      echo $form2->field($escopoModel, 'exe_ej_id')->textInput(['style'=>'width:4em;', 'name' => 'Escopo['.$esc["id"].'][exe_ej_id]','id' => 'escopoej-'.$esc["id"], 'type' => 'number', 'hidden'=>'hidden'])->label(false);
 
-      $horas_ep = '<td style="font-size: 10px; padding: 1px;"><div class="row"><div class="col-md-8">'.$form2->field($escopoModel, 'horas_ep')->textInput(['style'=>'width:7em', 'name' =>'Escopo['.$esc["id"].'][horas_ep]', 'type' => 'number'])->label(false).'</div><div class="col-md-4" style="padding-left:1px">'.$popEP.'</div></td>';
+      $horas_ep = '<td style="font-size: 10px; padding: 1px;"><div class="row"><div class="col-md-8">'.$form2->field($escopoModel, 'horas_ep')->textInput(['style'=>'width:4em', 'name' =>'Escopo['.$esc["id"].'][horas_ep]', 'type' => 'number'])->label(false).'</div><div class="col-md-4" style="padding-left:1px;margin-left:-1em">'.$popEP.'</div></td>';
 
-      echo $form2->field($escopoModel, 'exe_ep_id')->textInput(['style'=>'width:7em', 'name' => 'Escopo['.$esc["id"].'][exe_ep_id]','id' => 'escopoep-'.$esc["id"], 'type' => 'number', 'hidden'=>'hidden'])->label(false);
+      echo $form2->field($escopoModel, 'exe_ep_id')->textInput(['style'=>'width:4em;', 'name' => 'Escopo['.$esc["id"].'][exe_ep_id]','id' => 'escopoep-'.$esc["id"], 'type' => 'number', 'hidden'=>'hidden'])->label(false);
 
-      $horas_es = '<td style="font-size: 10px; padding: 1px;"><div class="row"><div class="col-md-8">'.$form2->field($escopoModel, 'horas_es')->textInput(['style'=>'width:7em', 'name' =>'Escopo['.$esc["id"].'][horas_es]', 'type' => 'number'])->label(false).'</div><div class="col-md-4" style="padding-left:1px">'.$popES.'</div></td>';
+      $horas_es = '<td style="font-size: 10px; padding: 1px;"><div class="row"><div class="col-md-8">'.$form2->field($escopoModel, 'horas_es')->textInput(['style'=>'width:4em', 'name' =>'Escopo['.$esc["id"].'][horas_es]', 'type' => 'number'])->label(false).'</div><div class="col-md-4" style="padding-left:1px;margin-left:-1em">'.$popES.'</div></td>';
 
-      echo $form2->field($escopoModel, 'exe_es_id')->textInput(['style'=>'width:7em', 'name' => 'Escopo['.$esc["id"].'][exe_es_id]','id' => 'escopoes-'.$esc["id"], 'type' => 'number', 'hidden'=>'hidden'])->label(false);
+      echo $form2->field($escopoModel, 'exe_es_id')->textInput(['style'=>'width:4em;', 'name' => 'Escopo['.$esc["id"].'][exe_es_id]','id' => 'escopoes-'.$esc["id"], 'type' => 'number', 'hidden'=>'hidden'])->label(false);
 
-      $horas_ee = '<td style="font-size: 10px; padding: 1px;"><div class="row"><div class="col-md-8">'.$form2->field($escopoModel, 'horas_ee')->textInput(['style'=>'width:7em', 'name' =>'Escopo['.$esc["id"].'][horas_ee]', 'type' => 'number'])->label(false).'</div><div class="col-md-4" style="padding-left:1px">'.$popEE.'</div></td>';
+      $horas_ee = '<td style="font-size: 10px; padding: 1px;"><div class="row"><div class="col-md-8">'.$form2->field($escopoModel, 'horas_ee')->textInput(['style'=>'width:4em', 'name' =>'Escopo['.$esc["id"].'][horas_ee]', 'type' => 'number'])->label(false).'</div><div class="col-md-4" style="padding-left:1px;margin-left:-1em">'.$popEE.'</div></td>';
 
-      echo $form2->field($escopoModel, 'exe_ee_id')->textInput(['style'=>'width:7em', 'name' => 'Escopo['.$esc["id"].'][exe_ee_id]','id' => 'escopoee-'.$esc["id"], 'type' => 'number', 'hidden'=>'hidden'])->label(false);
+      echo $form2->field($escopoModel, 'exe_ee_id')->textInput(['style'=>'width:4em;', 'name' => 'Escopo['.$esc["id"].'][exe_ee_id]','id' => 'escopoee-'.$esc["id"], 'type' => 'number', 'hidden'=>'hidden'])->label(false);
       
 
       $disciplina_id = Yii::$app->db->createCommand('SELECT disciplina_id FROM atividademodelo WHERE id='.$esc['atividademodelo_id'])->queryScalar();
@@ -754,19 +793,19 @@ tbody {
       $total = '<td class="total-td['.$esc['id'].']" style="font-size: 12px">'.$total.'</div>';
       
       if($disciplina_id == 1){
-        $bodyA .=  $descricao.' '.$qtd.' '.$horas_ee./*' '.$exe_ee_id.*/' '.$horas_es./*' '.$exe_es_id.*/' '.$horas_ep./*' '.$exe_ep_id.*/' '.$horas_ej./*' '.$exe_ej_id.*/' '.$horas_tp/*.' '.$exe_tp_id*/.' '.$total;  
+        $bodyA .=  $descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;  
       }
       if($disciplina_id == 2){
-        $bodyP .=  $descricao.' '.$qtd.' '.$horas_ee./*' '.$exe_ee_id.*/' '.$horas_es./*' '.$exe_es_id.*/' '.$horas_ep./*' '.$exe_ep_id.*/' '.$horas_ej./*' '.$exe_ej_id.*/' '.$horas_tp/*.' '.$exe_tp_id*/.' '.$total;
+        $bodyP .=  $descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
       }
       if($disciplina_id == 3){
-        $bodyI .=  $descricao.' '.$qtd.' '.$horas_ee./*' '.$exe_ee_id.*/' '.$horas_es./*' '.$exe_es_id.*/' '.$horas_ep./*' '.$exe_ep_id.*/' '.$horas_ej./*' '.$exe_ej_id.*/' '.$horas_tp/*.' '.$exe_tp_id*/.' '.$total; 
+        $bodyI .=  $descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total; 
       }       
           
  } 
-    $automacao = '<div style="height: 30em; overflow-y: scroll;">'.$header.''.$bodyA.'</table></div>';
-    $processo = '<div style="height: 30em; overflow-y: scroll;">'.$header.''.$bodyP.'</table></div>';
-    $instrumentacao = '<div style="height: 30em; overflow-y: scroll;">'.$header.''.$bodyI.'</table></div>';
+    $automacao = '<div style="height: 50em; overflow-y: scroll;">'.$header.''.$bodyA.'</table></div>';
+    $processo = '<div style="height: 50em; overflow-y: scroll;">'.$header.''.$bodyP.'</table></div>';
+    $instrumentacao = '<div style="height: 50em; overflow-y: scroll;">'.$header.''.$bodyI.'</table></div>';
     $as = '<div>'. $form->field($model, "nota_geral")->textArea() .'</div>';
     $resumo = '<div>'. $form->field($model, "resumo_escopo")->textArea() .'</div>
                 <div>'. $form->field($model, "resumo_exclusoes")->textArea() .'</div>
@@ -778,7 +817,36 @@ tbody {
                 <div>'. $form->field($model, "resumo_prazo")->textArea() .'</div>
                 <div>'. $form->field($model, "resumo_observacoes")->textArea() .'</div>
     ';
-    $ld_preliminar = '';
+
+    $ld_preliminar = '<p>'.
+        '<a class="btn btn-success ld-create">Novo</a>'.
+    '</p>'.GridView::widget([
+        'dataProvider' => $ldPreliminarDataProvider,
+            'filterModel' => $ldPreliminarSearchModel,
+            'pjax' => true,        
+            'options' => ['style' => 'font-size:12px;'],                
+            'hover' => true,            
+        'columns' => [
+            [
+              'class' => 'yii\grid\ActionColumn',
+              'template' => '{delete}',    
+              'contentOptions' => ['style' => 'width:5em;  min-width:5em;'],
+              'buttons' => [
+                'delete' => function ($url, $model) {
+                  $url = str_replace('projeto','ldpreliminar', $url);
+                    return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [
+                            'title' => Yii::t('app', 'lead-delete'),
+                    ]);
+                },
+            ]
+            ],
+            
+            'id',
+            'hcn',
+            'cliente',
+            'titulo',
+        ],
+    ]);
 
 
     if(!empty($bodyA))
@@ -847,14 +915,10 @@ echo TabsX::widget([
     <?php ActiveForm::end(); ?>
       <?php } ?>
 
+   </div>
+  </div>
+</div>
+</div>
     
 
-          
-         </div>
-        </div>
-      </div>
-    </div>
-    
-
-    
-
+  

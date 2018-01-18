@@ -37,7 +37,7 @@ class Escopo extends \yii\db\ActiveRecord
         return [
             [['item', 'horas_tp', 'horas_tp', 'horas_ej', 'horas_ep', 'horas_es', 'horas_ee', 'exe_tp_id', 'exe_ej_id', 'exe_ep_id', 'exe_ee_id', 'executado', 'qtd', 'projeto_id', 'atividademodelo_id'], 'integer'],
             [['criado', 'modificado'], 'safe'],
-            [['nome'], 'string', 'max' => 255],
+            [['nome', 'for'], 'string', 'max' => 255],
             [['descricao'], 'string', 'max' => 160],
         ];
     }
@@ -67,6 +67,7 @@ class Escopo extends \yii\db\ActiveRecord
             'exe_ep_id' => 'Eng. Pleno',
             'exe_es_id' => 'Eng. Senior',
             'exe_ee_id' => 'Eng. Especialista',
+            'for' => 'FOR.',
         ];
     }
 

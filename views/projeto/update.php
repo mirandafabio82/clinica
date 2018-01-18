@@ -31,6 +31,8 @@ $this->params['breadcrumbs'][] = 'Update';
         'listExecutantes_ep' => $listExecutantes_ep,
         'listExecutantes_es' => $listExecutantes_es,
         'listExecutantes_ee' => $listExecutantes_ee,
+        'ldPreliminarSearchModel' => $ldPreliminarSearchModel, 
+        'ldPreliminarDataProvider' => $ldPreliminarDataProvider,
     ]) ?>
 
 </div>
