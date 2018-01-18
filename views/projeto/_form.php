@@ -383,6 +383,31 @@ tbody {
   </div>
   <div class="box box-primary">
     <div class="box-header with-border">
+    <div style="border:1px solid black;padding: 2px; margin-bottom: 1em">
+    <div class="col-md-4">
+        <b> Executantes </b>
+    </div>    
+    <br>
+       <div class="row">    
+    <?php 
+
+        $existeExecutante = '';
+    foreach ($listExecutantes as $key => $exe) { 
+
+              if(!$model->isNewRecord){
+                $existeExecutante = Yii::$app->db->createCommand('SELECT executante_id FROM projeto_executante WHERE executante_id='.$key.' AND projeto_id='.$model->id)->queryScalar();
+              }
+      ?>     
+      <div class="col-md-2"> 
+      <?php if(!empty($existeExecutante)){ ?>
+        <input type="checkbox" name="ProjetoExecutante[<?=$key ?>]" value="<?= $key?>" checked> <?= $exe ?>
+      <?php }  else{ ?>
+        <input type="checkbox" name="ProjetoExecutante[<?=$key ?>]" value="<?= $key?>" > <?= $exe ?>
+      <?php } ?>
+      </div>
+    <?php } ?>
+      </div>
+      </div>
       <div class="row">    
       <div class="col-md-2"> 
       <?= $form->field($model, 'tipo')->radioList(array('A'=>'Autorização de Serviço','P'=>'Proposta')); ?>

@@ -27,7 +27,7 @@ th, td {
       </tr>
       <tr>
             <td align="center"><?=$projeto->rev_proposta?></td>
-            <td><?=date_format(DateTime::createFromFormat('Y-m-d', $projeto->data_proposta), 'd/m/Y');?></td>
+            <td><?=isset($projeto->data_proposta) ? date_format(DateTime::createFromFormat('Y-m-d', $projeto->data_proposta), 'd/m/Y') : '';?></td>
             <td colspan="7">Emiss&atilde;o Inicial</td>
             <td align="center">HCN</td>
       </tr>

@@ -32,7 +32,7 @@ th, td {
             <td style="font-family: arial;font-size: 8pt" align="center"></td>
             <td style="font-family: arial;font-size: 8pt" align="center"><?=$projeto->nome ?></td>
             <td style="font-family: arial;font-size: 8pt" align="center"></td>
-            <td style="font-family: arial;font-size: 8pt" align="center"><?=date_format(DateTime::createFromFormat('Y-m-d', $projeto->data_proposta), 'd/m/Y'); ?></td>
+            <td style="font-family: arial;font-size: 8pt" align="center"><?=isset($projeto->data_proposta) ? date_format(DateTime::createFromFormat('Y-m-d', $projeto->data_proposta), 'd/m/Y') : ''; ?></td>
             <td style="font-family: arial;font-size: 8pt" align="center">HCN</td>
             <td style="font-family: arial;font-size: 8pt" align="center"><?=$projeto->rev_proposta ?></td>            
       </tr>

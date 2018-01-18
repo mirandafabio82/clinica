@@ -7,6 +7,7 @@ use app\models\Projeto;
 use app\models\search\LdpreliminarSearch;
 use app\models\Cliente;
 use app\models\Contato;
+use app\models\ProjetoExecutante;
 use app\models\Escopo;
 use app\models\search\EscopoSearch;
 use app\models\search\ProjetoSearch;
@@ -140,6 +141,9 @@ class ProjetoController extends Controller
         $status = Yii::$app->db->createCommand('SELECT id, status FROM projeto_status')->queryAll();
         $listStatus = ArrayHelper::map($status,'id','status');
 
+        $executantes = Yii::$app->db->createCommand('SELECT usuario_id, nome FROM executante JOIN user ON executante.usuario_id = user.id')->queryAll();
+        $listExecutantes = ArrayHelper::map($executantes,'usuario_id','nome');
+
         $searchEscopo = new EscopoSearch();
         $escopoDataProvider = $searchEscopo->search(Yii::$app->request->queryParams);
         $escopoDataProvider->query->join('join','atividademodelo', 'atividademodelo.id=escopo.atividademodelo_id')->where('1=2');
@@ -213,9 +217,18 @@ class ProjetoController extends Controller
                                 $escopo_model->save();
                             }
                         }
-
                      
                     }                    
+                }
+
+                if(isset($_POST['ProjetoExecutante'])){
+                   foreach ($_POST['ProjetoExecutante'] as $key => $proExe) {
+                       $proExeModel = new ProjetoExecutante();
+                       $proExeModel->projeto_id = $model->id;
+                       $proExeModel->executante_id = $proExe;
+
+                       $proExeModel->save();
+                   }
                 }
 
                 $transaction->commit();
@@ -238,7 +251,9 @@ class ProjetoController extends Controller
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
                 'escopoDataProvider' => $escopoDataProvider,
-                'searchEscopo' => $searchEscopo
+                'searchEscopo' => $searchEscopo,
+                'executantes' => $executantes,
+                'listExecutantes' =>   $listExecutantes
 
             ]);
         }
@@ -332,20 +347,23 @@ class ProjetoController extends Controller
 
         $escopoArray = Yii::$app->db->createCommand('SELECT * FROM atividademodelo JOIN escopo  ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$model->id.' ORDER BY isEntregavel ASC')->queryAll();
 
-        $executantes_tp = Yii::$app->db->createCommand('SELECT executante.usuario_id as exec_id, nome FROM executante JOIN executante_tipo ON executante_tipo.executante_id=executante.usuario_id JOIN tipo_executante ON executante_tipo.tipo_id=tipo_executante.id JOIN user ON user.id=executante.usuario_id WHERE tipo_executante.id =1')->queryAll();
+        $executantes_tp = Yii::$app->db->createCommand('SELECT executante.usuario_id as exec_id, nome FROM executante JOIN executante_tipo ON executante_tipo.executante_id=executante.usuario_id JOIN tipo_executante ON executante_tipo.tipo_id=tipo_executante.id JOIN user ON user.id=executante.usuario_id JOIN projeto_executante ON projeto_executante.executante_id=executante.usuario_id WHERE tipo_executante.id =1 AND projeto_executante.projeto_id='.$model->id)->queryAll();
         $listExecutantes_tp = ArrayHelper::map($executantes_tp,'exec_id','nome'); 
 
-        $executantes_ej = Yii::$app->db->createCommand('SELECT executante.usuario_id as exec_id, nome FROM executante JOIN executante_tipo ON executante_tipo.executante_id=executante.usuario_id JOIN tipo_executante ON executante_tipo.tipo_id=tipo_executante.id JOIN user ON user.id=executante.usuario_id WHERE tipo_executante.id =2')->queryAll();
+        $executantes_ej = Yii::$app->db->createCommand('SELECT executante.usuario_id as exec_id, nome FROM executante JOIN executante_tipo ON executante_tipo.executante_id=executante.usuario_id JOIN tipo_executante ON executante_tipo.tipo_id=tipo_executante.id JOIN user ON user.id=executante.usuario_id JOIN projeto_executante ON projeto_executante.executante_id=executante.usuario_id  WHERE tipo_executante.id =2 AND projeto_executante.projeto_id='.$model->id)->queryAll();
         $listExecutantes_ej = ArrayHelper::map($executantes_ej,'exec_id','nome'); 
 
-        $executantes_ep = Yii::$app->db->createCommand('SELECT executante.usuario_id as exec_id, nome FROM executante JOIN executante_tipo ON executante_tipo.executante_id=executante.usuario_id JOIN tipo_executante ON executante_tipo.tipo_id=tipo_executante.id JOIN user ON user.id=executante.usuario_id WHERE tipo_executante.id =3')->queryAll();
+        $executantes_ep = Yii::$app->db->createCommand('SELECT executante.usuario_id as exec_id, nome FROM executante JOIN executante_tipo ON executante_tipo.executante_id=executante.usuario_id JOIN tipo_executante ON executante_tipo.tipo_id=tipo_executante.id JOIN user ON user.id=executante.usuario_id JOIN projeto_executante ON projeto_executante.executante_id=executante.usuario_id WHERE tipo_executante.id =3 AND projeto_executante.projeto_id='.$model->id)->queryAll();
         $listExecutantes_ep = ArrayHelper::map($executantes_ep,'exec_id','nome');
 
-        $executantes_es = Yii::$app->db->createCommand('SELECT executante.usuario_id as exec_id, nome FROM executante JOIN executante_tipo ON executante_tipo.executante_id=executante.usuario_id JOIN tipo_executante ON executante_tipo.tipo_id=tipo_executante.id JOIN user ON user.id=executante.usuario_id WHERE tipo_executante.id =4')->queryAll();
+        $executantes_es = Yii::$app->db->createCommand('SELECT executante.usuario_id as exec_id, nome FROM executante JOIN executante_tipo ON executante_tipo.executante_id=executante.usuario_id JOIN tipo_executante ON executante_tipo.tipo_id=tipo_executante.id JOIN user ON user.id=executante.usuario_id JOIN projeto_executante ON projeto_executante.executante_id=executante.usuario_id WHERE tipo_executante.id =4 AND projeto_executante.projeto_id='.$model->id)->queryAll();
         $listExecutantes_es = ArrayHelper::map($executantes_es,'exec_id','nome'); 
 
-        $executantes_ee = Yii::$app->db->createCommand('SELECT executante.usuario_id as exec_id, nome FROM executante JOIN executante_tipo ON executante_tipo.executante_id=executante.usuario_id JOIN tipo_executante ON executante_tipo.tipo_id=tipo_executante.id JOIN user ON user.id=executante.usuario_id WHERE tipo_executante.id =5')->queryAll();
+        $executantes_ee = Yii::$app->db->createCommand('SELECT executante.usuario_id as exec_id, nome FROM executante JOIN executante_tipo ON executante_tipo.executante_id=executante.usuario_id JOIN tipo_executante ON executante_tipo.tipo_id=tipo_executante.id JOIN user ON user.id=executante.usuario_id JOIN projeto_executante ON projeto_executante.executante_id=executante.usuario_id WHERE tipo_executante.id =5 AND projeto_executante.projeto_id='.$model->id)->queryAll();
         $listExecutantes_ee = ArrayHelper::map($executantes_ee,'exec_id','nome'); 
+
+        $executantes = Yii::$app->db->createCommand('SELECT usuario_id, nome FROM executante JOIN user ON executante.usuario_id = user.id')->queryAll();
+        $listExecutantes = ArrayHelper::map($executantes,'usuario_id','nome');
 
         
         $searchEscopo = new EscopoSearch();
@@ -496,6 +514,18 @@ class ProjetoController extends Controller
                         }
                     }                    
                 }
+                Yii::$app->db->createCommand('DELETE FROM projeto_executante WHERE projeto_id='.$model->id)->execute();
+
+                if(isset($_POST['ProjetoExecutante'])){
+                   foreach ($_POST['ProjetoExecutante'] as $key => $proExe) {
+
+                       $proExeModel = new ProjetoExecutante();
+                       $proExeModel->projeto_id = $model->id;
+                       $proExeModel->executante_id = $proExe;
+
+                       $proExeModel->save();
+                   }
+                }
 
                 $transaction->commit();
                 return $this->redirect(['update', 'id' => $model->id]);
@@ -530,6 +560,8 @@ class ProjetoController extends Controller
                 'listExecutantes_ee' => $listExecutantes_ee,
                 'ldPreliminarSearchModel' => $ldPreliminarSearchModel, 
                 'ldPreliminarDataProvider' => $ldPreliminarDataProvider,
+                'executantes' => $executantes,
+                'listExecutantes' =>   $listExecutantes
             ]);
         }
     }
@@ -687,9 +719,5 @@ class ProjetoController extends Controller
             $mpdf->Output();
         }
 
-            
-     
-        
-        
     }
 }

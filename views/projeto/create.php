@@ -24,7 +24,9 @@ $this->params['breadcrumbs'][] = $this->title;
         'searchModel' => $searchModel,
         'dataProvider' => $dataProvider,
         'escopoDataProvider' => $escopoDataProvider,
-        'searchEscopo' => $searchEscopo
+        'searchEscopo' => $searchEscopo,
+        'executantes' => $executantes,
+        'listExecutantes' => $listExecutantes
     ]) ?>
 
 </div>
