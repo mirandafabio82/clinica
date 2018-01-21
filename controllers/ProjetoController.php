@@ -415,8 +415,21 @@ class ProjetoController extends Controller
             }
             //salva resumo e outras abas
             if(isset($_POST['Projeto'])){
-              
                 $model->setAttributes($_POST['Projeto']);
+
+                if(!empty($model->data_pendencia)){
+                    $dat = DateTime::createFromFormat('d/m/Y', $model->data_pendencia);          
+                    $model->data_pendencia = date_format($dat, 'Y-m-d');
+                }
+                if(!empty($model->data_entrega)){
+                    $dat = DateTime::createFromFormat('d/m/Y', $model->data_entrega);          
+                    $model->data_entrega = date_format($dat, 'Y-m-d');
+                }
+                if(!empty($model->data_proposta)){
+                    $dat = DateTime::createFromFormat('d/m/Y', $model->data_proposta);          
+                    $model->data_proposta = date_format($dat, 'Y-m-d');
+                }
+
                 $model->nota_geral = $_POST['Projeto']['nota_geral'];
                 $model->resumo_escopo = $_POST['Projeto']['resumo_escopo'];
                 $model->resumo_exclusoes = $_POST['Projeto']['resumo_exclusoes'];
