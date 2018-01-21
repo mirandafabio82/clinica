@@ -170,6 +170,10 @@ class ProjetoController extends Controller
                     $dat = DateTime::createFromFormat('d/m/Y', $_POST['Projeto']['data_pendencia']);          
                     $model->data_pendencia = date_format($dat, 'Y-m-d');
                 }
+                if(!empty($_POST['Projeto']['data_entrega'])){
+                    $dat = DateTime::createFromFormat('d/m/Y', $_POST['Projeto']['data_entrega']);          
+                    $model->data_entrega = date_format($dat, 'Y-m-d');
+                }
 
                 if($model->save()){       
 
@@ -447,6 +451,10 @@ class ProjetoController extends Controller
                 if(!empty($_POST['Projeto']['data_pendencia'])){
                     $dat = DateTime::createFromFormat('d/m/Y', $_POST['Projeto']['data_pendencia']);          
                     $model->data_pendencia = date_format($dat, 'Y-m-d');
+                }
+                if(!empty($_POST['Projeto']['data_entrega'])){
+                    $dat = DateTime::createFromFormat('d/m/Y', $_POST['Projeto']['data_entrega']);          
+                    $model->data_entrega = date_format($dat, 'Y-m-d');
                 }
 
                 if($model->save()){                        

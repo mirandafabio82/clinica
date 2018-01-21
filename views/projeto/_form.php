@@ -702,19 +702,19 @@ tbody {
           <th colspan="10" style="text-align:center;">Horas</th>
         </tr>
         <tr>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th>EE</th>
-          <th>ES</th>
-          <th>EP</th>
-          <th>EJ</th>
-          <th>TP</th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th>Total</th>
+          <th style="width:4.3em;"></th>
+          <th style="width:4.3em;"></th>
+          <th style="width:4.3em;"></th>
+          <th style="width:4.3em;">EE</th>
+          <th style="width:4.3em;">ES</th>
+          <th style="width:4.3em;">EP</th>
+          <th style="width:4.3em;">EJ</th>
+          <th style="width:4.3em;">TP</th>
+          <th style="width:4.3em;"></th>
+          <th style="width:4.3em;"></th>
+          <th style="width:4.3em;"></th>
+          <th style="width:4.3em;"></th>
+          <th style="width:4.3em;">Total</th>
         </tr>
         </thead> ';
 
