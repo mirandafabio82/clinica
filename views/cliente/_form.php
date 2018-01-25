@@ -21,7 +21,7 @@ $this->registerJs("
                 location.href = '" . Url::to(['cliente/update']) . "&id='+id;
         }
     });
-
+    $('.dropify').dropify();
 ");
 ?>
 <style>
@@ -122,7 +122,7 @@ $this->registerJs("
                 </div>
 
                 <div class="col-md-2">
-                    <?= $form->field($model, 'logo')->fileInput(); ?>
+                    <?= $form->field($model, 'logo')->fileInput(['class' => 'dropify']); ?>
                 </div>
 
             </div>
