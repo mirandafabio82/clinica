@@ -17,6 +17,10 @@ use kartik\money\MaskMoney;
 .pagination{
     margin: 0px;
 }
+
+.summary{
+  display: none;
+}
 </style>
 <?php
 $this->registerJs("

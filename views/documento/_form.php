@@ -18,6 +18,10 @@ use yii\helpers\Url;
 .pagination{
     margin: 0px;
 }
+
+.summary{
+  display: none;
+}
 </style>
 <?php
 $this->registerJs("

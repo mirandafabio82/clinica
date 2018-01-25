@@ -38,6 +38,10 @@ $this->registerJs("
 .pagination{
     margin: 0px;
 }
+
+.summary{
+  display: none;
+}
 </style>
 
 <?php $this->head() ?>

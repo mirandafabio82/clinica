@@ -29,6 +29,10 @@ $this->registerJs("
 .pagination{
     margin: 0px;
 }
+
+.summary{
+  display: none;
+}
 </style>
 <div class="atividademodelo-form">
     <?= GridView::widget([

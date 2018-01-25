@@ -20,6 +20,10 @@ use yii\bootstrap\Modal;
   padding-top: 0px !important;
   padding-bottom: 0px !important;
 }
+
+.summary{
+  display: none;
+}
 </style>
 <?php 
 $this->registerJs('

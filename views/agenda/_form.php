@@ -30,6 +30,10 @@ $this->registerJs("
 .pagination{
     margin: 0px;
 }
+
+.summary{
+  display: none;
+}
 </style>
 <!-- mask so funciona com isso -->
 <?php $this->head() ?>

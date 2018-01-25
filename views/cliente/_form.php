@@ -32,6 +32,10 @@ $this->registerJs("
 .pagination{
     margin: 0px;
 }
+
+.summary{
+  display: none;
+}
 </style>
 <?= GridView::widget([
         'dataProvider' => $dataProvider,
