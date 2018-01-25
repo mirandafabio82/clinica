@@ -13,7 +13,7 @@ th, td {
 <img src="logos/<?= Yii::$app->db->createCommand('SELECT cliente.logo FROM cliente JOIN projeto ON cliente.id=projeto.cliente_id WHERE projeto.cliente_id='.$projeto->cliente_id)->queryScalar()?>" alt="User Image" style="float: right;width: 10em">
 
 <div style="margin-top:-3em;font-size: 15pt;font-family: arial; font-weight: bold" line-height= "2em" align="center">AUTORIZAÇÃO </div>
-<div style="margin-bottom:1em;font-size: 15pt;font-family: arial; font-weight: bold" line-height= "2em" align="center">DE SERVIÇO (AS) </div>
+<div style="margin-top:-0.5em;margin-bottom:1em;font-size: 15pt;font-family: arial; font-weight: bold" line-height= "2em" align="center">DE SERVIÇO (AS) </div>
 
 
 <table border="1" align="center" width="100%">
