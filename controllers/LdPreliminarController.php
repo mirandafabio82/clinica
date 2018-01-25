@@ -3,8 +3,8 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\LdPreliminar;
-use app\models\search\LdPreliminarSearch;
+use app\models\Ldpreliminar;
+use app\models\search\LdpreliminarSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -35,7 +35,7 @@ class LdpreliminarController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new LdPreliminarSearch();
+        $searchModel = new LdpreliminarSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -64,7 +64,7 @@ class LdpreliminarController extends Controller
      */
     public function actionCreate()
     {
-        $model = new LdPreliminar();
+        $model = new Ldpreliminar();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(Yii::$app->request->referrer);
@@ -118,7 +118,7 @@ class LdpreliminarController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = LdPreliminar::findOne($id)) !== null) {
+        if (($model = Ldpreliminar::findOne($id)) !== null) {
             return $model;
         }
 
