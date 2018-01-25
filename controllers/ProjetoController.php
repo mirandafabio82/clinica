@@ -595,7 +595,9 @@ class ProjetoController extends Controller
      */
     public function actionDelete($id)
     {
-        $projeto = Yii::$app->db->createCommand('SELECT id FROM projeto WHERE cliente_id='.$id)->queryScalar();
+        Yii::$app->db->createCommand('DELETE FROM documento WHERE projeto_id='.$id)->execute();
+        Yii::$app->db->createCommand('DELETE FROM escopo WHERE projeto_id='.$id)->execute();
+        $projeto = Yii::$app->db->createCommand('SELECT id FROM projeto WHERE id='.$id)->queryScalar();
         if(empty($projeto)){
         }
         $this->findModel($id)->delete();

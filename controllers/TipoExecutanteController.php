@@ -104,7 +104,11 @@ class TipoexecutanteController extends Controller
 
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) ) {
+          
+            $model->valor_hora = Yii::$app->request->post()['Tipoexecutante']['valor_hora'];
+            $model->valor_pago = Yii::$app->request->post()['Tipoexecutante']['valor_pago'];
+            $model->save();
             return $this->redirect(['create']);
         } else {
             return $this->render('update', [

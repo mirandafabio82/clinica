@@ -103,7 +103,9 @@ $this->registerJs("
                 </div>
 
                 <div class="col-md-2">
-                    <?= $form->field($model, 'cep')->textInput(['maxlength' => true])  ?>
+                    <?= $form->field($model, 'cep')->widget(\yii\widgets\MaskedInput::className(), [
+                        'mask' => '99999-999',
+                    ]) ?>
                 </div>
 
                 <div class="col-md-3">
