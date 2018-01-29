@@ -35,7 +35,7 @@ class Escopo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['item', 'horas_tp', 'horas_tp', 'horas_ej', 'horas_ep', 'horas_es', 'horas_ee', 'exe_tp_id', 'exe_ej_id', 'exe_ep_id', 'exe_ee_id', 'executado', 'qtd', 'projeto_id', 'atividademodelo_id'], 'integer'],
+            [['item', 'horas_tp', 'horas_tp', 'horas_ej', 'horas_ep', 'horas_es', 'horas_ee', 'exe_tp_id', 'exe_ej_id', 'exe_ep_id', 'exe_ee_id', 'executado', 'qtd', 'projeto_id', 'atividademodelo_id', 'status'], 'integer'],
             [['criado', 'modificado'], 'safe'],
             [['nome', 'for'], 'string', 'max' => 255],
             [['descricao'], 'string', 'max' => 160],
@@ -68,6 +68,7 @@ class Escopo extends \yii\db\ActiveRecord
             'exe_es_id' => 'Eng. Senior',
             'exe_ee_id' => 'Eng. Especialista',
             'for' => 'FOR.',
+            'status' => 'status',
         ];
     }
 

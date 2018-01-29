@@ -122,7 +122,13 @@ $this->registerJs("
                 </div>
 
                 <div class="col-md-2">
-                    <?= $form->field($model, 'logo')->fileInput(['class' => 'dropify']); ?>
+                    <?php
+                          if($model->isNewRecord)
+                          echo $form->field($model, 'logo')->fileInput(['class'=>'dropify']);
+                          else{
+                            echo $form->field($model, 'logo')->fileInput(['class'=>'dropify','data-default-file'=> Url::base()."/logos/".$model['logo']]);
+                          } 
+                        ?>
                 </div>
 
             </div>

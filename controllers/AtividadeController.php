@@ -5,11 +5,14 @@ namespace app\controllers;
 use Yii;
 use app\models\Atividade;
 use app\models\search\AtividadeSearch;
+use app\models\Escopo;
+use app\models\search\EscopoSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-
+use yii\helpers\ArrayHelper;
+use yii\helpers\Json;
 /**
  * AtividadeController implements the CRUD actions for Atividade model.
  */
@@ -45,12 +48,36 @@ class AtividadeController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new AtividadeSearch();
+        
+         if(Yii::$app->request->post('editableKey')){
+
+            $escopo_id = Yii::$app->request->post('editableKey');
+            $escopo = Escopo::findOne($escopo_id);
+
+            $out = Json::encode(['output'=>'', 'message'=>'']);
+            $post =[];
+            $posted = current($_POST['Escopo']);
+            $post['Escopo'] = $posted;
+
+            if($escopo->load($post)){
+                $escopo->save();
+                // $output = 'teste';
+                $out = Json::encode(['output'=>'', 'message'=>'']);
+            }
+            echo $out;
+            return $this->redirect(['index']);
+        }
+        $searchModel = new EscopoSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        $status = Yii::$app->db->createCommand('SELECT id, status FROM agenda_status')->queryAll();
+        $listStatus = ArrayHelper::map($status,'id','status');
+
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'listStatus' => $listStatus,
         ]);
     }
 
