@@ -30,7 +30,7 @@ th, td {
       <tr>
             <td style="font-family: arial;font-size: 8pt" align="center"><?=$projeto->proposta ?></td>
             <td style="font-family: arial;font-size: 8pt" align="center"></td>
-            <td style="font-family: arial;font-size: 8pt" align="center"><?=$projeto->nome ?></td>
+            <td style="font-family: arial;font-size: 8pt" align="center"><?=preg_replace('/[^0-9]/', '', $projeto->nome) ?></td>
             <td style="font-family: arial;font-size: 8pt" align="center"></td>
             <td style="font-family: arial;font-size: 8pt" align="center"><?=isset($projeto->data_proposta) ? date_format(DateTime::createFromFormat('Y-m-d', $projeto->data_proposta), 'd/m/Y') : ''; ?></td>
             <td style="font-family: arial;font-size: 8pt" align="center">HCN</td>
@@ -43,13 +43,15 @@ th, td {
             <td style="font-family: arial;font-size: 8pt" align="center" colspan="7"><?=$projeto->descricao ?></td>                        
       </tr>
       <tr style="background-color: #d3d3d3;">
-            <td style="font-family: arial;font-size: 8pt" align="center" colspan="3">ÓRGÃO SOLICITANTE</td> 
+            <td style="font-family: arial;font-size: 8pt" align="center" colspan="1">ÓRGÃO </td> 
+            <td style="font-family: arial;font-size: 8pt" align="center" colspan="2">SOLCITANTE </td> 
             <td style="font-family: arial;font-size: 8pt" align="center" colspan="2">CONTRATO Nº</td>                       
             <td style="font-family: arial;font-size: 8pt" align="center" colspan="2">UN</td>
       </tr>
       <tr >
-            <td style="font-family: arial;font-size: 8pt" align="center" colspan="3"><?=$projeto->site ?></td> 
-            <td style="font-family: arial;font-size: 8pt" align="center" colspan="2">MUDAR</td>                       
+            <td style="font-family: arial;font-size: 8pt" align="center" colspan="1"><?=$projeto->setor ?></td>
+            <td style="font-family: arial;font-size: 8pt" align="center" colspan="2"><?=$projeto->contato ?></td> 
+            <td style="font-family: arial;font-size: 8pt" align="center" colspan="2"><?=$projeto->contrato ?></td>                       
             <td style="font-family: arial;font-size: 8pt" align="center" colspan="2"><?=$projeto->site?></td>
       </tr>
       </tbody>
@@ -76,7 +78,7 @@ th, td {
       <tr>
             <td style="font-family: arial;font-size: 8pt" align="center" colspan="2"><input type="checkbox"  >ADMINISTRAÇÃO <input type="checkbox"  checked="checked">PREÇO GLOBAL</td> 
             <td style="font-family: arial;font-size: 8pt" align="center" colspan="2"><input type="checkbox"  <?=$basico ?>>BÁSICO <input type="checkbox"  <?=$detalhamento ?>>DETALHAMENTO  <input type="checkbox"  <?=$config ?>>CONFIGURAÇÃO</td>                       
-            <td style="font-family: arial;font-size: 8pt" align="center" colspan="3"><?=$projeto->valor_proposta ?> (Valor por extenso)</td>
+            <td style="font-family: arial;font-size: 8pt" align="center" colspan="3"><?=number_format($projeto->valor_proposta, 2, ',', '.') ?> (<?= escreverValorMoeda($projeto->valor_proposta)?>)</td>
       </tr>
       </tbody>
       </table>
@@ -141,11 +143,11 @@ th, td {
 
       <tr style="background-color: #d3d3d3;">
             <td style="font-family: arial;font-size: 8pt" >PU Médios (R$)</td>  
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$tipo_executante[4]['valor_hora'] ?></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$tipo_executante[3]['valor_hora'] ?></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$tipo_executante[2]['valor_hora'] ?></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$tipo_executante[1]['valor_hora'] ?></td> 
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$tipo_executante[0]['valor_hora'] ?></td>    
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=str_replace('.',',',sprintf("%.2f",$tipo_executante[4]['valor_hora'])) ?></td>
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=str_replace('.',',',sprintf("%.2f",$tipo_executante[3]['valor_hora'])) ?></td>
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=str_replace('.',',',sprintf("%.2f",$tipo_executante[2]['valor_hora'])) ?></td>
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=str_replace('.',',',sprintf("%.2f",$tipo_executante[1]['valor_hora'])) ?></td> 
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=str_replace('.',',',sprintf("%.2f",$tipo_executante[0]['valor_hora'])) ?></td>    
             <td></td>
             <td></td>
             <td></td>
@@ -156,18 +158,18 @@ th, td {
       </tr>
       <tr>
             <td style="font-family: arial;font-size: 8pt" >PROCESSO</td>  
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$p_horas_ee ?></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$p_horas_es ?></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$p_horas_ep ?></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$p_horas_ej ?></td> 
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$p_horas_tp ?></td>    
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=str_replace('.',',',sprintf("%.1f", $p_horas_ee)) ?></td>
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=str_replace('.',',',sprintf("%.1f",$p_horas_es)) ?></td>
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=str_replace('.',',',sprintf("%.1f",$p_horas_ep)) ?></td>
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=str_replace('.',',',sprintf("%.1f",$p_horas_ej)) ?></td> 
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=str_replace('.',',',sprintf("%.1f",$p_horas_tp)) ?></td>    
             <td></td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>                 
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$p_tot?></td> 
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$money_proc ?></td> 
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=str_replace('.',',',number_format($p_tot, 2, ',', '.')) ?></td> 
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=number_format($money_proc, 2, ',', '.') ?></td> 
       </tr>
       <tr>
             <td style="font-family: arial;font-size: 8pt" >TUBULAÇÃO</td>  
@@ -216,33 +218,33 @@ th, td {
       </tr>
       <tr>
             <td style="font-family: arial;font-size: 8pt" >INSTRUMENTAÇÃO</td>  
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$i_horas_ee ?></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$i_horas_es ?></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$i_horas_ep ?></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$i_horas_ej ?></td> 
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$i_horas_tp ?></td>    
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=str_replace('.',',',sprintf("%.1f",$i_horas_ee)) ?></td>
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=str_replace('.',',',sprintf("%.1f",$i_horas_es)) ?></td>
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=str_replace('.',',',sprintf("%.1f",$i_horas_ep)) ?></td>
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=str_replace('.',',',sprintf("%.1f",$i_horas_ej)) ?></td> 
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=str_replace('.',',',sprintf("%.1f",$i_horas_tp)) ?></td>    
             <td></td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>                  
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$i_tot?></td> 
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$money_inst ?></td>
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=str_replace('.',',',sprintf("%.1f",$i_tot)) ?></td> 
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=number_format($money_inst, 2, ',', '.') ?></td>
       </tr>
       <tr>
             <td style="font-family: arial;font-size: 8pt" >AUTOMAÇÃO</td>  
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$a_horas_ee ?></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$a_horas_es ?></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$a_horas_ep ?></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$a_horas_ej ?></td> 
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$a_horas_tp ?></td>    
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=str_replace('.',',',sprintf("%.1f",$a_horas_ee)) ?></td>
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=str_replace('.',',',sprintf("%.1f",$a_horas_es)) ?></td>
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=str_replace('.',',',sprintf("%.1f",$a_horas_ep)) ?></td>
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=str_replace('.',',',sprintf("%.1f",$a_horas_ej)) ?></td> 
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=str_replace('.',',',sprintf("%.1f",$a_horas_tp)) ?></td>    
             <td></td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>                 
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$a_tot?></td> 
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$money_aut ?></td> 
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=str_replace('.',',',sprintf("%.1f",$a_tot)) ?></td> 
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=number_format($money_aut, 2, ',', '.') ?></td> 
       </tr>
       <tr>
             <td style="font-family: arial;font-size: 8pt" >CALDEIRARIA</td>  
@@ -276,18 +278,18 @@ th, td {
       </tr>
       <tr style="background-color: #d3d3d3;"> 
             <td style="font-family: arial;font-size: 8pt" >TOTAL DISCIPLINAS</td>  
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$p_horas_ee+$i_horas_ee+$a_horas_ee?></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$p_horas_es+$i_horas_es+$a_horas_es?></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$p_horas_ep+$i_horas_ep+$a_horas_ep?></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$p_horas_ej+$i_horas_ej+$a_horas_ej?></td> 
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$p_horas_tp+$i_horas_tp+$a_horas_tp?></td>    
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=str_replace('.',',',sprintf("%.1f",$p_horas_ee+$i_horas_ee+$a_horas_ee)) ?></td>
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=str_replace('.',',',sprintf("%.1f",$p_horas_es+$i_horas_es+$a_horas_es)) ?></td>
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=str_replace('.',',',sprintf("%.1f",$p_horas_ep+$i_horas_ep+$a_horas_ep))?></td>
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=str_replace('.',',',sprintf("%.1f",$p_horas_ej+$i_horas_ej+$a_horas_ej)) ?></td> 
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=str_replace('.',',',sprintf("%.1f",$p_horas_tp+$i_horas_tp+$a_horas_tp)) ?></td>    
             <td></td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>              
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$p_tot+$i_tot+$a_tot ?></td> 
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$money_proc+$money_inst+$money_aut ?></td>
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=str_replace('.',',',sprintf("%.1f",$p_tot+$i_tot+$a_tot)) ?></td> 
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=number_format($money_proc+$money_inst+$money_aut, 2, ',', '.') ?></td>
       </tr>
       <tr> 
             <td style="font-family: arial;font-size: 8pt" colspan="11">SUB-CONTRATAÇÃO</td>              
@@ -297,7 +299,7 @@ th, td {
       <tr style="background-color: #d3d3d3;"> 
             <td style="font-family: arial;font-size: 8pt" colspan="12">SUBTOTAL</td>              
               
-            <td style="font-family: arial;font-size: 8pt" align="center" colspan="1"><?=$money_proc+$money_inst+$money_aut ?></td>    
+            <td style="font-family: arial;font-size: 8pt" align="center" colspan="1"><?=number_format($money_proc+$money_inst+$money_aut, 2, ',', '.')  ?></td>    
       </tr>
       
 	</tbody>
@@ -306,14 +308,14 @@ th, td {
       <table border="1" align="center" width="100%" style="margin-top: 0.2em">
 	  <tbody>
 	<tr style="background-color: #d3d3d3;">
-            <td style="font-family: arial;font-size: 8pt" align="center" colspan="10" >CUSTOS DIVERSOS</td>            
+            <td style="font-family: arial;font-size: 8pt" align="center" colspan="3" >CUSTOS DIVERSOS</td>            
      </tr>
      <tr style="background-color: #d3d3d3; width:10px" >
             <td style="font-family: arial;font-size: 8pt"  >Viagens</td> 
-            <td style="font-family: arial;font-size: 8pt"  colspan="8"></td>
-            <td style="font-family: arial;font-size: 8pt"  align="center">-</td>           
+            <td style="font-family: arial;font-size: 8pt" ></td>
+            <td style="font-family: arial;font-size: 8pt"  align="center"></td>           
      </tr>
-     <tr style="background-color: #d3d3d3;">
+    <!--  <tr style="background-color: #d3d3d3;">
             <td style="font-family: arial;font-size: 8pt"   rowspan="2">Translados <br>(140 Km por viagem)</td> 
             <td style="font-family: arial;font-size: 8pt"  >Coordenação</td>
             <td style="font-family: arial;font-size: 8pt; width:10px" rowspan="2">Qnt.</td>    
@@ -324,23 +326,22 @@ th, td {
             <td style="font-family: arial;font-size: 8pt; width: 10px" rowspan="2">Quantidade<br> de viagens:</td>
             <td style="font-family: arial;font-size: 8pt"  rowspan="2" align="center">2</td>  
             <td style="font-family: arial;font-size: 8pt"  rowspan="2" align="center">2</td>
-     </tr>
+     </tr> -->
      <tr style="background-color: #d3d3d3;">
-            <td style="font-family: arial;font-size: 8pt"  >Processo</td> 
-            <td style="font-family: arial;font-size: 8pt"  align="center">2</td>
-            <td style="font-family: arial;font-size: 8pt"  >Automação</td>    
-            <td style="font-family: arial;font-size: 8pt"  align="center">1</td> 
-                   
-     </tr>
+            <td style="font-family: arial;font-size: 8pt">Translados</td> 
+           <td style="font-family: arial;font-size: 8pt" align="center">Deslocamento para <?= $projeto->qtd_km ?> Km</td> 
+           <td style="font-family: arial;font-size: 8pt" align="right"><?= $projeto->vl_km ?></td> 
+      </tr>
+
      <tr style="background-color: #d3d3d3;">
             <td style="font-family: arial;font-size: 8pt"  >Softwares Especiais</td> 
-            <td style="font-family: arial;font-size: 8pt"  colspan="8"></td>
-            <td style="font-family: arial;font-size: 8pt"  align="center">-</td>           
+            <td style="font-family: arial;font-size: 8pt" ></td>
+            <td style="font-family: arial;font-size: 8pt"  align="center"></td>           
      </tr>
      <tr style="background-color: #d3d3d3;">
             <td style="font-family: arial;font-size: 8pt"  >Aut. Sub-Contratações</td> 
-            <td style="font-family: arial;font-size: 8pt"  colspan="8"></td>
-            <td style="font-family: arial;font-size: 8pt"  align="center">-</td>           
+            <td style="font-family: arial;font-size: 8pt" ></td>
+            <td style="font-family: arial;font-size: 8pt"  align="center"></td>           
      </tr>
 	</tbody>
       </table>
@@ -460,3 +461,199 @@ th, td {
 </tbody>
 </table>
 	
+
+<?php
+/**
+ * Retorna uma string do valor 
+ *  
+ * @param string $n - Valor a ser traduzido, pode ser no formato americano ou brasileiro
+ * @example escreverValorMoeda('1.530,64');
+ * @example escreverValorMoeda('1530.64');
+ * @return string 
+ */
+function escreverValorMoeda($n){
+    //Converte para o formato float 
+    if(strpos($n, ',') !== FALSE){
+        $n = str_replace('.','',$n); 
+        $n = str_replace(',','.',$n);
+    }
+ 
+    //Separa o valor "reais" dos "centavos"; 
+    $n = explode('.',$n);
+ 
+    return ucfirst(numeroEscrito($n[0])). ' reais' . ((isset($n[1]) && $n[1] > 0)?' e '.numeroEscrito($n[1]).' centavos.':'');
+ 
+}
+
+/**
+ * Retorna uma string do numero
+ * 
+ * @param string $n - Valor a ser traduzido,  apenas numeros inteiros
+ * @example numeroEscrito('500');
+ * @return string 
+ */
+function numeroEscrito($n) {
+ 
+    $numeros[1][0] = '';
+    $numeros[1][1] = 'um';
+    $numeros[1][2] = 'dois';
+    $numeros[1][3] = 'três';
+    $numeros[1][4] = 'quatro';
+    $numeros[1][5] = 'cinco';
+    $numeros[1][6] = 'seis';
+    $numeros[1][7] = 'sete';
+    $numeros[1][8] = 'oito';
+    $numeros[1][9] = 'nove';
+ 
+    $numeros[2][0] = '';
+    $numeros[2][10] = 'dez';
+    $numeros[2][11] = 'onze';
+    $numeros[2][12] = 'doze';
+    $numeros[2][13] = 'treze';
+    $numeros[2][14] = 'quatorze';
+    $numeros[2][15] = 'quinze';
+    $numeros[2][16] = 'dezesseis';
+    $numeros[2][17] = 'dezesete';
+    $numeros[2][18] = 'dezoito';
+    $numeros[2][19] = 'dezenove';
+    $numeros[2][2] = 'vinte';
+    $numeros[2][3] = 'trinta';
+    $numeros[2][4] = 'quarenta';
+    $numeros[2][5] = 'cinquenta';
+    $numeros[2][6] = 'sessenta';
+    $numeros[2][7] = 'setenta';
+    $numeros[2][8] = 'oitenta';
+    $numeros[2][9] = 'noventa';
+ 
+    $numeros[3][0] = '';
+    $numeros[3][1] = 'cem';
+    $numeros[3][2] = 'duzentos';
+    $numeros[3][3] = 'trezentos';
+    $numeros[3][4] = 'quatrocentos';
+    $numeros[3][5] = 'quinhentos';
+    $numeros[3][6] = 'seiscentos';
+    $numeros[3][7] = 'setecentos';
+    $numeros[3][8] = 'oitocentos';
+    $numeros[3][9] = 'novecentos';
+ 
+    $qtd = strlen($n);
+ 
+    $compl[0] = ' mil ';
+    $compl[1] = ' milhão ';
+    $compl[2] = ' milhões ';
+    $numero = "";
+    $casa = $qtd;
+    $pulaum = false;
+    $x = 0;
+    for ($y = 0; $y < $qtd; $y++) {
+ 
+        if ($casa == 5) {
+ 
+            if ($n[$x] == '1') {
+ 
+                $indice = '1' . $n[$x + 1];
+                $pulaum = true;
+            } else {
+ 
+                $indice = $n[$x];
+            }
+ 
+            if ($n[$x] != '0') {
+ 
+                if (isset($n[$x - 1])) {
+ 
+                    $numero .= ' e ';
+                }
+ 
+                $numero .= $numeros[2][$indice];
+ 
+                if ($pulaum) {
+ 
+                    $numero .= ' ' . $compl[0];
+                }
+            }
+        }
+ 
+        if ($casa == 4) {
+ 
+            if (!$pulaum) {
+ 
+                if ($n[$x] != '0') {
+ 
+                    if (isset($n[$x - 1])) {
+ 
+                        $numero .= ' e ';
+                    }
+                }
+            }
+ 
+            $numero .= $numeros[1][$n[$x]] . ' ' . $compl[0];
+        }
+ 
+        if ($casa == 3) {
+ 
+            if ($n[$x] == '1' && $n[$x + 1] != '0') {
+ 
+                $numero .= 'cento ';
+            } else {
+ 
+                if ($n[$x] != '0') {
+ 
+                    if (isset($n[$x - 1])) {
+ 
+                        $numero .= ' e ';
+                    }
+ 
+                    $numero .= $numeros[3][$n[$x]];
+                }
+            }
+        }
+ 
+        if ($casa == 2) {
+ 
+            if ($n[$x] == '1') {
+ 
+                $indice = '1' . $n[$x + 1];
+                $casa = 0;
+            } else {
+ 
+                $indice = $n[$x];
+            }
+ 
+            if ($n[$x] != '0') {
+ 
+                if (isset($n[$x - 1])) {
+ 
+                    $numero .= ' e ';
+                }
+ 
+                $numero .= $numeros[2][$indice];
+            }
+        }
+ 
+        if ($casa == 1) {
+ 
+            if ($n[$x] != '0') {
+                if ($numeros[1][$n[$x]] <= 10)
+                    $numero .= ' ' . $numeros[1][$n[$x]];
+                else
+                    $numero .= ' e ' . $numeros[1][$n[$x]];
+            } else {
+ 
+                $numero .= '';
+            }
+        }
+ 
+        if ($pulaum) {
+ 
+            $casa--;
+            $x++;
+            $pulaum = false;
+        }
+ 
+        $casa--;
+        $x++;
+    }
+ 
+    return $numero;
+}

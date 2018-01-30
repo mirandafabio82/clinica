@@ -95,6 +95,7 @@ class ProjetoController extends Controller
     {
         $model = new Projeto();
         $model->tipo = 'A';
+        $model->data_proposta =  date('d/m/Y');
         $searchModel = new ProjetoSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -156,10 +157,10 @@ class ProjetoController extends Controller
 
                 $model->setAttributes($_POST['Projeto']); 
                 if($model->tipo == "P"){
-                    $model->proposta = '(PTC)'.'-'.$model->codigo.'-'.$model->site.'-'.$model->rev_proposta;
+                    $model->proposta = 'PTC'.'-'.$model->codigo.'-'.$model->site.'-'.$model->rev_proposta;
                 }
                 else{
-                    $model->proposta = '(AS)'.'-'.$model->codigo.'-'.$model->site;
+                    $model->proposta = 'AS'.'-'.$model->codigo.'-'.$model->site.'-'.preg_replace('/[^0-9]/', '', $model->nome);
                 }
                 
                 if(!empty($_POST['Projeto']['data_proposta'])){
@@ -452,11 +453,11 @@ class ProjetoController extends Controller
 
                 $model->setAttributes($_POST['Projeto']);      
                 if($model->tipo == "P"){
-                    $model->proposta = '(PTC)'.'-'.$model->codigo.'-'.$model->site.'-'.$model->rev_proposta;
+                    $model->proposta = 'PTC'.'-'.$model->codigo.'-'.$model->site.'-'.$model->rev_proposta;
                 }
                 else{
-                    $model->proposta = '(AS)'.'-'.$model->codigo.'-'.$model->site;
-                }
+                    $model->proposta = 'AS'.'-'.$model->codigo.'-'.$model->site.'-'.preg_replace('/[^0-9]/', '', $model->nome);
+                } 
                 if(!empty($_POST['Projeto']['data_proposta'])){
                     $dat = DateTime::createFromFormat('d/m/Y', $_POST['Projeto']['data_proposta']);          
                     $model->data_proposta = date_format($dat, 'Y-m-d');
@@ -651,6 +652,13 @@ class ProjetoController extends Controller
     public function actionPreencheformsite(){
         if (Yii::$app->request->isAjax) {                 
             echo json_encode(Yii::$app->db->createCommand('SELECT * FROM planta WHERE site_id='.Yii::$app->request->post()['id'])->queryAll());  
+        }
+        
+    }
+
+    public function actionPreenchekm(){
+        if (Yii::$app->request->isAjax) {                 
+            echo json_encode(Yii::$app->db->createCommand('SELECT qtd_km_dia, vl_km FROM executante WHERE usuario_id=61')->queryOne());  
         }
         
     }

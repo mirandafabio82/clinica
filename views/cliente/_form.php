@@ -23,11 +23,18 @@ $this->registerJs("
     });
     $('.dropify').dropify();
 ");
+
 ?>
 <style>
 .table-bordered > tbody > tr > td{
   padding-top: 0px !important;
   padding-bottom: 0px !important;
+}
+.dropify-wrapper.touch-fallback .dropify-clear {
+  display:none;
+}
+.dropify-wrapper.touch-fallback .dropify-infos {
+  display:none;
 }
 .pagination{
     margin: 0px;

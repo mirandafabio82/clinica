@@ -156,6 +156,29 @@ $(".ld-create").click(function(ev){
   }
 });
 });*/
+
+$("#projeto-qtd_dias").focusout(function() {
+    dias = this.value;
+
+    $.ajax({ 
+    url: "index.php?r=projeto/preenchekm",
+    type: "POST",
+    success: function(response){
+     var resposta = $.parseJSON(response);     
+     var qtd_km = resposta["qtd_km_dia"] * dias;
+     var valor_km = qtd_km * resposta["vl_km"];
+     
+     $("#projeto-qtd_km").val(qtd_km);
+     $("#projeto-vl_km").val(valor_km);
+
+
+  },
+  error: function(){
+    console.log("failure");
+  }
+});
+
+});
 ');
 ?>
 <?php
@@ -468,7 +491,7 @@ tbody {
         
       </div>
       <div class="row">
-        <div class="col-md-2">
+        <div class="col-md-4">
           <?= $form->field($model, 'cliente_id')->dropDownList($listClientes,['prompt'=>'Selecione um Cliente']) ?>
         </div>
 
@@ -476,13 +499,13 @@ tbody {
           <?= $form->field($model, 'codigo')->textInput(['maxlength' => true,'style'=>'width:6em']) ?>   
         </div>
 
-        <div class="col-md-2">
-          <?= $form->field($model, 'site')->textInput(['maxlength' => true]) ?>
+        <div class="col-md-1">
+          <?= $form->field($model, 'site')->textInput(['maxlength' => true,'style'=>'width:6em']) ?>
         </div>
 
-        <div class="col-md-2">
+        <div class="col-md-1">
           
-          <?= $form->field($model, 'planta')->textInput(['maxlength' => true]) ?>
+          <?= $form->field($model, 'planta')->textInput(['maxlength' => true,'style'=>'width:6em']) ?>
         </div>
 
         <div class="col-md-1" style="width: 1em">
@@ -498,7 +521,7 @@ tbody {
 
       </div>
       <div class="row">
-       <div class="col-md-2">
+       <div class="col-md-4">
         <?php if($model->isNewRecord){ ?>
         <?= $form->field($model, 'contato_id')->dropDownList(['prompt'=>'Selecione um Contato']) ?>
         <?php } else{ ?>
@@ -510,14 +533,14 @@ tbody {
         <?= $form->field($model, 'tratamento')->textInput(['maxlength' => true,'style'=>'width:6em']) ?>
       </div>
 
-      <div class="col-md-2">
-        <?= $form->field($model, 'contato')->textInput(['maxlength' => true]) ?>
+      <div class="col-md-1">
+        <?= $form->field($model, 'contato')->textInput(['maxlength' => true,'style'=>'width:6em']) ?>
       </div>
-      <div class="col-md-2">
-        <?= $form->field($model, 'setor')->textInput(['maxlength' => true]) ?>
+      <div class="col-md-1">
+        <?= $form->field($model, 'setor')->textInput(['maxlength' => true,'style'=>'width:6em']) ?>
       </div>
-      <div class="col-md-2">
-        <?= $form->field($model, 'fone_contato')->textInput(['maxlength' => true]) ?>
+      <div class="col-md-1">
+        <?= $form->field($model, 'fone_contato')->textInput(['maxlength' => true,'style'=>'width:6em']) ?>
       </div>
       <div class="col-md-1">
         <?= $form->field($model, 'celular')->textInput(['maxlength' => true]) ?>
@@ -534,8 +557,8 @@ tbody {
     <div class="col-md-2">
       <?= $form->field($model, 'proposta')->textInput(['maxlength' => true]) ?>        
     </div>
-    <div class="col-md-2">
-      <?= $form->field($model, 'rev_proposta')->textInput() ?>
+    <div class="col-md-1">
+      <?= $form->field($model, 'rev_proposta')->textInput(['maxlength' => true,'style'=>'width:3em']) ?>
     </div>
     <div class="col-md-1">
       <?= $form->field($model, 'data_proposta')->widget(\yii\widgets\MaskedInput::className(), [
@@ -635,7 +658,7 @@ tbody {
 
     <div class="row">
       <div class="col-md-8">
-        <?= $form->field($model, 'comentarios')->textarea(['maxlength' => true]) ?>
+        <?= $form->field($model, 'nota_geral')->textarea(['maxlength' => true]) ?>
 
       </div>
       <div class="col-md-2">
@@ -909,10 +932,10 @@ $items = [
     'content'=>$instrumentacao, 
     'visible' => $visibleI       
 ],
-[
+/*[
     'label'=>'AS',
     'content'=>$as,        
-],
+],*/
 [
     'label'=>'Resumo',
     'content'=>$resumo,        

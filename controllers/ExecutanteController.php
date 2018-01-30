@@ -103,9 +103,10 @@ class ExecutanteController extends Controller
                 $model->save();
 
 
-
-                foreach ($_POST['Tipos'] as $key => $tipo) {
-                    Yii::$app->db->createCommand('INSERT INTO executante_tipo (tipo_id, executante_id) VALUES ('.$tipo.', '.$model->usuario_id.')')->execute();    
+                if(isset($_POST['Tipos'])){
+                    foreach ($_POST['Tipos'] as $key => $tipo) {
+                        Yii::$app->db->createCommand('INSERT INTO executante_tipo (tipo_id, executante_id) VALUES ('.$tipo.', '.$model->usuario_id.')')->execute();    
+                    }
                 }
 
                 $auth = \Yii::$app->authManager;

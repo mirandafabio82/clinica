@@ -32,7 +32,7 @@ class ExecutanteTipo extends \yii\db\ActiveRecord
             [['executante_id', 'tipo_id'], 'required'],
             [['executante_id', 'tipo_id'], 'integer'],
             [['executante_id'], 'exist', 'skipOnError' => true, 'targetClass' => Executante::className(), 'targetAttribute' => ['executante_id' => 'usuario_id']],
-            [['tipo_id'], 'exist', 'skipOnError' => true, 'targetClass' => TipoExecutante::className(), 'targetAttribute' => ['tipo_id' => 'id']],
+            [['tipo_id'], 'exist', 'skipOnError' => true, 'targetClass' => Tipoexecutante::className(), 'targetAttribute' => ['tipo_id' => 'id']],
         ];
     }
 

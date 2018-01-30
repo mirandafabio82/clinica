@@ -42,7 +42,7 @@ class Executante extends \yii\db\ActiveRecord
             [['cidade', 'endereco', 'cnpj', 'nome_empresa', 'endereco_empresa', 'insc_municipal'], 'string', 'max' => 255],
             [['uf'], 'string', 'max' => 2],
             [['telefone', 'celular'], 'string', 'max' => 15],
-            [['vl_hh_tp', 'vl_hh_ej', 'vl_hh_ep', 'vl_hh_es', 'vl_hh_ee'], 'number'],
+            [['vl_hh_tp', 'vl_hh_ej', 'vl_hh_ep', 'vl_hh_es', 'vl_hh_ee', 'vl_km', 'qtd_km_dia'], 'number'],
            
         ];
     }

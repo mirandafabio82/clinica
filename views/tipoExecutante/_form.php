@@ -58,8 +58,26 @@ $this->registerJs("
             // 'id',
             'cargo',
             'codigo',
-            'valor_hora',
-            'valor_pago',
+            [
+            'attribute' => 'valor_hora',   
+            'format' => 'raw',
+            'contentOptions' => ['style' => 'width:10em;'],
+            'value' => function ($data) {
+               
+              return str_replace('.',',',sprintf("%.2f",$data->valor_hora));
+
+            },
+            ],
+            [
+            'attribute' => 'valor_pago',   
+            'format' => 'raw',
+            'contentOptions' => ['style' => 'width:10em;'],
+            'value' => function ($data) {
+               
+              return str_replace('.',',',sprintf("%.2f",$data->valor_pago));
+
+            },
+            ],
 
             // ['class' => 'yii\grid\ActionColumn'],
         ],
