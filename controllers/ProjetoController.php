@@ -179,13 +179,14 @@ class ProjetoController extends Controller
                 if($model->save()){       
 
                     if(isset($_POST['Escopos'])){
+
                         $escopos = $_POST['Escopos'];
                         $automacoes = isset($escopos['Automação']) ? $escopos['Automação'] : array();
                         $processos = isset($escopos['Processo']) ? $escopos['Processo'] : array();
                         $instrumentacoes = isset($escopos['Instrumentação']) ? $escopos['Instrumentação'] : array();
 
                         foreach ($automacoes as $key => $automacao) {
-                            $atvmodelos = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE escopopadrao_id='.$automacao.' AND disciplina_id = 1')->queryAll();
+                            $atvmodelos = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE (escopopadrao_id='.$automacao.' OR escopopadrao_id=0) AND disciplina_id = 1 AND isPrioritaria=1')->queryAll();
                             
                             foreach ($atvmodelos as $key => $atv) {
                                 $escopo_model = new Escopo();
@@ -198,7 +199,7 @@ class ProjetoController extends Controller
                         }
                         foreach ($processos as $key => $processo) {
 
-                            $atvmodelos = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE escopopadrao_id='.$processo.' AND disciplina_id = 2')->queryAll();
+                            $atvmodelos = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE (escopopadrao_id='.$processo.' OR escopopadrao_id=0) AND disciplina_id = 2 AND isPrioritaria=1')->queryAll();
 
                             foreach ($atvmodelos as $key => $atv) {
                                 $escopo_model = new Escopo();
@@ -211,7 +212,7 @@ class ProjetoController extends Controller
                         }
                         foreach ($instrumentacoes as $key => $instrumentacao) {
 
-                            $atvmodelos = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE escopopadrao_id='.$instrumentacao.' AND disciplina_id = 3')->queryAll();
+                            $atvmodelos = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE (escopopadrao_id='.$instrumentacao.' OR escopopadrao_id=0) AND disciplina_id = 3 AND isPrioritaria=1')->queryAll();
 
                             foreach ($atvmodelos as $key => $atv) {
                                 $escopo_model = new Escopo();
@@ -219,6 +220,21 @@ class ProjetoController extends Controller
                                 $escopo_model->atividademodelo_id = $atv['id'];
                                 $escopo_model->nome = $atv['nome'];
                                 $escopo_model->descricao = $atv['nome'];
+                                $escopo_model->save();
+                            }
+                        }
+
+                        if(isset($_POST['np'])){
+
+                            foreach ($_POST['np'] as $key => $np) {
+
+                               $ativi = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE id='.$np)->queryOne();
+
+                                $escopo_model = new Escopo();
+                                $escopo_model->projeto_id = $model->id;
+                                $escopo_model->atividademodelo_id = $ativi['id'];
+                                $escopo_model->nome = $ativi['nome'];
+                                $escopo_model->descricao = $ativi['nome'];
                                 $escopo_model->save();
                             }
                         }
@@ -431,7 +447,7 @@ class ProjetoController extends Controller
                     $model->data_proposta = date_format($dat, 'Y-m-d');
                 }
 
-                $model->nota_geral = $_POST['Projeto']['nota_geral'];
+                // $model->nota_geral = $_POST['Projeto']['nota_geral'];
                 $model->resumo_escopo = $_POST['Projeto']['resumo_escopo'];
                 $model->resumo_exclusoes = $_POST['Projeto']['resumo_exclusoes'];
                 $model->resumo_premissas = $_POST['Projeto']['resumo_premissas'];
@@ -480,16 +496,16 @@ class ProjetoController extends Controller
 
                         
                         if(!isset($automacoes[1]))
-                         Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id NOT IN(SELECT id FROM atividademodelo WHERE escopopadrao_id=1 AND disciplina_id=1 AND projeto_id=) AND (horas_tp=null AND horas_ej=null AND horas_ep=null AND horas_es=null AND horas_ee=null) AND projeto_id='.$model->id)->execute();
+                         Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id NOT IN(SELECT id FROM atividademodelo WHERE (escopopadrao_id=1  OR escopopadrao_id=0) AND disciplina_id=1) AND (horas_tp=null AND horas_ej=null AND horas_ep=null AND horas_es=null AND horas_ee=null) AND projeto_id='.$model->id)->execute();
 
                         if(!isset($automacoes[2]))
-                         Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id NOT IN(SELECT id FROM atividademodelo WHERE escopopadrao_id=2 AND disciplina_id=1) AND (horas_tp=null AND horas_ej=null AND horas_ep=null AND horas_es=null AND horas_ee=null) AND projeto_id='.$model->id )->execute();
+                         Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id NOT IN(SELECT id FROM atividademodelo WHERE (escopopadrao_id=2 OR escopopadrao_id=0) AND disciplina_id=1) AND (horas_tp=null AND horas_ej=null AND horas_ep=null AND horas_es=null AND horas_ee=null) AND projeto_id='.$model->id )->execute();
 
                         if(!isset($automacoes[3]))
-                         Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id NOT IN(SELECT id FROM atividademodelo WHERE escopopadrao_id=3 AND disciplina_id=1) AND (horas_tp=null AND horas_ej=null AND horas_ep=null AND horas_es=null AND horas_ee=null) AND projeto_id='.$model->id)->execute();
+                         Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id NOT IN(SELECT id FROM atividademodelo WHERE (escopopadrao_id=3 OR escopopadrao_id=0) AND disciplina_id=1) AND (horas_tp=null AND horas_ej=null AND horas_ep=null AND horas_es=null AND horas_ee=null) AND projeto_id='.$model->id)->execute();
 
                         foreach ($automacoes as $key => $automacao) {
-                            $atvmodelos = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE escopopadrao_id='.$automacao.' AND disciplina_id = 1')->queryAll();
+                            $atvmodelos = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE (escopopadrao_id='.$automacao.' OR escopopadrao_id=0) AND disciplina_id = 1 AND isPrioritaria=1')->queryAll();
 
                             foreach ($atvmodelos as $key => $atv) {
                                 $existeEscopo = Yii::$app->db->createCommand('SELECT id FROM escopo WHERE projeto_id='.$model->id.' AND atividademodelo_id='.$atv['id'])->queryScalar();
@@ -504,8 +520,16 @@ class ProjetoController extends Controller
                                 }
                             }
                         }
+                        if(!isset($processos[1]))
+                         Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id NOT IN(SELECT id FROM atividademodelo WHERE (escopopadrao_id=1  OR escopopadrao_id=0) AND disciplina_id=2) AND (horas_tp=null AND horas_ej=null AND horas_ep=null AND horas_es=null AND horas_ee=null) AND projeto_id='.$model->id)->execute();
+
+                        if(!isset($processos[2]))
+                         Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id NOT IN(SELECT id FROM atividademodelo WHERE (escopopadrao_id=2 OR escopopadrao_id=0) AND disciplina_id=2) AND (horas_tp=null AND horas_ej=null AND horas_ep=null AND horas_es=null AND horas_ee=null) AND projeto_id='.$model->id )->execute();
+
+                        if(!isset($processos[3]))
+                         Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id NOT IN(SELECT id FROM atividademodelo WHERE (escopopadrao_id=3 OR escopopadrao_id=0) AND disciplina_id=2) AND (horas_tp=null AND horas_ej=null AND horas_ep=null AND horas_es=null AND horas_ee=null) AND projeto_id='.$model->id)->execute();
                         foreach ($processos as $key => $processo) {
-                            $atvmodelos = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE escopopadrao_id='.$processo.' AND disciplina_id = 2')->queryAll();
+                            $atvmodelos = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE (escopopadrao_id='.$processo.' OR escopopadrao_id=0) AND disciplina_id = 2 AND isPrioritaria=1')->queryAll();
 
                             foreach ($atvmodelos as $key => $atv) {
                                 $existeEscopo = Yii::$app->db->createCommand('SELECT id FROM escopo WHERE projeto_id='.$model->id.' AND atividademodelo_id='.$atv['id'])->queryScalar();
@@ -519,8 +543,17 @@ class ProjetoController extends Controller
                                 }
                             }
                         }
+                        if(!isset($instrumentacoes[1]))
+                         Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id NOT IN(SELECT id FROM atividademodelo WHERE (escopopadrao_id=1  OR escopopadrao_id=0) AND disciplina_id=3) AND (horas_tp=null AND horas_ej=null AND horas_ep=null AND horas_es=null AND horas_ee=null) AND projeto_id='.$model->id)->execute();
+
+                        if(!isset($instrumentacoes[2]))
+                         Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id NOT IN(SELECT id FROM atividademodelo WHERE (escopopadrao_id=2 OR escopopadrao_id=0) AND disciplina_id=3) AND (horas_tp=null AND horas_ej=null AND horas_ep=null AND horas_es=null AND horas_ee=null) AND projeto_id='.$model->id )->execute();
+
+                        if(!isset($instrumentacoes[3]))
+                         Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id NOT IN(SELECT id FROM atividademodelo WHERE (escopopadrao_id=3 OR escopopadrao_id=0) AND disciplina_id=3) AND (horas_tp=null AND horas_ej=null AND horas_ep=null AND horas_es=null AND horas_ee=null) AND projeto_id='.$model->id)->execute();
+
                         foreach ($instrumentacoes as $key => $instrumentacao) {
-                            $atvmodelos = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE escopopadrao_id='.$instrumentacao.' AND disciplina_id = 3')->queryAll();
+                            $atvmodelos = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE (escopopadrao_id='.$instrumentacao.' OR escopopadrao_id=0) AND disciplina_id = 3 AND isPrioritaria=1')->queryAll();
 
                             foreach ($atvmodelos as $key => $atv) {
                                 $existeEscopo = Yii::$app->db->createCommand('SELECT id FROM escopo WHERE projeto_id='.$model->id.' AND atividademodelo_id='.$atv['id'])->queryScalar();
@@ -532,6 +565,20 @@ class ProjetoController extends Controller
                                     $escopo_model->descricao = $atv['nome'];
                                     $escopo_model->save();
                                 }
+                            }
+                        }
+                        if(isset($_POST['np'])){
+
+                            foreach ($_POST['np'] as $key => $np) {
+
+                               $ativi = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE id='.$np)->queryOne();
+
+                                $escopo_model = new Escopo();
+                                $escopo_model->projeto_id = $model->id;
+                                $escopo_model->atividademodelo_id = $ativi['id'];
+                                $escopo_model->nome = $ativi['nome'];
+                                $escopo_model->descricao = $ativi['nome'];
+                                $escopo_model->save();
                             }
                         }
                     }                    

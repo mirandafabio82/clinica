@@ -24,12 +24,27 @@ use yii\bootstrap\Modal;
 .summary{
   display: none;
 }
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0; 
+}
 </style>
 <?php 
+
+$scroll='';
+if(!$model->isNewRecord){
+  $scroll = 'window.scrollTo(0, 1200);';
+}
+
 $this->registerJs('
 
   $( document ).ready(function() {
-    
+    '.$scroll.'
+
     $("input").removeClass("form-control");
     $(".messages-inline").text("");
   });
@@ -131,6 +146,13 @@ $(".ld-create").click(function(ev){
       
   });
 
+  $(".nao-prioritarios").click(function(ev){              
+     
+      $("#nao-prioritarios_div").removeAttr("hidden");    
+      
+  });
+  
+
 /*$("#projeto-site").change(function(ev){
   var id = $(this).val();    
   $.ajax({ 
@@ -179,6 +201,33 @@ $("#projeto-qtd_dias").focusout(function() {
 });
 
 });
+
+$(".horas").focusout(function() {
+  id = this.className.split("[")[1];
+  id = id.split("]")[0];
+
+  
+  horas_ee = isNaN(parseInt($("#horas_ee-"+id).val())) ? 0 : parseInt($("#horas_ee-"+id).val());
+  horas_es = isNaN(parseInt($("#horas_es-"+id).val())) ? 0 : parseInt($("#horas_es-"+id).val());
+  horas_ep = isNaN(parseInt($("#horas_ep-"+id).val())) ? 0 : parseInt($("#horas_ep-"+id).val());
+  horas_ej = isNaN(parseInt($("#horas_ej-"+id).val())) ? 0 : parseInt($("#horas_ej-"+id).val());
+  horas_tp = isNaN(parseInt($("#horas_tp-"+id).val())) ? 0 : parseInt($("#horas_tp-"+id).val());
+
+  console.log(parseInt($("#horas_es-"+id).val()));
+  var totalHoras = horas_ee + horas_es + horas_ep + horas_ej + horas_tp;
+  
+    var tds = document.getElementsByTagName("td");
+    for (var i = 0; i<tds.length; i++) {      
+      if (tds[i].className == "total-td["+id+"]") {
+        // tds[i].html(totalHoras);
+        tds[i].innerHTML = totalHoras;
+      }
+    }
+  
+  
+
+});
+
 ');
 ?>
 <?php
@@ -690,7 +739,28 @@ tbody {
           </div>
         
       </div></div> -->
+      
+
+      <?php 
+          $nao_prioritarios = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE isPrioritaria=0')->queryAll();
+
+      ?>
+
+      <div ><p><a class="btn btn-success nao-prioritarios">Não Prioritários</a></p></div>
+      <div id="nao-prioritarios_div" style="margin-bottom: 1em" hidden> 
+        <?php foreach ($nao_prioritarios as $key => $np) { ?> 
+          <?php 
+          if(!$model->isNewRecord){
+          $npExists = Yii::$app->db->createCommand('SELECT id FROM escopo WHERE atividademodelo_id='.$np['id'].' AND projeto_id='.$model->id)->queryScalar();
+          if(!empty($npExists)){ ?>       
+              <input type="checkbox" name="np[<?= $key ?>]" value="<?= $np['id']?>" checked> <?= $np['nome'] ?>
+         <?php } else{ ?>
+              <input type="checkbox" name="np[<?= $key ?>]" value="<?= $np['id']?>"> <?= $np['nome'] ?>
+         <?php } } } ?>
+      </div>
+
       <?= Html::submitButton($model->isNewRecord ? 'Add Escopo' : 'Add Escopo', ['class' => $model->isNewRecord ? 'btn btn-primary' : 'btn btn-primary']) ?>
+
       </div>
       </div>
       </div>
@@ -710,7 +780,7 @@ tbody {
      </div>
 
 
-     
+     <a href="#" id="escopos"></a>
     <?php 
     $descricao ='';
     $disciplina = '';
@@ -753,6 +823,7 @@ tbody {
     $exe_ep ='';
     $exe_es ='';
     $exe_ee ='';
+    $separaEntregavel = 0;
     foreach ($escopoArray as $key => $esc) { 
         $escopoModel =  Escopo::findOne($esc['id']);  
         if(!empty($exe_tp))
@@ -776,8 +847,16 @@ tbody {
       $for='<td style="font-size: 10px; padding: 1px; background-color: #337ab7"></td>';
 
       if($isEntregavel){
+          if($separaEntregavel==0){
+            $separador = '';
+          }
+          else{
+            $separador = '';
+          }
         $qtd = '<td style="font-size: 10px; padding: 1px;">'.$form2->field($escopoModel, 'qtd')->textInput(['style'=>' width:4em', 'name' => 'Escopo['.$esc["id"].'][qtd]', 'type' => 'number'])->label(false).'</td>'; 
         $for = '<td style="font-size: 10px; padding: 1px;">'.$form2->field($escopoModel, 'for')->textInput(['style'=>' width:4em', 'name' => 'Escopo['.$esc["id"].'][for]'])->label(false).'</td>';
+
+        $separaEntregavel++;
       }
       
       $contentTP = '<p class="text-justify">' .$form2->field($escopoModel, 'exe_tp_id')->dropDownList($listExecutantes_tp,['name' => 'Escopo['.$esc["id"].'][exe_tp_id]', 'value'=>$esc['exe_tp_id'], 'class'=> 'form-control poptp'])->label(false) .'</p>';
@@ -815,23 +894,23 @@ tbody {
         'toggleButton' => ['label'=>'<i class="fa fa-caret-up" aria-hidden="true"></i>', 'class'=>'btn btn-default', 'style'=>'padding:1px'],
       ]);
 
-      $horas_tp = '<td style="font-size: 10px; padding: 1px;"><div class="row"><div class="col-md-8">'.$form2->field($escopoModel, 'horas_tp')->textInput(['style'=>'width:4em', 'name' => 'Escopo['.$esc["id"].'][horas_tp]', 'type' => 'number'])->label(false).'</div><div class="col-md-4" style="padding-left:1px;margin-left:-1em">'.$popTP.'</div></td>'; 
+      $horas_tp = '<td style="font-size: 10px; padding: 1px;"><div class="row"><div class="col-md-8">'.$form2->field($escopoModel, 'horas_tp')->textInput(['style'=>'width:4em', 'name' => 'Escopo['.$esc["id"].'][horas_tp]', 'type' => 'number', 'class' => 'Escopo['.$esc["id"].'][horas_tp] horas', 'id' => 'horas_tp-'.$esc["id"]])->label(false).'</div><div class="col-md-4" style="padding-left:1px;margin-left:-1em">'.$popTP.'</div></td>'; 
 
       echo $form2->field($escopoModel, 'exe_tp_id')->textInput(['style'=>'width:4em;', 'name' => 'Escopo['.$esc["id"].'][exe_tp_id]','id' => 'escopotp-'.$esc["id"], 'type' => 'number','hidden'=>'hidden'])->label(false);
 
-      $horas_ej = '<td style="font-size: 10px; padding: 1px;"><div class="row"><div class="col-md-8">'.$form2->field($escopoModel, 'horas_ej')->textInput(['style'=>'width:4em', 'name' =>'Escopo['.$esc["id"].'][horas_ej]', 'type' => 'number'])->label(false).'</div><div class="col-md-4" style="padding-left:1px;margin-left:-1em">'.$popEJ.'</div></td>'; 
+      $horas_ej = '<td style="font-size: 10px; padding: 1px;"><div class="row"><div class="col-md-8">'.$form2->field($escopoModel, 'horas_ej')->textInput(['style'=>'width:4em', 'name' =>'Escopo['.$esc["id"].'][horas_ej]', 'type' => 'number', 'class' => 'Escopo['.$esc["id"].'][horas_ej] horas', 'id' => 'horas_ej-'.$esc["id"]])->label(false).'</div><div class="col-md-4" style="padding-left:1px;margin-left:-1em">'.$popEJ.'</div></td>'; 
 
       echo $form2->field($escopoModel, 'exe_ej_id')->textInput(['style'=>'width:4em;', 'name' => 'Escopo['.$esc["id"].'][exe_ej_id]','id' => 'escopoej-'.$esc["id"], 'type' => 'number', 'hidden'=>'hidden'])->label(false);
 
-      $horas_ep = '<td style="font-size: 10px; padding: 1px;"><div class="row"><div class="col-md-8">'.$form2->field($escopoModel, 'horas_ep')->textInput(['style'=>'width:4em', 'name' =>'Escopo['.$esc["id"].'][horas_ep]', 'type' => 'number'])->label(false).'</div><div class="col-md-4" style="padding-left:1px;margin-left:-1em">'.$popEP.'</div></td>';
+      $horas_ep = '<td style="font-size: 10px; padding: 1px;"><div class="row"><div class="col-md-8">'.$form2->field($escopoModel, 'horas_ep')->textInput(['style'=>'width:4em', 'name' =>'Escopo['.$esc["id"].'][horas_ep]', 'type' => 'number', 'class' => 'Escopo['.$esc["id"].'][horas_ep] horas', 'id' => 'horas_ep-'.$esc["id"]])->label(false).'</div><div class="col-md-4" style="padding-left:1px;margin-left:-1em">'.$popEP.'</div></td>';
 
       echo $form2->field($escopoModel, 'exe_ep_id')->textInput(['style'=>'width:4em;', 'name' => 'Escopo['.$esc["id"].'][exe_ep_id]','id' => 'escopoep-'.$esc["id"], 'type' => 'number', 'hidden'=>'hidden'])->label(false);
 
-      $horas_es = '<td style="font-size: 10px; padding: 1px;"><div class="row"><div class="col-md-8">'.$form2->field($escopoModel, 'horas_es')->textInput(['style'=>'width:4em', 'name' =>'Escopo['.$esc["id"].'][horas_es]', 'type' => 'number'])->label(false).'</div><div class="col-md-4" style="padding-left:1px;margin-left:-1em">'.$popES.'</div></td>';
+      $horas_es = '<td style="font-size: 10px; padding: 1px;"><div class="row"><div class="col-md-8">'.$form2->field($escopoModel, 'horas_es')->textInput(['style'=>'width:4em', 'name' =>'Escopo['.$esc["id"].'][horas_es]', 'type' => 'number', 'class' => 'Escopo['.$esc["id"].'][horas_es] horas', 'id' => 'horas_es-'.$esc["id"]])->label(false).'</div><div class="col-md-4" style="padding-left:1px;margin-left:-1em">'.$popES.'</div></td>';
 
       echo $form2->field($escopoModel, 'exe_es_id')->textInput(['style'=>'width:4em;', 'name' => 'Escopo['.$esc["id"].'][exe_es_id]','id' => 'escopoes-'.$esc["id"], 'type' => 'number', 'hidden'=>'hidden'])->label(false);
 
-      $horas_ee = '<td style="font-size: 10px; padding: 1px;"><div class="row"><div class="col-md-8">'.$form2->field($escopoModel, 'horas_ee')->textInput(['style'=>'width:4em', 'name' =>'Escopo['.$esc["id"].'][horas_ee]', 'type' => 'number'])->label(false).'</div><div class="col-md-4" style="padding-left:1px;margin-left:-1em">'.$popEE.'</div></td>';
+      $horas_ee = '<td style="font-size: 10px; padding: 1px;"><div class="row"><div class="col-md-8">'.$form2->field($escopoModel, 'horas_ee')->textInput(['style'=>'width:4em', 'name' =>'Escopo['.$esc["id"].'][horas_ee]', 'type' => 'number', 'class' => 'Escopo['.$esc["id"].'][horas_ee] horas', 'id' => 'horas_ee-'.$esc["id"]])->label(false).'</div><div class="col-md-4" style="padding-left:1px;margin-left:-1em">'.$popEE.'</div></td>';
 
       echo $form2->field($escopoModel, 'exe_ee_id')->textInput(['style'=>'width:4em;', 'name' => 'Escopo['.$esc["id"].'][exe_ee_id]','id' => 'escopoee-'.$esc["id"], 'type' => 'number', 'hidden'=>'hidden'])->label(false);
       
