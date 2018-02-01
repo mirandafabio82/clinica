@@ -30,7 +30,7 @@ class Contato extends \yii\db\ActiveRecord
     {
         return 'contato';
     }
-
+    
     /**
      * @inheritdoc
      */
@@ -79,5 +79,10 @@ class Contato extends \yii\db\ActiveRecord
     public function getProjetos()
     {
         return $this->hasMany(Projeto::className(), ['contato_id' => 'usuario_id']);
+    }
+
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'usuario_id']);
     }
 }

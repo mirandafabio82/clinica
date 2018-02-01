@@ -12,6 +12,8 @@ use app\models\Contato;
  */
 class ContatoSearch extends Contato
 {
+    public $user;
+    public $cliente;
     /**
      * @inheritdoc
      */
@@ -19,9 +21,11 @@ class ContatoSearch extends Contato
     {
         return [
             [['usuario_id', 'cliente_id'], 'integer'],
-            [['tratamento', 'site', 'contato', 'setor', 'criado', 'modificado'], 'safe'],
+            [['tratamento', 'site', 'contato', 'setor', 'criado', 'modificado', 'user', 'cliente'], 'safe'],
         ];
     }
+
+    
 
     /**
      * @inheritdoc
@@ -42,6 +46,21 @@ class ContatoSearch extends Contato
     public function search($params)
     {
         $query = Contato::find();
+        $query->joinWith(['user', 'cliente']);
+
+        $dataProvider->sort->attributes['user'] = [
+            // The tables are the ones our relation are configured to
+            // in my case they are prefixed with "tbl_"
+            'asc' => ['user.nome' => SORT_ASC],
+            'desc' => ['user.nome' => SORT_DESC],
+        ];
+
+        $dataProvider->sort->attributes['cliente'] = [
+            // The tables are the ones our relation are configured to
+            // in my case they are prefixed with "tbl_"
+            'asc' => ['cliente.nome' => SORT_ASC],
+            'desc' => ['cliente.nome' => SORT_DESC],
+        ];
 
         // add conditions that should always apply here
 
@@ -65,7 +84,7 @@ class ContatoSearch extends Contato
             'usuario_id' => $this->usuario_id,
             'cliente_id' => $this->cliente_id,
             'criado' => $this->criado,
-            'modificado' => $this->modificado,
+            'modificado' => $this->modificado,            
         ]);
 
         $query->andFilterWhere(['like', 'tratamento', $this->tratamento])
@@ -73,7 +92,9 @@ class ContatoSearch extends Contato
             ->andFilterWhere(['like', 'contato', $this->contato])
             ->andFilterWhere(['like', 'setor', $this->setor])
             ->andFilterWhere(['like', 'telefone', $this->telefone])
-            ->andFilterWhere(['like', 'celular', $this->celular]);
+            ->andFilterWhere(['like', 'celular', $this->celular])
+            ->andFilterWhere(['like', 'user.nome', $this->user])
+            ->andFilterWhere(['like', 'cliente.nome', $this->cliente]);
 
         return $dataProvider;
     }

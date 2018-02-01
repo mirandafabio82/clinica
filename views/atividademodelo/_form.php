@@ -37,7 +37,7 @@ $this->registerJs("
 <div class="atividademodelo-form">
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+        // 'filterModel' => $searchModel,
         'options' => ['style' => 'font-size:12px;'],
         'pjax' => true,        
         
@@ -58,8 +58,8 @@ $this->registerJs("
             [
                 'attribute'=>'disciplina_id',
                 'value'=>function($data){
-                    if(isset($data->escopopadrao_id))
-                        return Yii::$app->db->createCommand('SELECT nome FROM disciplina WHERE id='.$data->escopopadrao_id)->queryScalar();
+                    if(isset($data->disciplina_id))
+                        return Yii::$app->db->createCommand('SELECT nome FROM disciplina WHERE id='.$data->disciplina_id)->queryScalar();
                 }
             ],
             [

@@ -56,14 +56,15 @@ use yii\helpers\Url;
               'data' => $listStatus                
               ]
             ],
-            [
-                'attribute' => 'projeto_id',
+            [ 
+                'header' => '<span style="color:#337ab7">Projeto </span>',
+                'attribute' => 'projeto',
                 'value' => function($data){
                     if(isset($data->projeto_id))
                     return Yii::$app->db->createCommand('SELECT nome FROM projeto WHERE id='.$data->projeto_id)->queryScalar();
                 }
             ],            
-               'atividademodelo_id',
+               // 'atividademodelo_id',
                'nome',
             
             // ['class' => 'yii\grid\ActionColumn'],

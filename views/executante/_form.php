@@ -140,7 +140,8 @@ $this->registerJs("
             ],
             
             [
-              'attribute' => 'usuario_id',              
+              'header' => '<span style="color:#337ab7">Nome</span>',
+              'attribute' => 'user',              
               'format' => 'raw',
                'value' => function ($data) {
 
@@ -148,7 +149,7 @@ $this->registerJs("
                },
             ],
             [
-              'header' => 'Tipo',              
+              'header' => '<span style="color:#337ab7">Tipo</span>',              
               'format' => 'raw',
                'value' => function ($data) {
                   $executantes = Yii::$app->db->createCommand('SELECT cargo, codigo FROM tipo_executante JOIN executante_tipo ON tipo_executante.id=executante_tipo.tipo_id WHERE executante_tipo.executante_id='.$data->usuario_id)->queryAll();
@@ -163,7 +164,7 @@ $this->registerJs("
                        
             // 'cpf',
             [
-              'header' => 'Email',              
+              'header' => '<span style="color:#337ab7">Email</span>',              
               'format' => 'raw',
                'value' => function ($data) {
 

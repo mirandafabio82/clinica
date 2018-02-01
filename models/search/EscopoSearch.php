@@ -12,6 +12,7 @@ use app\models\Escopo;
  */
 class EscopoSearch extends Escopo
 {
+    public $projeto;
     /**
      * @inheritdoc
      */
@@ -19,7 +20,7 @@ class EscopoSearch extends Escopo
     {
         return [
             [['id', 'item', 'horas_tp', 'horas_tp', 'horas_ej', 'horas_ep', 'horas_es', 'horas_ee', 'executado', 'qtd', 'projeto_id', 'atividademodelo_id', 'status'], 'integer'],
-            [['nome', 'descricao', 'criado', 'modificado'], 'safe'],
+            [['nome', 'descricao', 'criado', 'modificado', 'projeto'], 'safe'],
         ];
     }
 
@@ -42,6 +43,14 @@ class EscopoSearch extends Escopo
     public function search($params)
     {
         $query = Escopo::find();
+        $query->joinWith(['projeto']);
+
+        $dataProvider->sort->attributes['projeto'] = [
+            // The tables are the ones our relation are configured to
+            // in my case they are prefixed with "tbl_"
+            'asc' => ['projeto.nome' => SORT_ASC],
+            'desc' => ['projeto.nome' => SORT_DESC],
+        ];
 
         // add conditions that should always apply here
 
@@ -78,7 +87,8 @@ class EscopoSearch extends Escopo
         ]);
 
         $query->andFilterWhere(['like', 'nome', $this->nome])
-            ->andFilterWhere(['like', 'descricao', $this->descricao]);
+            ->andFilterWhere(['like', 'descricao', $this->descricao])
+            ->andFilterWhere(['like', 'projeto.nome', $this->projeto]);
 
         return $dataProvider;
     }

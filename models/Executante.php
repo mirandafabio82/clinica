@@ -81,5 +81,9 @@ class Executante extends \yii\db\ActiveRecord
         return $this->hasMany(Atividade::className(), ['executante_id' => 'usuario_id']);
     }
 
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'usuario_id']);
+    }
    
 }

@@ -366,7 +366,7 @@ class ProjetoController extends Controller
         $status = Yii::$app->db->createCommand('SELECT id, status FROM projeto_status')->queryAll();
         $listStatus = ArrayHelper::map($status,'id','status');
 
-        $escopoArray = Yii::$app->db->createCommand('SELECT * FROM atividademodelo JOIN escopo  ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$model->id.' ORDER BY isEntregavel ASC')->queryAll();
+        $escopoArray = Yii::$app->db->createCommand('SELECT * FROM atividademodelo JOIN escopo  ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$model->id.' ORDER BY isEntregavel ASC, atividademodelo.id ASC')->queryAll();
 
         $executantes_tp = Yii::$app->db->createCommand('SELECT executante.usuario_id as exec_id, nome FROM executante JOIN executante_tipo ON executante_tipo.executante_id=executante.usuario_id JOIN tipo_executante ON executante_tipo.tipo_id=tipo_executante.id JOIN user ON user.id=executante.usuario_id JOIN projeto_executante ON projeto_executante.executante_id=executante.usuario_id WHERE tipo_executante.id =1 AND projeto_executante.projeto_id='.$model->id)->queryAll();
         $listExecutantes_tp = ArrayHelper::map($executantes_tp,'exec_id','nome'); 
@@ -404,6 +404,12 @@ class ProjetoController extends Controller
             $valor_ee = Yii::$app->db->createCommand('SELECT valor_pago FROM tipo_executante WHERE id=5')->queryScalar();
 
             foreach ($_POST['Escopo'] as $key => $esc) {
+                if(empty($esc['horas_tp'] )) $esc['horas_tp'] = 0;
+                if(empty($esc['horas_ej'] )) $esc['horas_ej'] = 0;
+                if(empty($esc['horas_ep'] )) $esc['horas_ep'] = 0;
+                if(empty($esc['horas_es'] )) $esc['horas_es'] = 0;
+                if(empty($esc['horas_ee'] )) $esc['horas_ee'] = 0;
+
                 $totalHoras = $totalHoras + $esc['horas_tp'] 
                                             + $esc['horas_ej'] 
                                             + $esc['horas_ep']

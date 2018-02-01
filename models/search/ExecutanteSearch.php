@@ -12,6 +12,7 @@ use app\models\Executante;
  */
 class ExecutanteSearch extends Executante
 {
+    public $user;
     /**
      * @inheritdoc
      */
@@ -19,7 +20,7 @@ class ExecutanteSearch extends Executante
     {
         return [
             [['usuario_id'], 'integer'],
-            [['usuario_id'], 'safe'],
+            [['usuario_id', 'user'], 'safe'],
         ];
     }
 
@@ -42,6 +43,15 @@ class ExecutanteSearch extends Executante
     public function search($params)
     {
         $query = Executante::find();
+        $query->joinWith(['user']);
+
+         $dataProvider->sort->attributes['user'] = [
+            // The tables are the ones our relation are configured to
+            // in my case they are prefixed with "tbl_"
+            'asc' => ['user.nome' => SORT_ASC],
+            'desc' => ['user.nome' => SORT_DESC],
+        ];
+
 
         // add conditions that should always apply here
 
@@ -71,7 +81,8 @@ class ExecutanteSearch extends Executante
             ->andFilterWhere(['like', 'uf', $this->uf])
             ->andFilterWhere(['like', 'cpf', $this->cpf])            
             ->andFilterWhere(['like', 'telefone', $this->telefone])
-            ->andFilterWhere(['like', 'celular', $this->celular]);
+            ->andFilterWhere(['like', 'celular', $this->celular])
+            ->andFilterWhere(['like', 'user.nome', $this->user]);
 
         return $dataProvider;
     }

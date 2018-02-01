@@ -206,15 +206,23 @@ $(".horas").focusout(function() {
   id = this.className.split("[")[1];
   id = id.split("]")[0];
 
-  
-  horas_ee = isNaN(parseInt($("#horas_ee-"+id).val())) ? 0 : parseInt($("#horas_ee-"+id).val());
-  horas_es = isNaN(parseInt($("#horas_es-"+id).val())) ? 0 : parseInt($("#horas_es-"+id).val());
-  horas_ep = isNaN(parseInt($("#horas_ep-"+id).val())) ? 0 : parseInt($("#horas_ep-"+id).val());
-  horas_ej = isNaN(parseInt($("#horas_ej-"+id).val())) ? 0 : parseInt($("#horas_ej-"+id).val());
-  horas_tp = isNaN(parseInt($("#horas_tp-"+id).val())) ? 0 : parseInt($("#horas_tp-"+id).val());
+  tipo = this.id.split("_")[1];
+  tipo = tipo.split("-")[0];
 
-  console.log(parseInt($("#horas_es-"+id).val()));
+  disc = this.id.split("-")[1];
+  disc = disc.split("-")[0];
+
+  horas_ee = isNaN(parseInt($("#horas_ee-"+disc+"-"+id).val())) ? 0 : parseInt($("#horas_ee-"+disc+"-"+id).val());
+  horas_es = isNaN(parseInt($("#horas_es-"+disc+"-"+id).val())) ? 0 : parseInt($("#horas_es-"+disc+"-"+id).val());
+  horas_ep = isNaN(parseInt($("#horas_ep-"+disc+"-"+id).val())) ? 0 : parseInt($("#horas_ep-"+disc+"-"+id).val());
+  horas_ej = isNaN(parseInt($("#horas_ej-"+disc+"-"+id).val())) ? 0 : parseInt($("#horas_ej-"+disc+"-"+id).val());
+  horas_tp = isNaN(parseInt($("#horas_tp-"+disc+"-"+id).val())) ? 0 : parseInt($("#horas_tp-"+disc+"-"+id).val());
+
+  
+  
+
   var totalHoras = horas_ee + horas_es + horas_ep + horas_ej + horas_tp;
+  var totalHorasGeral = horas_ee + horas_es + horas_ep + horas_ej + horas_tp;
   
     var tds = document.getElementsByTagName("td");
     for (var i = 0; i<tds.length; i++) {      
@@ -223,8 +231,188 @@ $(".horas").focusout(function() {
         tds[i].innerHTML = totalHoras;
       }
     }
+
+    if($(this).val()!=""){
   
-  
+      var tds = document.getElementsByTagName("th");
+      for (var i = 0; i<tds.length; i++) {      
+        if(tipo=="ee"){
+          if(disc==1){
+            if (tds[i].className == "sub-a-tot-ee-entregavel") {  
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+            }  
+             if (tds[i].className == "sub-a-tot-ee") {  
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+            } 
+            if (tds[i].className == "full-a-tot-ee") {  
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+            }  
+          }
+          if(disc==2){
+            if (tds[i].className == "sub-p-tot-ee-entregavel") {  
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+            }  
+             if (tds[i].className == "sub-p-tot-ee") {  
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+            } 
+            if (tds[i].className == "full-p-tot-ee") {  
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+            }  
+          }
+          if(disc==3){
+            if (tds[i].className == "sub-i-tot-ee-entregavel") {  
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+            }  
+             if (tds[i].className == "sub-i-tot-ee") {  
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+            } 
+            if (tds[i].className == "full-i-tot-ee") {  
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+            }  
+          }
+        }
+        if(tipo=="es"){
+          if(disc==1){
+            if (tds[i].className == "sub-a-tot-es-entregavel") {  
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+            } 
+             if (tds[i].className == "sub-a-tot-es") {  
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+            } 
+            if (tds[i].className == "full-a-tot-es") {  
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+            }   
+          }
+          if(disc==2){
+            if (tds[i].className == "sub-p-tot-es-entregavel") {  
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+            } 
+             if (tds[i].className == "sub-p-tot-es") {  
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+            } 
+            if (tds[i].className == "full-p-tot-es") {  
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+            }   
+          }
+          if(disc==3){
+            if (tds[i].className == "sub-i-tot-es-entregavel") {  
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+            } 
+             if (tds[i].className == "sub-i-tot-es") {  
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+            } 
+            if (tds[i].className == "full-i-tot-es") {  
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+            }   
+          }
+        }
+        if(tipo=="ep"){
+          if(disc==1){
+            if (tds[i].className == "sub-a-tot-ep-entregavel") {  
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+            } 
+             if (tds[i].className == "sub-a-tot-ep") {  
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+            } 
+            if (tds[i].className == "full-a-tot-ep") {  
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+            }   
+          }
+          if(disc==2){
+            if (tds[i].className == "sub-p-tot-ep-entregavel") {  
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+            } 
+             if (tds[i].className == "sub-p-tot-ep") {  
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+            } 
+            if (tds[i].className == "full-p-tot-ep") {  
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+            }   
+          }
+          if(disc==3){
+            if (tds[i].className == "sub-i-tot-ep-entregavel") {  
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+            } 
+             if (tds[i].className == "sub-i-tot-ep") {  
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+            } 
+            if (tds[i].className == "full-i-tot-ep") {  
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+            }   
+          }
+        }
+        if(tipo=="ej"){
+          if(disc==1){
+            if (tds[i].className == "sub-a-tot-ej-entregavel") {  
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+            }  
+            if (tds[i].className == "sub-a-tot-ej") {  
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+            } 
+            if (tds[i].className == "full-a-tot-ej") {  
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+            }   
+          }
+          if(disc==2){
+            if (tds[i].className == "sub-p-tot-ej-entregavel") {  
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+            }  
+            if (tds[i].className == "sub-p-tot-ej") {  
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+            } 
+            if (tds[i].className == "full-p-tot-ej") {  
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+            }   
+          }
+          if(disc==3){
+            if (tds[i].className == "sub-i-tot-ej-entregavel") {  
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+            }  
+            if (tds[i].className == "sub-i-tot-ej") {  
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+            } 
+            if (tds[i].className == "full-i-tot-ej") {  
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+            }   
+          }
+        }
+        if(tipo=="tp"){
+          if(disc==1){
+            if (tds[i].className == "sub-a-tot-tp-entregavel") {  
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+            }  
+            if (tds[i].className == "sub-a-tot-tp") {  
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+            } 
+            if (tds[i].className == "full-a-tot-tp") {  
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+            }  
+          }
+          if(disc==2){
+            if (tds[i].className == "sub-p-tot-tp-entregavel") {  
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+            }  
+            if (tds[i].className == "sub-p-tot-tp") {  
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+            } 
+            if (tds[i].className == "full-p-tot-tp") {  
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+            }  
+          }
+          if(disc==3){
+            if (tds[i].className == "sub-i-tot-tp-entregavel") {  
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+            }  
+            if (tds[i].className == "sub-i-tot-tp") {  
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+            } 
+            if (tds[i].className == "full-i-tot-tp") {  
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+            }  
+          }
+        }
+      }
+    }
 
 });
 
@@ -824,6 +1012,23 @@ tbody {
     $exe_es ='';
     $exe_ee ='';
     $separaEntregavel = 0;
+    $total_a_EE = 0;
+    $total_a_ES = 0;
+    $total_a_EP = 0;
+    $total_a_EJ = 0;
+    $total_a_TP = 0;
+    $total_p_EE = 0;
+    $total_p_ES = 0;
+    $total_p_EP = 0;
+    $total_p_EJ = 0;
+    $total_p_TP = 0;
+    $total_i_EE = 0;
+    $total_i_ES = 0;
+    $total_i_EP = 0;
+    $total_i_EJ = 0;
+    $total_i_TP = 0;
+
+
     foreach ($escopoArray as $key => $esc) { 
         $escopoModel =  Escopo::findOne($esc['id']);  
         if(!empty($exe_tp))
@@ -846,13 +1051,14 @@ tbody {
       $qtd='<td style="font-size: 10px; padding: 1px; background-color: #337ab7"></td>';
       $for='<td style="font-size: 10px; padding: 1px; background-color: #337ab7"></td>';
 
+      $separador = 0;
       if($isEntregavel){
           if($separaEntregavel==0){
-            $separador = '';
+            $separador = 1;
+            $separaEntregavel = 1;
+            
           }
-          else{
-            $separador = '';
-          }
+          
         $qtd = '<td style="font-size: 10px; padding: 1px;">'.$form2->field($escopoModel, 'qtd')->textInput(['style'=>' width:4em', 'name' => 'Escopo['.$esc["id"].'][qtd]', 'type' => 'number'])->label(false).'</td>'; 
         $for = '<td style="font-size: 10px; padding: 1px;">'.$form2->field($escopoModel, 'for')->textInput(['style'=>' width:4em', 'name' => 'Escopo['.$esc["id"].'][for]'])->label(false).'</td>';
 
@@ -894,46 +1100,104 @@ tbody {
         'toggleButton' => ['label'=>'<i class="fa fa-caret-up" aria-hidden="true"></i>', 'class'=>'btn btn-default', 'style'=>'padding:1px'],
       ]);
 
-      $horas_tp = '<td style="font-size: 10px; padding: 1px;"><div class="row"><div class="col-md-8">'.$form2->field($escopoModel, 'horas_tp')->textInput(['style'=>'width:4em', 'name' => 'Escopo['.$esc["id"].'][horas_tp]', 'type' => 'number', 'class' => 'Escopo['.$esc["id"].'][horas_tp] horas', 'id' => 'horas_tp-'.$esc["id"]])->label(false).'</div><div class="col-md-4" style="padding-left:1px;margin-left:-1em">'.$popTP.'</div></td>'; 
+       $disciplina_id = Yii::$app->db->createCommand('SELECT disciplina_id FROM atividademodelo WHERE id='.$esc['atividademodelo_id'])->queryScalar();
+
+      $horas_tp = '<td style="font-size: 10px; padding: 1px;"><div class="row"><div class="col-md-8">'.$form2->field($escopoModel, 'horas_tp')->textInput(['style'=>'width:4em', 'name' => 'Escopo['.$esc["id"].'][horas_tp]', 'type' => 'number', 'class' => 'Escopo['.$esc["id"].'][horas_tp] horas', 'id' => 'horas_tp-'.$disciplina_id.'-'.$esc["id"]])->label(false).'</div><div class="col-md-4" style="padding-left:1px;margin-left:-1em">'.$popTP.'</div></td>'; 
 
       echo $form2->field($escopoModel, 'exe_tp_id')->textInput(['style'=>'width:4em;', 'name' => 'Escopo['.$esc["id"].'][exe_tp_id]','id' => 'escopotp-'.$esc["id"], 'type' => 'number','hidden'=>'hidden'])->label(false);
 
-      $horas_ej = '<td style="font-size: 10px; padding: 1px;"><div class="row"><div class="col-md-8">'.$form2->field($escopoModel, 'horas_ej')->textInput(['style'=>'width:4em', 'name' =>'Escopo['.$esc["id"].'][horas_ej]', 'type' => 'number', 'class' => 'Escopo['.$esc["id"].'][horas_ej] horas', 'id' => 'horas_ej-'.$esc["id"]])->label(false).'</div><div class="col-md-4" style="padding-left:1px;margin-left:-1em">'.$popEJ.'</div></td>'; 
+      $horas_ej = '<td style="font-size: 10px; padding: 1px;"><div class="row"><div class="col-md-8">'.$form2->field($escopoModel, 'horas_ej')->textInput(['style'=>'width:4em', 'name' =>'Escopo['.$esc["id"].'][horas_ej]', 'type' => 'number', 'class' => 'Escopo['.$esc["id"].'][horas_ej] horas', 'id' => 'horas_ej-'.$disciplina_id.'-'.$esc["id"]])->label(false).'</div><div class="col-md-4" style="padding-left:1px;margin-left:-1em">'.$popEJ.'</div></td>'; 
 
       echo $form2->field($escopoModel, 'exe_ej_id')->textInput(['style'=>'width:4em;', 'name' => 'Escopo['.$esc["id"].'][exe_ej_id]','id' => 'escopoej-'.$esc["id"], 'type' => 'number', 'hidden'=>'hidden'])->label(false);
 
-      $horas_ep = '<td style="font-size: 10px; padding: 1px;"><div class="row"><div class="col-md-8">'.$form2->field($escopoModel, 'horas_ep')->textInput(['style'=>'width:4em', 'name' =>'Escopo['.$esc["id"].'][horas_ep]', 'type' => 'number', 'class' => 'Escopo['.$esc["id"].'][horas_ep] horas', 'id' => 'horas_ep-'.$esc["id"]])->label(false).'</div><div class="col-md-4" style="padding-left:1px;margin-left:-1em">'.$popEP.'</div></td>';
+      $horas_ep = '<td style="font-size: 10px; padding: 1px;"><div class="row"><div class="col-md-8">'.$form2->field($escopoModel, 'horas_ep')->textInput(['style'=>'width:4em', 'name' =>'Escopo['.$esc["id"].'][horas_ep]', 'type' => 'number', 'class' => 'Escopo['.$esc["id"].'][horas_ep] horas', 'id' => 'horas_ep-'.$disciplina_id.'-'.$esc["id"]])->label(false).'</div><div class="col-md-4" style="padding-left:1px;margin-left:-1em">'.$popEP.'</div></td>';
 
       echo $form2->field($escopoModel, 'exe_ep_id')->textInput(['style'=>'width:4em;', 'name' => 'Escopo['.$esc["id"].'][exe_ep_id]','id' => 'escopoep-'.$esc["id"], 'type' => 'number', 'hidden'=>'hidden'])->label(false);
 
-      $horas_es = '<td style="font-size: 10px; padding: 1px;"><div class="row"><div class="col-md-8">'.$form2->field($escopoModel, 'horas_es')->textInput(['style'=>'width:4em', 'name' =>'Escopo['.$esc["id"].'][horas_es]', 'type' => 'number', 'class' => 'Escopo['.$esc["id"].'][horas_es] horas', 'id' => 'horas_es-'.$esc["id"]])->label(false).'</div><div class="col-md-4" style="padding-left:1px;margin-left:-1em">'.$popES.'</div></td>';
+      $horas_es = '<td style="font-size: 10px; padding: 1px;"><div class="row"><div class="col-md-8">'.$form2->field($escopoModel, 'horas_es')->textInput(['style'=>'width:4em', 'name' =>'Escopo['.$esc["id"].'][horas_es]', 'type' => 'number', 'class' => 'Escopo['.$esc["id"].'][horas_es] horas', 'id' => 'horas_es-'.$disciplina_id.'-'.$esc["id"]])->label(false).'</div><div class="col-md-4" style="padding-left:1px;margin-left:-1em">'.$popES.'</div></td>';
 
       echo $form2->field($escopoModel, 'exe_es_id')->textInput(['style'=>'width:4em;', 'name' => 'Escopo['.$esc["id"].'][exe_es_id]','id' => 'escopoes-'.$esc["id"], 'type' => 'number', 'hidden'=>'hidden'])->label(false);
 
-      $horas_ee = '<td style="font-size: 10px; padding: 1px;"><div class="row"><div class="col-md-8">'.$form2->field($escopoModel, 'horas_ee')->textInput(['style'=>'width:4em', 'name' =>'Escopo['.$esc["id"].'][horas_ee]', 'type' => 'number', 'class' => 'Escopo['.$esc["id"].'][horas_ee] horas', 'id' => 'horas_ee-'.$esc["id"]])->label(false).'</div><div class="col-md-4" style="padding-left:1px;margin-left:-1em">'.$popEE.'</div></td>';
+      $horas_ee = '<td style="font-size: 10px; padding: 1px;"><div class="row"><div class="col-md-8">'.$form2->field($escopoModel, 'horas_ee')->textInput(['style'=>'width:4em', 'name' =>'Escopo['.$esc["id"].'][horas_ee]', 'type' => 'number', 'class' => 'Escopo['.$esc["id"].'][horas_ee] horas', 'id' => 'horas_ee-'.$disciplina_id.'-'.$esc["id"]])->label(false).'</div><div class="col-md-4" style="padding-left:1px;margin-left:-1em">'.$popEE.'</div></td>';
 
       echo $form2->field($escopoModel, 'exe_ee_id')->textInput(['style'=>'width:4em;', 'name' => 'Escopo['.$esc["id"].'][exe_ee_id]','id' => 'escopoee-'.$esc["id"], 'type' => 'number', 'hidden'=>'hidden'])->label(false);
       
 
-      $disciplina_id = Yii::$app->db->createCommand('SELECT disciplina_id FROM atividademodelo WHERE id='.$esc['atividademodelo_id'])->queryScalar();
+     
 
       
 
 
       $total = $esc["horas_tp"]+$esc["horas_ej"]+$esc["horas_ep"]+$esc["horas_es"]+$esc["horas_ee"];
       $total = '<td class="total-td['.$esc['id'].']" style="font-size: 12px">'.$total.'</div>';
+
       
-      if($disciplina_id == 1){
-        $bodyA .=  $descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;  
+      if($disciplina_id == 1){        
+        $total_a_EE = $esc["horas_ee"] + $total_a_EE;
+        $total_a_ES = $esc["horas_es"] + $total_a_ES;
+        $total_a_EP = $esc["horas_ep"] + $total_a_EP;
+        $total_a_EJ = $esc["horas_ej"] + $total_a_EJ;
+        $total_a_TP = $esc["horas_tp"] + $total_a_TP;
+        
+          if($descricao=='<tr><td style="font-size: 10px">Coordenação e Adminstração</td>'){
+            $bodyA .=  $descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total.'<tr><th>SUBTOTAL ATIVIDADES GERAIS DE PROJETO</th><th></th><th></th><th class="sub-a-tot-ee">'.$total_a_EE.'</th><th class="sub-a-tot-es">'.$total_a_ES.'</th><th class="sub-a-tot-ep">'.$total_a_EP.'</th><th class="sub-a-tot-ej">'.$total_a_EJ.'</th><th class="sub-a-tot-tp">'.$total_a_TP.'</th><th></th><th></th><th></th><th></th><th></th></tr>';  
+          }
+          else{
+             $bodyA .=  $descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
+          }
       }
       if($disciplina_id == 2){
-        $bodyP .=  $descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
+        $total_p_EE = $esc["horas_ee"] + $total_p_EE;
+        $total_p_ES = $esc["horas_es"] + $total_p_ES;
+        $total_p_EP = $esc["horas_ep"] + $total_p_EP;
+        $total_p_EJ = $esc["horas_ej"] + $total_p_EJ;
+        $total_p_TP = $esc["horas_tp"] + $total_p_TP;
+        
+        if($descricao=='<tr><td style="font-size: 10px">Coordenação e Adminstração</td>'){
+            $bodyP .=  $descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total.'<tr><th>SUBTOTAL ATIVIDADES GERAIS DE PROJETO</th><th></th><th></th><th class="sub-p-tot-ee">'.$total_p_EE.'</th><th class="sub-p-tot-es">'.$total_p_ES.'</th><th class="sub-p-tot-ep">'.$total_p_EP.'</th><th class="sub-p-tot-ej">'.$total_p_EJ.'</th><th class="sub-p-tot-tp">'.$total_p_TP.'</th><th></th><th></th><th></th><th></th><th></th></tr>';  
+          }
+          else{
+             $bodyP .=  $descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
+          }
       }
       if($disciplina_id == 3){
-        $bodyI .=  $descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total; 
-      }       
+        $total_i_EE = $esc["horas_ee"] + $total_i_EE;
+        $total_i_ES = $esc["horas_es"] + $total_i_ES;
+        $total_i_EP = $esc["horas_ep"] + $total_i_EP;
+        $total_i_EJ = $esc["horas_ej"] + $total_i_EJ;
+        $total_i_TP = $esc["horas_tp"] + $total_i_TP;
+               
+        if($descricao=='<tr><td style="font-size: 10px">Coordenação e Adminstração</td>'){
+            $bodyI .=  $descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total.'<tr><th>SUBTOTAL ATIVIDADES GERAIS DE PROJETO</th><th></th><th></th><th class="sub-i-tot-ee">'.$total_i_EE.'</th><th class="sub-i-tot-es">'.$total_i_ES.'</th><th class="sub-i-tot-ep">'.$total_i_EP.'</th><th class="sub-i-tot-ej">'.$total_i_EJ.'</th><th class="sub-i-tot-tp">'.$total_i_TP.'</th><th></th><th></th><th></th><th></th><th></th></tr>';  
+          }
+          else{
+             $bodyI .=  $descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
+          }
+      } 
+
           
  } 
+    $entr = Yii::$app->db->createCommand('SELECT SUM(horas_ee) entr_horas_a_ee,SUM(horas_es) entr_horas_a_es,SUM(horas_ep) entr_horas_a_ep,SUM(horas_ej) entr_horas_a_ej,SUM(horas_tp) entr_horas_a_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$model->id.' AND isEntregavel=1 AND disciplina_id=1')->queryOne();
+
+    $full = Yii::$app->db->createCommand('SELECT SUM(horas_ee) entr_horas_a_ee,SUM(horas_es) entr_horas_a_es,SUM(horas_ep) entr_horas_a_ep,SUM(horas_ej) entr_horas_a_ej,SUM(horas_tp) entr_horas_a_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=1 AND projeto_id='.$model->id)->queryOne();
+    
+    $bodyA = $bodyA.'<tr><th>SUBTOTAL ATIVIDADES GERAIS DE PROJETO</th><th></th><th></th><th class="sub-a-tot-ee-entregavel">'.$entr['entr_horas_a_ee'].'</th><th class="sub-a-tot-es-entregavel">'.$entr['entr_horas_a_es'].'</th><th class="sub-a-tot-ep-entregavel">'.$entr['entr_horas_a_ep'].'</th><th class="sub-a-tot-ej-entregavel">'.$entr['entr_horas_a_ej'].'</th><th class="sub-a-tot-tp-entregavel">'.$entr['entr_horas_a_tp'].'</th><th></th><th></th><th></th><th></th><th></th></tr>
+    <tr><th>HH TOTAL DE ENGENHARIA</th><th></th><th></th><th class="full-a-tot-ee">'.$full['entr_horas_a_ee'].'</th><th class="full-a-tot-es">'.$full['entr_horas_a_es'].'</th><th class="full-a-tot-ep">'.$full['entr_horas_a_ep'].'</th><th class="full-a-tot-ej">'.$full['entr_horas_a_ej'].'</th><th class="full-a-tot-tp">'.$full['entr_horas_a_tp'].'</th><th></th><th></th><th></th><th></th><th></th></tr>';
+
+    $entr = Yii::$app->db->createCommand('SELECT SUM(horas_ee) entr_horas_p_ee,SUM(horas_es) entr_horas_p_es,SUM(horas_ep) entr_horas_p_ep,SUM(horas_ej) entr_horas_p_ej,SUM(horas_tp) entr_horas_p_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$model->id.' AND isEntregavel=1 AND disciplina_id=2')->queryOne();
+
+    $full = Yii::$app->db->createCommand('SELECT SUM(horas_ee) entr_horas_a_ee,SUM(horas_es) entr_horas_a_es,SUM(horas_ep) entr_horas_a_ep,SUM(horas_ej) entr_horas_a_ej,SUM(horas_tp) entr_horas_a_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=2 AND projeto_id='.$model->id)->queryOne();
+
+    $bodyP = $bodyP.'<tr><th>SUBTOTAL ATIVIDADES GERAIS DE PROJETO</th><th></th><th></th><th>'.$entr['entr_horas_p_ee'].'</th><th>'.$entr['entr_horas_p_es'].'</th><th>'.$entr['entr_horas_p_ep'].'</th><th>'.$entr['entr_horas_p_ej'].'</th><th>'.$entr['entr_horas_p_tp'].'</th><th></th><th></th><th></th><th></th><th></th></tr>
+    <tr><th>HH TOTAL DE ENGENHARIA</th><th></th><th></th><th class="full-p-tot-ee">'.$total_p_EE.'</th><th class="full-p-tot-es">'.$total_p_ES.'</th><th class="full-p-tot-ep">'.$total_p_EP.'</th><th class="full-p-tot-ej">'.$total_p_EJ.'</th><th class="full-p-tot-tp">'.$total_p_TP.'</th><th></th><th></th><th></th><th></th><th></th></tr>';
+
+    $entr = Yii::$app->db->createCommand('SELECT SUM(horas_ee) entr_horas_i_ee,SUM(horas_es) entr_horas_i_es,SUM(horas_ep) entr_horas_i_ep,SUM(horas_ej) entr_horas_i_ej,SUM(horas_tp) entr_horas_i_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$model->id.' AND isEntregavel=1 AND disciplina_id=3')->queryOne();
+
+    $full = Yii::$app->db->createCommand('SELECT SUM(horas_ee) entr_horas_a_ee,SUM(horas_es) entr_horas_a_es,SUM(horas_ep) entr_horas_a_ep,SUM(horas_ej) entr_horas_a_ej,SUM(horas_tp) entr_horas_a_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=3 AND projeto_id='.$model->id)->queryOne();
+
+    $bodyI = $bodyI.'<tr><th>SUBTOTAL ATIVIDADES GERAIS DE PROJETO</th><th></th><th></th><th>'.$entr['entr_horas_i_ee'].'</th><th>'.$entr['entr_horas_i_es'].'</th><th>'.$entr['entr_horas_i_ep'].'</th><th>'.$entr['entr_horas_i_ej'].'</th><th>'.$entr['entr_horas_i_tp'].'</th><th></th><th></th><th></th><th></th><th></th></tr>
+    <tr><th>HH TOTAL DE ENGENHARIA</th><th></th><th></th><th class="full-i-tot-ee">'.$total_p_EE.'</th><th class="full-i-tot-es">'.$total_p_ES.'</th><th class="full-i-tot-ep">'.$total_p_EP.'</th><th class="full-i-tot-ej">'.$total_p_EJ.'</th><th class="full-i-tot-tp">'.$total_p_TP.'</th><th></th><th></th><th></th><th></th><th></th></tr>';
+
     $automacao = '<div style="height: 50em; overflow-y: scroll;">'.$header.''.$bodyA.'</table></div>';
     $processo = '<div style="height: 50em; overflow-y: scroll;">'.$header.''.$bodyP.'</table></div>';
     $instrumentacao = '<div style="height: 50em; overflow-y: scroll;">'.$header.''.$bodyI.'</table></div>';

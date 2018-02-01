@@ -39,7 +39,7 @@ $this->registerJs("
 <?php $this->head() ?>
 <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+        // 'filterModel' => $searchModel,
         'options' => ['style' => 'font-size:12px;'],
         'pjax' => true,
         

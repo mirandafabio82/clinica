@@ -65,15 +65,17 @@ $this->registerJs("
               'contentOptions' => ['style' => 'width:5em;  min-width:5em;'],
             ],
             [
-              'attribute' => 'usuario_id',              
+              'header' => '<span style="color:#337ab7">Nome</span>',
+              'attribute' => 'user',              
               'format' => 'raw',
                'value' => function ($data) {
-                if(isset($data->usuario_id) && !empty($data->usuario_id))
+                 if(isset($data->usuario_id) && !empty($data->usuario_id))
                    return Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.$data->usuario_id)->queryScalar();
                },
-            ],            
+            ],         
             [
-              'attribute' => 'cliente_id',              
+              'header' => '<span style="color:#337ab7">Cliente</span>',
+              'attribute' => 'cliente',              
               'format' => 'raw',
                'value' => function ($data) {
                  if(isset($data->cliente_id) && !empty($data->cliente_id))
@@ -81,7 +83,7 @@ $this->registerJs("
                },
             ],
             [
-              'header' => 'Email',              
+              'header' => '<span style="color:#337ab7">Email</span>',              
               'format' => 'raw',
                'value' => function ($data) {
 
