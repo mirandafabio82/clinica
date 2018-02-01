@@ -39,7 +39,7 @@ class Documento extends \yii\db\ActiveRecord
             // [['projeto_id'], 'required'],
             [['projeto_id', 'revisao'], 'integer'],
             [['data', 'criado', 'modificado'], 'safe'],
-            [['nome', 'tipo'], 'string', 'max' => 20],
+            [['nome', 'tipo'], 'string', 'max' => 255],
             [['projeto_id'], 'exist', 'skipOnError' => true, 'targetClass' => Projeto::className(), 'targetAttribute' => ['projeto_id' => 'id']],
         ];
     }

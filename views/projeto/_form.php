@@ -1139,7 +1139,7 @@ tbody {
         $total_a_EJ = $esc["horas_ej"] + $total_a_EJ;
         $total_a_TP = $esc["horas_tp"] + $total_a_TP;
         
-          if($descricao=='<tr><td style="font-size: 10px">Coordenação e Adminstração</td>'){
+          if($descricao=='<tr><td style="font-size: 10px">Coordenação e Administração</td>'){
             $bodyA .=  $descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total.'<tr><th>SUBTOTAL ATIVIDADES GERAIS DE PROJETO</th><th></th><th></th><th class="sub-a-tot-ee">'.$total_a_EE.'</th><th class="sub-a-tot-es">'.$total_a_ES.'</th><th class="sub-a-tot-ep">'.$total_a_EP.'</th><th class="sub-a-tot-ej">'.$total_a_EJ.'</th><th class="sub-a-tot-tp">'.$total_a_TP.'</th><th></th><th></th><th></th><th></th><th></th></tr>';  
           }
           else{
@@ -1153,7 +1153,7 @@ tbody {
         $total_p_EJ = $esc["horas_ej"] + $total_p_EJ;
         $total_p_TP = $esc["horas_tp"] + $total_p_TP;
         
-        if($descricao=='<tr><td style="font-size: 10px">Coordenação e Adminstração</td>'){
+        if($descricao=='<tr><td style="font-size: 10px">Coordenação e Administração</td>'){
             $bodyP .=  $descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total.'<tr><th>SUBTOTAL ATIVIDADES GERAIS DE PROJETO</th><th></th><th></th><th class="sub-p-tot-ee">'.$total_p_EE.'</th><th class="sub-p-tot-es">'.$total_p_ES.'</th><th class="sub-p-tot-ep">'.$total_p_EP.'</th><th class="sub-p-tot-ej">'.$total_p_EJ.'</th><th class="sub-p-tot-tp">'.$total_p_TP.'</th><th></th><th></th><th></th><th></th><th></th></tr>';  
           }
           else{
@@ -1167,7 +1167,7 @@ tbody {
         $total_i_EJ = $esc["horas_ej"] + $total_i_EJ;
         $total_i_TP = $esc["horas_tp"] + $total_i_TP;
                
-        if($descricao=='<tr><td style="font-size: 10px">Coordenação e Adminstração</td>'){
+        if($descricao=='<tr><td style="font-size: 10px">Coordenação e Administração</td>'){
             $bodyI .=  $descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total.'<tr><th>SUBTOTAL ATIVIDADES GERAIS DE PROJETO</th><th></th><th></th><th class="sub-i-tot-ee">'.$total_i_EE.'</th><th class="sub-i-tot-es">'.$total_i_ES.'</th><th class="sub-i-tot-ep">'.$total_i_EP.'</th><th class="sub-i-tot-ej">'.$total_i_EJ.'</th><th class="sub-i-tot-tp">'.$total_i_TP.'</th><th></th><th></th><th></th><th></th><th></th></tr>';  
           }
           else{
@@ -1180,23 +1180,60 @@ tbody {
     $entr = Yii::$app->db->createCommand('SELECT SUM(horas_ee) entr_horas_a_ee,SUM(horas_es) entr_horas_a_es,SUM(horas_ep) entr_horas_a_ep,SUM(horas_ej) entr_horas_a_ej,SUM(horas_tp) entr_horas_a_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$model->id.' AND isEntregavel=1 AND disciplina_id=1')->queryOne();
 
     $full = Yii::$app->db->createCommand('SELECT SUM(horas_ee) entr_horas_a_ee,SUM(horas_es) entr_horas_a_es,SUM(horas_ep) entr_horas_a_ep,SUM(horas_ej) entr_horas_a_ej,SUM(horas_tp) entr_horas_a_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=1 AND projeto_id='.$model->id)->queryOne();
+
+    if(!isset($full['entr_horas_a_ee'])) $full['entr_horas_a_ee'] = 0; 
+    if(!isset($full['entr_horas_a_es'])) $full['entr_horas_a_es'] = 0; 
+    if(!isset($full['entr_horas_a_ep'])) $full['entr_horas_a_ep'] = 0; 
+    if(!isset($full['entr_horas_a_ej'])) $full['entr_horas_a_ej'] = 0; 
+    if(!isset($full['entr_horas_a_tp'])) $full['entr_horas_a_tp'] = 0; 
+
+    if(!isset($entr['entr_horas_a_ee'])) $entr['entr_horas_a_ee'] = 0;
+    if(!isset($entr['entr_horas_a_es'])) $entr['entr_horas_a_es'] = 0;
+    if(!isset($entr['entr_horas_a_ep'])) $entr['entr_horas_a_ep'] = 0;
+    if(!isset($entr['entr_horas_a_ej'])) $entr['entr_horas_a_ej'] = 0;
+    if(!isset($entr['entr_horas_a_tp'])) $entr['entr_horas_a_tp'] = 0;
     
     $bodyA = $bodyA.'<tr><th>SUBTOTAL ATIVIDADES GERAIS DE PROJETO</th><th></th><th></th><th class="sub-a-tot-ee-entregavel">'.$entr['entr_horas_a_ee'].'</th><th class="sub-a-tot-es-entregavel">'.$entr['entr_horas_a_es'].'</th><th class="sub-a-tot-ep-entregavel">'.$entr['entr_horas_a_ep'].'</th><th class="sub-a-tot-ej-entregavel">'.$entr['entr_horas_a_ej'].'</th><th class="sub-a-tot-tp-entregavel">'.$entr['entr_horas_a_tp'].'</th><th></th><th></th><th></th><th></th><th></th></tr>
     <tr><th>HH TOTAL DE ENGENHARIA</th><th></th><th></th><th class="full-a-tot-ee">'.$full['entr_horas_a_ee'].'</th><th class="full-a-tot-es">'.$full['entr_horas_a_es'].'</th><th class="full-a-tot-ep">'.$full['entr_horas_a_ep'].'</th><th class="full-a-tot-ej">'.$full['entr_horas_a_ej'].'</th><th class="full-a-tot-tp">'.$full['entr_horas_a_tp'].'</th><th></th><th></th><th></th><th></th><th></th></tr>';
 
     $entr = Yii::$app->db->createCommand('SELECT SUM(horas_ee) entr_horas_p_ee,SUM(horas_es) entr_horas_p_es,SUM(horas_ep) entr_horas_p_ep,SUM(horas_ej) entr_horas_p_ej,SUM(horas_tp) entr_horas_p_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$model->id.' AND isEntregavel=1 AND disciplina_id=2')->queryOne();
 
-    $full = Yii::$app->db->createCommand('SELECT SUM(horas_ee) entr_horas_a_ee,SUM(horas_es) entr_horas_a_es,SUM(horas_ep) entr_horas_a_ep,SUM(horas_ej) entr_horas_a_ej,SUM(horas_tp) entr_horas_a_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=2 AND projeto_id='.$model->id)->queryOne();
+    $full = Yii::$app->db->createCommand('SELECT SUM(horas_ee) entr_horas_p_ee,SUM(horas_es) entr_horas_p_es,SUM(horas_ep) entr_horas_p_ep,SUM(horas_ej) entr_horas_p_ej,SUM(horas_tp) entr_horas_p_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=2 AND projeto_id='.$model->id)->queryOne();
+
+    if(!isset($full['entr_horas_p_ee'])) $full['entr_horas_p_ee'] = 0;
+    if(!isset($full['entr_horas_p_es'])) $full['entr_horas_p_es'] = 0;
+    if(!isset($full['entr_horas_p_ep'])) $full['entr_horas_p_ep'] = 0;
+    if(!isset($full['entr_horas_p_ej'])) $full['entr_horas_p_ej'] = 0;
+    if(!isset($full['entr_horas_p_tp'])) $full['entr_horas_p_tp'] = 0;
+
+    if(!isset($entr['entr_horas_p_ee'])) $entr['entr_horas_p_ee'] = 0;
+    if(!isset($entr['entr_horas_p_es'])) $entr['entr_horas_p_es'] = 0;
+    if(!isset($entr['entr_horas_p_ep'])) $entr['entr_horas_p_ep'] = 0;
+    if(!isset($entr['entr_horas_p_ej'])) $entr['entr_horas_p_ej'] = 0;
+    if(!isset($entr['entr_horas_p_tp'])) $entr['entr_horas_p_tp'] = 0;
+
 
     $bodyP = $bodyP.'<tr><th>SUBTOTAL ATIVIDADES GERAIS DE PROJETO</th><th></th><th></th><th>'.$entr['entr_horas_p_ee'].'</th><th>'.$entr['entr_horas_p_es'].'</th><th>'.$entr['entr_horas_p_ep'].'</th><th>'.$entr['entr_horas_p_ej'].'</th><th>'.$entr['entr_horas_p_tp'].'</th><th></th><th></th><th></th><th></th><th></th></tr>
-    <tr><th>HH TOTAL DE ENGENHARIA</th><th></th><th></th><th class="full-p-tot-ee">'.$total_p_EE.'</th><th class="full-p-tot-es">'.$total_p_ES.'</th><th class="full-p-tot-ep">'.$total_p_EP.'</th><th class="full-p-tot-ej">'.$total_p_EJ.'</th><th class="full-p-tot-tp">'.$total_p_TP.'</th><th></th><th></th><th></th><th></th><th></th></tr>';
+    <tr><th>HH TOTAL DE ENGENHARIA</th><th></th><th></th><th class="full-p-tot-ee">'.$full['entr_horas_p_ee'].'</th><th class="full-p-tot-es">'.$full['entr_horas_p_es'].'</th><th class="full-p-tot-ep">'.$full['entr_horas_p_ep'].'</th><th class="full-p-tot-ej">'.$full['entr_horas_p_ej'].'</th><th class="full-p-tot-tp">'.$full['entr_horas_p_tp'].'</th><th></th><th></th><th></th><th></th><th></th></tr>';
 
     $entr = Yii::$app->db->createCommand('SELECT SUM(horas_ee) entr_horas_i_ee,SUM(horas_es) entr_horas_i_es,SUM(horas_ep) entr_horas_i_ep,SUM(horas_ej) entr_horas_i_ej,SUM(horas_tp) entr_horas_i_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$model->id.' AND isEntregavel=1 AND disciplina_id=3')->queryOne();
 
-    $full = Yii::$app->db->createCommand('SELECT SUM(horas_ee) entr_horas_a_ee,SUM(horas_es) entr_horas_a_es,SUM(horas_ep) entr_horas_a_ep,SUM(horas_ej) entr_horas_a_ej,SUM(horas_tp) entr_horas_a_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=3 AND projeto_id='.$model->id)->queryOne();
+    $full = Yii::$app->db->createCommand('SELECT SUM(horas_ee) entr_horas_i_ee,SUM(horas_es) entr_horas_i_es,SUM(horas_ep) entr_horas_i_ep,SUM(horas_ej) entr_horas_i_ej,SUM(horas_tp) entr_horas_i_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=3 AND projeto_id='.$model->id)->queryOne();
+
+    if(!isset($full['entr_horas_i_ee'])) $full['entr_horas_i_ee'] = 0;
+    if(!isset($full['entr_horas_i_es'])) $full['entr_horas_i_es'] = 0;
+    if(!isset($full['entr_horas_i_ep'])) $full['entr_horas_i_ep'] = 0;
+    if(!isset($full['entr_horas_i_ej'])) $full['entr_horas_i_ej'] = 0;
+    if(!isset($full['entr_horas_i_tp'])) $full['entr_horas_i_tp'] = 0;
+
+    if(!isset($entr['entr_horas_i_ee'])) $entr['entr_horas_i_ee'] = 0;
+    if(!isset($entr['entr_horas_i_es'])) $entr['entr_horas_i_es'] = 0;
+    if(!isset($entr['entr_horas_i_ep'])) $entr['entr_horas_i_ep'] = 0;
+    if(!isset($entr['entr_horas_i_ej'])) $entr['entr_horas_i_ej'] = 0;
+    if(!isset($entr['entr_horas_i_tp'])) $entr['entr_horas_i_tp'] = 0;
 
     $bodyI = $bodyI.'<tr><th>SUBTOTAL ATIVIDADES GERAIS DE PROJETO</th><th></th><th></th><th>'.$entr['entr_horas_i_ee'].'</th><th>'.$entr['entr_horas_i_es'].'</th><th>'.$entr['entr_horas_i_ep'].'</th><th>'.$entr['entr_horas_i_ej'].'</th><th>'.$entr['entr_horas_i_tp'].'</th><th></th><th></th><th></th><th></th><th></th></tr>
-    <tr><th>HH TOTAL DE ENGENHARIA</th><th></th><th></th><th class="full-i-tot-ee">'.$total_p_EE.'</th><th class="full-i-tot-es">'.$total_p_ES.'</th><th class="full-i-tot-ep">'.$total_p_EP.'</th><th class="full-i-tot-ej">'.$total_p_EJ.'</th><th class="full-i-tot-tp">'.$total_p_TP.'</th><th></th><th></th><th></th><th></th><th></th></tr>';
+    <tr><th>HH TOTAL DE ENGENHARIA</th><th></th><th></th><th class="full-i-tot-ee">'.$full['entr_horas_i_ee'].'</th><th class="full-i-tot-es">'.$full['entr_horas_i_es'].'</th><th class="full-i-tot-ep">'.$full['entr_horas_i_ep'].'</th><th class="full-i-tot-ej">'.$full['entr_horas_i_ej'].'</th><th class="full-i-tot-tp">'.$full['entr_horas_i_tp'].'</th><th></th><th></th><th></th><th></th><th></th></tr>';
 
     $automacao = '<div style="height: 50em; overflow-y: scroll;">'.$header.''.$bodyA.'</table></div>';
     $processo = '<div style="height: 50em; overflow-y: scroll;">'.$header.''.$bodyP.'</table></div>';

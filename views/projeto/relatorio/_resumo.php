@@ -25,50 +25,50 @@ th, td {
             <td style="background-color: #d3d3d3;font-size: 8pt">1. ESCOPO</td>            
       </tr>
       <tr>
-            <td style="font-size: 8pt"><?=nl2br($projeto->resumo_escopo) ?></td>
+            <td style="font-size: 8pt; height: 5em"><?=nl2br($projeto->resumo_escopo) ?></td>
             
       </tr>
       <tr>
             <td style="background-color: #d3d3d3;font-size: 8pt">2. EXCLUSÕES DE ESCOPO</td>            
       </tr>
       <tr>
-            <td style="font-size: 8pt"><?=nl2br($projeto->resumo_exclusoes) ?></td>            
+            <td style="font-size: 8pt; height: 5em"><?=nl2br($projeto->resumo_exclusoes) ?></td>            
       </tr>
       <tr>
             <td style="background-color: #d3d3d3;font-size: 8pt">3. PREMISSAS ADOTADAS</td>            
       </tr>
       <tr>
-            <td style="font-size: 8pt"><?=nl2br($projeto->resumo_premissas) ?></td>            
+            <td style="font-size: 8pt; height: 5em"><?=nl2br($projeto->resumo_premissas) ?></td>            
       </tr>
       <tr>
             <td style="background-color: #d3d3d3;font-size: 8pt">4. RESTRIÇÕES</td>            
       </tr>
       <tr>
-            <td style="font-size: 8pt"><?=nl2br($projeto->resumo_restricoes) ?></td>            
+            <td style="font-size: 8pt; height: 5em"><?=nl2br($projeto->resumo_restricoes) ?></td>            
       </tr>
       <tr>
             <td style="background-color: #d3d3d3;font-size: 8pt">5. NORMAS E ESPECIFICAÇÕES A SEREM UTILIZADAS</td>            
       </tr>
       <tr>
-            <td style="font-size: 8pt"><?=nl2br($projeto->resumo_normas) ?></td>            
+            <td style="font-size: 8pt; height: 5em"><?=nl2br($projeto->resumo_normas) ?></td>            
       </tr>
       <tr>
             <td style="background-color: #d3d3d3;font-size: 8pt">6. DOCUMENTOS DE REFÊRENCIA</td>            
       </tr>
       <tr>
-            <td style="font-size: 8pt"><?=nl2br($projeto->resumo_documentos) ?></td>            
+            <td style="font-size: 8pt; height: 5em"><?=nl2br($projeto->resumo_documentos) ?></td>            
       </tr>
       <tr>
             <td style="background-color: #d3d3d3;font-size: 8pt">7. ITENS DE COMPRA</td>            
       </tr>
       <tr>
-            <td style="font-size: 8pt"><?=nl2br($projeto->resumo_itens) ?></td>            
+            <td style="font-size: 8pt; height: 5em"><?=nl2br($projeto->resumo_itens) ?></td>            
       </tr>
       <tr>
             <td style="background-color: #d3d3d3;font-size: 8pt">8. PRAZO</td>            
       </tr>
       <tr>
-            <td style="font-size: 8pt"><?=nl2br($projeto->resumo_prazo)?></td>            
+            <td style="font-size: 8pt; height: 5em"><?=nl2br($projeto->resumo_prazo)?></td>            
       </tr>
       
 </tbody>

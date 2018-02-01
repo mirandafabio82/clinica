@@ -310,8 +310,8 @@ th, td {
 	<tr style="background-color: #d3d3d3;">
             <td style="font-family: arial;font-size: 8pt" align="center" colspan="3" >CUSTOS DIVERSOS</td>            
      </tr>
-     <tr style="background-color: #d3d3d3; width:10px" >
-            <td style="font-family: arial;font-size: 8pt"  >Viagens</td> 
+     <tr style="background-color: #d3d3d3" >
+            <td style="font-family: arial;font-size: 8pt; width:10px"  >Viagens</td> 
             <td style="font-family: arial;font-size: 8pt" ></td>
             <td style="font-family: arial;font-size: 8pt"  align="center"></td>           
      </tr>
@@ -328,20 +328,20 @@ th, td {
             <td style="font-family: arial;font-size: 8pt"  rowspan="2" align="center">2</td>
      </tr> -->
      <tr style="background-color: #d3d3d3;">
-            <td style="font-family: arial;font-size: 8pt">Translados</td> 
-           <td style="font-family: arial;font-size: 8pt" align="center">Deslocamento para <?= $projeto->qtd_km ?> Km</td> 
-           <td style="font-family: arial;font-size: 8pt" align="right"><?= $projeto->vl_km ?></td> 
+            <td style="font-family: arial;font-size: 8pt; width:20em">Translados</td> 
+           <td style="font-family: arial;font-size: 8pt; width:20em" align="center">Deslocamento para <?= $projeto->qtd_km ?> Km</td> 
+           <td style="font-family: arial;font-size: 8pt; width:20em" align="right"><?= $projeto->vl_km ?></td> 
       </tr>
 
      <tr style="background-color: #d3d3d3;">
-            <td style="font-family: arial;font-size: 8pt"  >Softwares Especiais</td> 
-            <td style="font-family: arial;font-size: 8pt" ></td>
-            <td style="font-family: arial;font-size: 8pt"  align="center"></td>           
+            <td style="font-family: arial;font-size: 8pt; width:20em"  >Softwares Especiais</td> 
+            <td style="font-family: arial;font-size: 8pt; width:20em" ></td>
+            <td style="font-family: arial;font-size: 8pt; width:20em"  align="center"></td>           
      </tr>
      <tr style="background-color: #d3d3d3;">
-            <td style="font-family: arial;font-size: 8pt"  >Aut. Sub-Contratações</td> 
-            <td style="font-family: arial;font-size: 8pt" ></td>
-            <td style="font-family: arial;font-size: 8pt"  align="center"></td>           
+            <td style="font-family: arial;font-size: 8pt; width:20em"  >Aut. Sub-Contratações</td> 
+            <td style="font-family: arial;font-size: 8pt; width:20em" ></td>
+            <td style="font-family: arial;font-size: 8pt; width:20em"  align="center"></td>           
      </tr>
 	</tbody>
       </table>

@@ -176,9 +176,38 @@ class ProjetoController extends Controller
                     $model->data_entrega = date_format($dat, 'Y-m-d');
                 }
 
+                $model->resumo_escopo = '1.1- Elaboração de projeto básico, com base no PROJETO CONCEITUAL BK-BA07-00200-PC-03-00003 Rev. 1 Migração para PLC do intertravamento de alta temperatura na purificação de eteno.
+1.2- Implementar no PLC de segurança o intertravamento por alta temperatura (TAHH) respectivo das colunas de purificação de eteno C-2107, C-2109, C-2111, C-2112, C-2113 e C-2115, além do TAH da coluna C-2103.
+1.3- Elaboração de MEMORA DE CÁLCULO SIL, considerando a instrumentação existe do alarme de TAHH respectivo das colunas de purificação de eteno C-2107, C-2109, C-2111, C-2112, C-2113 e C-2115, além do TAH da coluna C-2103, conforme solicitado pelo conceitual. Incluindo as sugestões de adequação das funções para atendimento do SIL requerido, (caso necessário).';
+                $model->resumo_exclusoes = '2.1- Participação em reuniões de HAZOP e Analise de risco.
+2.2- Consolidação do Projeto Coceitual.
+2.3- Analise de consistência do projeto conceitual.
+2.4- Avaliação ou instalação de instrumentos não especificados no Conceitual.
+2.5- Especificação de novos instrumentos. O projeto contempla a avaliação dos instrumentos, existentes conforme solicitação do Conceitual.
+2.6- Instalação de novas estruturas de PLC e painéis de interligação.
+2.7- Emissão de Data Book em papel.';
+                $model->resumo_premissas = '3.1- Levantamento de campo para verificação das características e modelos da instrumentação existe de temperatura e pressão das colunas C-2103, C-2107, C-2109, C-2111, C-2112, C-2113 e C-2115.
+3.2- Participação em reuniões com a BRASKEM para definição de escopo e acompanhamento do projeto.
+3.3- Todos os elementos de temperatura e pressão das colunas C-2103, C-2107, C-2109, C-2111, C-2112, C-2113 e C-2115 já estão configurados no PLC de segurança, assim como as válvulas HV-2001-2 (alimentação de eteno para a purificação) e HV-2113-8A (alimentação de eteno para o reator) e HV-2113-8B (envio do eteno para flare). 
+3.4- O intertravamento deverá atender SIL 1 possuindo um PFD de 1,52E-2 com RRF de 66 com votação 2oo3 para cada nível de medição das colunas.
+3.5- Para o caso especifico da coluna C-2103 que está fora de operação, o intertravamento deverá ser desenvolvido, porém mantido em hold e implementado caso a coluna seja recolocada em operação.';
+
+                $model->resumo_normas = 'Padrão Normativo de Engenharia - PN-0502-00062 - Critérios para Projetos de Instrumentação
+Sistemas Instrumentados de Segurança PNE-80-00087';
+
+                $model->resumo_documentos = 'PROJETO CONCEITUAL BK-BA07-00200-PC-03-00003 Rev. 1 Migração para PLC do intertravamento de alta temperatura na purificação de eteno.';
+                $model->resumo_observacoes ='1- O valor desta proposta refere-se ao número de horas previstas na tabela do ANEXO I;                                                     
+2 - As condições e valores dessa proposta estão de acordo com o contrato N° 4600008691/2015 firmado entre a BRASKEM e a HCN Automação;                                                      
+3 - Esta AS é válida por 30 dias, contados da data da sua emissão;                                                      
+4 - Em caso de aprovação desta proposta, favor enviar e-mail para helder@hcnautomacao.com.br ou contato telefônico no número 71-98867-3010                                                      
+     para esclarecimentos da emissão do pedido de compra, e posteriormente para andamento dos serviços.                                                     
+';
+
                 if($model->save()){       
 
                     if(isset($_POST['Escopos'])){
+
+
 
                         $escopos = $_POST['Escopos'];
                         $automacoes = isset($escopos['Automação']) ? $escopos['Automação'] : array();
@@ -288,6 +317,7 @@ class ProjetoController extends Controller
      */
     public function actionUpdate($id)
     {
+
         $model = $this->findModel($id); 
         
         if(!empty($model->data_pendencia))
@@ -325,6 +355,7 @@ class ProjetoController extends Controller
             }*/
                
             if(isset($_POST['Projeto'])){
+
                 $projeto_id = Yii::$app->request->post('editableKey');
                 $projeto = Projeto::findOne($projeto_id);
 
@@ -404,6 +435,7 @@ class ProjetoController extends Controller
             $valor_ee = Yii::$app->db->createCommand('SELECT valor_pago FROM tipo_executante WHERE id=5')->queryScalar();
 
             foreach ($_POST['Escopo'] as $key => $esc) {
+
                 if(empty($esc['horas_tp'] )) $esc['horas_tp'] = 0;
                 if(empty($esc['horas_ej'] )) $esc['horas_ej'] = 0;
                 if(empty($esc['horas_ep'] )) $esc['horas_ep'] = 0;

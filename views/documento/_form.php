@@ -26,13 +26,13 @@ use yii\helpers\Url;
 <?php
 $this->registerJs("
 
-    $('td').click(function (e) {
+   /* $('td').click(function (e) {
         var id = $(this).closest('tr').attr('data-key');
         if(id != null){
           if(e.target == this)
               location.href = '" . Url::to(['documento/update']) . "&id='+id;
         }
-    });
+    });*/
 
 ");
 ?>
@@ -40,7 +40,7 @@ $this->registerJs("
         'dataProvider' => $dataProvider,
         // 'filterModel' => $searchModel,
         'options' => ['style' => 'font-size:12px;'],
-        'pjax' => true,
+        // 'pjax' => true,
         
         'hover' => true,
         'panel' => [
@@ -56,7 +56,7 @@ $this->registerJs("
             ],
 
             
-            [
+            [   
                 'attribute' => 'path',
                 'format' => 'raw',
                 'value' => function($data){
@@ -81,7 +81,7 @@ $this->registerJs("
                 },
             ],
             [
-                'header' => 'Área',
+                'header' => '<span style="color:#337ab7">Área</span>',
                 'format' => 'raw',
                 'value' => function($data){
                     $area = Yii::$app->db->createCommand('SELECT planta FROM projeto WHERE id ='.$data->projeto_id)->queryScalar(); 
@@ -90,7 +90,7 @@ $this->registerJs("
                 }
             ],
             [
-                'header' => 'Descrição do Projeto',
+                'header' => '<span style="color:#337ab7">Descrição do Projeto</span>',
                 'format' => 'raw',
                 'value' => function($data){
                     return Yii::$app->db->createCommand('SELECT descricao FROM projeto WHERE id ='.$data->projeto_id)->queryScalar();
@@ -140,7 +140,7 @@ $this->registerJs("
     
 <br>
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Cadastrar' : 'Atualizar', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($model->isNewRecord ? 'Cadastrar' : 'Cadastrar', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

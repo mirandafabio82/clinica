@@ -12,6 +12,7 @@ use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\web\UploadedFile;
 use \Datetime;
+use yii\helpers\FileHelper;
 
 /**
  * DocumentoController implements the CRUD actions for Documento model.
@@ -100,6 +101,7 @@ class DocumentoController extends Controller
                     
                     if (!is_dir(Yii::$app->basePath . '/web/uploaded-files/' . $model->projeto_id)) {
                         mkdir(Yii::$app->basePath . '/web/uploaded-files/' . $model->projeto_id);
+                        FileHelper::createDirectory(Yii::$app->basePath . '/web/uploaded-files/' . $model->projeto_id, $mode = 0775, $recursive = true);
                     }
 
                     $model->path = UploadedFile::getInstance($model,'path');                
@@ -107,7 +109,7 @@ class DocumentoController extends Controller
 
                     $fileName = "{$nomeOriginal}";  
                     $model->nome = $fileName;              
-                    
+
                     $model->path->saveAs(Yii::$app->basePath.'/web/uploaded-files/'.$model->projeto_id.'/'.$fileName);                
                     $model->path = $fileName;
                 }
@@ -120,8 +122,11 @@ class DocumentoController extends Controller
                
                 //atualiza qtd documentos no projeto
                 Yii::$app->db->createCommand('UPDATE projeto SET documentos='.$qtdDocs.' WHERE id='.$model->projeto_id)->execute();
-
-                $model->save();
+                
+                if(!$model->save()){
+                    print_r($model->getErrors());
+                    die();
+                }
                 $transaction->commit();
                 return $this->render('create', [
                 'model' => $model,
@@ -196,7 +201,7 @@ class DocumentoController extends Controller
                 throw $e;
             } 
             }else {
-            return $this->render('update', [
+            return $this->render('create', [
                 'model' => $model,
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
