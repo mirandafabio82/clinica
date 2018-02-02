@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\grid\GridView;
 use yii\helpers\Url;
+use app\models\Escopo;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Agenda */
@@ -36,36 +37,27 @@ use yii\helpers\Url;
             'type' => GridView::TYPE_PRIMARY,
             'heading' => '<i class="fa fa-hourglass-half"></i> Gerenciamento das Atividades'
         ],
-        'columns' => [                       
-
-
+        'columns' => [    
             [
-              'attribute' => 'status',      
-              'class' => 'kartik\grid\EditableColumn',        
-              'format' => 'raw',
-              'contentOptions' => ['style' => 'width:8em;  min-width:8em;'],
-               'value' => function ($data) {
-
-                $status = Yii::$app->db->createCommand('SELECT status, cor FROM agenda_status WHERE id='.$data->status)->queryOne();
+              'class' => 'kartik\grid\ExpandRowColumn',
+              'width' => '50px',
+              'value' => function ($model, $key, $index, $column) {
+                  return GridView::ROW_COLLAPSED;
+              },
+              'detail' => function ($model, $key, $index, $column) {
                 
-               return '<span style="color:'.$status['cor'].' "><i class="fa fa-circle" aria-hidden="true"></i> '.$status['status'].'</span>';
+                // $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-               },
-                'editableOptions' => [
-              'inputType' => \kartik\editable\Editable::INPUT_DROPDOWN_LIST,
-              'data' => $listStatus                
-              ]
-            ],
-            [ 
-                'header' => '<span style="color:#337ab7">Projeto </span>',
-                'attribute' => 'projeto',
-                'value' => function($data){
-                    if(isset($data->projeto_id))
-                    return Yii::$app->db->createCommand('SELECT nome FROM projeto WHERE id='.$data->projeto_id)->queryScalar();
-                }
-            ],            
-               // 'atividademodelo_id',
-               'nome',
+                // $dataProvider->query->where('horas_tp IS NOT NULL OR horas_ej IS NOT NULL OR horas_ep IS NOT NULL OR horas_es IS NOT NULL OR horas_ee IS NOT NULL');
+
+                  return Yii::$app->controller->renderPartial('_grid_content', 
+                    ['model' => $model]);
+              },
+              'headerOptions' => ['class' => 'kartik-sheet-style'] 
+              
+          ],            
+            'nome',
+            'descricao'   
             
             // ['class' => 'yii\grid\ActionColumn'],
         ],

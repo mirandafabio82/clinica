@@ -7,6 +7,7 @@ use app\models\Atividade;
 use app\models\search\AtividadeSearch;
 use app\models\Escopo;
 use app\models\search\EscopoSearch;
+use app\models\search\ProjetoSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -67,10 +68,15 @@ class AtividadeController extends Controller
             echo $out;
             return $this->redirect(['index']);
         }
-        $searchModel = new EscopoSearch();
+        // $searchModel = new EscopoSearch();
+        // $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        
+        $searchModel = new ProjetoSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        $status = Yii::$app->db->createCommand('SELECT id, status FROM agenda_status')->queryAll();
+        
+
+        $status = Yii::$app->db->createCommand('SELECT id, status FROM escopo_status')->queryAll();
         $listStatus = ArrayHelper::map($status,'id','status');
 
 
