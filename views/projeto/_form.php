@@ -964,6 +964,8 @@ tbody {
        <?= Html::submitButton('Salvar Escopo', ['class' =>'btn btn-primary']) ?>
 
       <?= Html::a('<span class="btn-label">Gerar Relatório</span>', ['gerarrelatorio', 'id' => $model->id], ['class' => 'btn btn-primary', 'target'=>'_blank', 'style'=> 'float:right']) ?>
+
+      <?= Html::a('<span class="btn-label">Gerar BM</span>', ['gerarbm', 'id' => $model->id], ['class' => 'btn btn-primary', 'target'=>'_blank', 'style'=> 'float:right; margin-right: 1em']) ?>
   
      </div>
 

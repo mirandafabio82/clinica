@@ -748,6 +748,28 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
         
     }
 
+    public function actionGerarbm()
+    {
+        if($_GET['id']){
+            $projeto = Projeto::findOne($_GET['id']);
+            $escopos = Yii::$app->db->createCommand('SELECT SUM(horas_tp) h_tp,SUM(horas_ej) h_ej,SUM(horas_ep) h_ep,SUM(horas_es) h_es,SUM(horas_ee) h_ee, escopo.nome as nomeE FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$projeto->id)->queryOne();
+
+            $tipo_exec = Yii::$app->db->createCommand('SELECT * FROM tipo_executante')->queryAll();
+
+
+            $bm = $this->renderPartial('relatorio/_bm', [
+                'projeto' => $projeto,
+                'escopos' => $escopos,
+                'tipo_exec' => $tipo_exec]);
+
+
+            $mpdf = new \Mpdf\Mpdf();
+            $mpdf->WriteHTML($bm);   
+            $mpdf->Output();         
+
+
+        }
+    }
     public function actionGerarrelatorio()
     {
         if($_GET['id']){
