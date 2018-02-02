@@ -2,8 +2,9 @@
 use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
 use app\models\Escopo;
+use yii\widgets\Pjax;
 
-$escopo_status = Yii::$app->db->createCommand('SELECT id, status as nome FROM escopo_status')->queryAll();
+$escopo_status = Yii::$app->db->createCommand('SELECT id, status as nome, cor FROM escopo_status')->queryAll();
 $listStatus = ArrayHelper::map($escopo_status,'id','nome');
 
 $escopos = Yii::$app->db->createCommand('SELECT * FROM escopo WHERE (horas_tp IS NOT NULL OR horas_ej IS NOT NULL OR horas_ep IS NOT NULL OR horas_es IS NOT NULL OR horas_ee IS NOT NULL) AND projeto_id='.$model->id)->queryAll();
@@ -50,6 +51,7 @@ $escopos = Yii::$app->db->createCommand('SELECT * FROM escopo WHERE (horas_tp IS
 tr{
       background-color: white !important;      
 }
+
 /*thead {   
     display:table;
    
@@ -66,8 +68,38 @@ tbody {
 
 
 </style>
+
+<?php 
+  $this->registerJs('
+
+      $(".status").change(function(){
+      id = this.id.split("-")[1];
+      status = $(this).val();
+
+         $.ajax({ 
+            url: "index.php?r=atividade/attatividade",
+            data: {id: id, status: status},
+            container:"#pjax-status",
+            type: "POST",
+            success: function(response){
+             console.log(response);
+             location.reload();
+           },
+           error: function(){
+            console.log("failure");
+          }
+  });
+      })
+
+  ');
+?>
+
+
 <div class="box-header with-border">
      <div class="form-group">
+<?php Pjax::begin() ?>
+<div id="pjax-status">
+
 <table style="width:100%; margin-bottom: 1em" id="tabela-escopo">
     <col width="600">
     <thead>
@@ -80,16 +112,21 @@ tbody {
       </thead>
       <?php $form = ActiveForm::begin(); ?>
       <?php foreach ($escopos as $key => $escopo) { 
+            $cor = Yii::$app->db->createCommand('SELECT cor FROM escopo_status WHERE id='.$escopo['status'])->queryScalar();
             $escopoModel = Escopo::findIdentity($escopo['id']);
       ?> 
-      <tr>
-        <td style="font-size: 15px; padding: 1px;"><?=$form->field($escopoModel, 'status')->dropDownList($listStatus)->label(false) ?></td>
-        <td style="font-size: 15px; padding: 1px;padding-left: 1em;"><?=$escopo['nome'] ?></td>
-        <td style="font-size: 15px; padding-right: 1em;"><?=$escopo['executado'] ?></td>
+      
+      <tr style="background-color: <?=$cor?> !important">
+        <td style="font-size: 15px; padding: 1px;"><?=$form->field($escopoModel, 'status')->dropDownList($listStatus,['class' =>'form-control status', 'id'=>'status-'.$escopo['id']])->label(false) ?></td>
+        <td style="font-size: 15px; padding: 1px;padding-left: 1em;color: white"><?=$escopo['nome'] ?></td>
+        <td style="font-size: 15px; padding-right: 1em;"><?= $form->field($escopoModel, 'executado')->textInput(['maxlength' => true])->label(false) ?>  </td>
       </tr>
+      
       <?php } ?>
 
       <?php ActiveForm::end(); ?>
 </table>
 </div>
 </div>
+</div>
+<?php Pjax::end() ?>

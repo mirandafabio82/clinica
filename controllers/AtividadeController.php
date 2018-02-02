@@ -164,4 +164,20 @@ class AtividadeController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
+    //habilitar ajax
+    public function beforeAction($action) {
+        $this->enableCsrfValidation = false;
+        return parent::beforeAction($action);
+    }
+
+    public function actionAttatividade(){
+        if (Yii::$app->request->isAjax) {                 
+           Yii::$app->db->createCommand('UPDATE escopo SET status='.Yii::$app->request->post()['status'].' WHERE id='.Yii::$app->request->post()['id'])->execute();  
+           
+            echo 'success';
+        }
+        
+    }
+
 }
