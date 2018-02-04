@@ -105,9 +105,9 @@ tbody {
     <thead>
        
         <tr>
-          <th style="width:1em;">Status</th>
-          <th style="width:100em;">Nome</th>
+          <th style="width:150em;">Nome</th>
           <th style="width:1em;padding-right: 1em;">Executado</th>
+          <th style="width:50em;">Status</th>
         </tr>
       </thead>
       <?php $form = ActiveForm::begin(); ?>
@@ -117,9 +117,9 @@ tbody {
       ?> 
       
       <tr style="background-color: <?=$cor?> !important">
-        <td style="font-size: 15px; padding: 1px;"><?=$form->field($escopoModel, 'status')->dropDownList($listStatus,['class' =>'form-control status', 'id'=>'status-'.$escopo['id']])->label(false) ?></td>
         <td style="font-size: 15px; padding: 1px;padding-left: 1em;color: white"><?=$escopo['nome'] ?></td>
         <td style="font-size: 15px; padding-right: 1em;"><?= $form->field($escopoModel, 'executado')->textInput(['maxlength' => true])->label(false) ?>  </td>
+        <td style="font-size: 15px; padding: 1px;"><?=$form->field($escopoModel, 'status')->dropDownList($listStatus,['class' =>'form-control status', 'id'=>'status-'.$escopo['id']])->label(false) ?></td>
       </tr>
       
       <?php } ?>

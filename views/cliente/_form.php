@@ -21,7 +21,11 @@ $this->registerJs("
                 location.href = '" . Url::to(['cliente/update']) . "&id='+id;
         }
     });
-    $('.dropify').dropify();
+    $('.dropify').dropify({
+        tpl: {
+        message:         '<div class=\'dropify-message\'><span class=\'file-icon\' /> <p>Click para adicionar uma foto </p></div>',
+    }
+    });
 ");
 
 ?>

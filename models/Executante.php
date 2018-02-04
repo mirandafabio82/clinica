@@ -39,7 +39,7 @@ class Executante extends \yii\db\ActiveRecord
             [['criado', 'modificado'], 'safe'],
             [['cpf'], 'string', 'max' => 45],
             [['cnpj'], 'string', 'max' => 18],
-            [['cidade', 'endereco', 'cnpj', 'nome_empresa', 'endereco_empresa', 'insc_municipal'], 'string', 'max' => 255],
+            [['cidade', 'endereco', 'cnpj', 'nome_empresa', 'endereco_empresa', 'insc_municipal', 'bairro_empresa', 'cep_empresa', 'uf_empresa', 'cidade_empresa', 'bairro', 'cep', 'endereco_empresa'], 'string', 'max' => 255],
             [['uf'], 'string', 'max' => 2],
             [['telefone', 'celular'], 'string', 'max' => 15],
             [['vl_hh_tp', 'vl_hh_ej', 'vl_hh_ep', 'vl_hh_es', 'vl_hh_ee', 'vl_km', 'qtd_km_dia'], 'number'],
@@ -69,7 +69,8 @@ class Executante extends \yii\db\ActiveRecord
             'vl_hh_ee' => 'Valor Horas (EE)',
             'vl_km' => 'Valor KM',
             'qtd_km_dia' => 'Qtd. Km Dia',
-            'tipo_id' => 'Tipos'
+            'tipo_id' => 'Tipos',
+            'uf_empresa' => 'UF Empresa',
         ];
     }
 

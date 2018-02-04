@@ -211,6 +211,11 @@ $this->registerJs("
     <?= $form->field($user, 'nome')->textInput(['maxlength' => true]) ?>
     </div>
     <div class="col-md-2">
+    <?= $form->field($model, 'cnpj')->widget(\yii\widgets\MaskedInput::className(), [
+                        'mask' => '99.999.999/9999-99',
+                    ]) ?> 
+    </div>
+    <div class="col-md-2">
     <?= $form->field($user, 'email')->textInput(['maxlength' => true]) ?>
     </div>
     <div class="col-md-2">
@@ -220,11 +225,6 @@ $this->registerJs("
     <?= $form->field($model, 'cpf')->widget(\yii\widgets\MaskedInput::className(), [
                         'mask' => '999.999.999-99',
                     ]) ?>
-    </div>
-    <div class="col-md-2">
-    <?= $form->field($model, 'cnpj')->widget(\yii\widgets\MaskedInput::className(), [
-                        'mask' => '99.999.999/9999-99',
-                    ]) ?> 
     </div>
      <div class="col-md-2">
     <?= $form->field($model, 'telefone')->widget(\yii\widgets\MaskedInput::className(), [
@@ -242,6 +242,14 @@ $this->registerJs("
     <div class="col-md-2">
     <?= $form->field($model, 'cidade')->textInput(['maxlength' => true]) ?>
     </div>
+    <div class="col-md-2">
+    <?= $form->field($model, 'bairro')->textInput(['maxlength' => true]) ?>        
+    </div>
+    <div class="col-md-2">
+    <?= $form->field($model, 'cep')->widget(\yii\widgets\MaskedInput::className(), [
+                        'mask' => '99999-999',
+                    ]) ?>        
+    </div>
     <div class="col-md-3">
     <?= $form->field($model, 'endereco')->textInput(['maxlength' => true]) ?>
     </div>
@@ -252,8 +260,22 @@ $this->registerJs("
     <div class="col-md-2">
     <?= $form->field($model, 'insc_municipal')->textInput(['maxlength' => true]) ?>      
     </div>
-    <div class="col-md-4">
-    <?= $form->field($model, 'endereco_empresa')->textInput(['maxlength' => true]) ?>        
+    <div class="col-md-1">
+    <?= $form->field($model, 'uf_empresa')->textInput(['maxlength' => true]) ?>        
+    </div>
+    <div class="col-md-2">
+    <?= $form->field($model, 'cidade_empresa')->textInput(['maxlength' => true]) ?>        
+    </div>
+    <div class="col-md-2">
+    <?= $form->field($model, 'bairro_empresa')->textInput(['maxlength' => true]) ?>        
+    </div>
+    <div class="col-md-2">
+    <?= $form->field($model, 'cep_empresa')->widget(\yii\widgets\MaskedInput::className(), [
+                        'mask' => '99999-999',
+                    ]) ?>        
+    </div>
+    <div class="col-md-3">
+    <?= $form->field($model, 'endereco_empresa')->textInput(['maxlength' => true]) ?>
     </div>
   
   <?php
@@ -373,7 +395,7 @@ $this->registerJs("
           ]
       ]); ?>
     </div>
-    <div class="col-md-2">
+    <div class="col-md-1">
     <?= $form->field($model, 'vl_km')->textInput(['maxlength' => true])->widget(MaskMoney::classname(), [
           'pluginOptions' => [
               'prefix' => 'R$ ',
@@ -385,7 +407,7 @@ $this->registerJs("
           ]
       ]); ?>
     </div>
-    <div class="col-md-2">
+    <div class="col-md-1">
     <?= $form->field($model, 'qtd_km_dia')->textInput(['maxlength' => true]) ?>
     </div>
     </div>
