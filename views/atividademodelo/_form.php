@@ -33,6 +33,10 @@ $this->registerJs("
 .summary{
   display: none;
 }
+
+#w2{
+    display: none;
+}
 </style>
 <div class="atividademodelo-form">
     <?= GridView::widget([

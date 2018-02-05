@@ -23,7 +23,7 @@ $this->registerJs("
     });
     $('.dropify').dropify({
         tpl: {
-        message:         '<div class=\'dropify-message\'><span class=\'file-icon\' /> <p>Click para adicionar uma foto </p></div>',
+        message:         '<div class=\'dropify-message\'><span class=\'file-icon\' /> <p>Clique para adicionar uma foto </p></div>',
     }
     });
 ");
@@ -46,6 +46,9 @@ $this->registerJs("
 
 .summary{
   display: none;
+}
+#w2{
+    display: none;
 }
 </style>
 <?= GridView::widget([

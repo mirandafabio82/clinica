@@ -9,6 +9,63 @@ use app\models\Escopo;
 /* @var $this yii\web\View */
 /* @var $model app\models\Agenda */
 /* @var $form yii\widgets\ActiveForm */
+
+$this->registerJs('
+
+      $(".save").click(function(){
+        
+        $( ".executado" ).each(function( index ) {
+          
+          divisor = this.name.split("[")[1];
+
+          id = divisor.split("]")[0];
+
+          tipo = this.name.split("[")[2].split("]")[0];
+          
+          valor = this.value;
+          if(this.value=="") valor = "null";
+
+          $.ajax({ 
+              url: "index.php?r=atividade/attatividade",
+              data: {id: id, value: valor, tipo: tipo},
+              type: "POST",
+              success: function(response){
+               console.log(response);
+               // location.reload();
+             },
+             error: function(){
+              console.log("failure");
+            }
+          });
+        });
+
+        $( ".status" ).each(function( index ) {
+          console.log(this.name +" "+ this.value );
+          divisor = this.name.split("[")[1];
+
+          id = divisor.split("]")[0];
+
+          tipo = this.name.split("[")[2].split("]")[0];
+          
+          valor = this.value;
+          if(this.value=="") valor = "null";
+
+          $.ajax({ 
+              url: "index.php?r=atividade/attatividade",
+              data: {id: id, value: valor, tipo: tipo},
+              type: "POST",
+              success: function(response){
+               console.log(response);
+                location.reload();
+             },
+             error: function(){
+              console.log("failure");
+            }
+          });
+        });
+      });
+
+  ');
 ?>
 
 <style>
@@ -23,11 +80,18 @@ use app\models\Escopo;
 .summary{
   display: none;
 }
+
+#w2{
+    display: none;
+}
 </style>
 
 
 <!-- mask so funciona com isso -->
 <?php $this->head() ?>
+<div style="margin-bottom: 1em">
+  <button type="button" class="btn btn-primary save">Salvar</button>
+</div>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         // 'filterModel' => $searchModel,

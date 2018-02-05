@@ -34,6 +34,10 @@ $this->registerJs("
 .summary{
   display: none;
 }
+
+#w2{
+    display: none;
+}
 </style>
 <!-- mask so funciona com isso -->
 <?php $this->head() ?>

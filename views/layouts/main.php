@@ -153,6 +153,7 @@ $usuario = Yii::$app->db->createCommand('SELECT * FROM user WHERE id='.Yii::$app
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">MENU PRINCIPAL</li>
         
+        <?php if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])){ ?>
         <li><a href="<?= Url::to(['projeto/create']) ?>"><i class="fa fa-folder-open"></i> <span>Projetos</span></a></li>
         <li><a href="<?= Url::to(['atividademodelo/create']) ?>"><i class="fa fa-tablet"></i> <span>Atividades Modelo</span></a></li>
         <li><a href="<?= Url::to(['cliente/create']) ?>"><i class="fa fa-handshake-o"></i> <span>Clientes</span></a></li>
@@ -164,6 +165,7 @@ $usuario = Yii::$app->db->createCommand('SELECT * FROM user WHERE id='.Yii::$app
         <!-- <li><a href="<?//= Url::to(['disciplina/index']) ?>"><i class="fa fa-tasks"></i> <span>Disciplina</span></a></li> -->
         <!-- <li><a href="<?//= Url::to(['escopopadrao/index']) ?>"><i class="fa fa-map"></i> <span>Escopo</span></a></li> -->
         <li><a href="<?= Url::to(['documento/create']) ?>"><i class="fa fa-file"></i> <span>Documentos</span></a></li>
+        <?php } ?>
         <li><a href="<?= Url::to(['atividade/index']) ?>"><i class="fa fa-hourglass-half"></i> <span>Gerenciamento das Atividades</span></a></li>        
         <!-- <li><a href="<?//= Url::to(['config/create']) ?>"><i class="fa fa-cog"></i> <span>Configurações</span></a></li> -->
         <li><a>

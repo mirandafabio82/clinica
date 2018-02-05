@@ -22,6 +22,10 @@ use yii\helpers\Url;
 .summary{
   display: none;
 }
+
+#w2{
+    display: none;
+}
 </style>
 <?php
 $this->registerJs("

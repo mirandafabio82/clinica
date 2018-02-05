@@ -31,6 +31,7 @@ class AtividadeController extends Controller
                 'rules' => [
                     ['allow' => true,'roles' => ['admin']],
                     ['allow' => true,'roles' => ['executante']],
+                    ['allow' => true,'roles' => ['contato']],
                     ['actions' => ['index', 'view'],'allow' => true,'roles' => ['executante']],
                 ],
             ],
@@ -71,11 +72,25 @@ class AtividadeController extends Controller
         // $searchModel = new EscopoSearch();
         // $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         
+        
         $searchModel = new ProjetoSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        
+        if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['contato'])) {
+            $clienteId = Yii::$app->db->createCommand('SELECT cliente_id FROM contato WHERE usuario_id='.Yii::$app->user->getId())->queryScalar();
+
+            $dataProvider->query->where('cliente_id='.$clienteId);
+        }
+        if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['executante'])){
+            $projetos_id = Yii::$app->db->createCommand('SELECT projeto.id FROM projeto JOIN escopo ON escopo.projeto_id=projeto.id JOIN executante ON (exe_tp_id='.Yii::$app->user->getId().' OR exe_ej_id='.Yii::$app->user->getId().' OR exe_ep_id='.Yii::$app->user->getId().' OR exe_es_id='.Yii::$app->user->getId().' OR exe_ee_id='.Yii::$app->user->getId().' ) WHERE usuario_id='.Yii::$app->user->getId())->queryAll();
+
+            foreach ($projetos_id as $key => $pid) {
+                $dataProvider->query->where('id='.$pid['id']);
+            }
+            
+        }
 
         
-
         $status = Yii::$app->db->createCommand('SELECT id, status FROM escopo_status')->queryAll();
         $listStatus = ArrayHelper::map($status,'id','status');
 
@@ -173,8 +188,10 @@ class AtividadeController extends Controller
 
     public function actionAttatividade(){
         if (Yii::$app->request->isAjax) {                 
-           Yii::$app->db->createCommand('UPDATE escopo SET status='.Yii::$app->request->post()['status'].' WHERE id='.Yii::$app->request->post()['id'])->execute();  
+           // Yii::$app->db->createCommand('UPDATE escopo SET status='.Yii::$app->request->post()['status'].' WHERE id='.Yii::$app->request->post()['id'])->execute();  
            
+           Yii::$app->db->createCommand('UPDATE escopo SET '.Yii::$app->request->post()['tipo'].'='.Yii::$app->request->post()['value'].' WHERE id='.Yii::$app->request->post()['id'])->execute(); 
+
             echo 'success';
         }
         

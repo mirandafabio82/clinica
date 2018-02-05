@@ -42,6 +42,10 @@ $this->registerJs("
 .summary{
   display: none;
 }
+
+#w2{
+    display: none;
+}
 </style>
 
 <?php $this->head() ?>
