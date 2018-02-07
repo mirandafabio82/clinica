@@ -95,19 +95,32 @@ tbody {
           <th style="width:150em;">Nome</th>
           <th style="width:1em;padding-right: 1em;">Horas</th>
           <th style="width:1em;padding-right: 1em;">Executado</th>
-          <th style="width:50em;">Status</th>
+          <th style="width:50em;padding-right: 1em;">Progresso</th>
+          <th style="width:20em;">Status</th>
         </tr>
       </thead>
       <?php $form = ActiveForm::begin(); ?>
       <?php foreach ($escopos as $key => $escopo) { 
             $cor = Yii::$app->db->createCommand('SELECT cor FROM escopo_status WHERE id='.$escopo['status'])->queryScalar();
             $escopoModel = Escopo::findIdentity($escopo['id']);
+            $progress = $escopoModel->executado / ($escopoModel['horas_ee']+$escopoModel['horas_es']+$escopoModel['horas_ep']+$escopoModel['horas_ej']+$escopoModel['horas_tp']) * 100;
+            
+            if($progress <= 30) $progressColor = 'danger'; 
+            if($progress <= 99.9 && $progress > 30) $progressColor = 'warning';
+            if($progress == 100) $progressColor = 'success';
       ?> 
       
       <tr style="background-color: <?=$cor?> !important">
         <td style="font-size: 15px; padding: 1px;padding-left: 1em;color: white"><?=$escopo['nome'] ?></td>
         <td style="font-size: 15px; padding-right: 1em;color: white"><?= $escopoModel['horas_ee']+$escopoModel['horas_es']+$escopoModel['horas_ep']+$escopoModel['horas_ej']+$escopoModel['horas_tp'] ?>  </td>
         <td style="font-size: 15px; padding-right: 1em;"><?= $form->field($escopoModel, 'executado')->textInput(['maxlength' => true, 'readonly'=>$editable, 'name'=>'Escopo['.$escopo['id'].'][executado]', 'class' =>'form-control executado'])->label(false) ?>  </td>
+        <td style="font-size: 15px; padding-right: 1em;">
+        <div class="progress progress-xs">
+          <div class="progress-bar progress-bar-<?=$progressColor ?> progress-bar-striped" style="width: <?= $progress ?>%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+            <!-- <span class="sr-only">40% Complete</span> -->
+          </div>
+        </div>
+          </td>
         <td style="font-size: 15px; padding: 1px;"><?=$form->field($escopoModel, 'status')->dropDownList($listStatus,['class' =>'form-control status', 'id'=>'status-'.$escopo['id'], 'name'=>'Escopo['.$escopo['id'].'][status]', 'disabled'=>$editable])->label(false) ?></td>
       </tr>
       

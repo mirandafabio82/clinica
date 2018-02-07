@@ -123,7 +123,44 @@ $this->registerJs('
               
           ],            
             'nome',
-            'descricao'   
+            'descricao',
+          [
+            'header' => 'Progresso',
+            'format' => 'raw',
+            'width' => '40em',
+            'value' => function ($data) {
+
+              $horas_ee = Yii::$app->db->createCommand('SELECT SUM(horas_ee) as horas, SUM(executado) as exe FROM escopo WHERE projeto_id='.$data->id)->queryOne();
+              $horas_es = Yii::$app->db->createCommand('SELECT SUM(horas_es) as horas, executado FROM escopo WHERE projeto_id='.$data->id)->queryOne();
+              $horas_ep = Yii::$app->db->createCommand('SELECT SUM(horas_ep) as horas, executado FROM escopo WHERE projeto_id='.$data->id)->queryOne();
+              $horas_ej = Yii::$app->db->createCommand('SELECT SUM(horas_ej) as horas, executado FROM escopo WHERE projeto_id='.$data->id)->queryOne();
+              $horas_tp = Yii::$app->db->createCommand('SELECT SUM(horas_tp) as horas, executado FROM escopo WHERE projeto_id='.$data->id)->queryOne();
+             
+
+              if(empty($horas_ee['horas'])) $horas_ee['horas']=0;
+              if(empty($horas_es['horas'])) $horas_es['horas']=0;
+              if(empty($horas_ep['horas'])) $horas_ep['horas']=0;
+              if(empty($horas_ej['horas'])) $horas_ej['horas']=0;
+              if(empty($horas_tp['horas'])) $horas_tp['horas']=0;
+
+
+              $horas = $horas_ee['horas']+$horas_es['horas']+$horas_ep['horas']+$horas_ej['horas']+$horas_tp['horas'];
+              
+              if($horas!=0){
+                $progress = ($horas_ee['exe'] / $horas) * 100 ;
+                
+                if($progress <= 30) $progressColor = 'danger'; 
+                if($progress <= 99.9 && $progress > 30) $progressColor = 'warning';
+                if($progress == 100) $progressColor = 'success';
+                
+                return '<div class="progress progress-xs">
+                        <div class="progress-bar progress-bar-'.$progressColor.' progress-bar-striped" style="width:  '.$progress.'%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+                          </div>
+                      </div>';
+              }
+            },
+          ],
+
             
             // ['class' => 'yii\grid\ActionColumn'],
         ],
