@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use kartik\grid\GridView;
+use yii\grid\GridView;
 use yii\widgets\Pjax;
 use yii\helpers\ArrayHelper;
 use app\models\Escopo;
@@ -546,14 +546,17 @@ tbody {
     <div class="box-header with-border">
       <div class="row">   
           <div class="col-md-12"> 
-          <div class="col-md-12">
-          Projetos
+          <div class="col-md-12" style="overflow: auto;overflow-y: hidden;Height:?">
+          <div style="background-color: #337ab7;color:white;padding: 10px"><i class="fa fa-folder-open"></i> Projetos </div>
+<div style="margin-bottom:1em;margin-top: 1em">
+    <?= Html::a('Mostrar Todos', ['/projeto/create', 'pagination' => true], ['class'=>'btn btn-primary grid-button']) ?>
+</div>
           <?= GridView::widget([
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
-            'pjax' => true,        
+            // 'pjax' => true,        
             'options' => ['style' => 'font-size:12px;'],                
-            'hover' => true,            
+            // 'hover' => true,            
             'columns' => [
             // ['class' => 'yii\grid\SerialColumn'],
 
@@ -563,8 +566,22 @@ tbody {
               'template' => '{delete}',    
               'contentOptions' => ['style' => 'width:5em;  min-width:5em;'],
             ],
-            'nome',
             [
+            'attribute' => 'nome', 
+            'contentOptions' => ['style' => 'width:8em;  min-width:8em;'],
+            ],
+            [
+              'attribute' => 'status', 
+              'format' => 'raw',
+              'value' => function ($data) {
+
+                $status = Yii::$app->db->createCommand('SELECT status, cor FROM projeto_status WHERE id='.$data->status)->queryOne();
+
+                return '<span style="color:'.$status['cor'].' "><i class="fa fa-circle" aria-hidden="true"></i> '.$status['status'].'</span>';
+
+              }, 
+            ],
+            /*[
               'attribute' => 'status',      
               'class' => 'kartik\grid\EditableColumn',        
               'format' => 'raw',
@@ -581,7 +598,7 @@ tbody {
               'inputType' => \kartik\editable\Editable::INPUT_DROPDOWN_LIST,
               'data' => $listStatus                
               ]
-            ],
+            ],*/
             [
             'attribute' => 'cliente_id',   
             'format' => 'raw',
@@ -612,7 +629,10 @@ tbody {
             // 'descricao',
             'codigo',            
             'municipio',
-            'uf',
+            [
+            'attribute' => 'uf',  
+            'contentOptions' => ['style' => 'width:1em;  min-width:1em;'],
+            ],
             
             // 'tratamento',
             // 'contato',
@@ -674,9 +694,9 @@ tbody {
       </div>
       <div class="row">    
       <div class="col-md-2"> 
-      <?= $form->field($model, 'tipo')->radioList(array('A'=>'Autorização de Serviço','P'=>'Proposta')); ?>
-        
+      <?= $form->field($model, 'tipo')->radioList(array('A'=>'Autorização de Serviço','P'=>'AS/Proposta')); ?>        
       </div>
+      
         <div class="col-md-2"> 
           <?= $form->field($model, 'nome')->textInput(['maxlength' => true]) ?>  
         </div>
@@ -725,7 +745,10 @@ tbody {
           
         <?php } ?>
         </div>
-        
+        <div class="col-md-8" style="margin-top: -4em;">
+        <?= $form->field($model, 'desc_resumida')->textarea(['maxlength' => true]) ?>
+
+      </div>
       </div>
       <div class="row">
         <div class="col-md-4">
@@ -826,9 +849,6 @@ tbody {
       </div>
       </div>
       <div class="row">
-      <div class="col-md-2">
-        <?= $form->field($model, 'total_km')->textInput(['maxlength' => true]) ?>
-      </div>
       
       <div class="col-md-2">
         <?= $form->field($model, 'valor_proposta')->textInput(['maxlength' => true,'style'=>'width:1em'])->widget(MaskMoney::classname(), [
@@ -963,9 +983,9 @@ tbody {
        <?php $form2 = ActiveForm::begin(); ?>
        <?= Html::submitButton('Salvar Escopo', ['class' =>'btn btn-primary']) ?>
 
-      <?= Html::a('<span class="btn-label">Gerar Relatório</span>', ['gerarrelatorio', 'id' => $model->id], ['class' => 'btn btn-primary', 'target'=>'_blank', 'style'=> 'float:right']) ?>
+      <?= Html::a('<span class="btn-label">Visualizar AS</span>', ['gerarrelatorio', 'id' => $model->id], ['class' => 'btn btn-primary', 'target'=>'_blank', 'style'=> 'float:right']) ?>
 
-      <?= Html::a('<span class="btn-label">Gerar BM</span>', ['gerarbm', 'id' => $model->id], ['class' => 'btn btn-primary', 'target'=>'_blank', 'style'=> 'float:right; margin-right: 1em']) ?>
+      <?= Html::a('<span class="btn-label">Visualizar BM</span>', ['gerarbm', 'id' => $model->id], ['class' => 'btn btn-primary', 'target'=>'_blank', 'style'=> 'float:right; margin-right: 1em']) ?>
   
      </div>
 
@@ -1240,16 +1260,16 @@ tbody {
     $automacao = '<div style="height: 50em; overflow-y: scroll;">'.$header.''.$bodyA.'</table></div>';
     $processo = '<div style="height: 50em; overflow-y: scroll;">'.$header.''.$bodyP.'</table></div>';
     $instrumentacao = '<div style="height: 50em; overflow-y: scroll;">'.$header.''.$bodyI.'</table></div>';
-    $as = '<div>'. $form->field($model, "nota_geral")->textArea() .'</div>';
-    $resumo = '<div>'. $form->field($model, "resumo_escopo")->textArea() .'</div>
-                <div>'. $form->field($model, "resumo_exclusoes")->textArea() .'</div>
-                <div>'. $form->field($model, "resumo_premissas")->textArea() .'</div>
-                <div>'. $form->field($model, "resumo_restricoes")->textArea() .'</div>
-                <div>'. $form->field($model, "resumo_normas")->textArea() .'</div>
-                <div>'. $form->field($model, "resumo_documentos")->textArea() .'</div>
-                <div>'. $form->field($model, "resumo_itens")->textArea() .'</div>
-                <div>'. $form->field($model, "resumo_prazo")->textArea() .'</div>
-                <div>'. $form->field($model, "resumo_observacoes")->textArea() .'</div>
+    $as = '<div>'. $form2->field($model, "nota_geral")->textArea() .'</div>';
+    $resumo = '<div>'. $form2->field($model, "resumo_escopo")->textArea() .'</div>
+                <div>'. $form2->field($model, "resumo_exclusoes")->textArea() .'</div>
+                <div>'. $form2->field($model, "resumo_premissas")->textArea() .'</div>
+                <div>'. $form2->field($model, "resumo_restricoes")->textArea() .'</div>
+                <div>'. $form2->field($model, "resumo_normas")->textArea() .'</div>
+                <div>'. $form2->field($model, "resumo_documentos")->textArea() .'</div>
+                <div>'. $form2->field($model, "resumo_itens")->textArea() .'</div>
+                <div>'. $form2->field($model, "resumo_prazo")->textArea() .'</div>
+                <div>'. $form2->field($model, "resumo_observacoes")->textArea() .'</div>
     ';
 
     $ld_preliminar = '<p>'.
@@ -1257,9 +1277,9 @@ tbody {
     '</p>'.GridView::widget([
         'dataProvider' => $ldPreliminarDataProvider,
             'filterModel' => $ldPreliminarSearchModel,
-            'pjax' => true,        
+            // 'pjax' => true,        
             'options' => ['style' => 'font-size:12px;'],                
-            'hover' => true,            
+            // 'hover' => true,            
         'columns' => [
             [
               'class' => 'yii\grid\ActionColumn',

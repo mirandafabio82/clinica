@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use kartik\grid\GridView;
+use yii\grid\GridView;
 use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $model app\models\Contato */
@@ -49,18 +49,25 @@ $this->registerJs("
 </style>
 
 <?php $this->head() ?>
+<div class="box box-primary">
+    <div class="box-header with-border">
+
+<div style="background-color: #337ab7;color:white;padding: 10px"><i class="fa fa-address-book"></i> Contatos </div>
+<div style="margin-bottom:1em;margin-top: 1em">
+    <?= Html::a('Mostrar Todos', ['/contato/create', 'pagination' => true], ['class'=>'btn btn-primary grid-button']) ?>
+</div>
 
 <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
-        'pjax' => true,
+        // 'pjax' => true,
         'options' => ['style' => 'font-size:12px;'],
         
-        'hover' => true,
+        /*'hover' => true,
         'panel' => [
             'type' => GridView::TYPE_PRIMARY,
             'heading' => '<i class="fa fa-address-book"></i> Contatos'
-        ],
+        ],*/
         'columns' => [
             // ['class' => 'yii\grid\SerialColumn'],
             [
@@ -102,6 +109,8 @@ $this->registerJs("
             // ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
+</div>
+</div>
 
 <div class="contato-form">
 
@@ -109,7 +118,7 @@ $this->registerJs("
     <div class="box box-primary">
         <div class="box-header with-border">
         <div class="row">       
-        <div class="col-md-2">
+        <div class="col-md-4">
             <?= $form->field($model, 'cliente_id')->dropDownList($listClientes,['prompt'=>'Selecione um Cliente']) ?>
         </div>
         <div class="col-md-3">    
@@ -119,7 +128,7 @@ $this->registerJs("
             <?= $form->field($user, 'email')->textInput(['maxlength' => true]) ?>
         </div>
         <div class="col-md-2">
-            <?= $form->field($user, 'password')->passwordInput(['maxlength' => true]) ?>
+            <?= $form->field($user, 'password')->textInput(['maxlength' => true]) ?>
         </div>
         <div class="col-md-2">
             <?= $form->field($model, 'site')->textInput(['maxlength' => true]) ?>

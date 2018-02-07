@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use kartik\grid\GridView;
+use yii\grid\GridView;
 use yii\helpers\Url;
 use kartik\money\MaskMoney;
 /* @var $this yii\web\View */
@@ -123,18 +123,23 @@ $this->registerJs("
 ?>
 <!-- mask so funciona com isso -->
 <?php $this->head() ?>
+<div class="box box-primary">
+    <div class="box-header with-border">
 
+<div style="margin-bottom:1em">
+    <?= Html::a('Mostrar Todos', ['/executante/create', 'pagination' => true], ['class'=>'btn btn-primary grid-button']) ?>
+</div>
 <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
-        'pjax' => true,
+        // 'pjax' => true,
         'options' => ['style' => 'font-size:12px;'],
         
-        'hover' => true,
-        'panel' => [
+        // 'hover' => true,
+        /*'panel' => [
             'type' => GridView::TYPE_PRIMARY,
             'heading' => '<i class="fa fa-wrench"></i> Executantes'
-        ],
+        ],*/
         'columns' => [
             // ['class' => 'yii\grid\SerialColumn'],
             [
@@ -183,7 +188,8 @@ $this->registerJs("
             // ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
-
+</div>
+</div>
 <div class="executante-form">
 
     <?php $form = ActiveForm::begin(); ?>
@@ -223,7 +229,7 @@ $this->registerJs("
     <?= $form->field($user, 'email')->textInput(['maxlength' => true]) ?>
     </div>
     <div class="col-md-2">
-    <?= $form->field($user, 'password')->passwordInput(['maxlength' => true]) ?>
+    <?= $form->field($user, 'password')->textInput(['maxlength' => true]) ?>
     </div>
     <div class="col-md-2">
     <?= $form->field($model, 'cpf')->widget(\yii\widgets\MaskedInput::className(), [
@@ -257,7 +263,10 @@ $this->registerJs("
     <div class="col-md-3">
     <?= $form->field($model, 'endereco')->textInput(['maxlength' => true]) ?>
     </div>
-    
+    </div>
+
+    EMPRESA
+    <div class="row" style="border:1px solid black;padding: 2px; margin-bottom: 1em">      
     <div class="col-md-3">   
     <?= $form->field($model, 'nome_empresa')->textInput(['maxlength' => true]) ?>  
     </div>
@@ -281,7 +290,30 @@ $this->registerJs("
     <div class="col-md-3">
     <?= $form->field($model, 'endereco_empresa')->textInput(['maxlength' => true]) ?>
     </div>
-  
+  </div>
+  <div class="row">      
+    <div class="col-md-3">   
+    <?= $form->field($model, 'banco')->textInput(['maxlength' => true]) ?>  
+    </div>
+    <div class="col-md-2">
+    <?= $form->field($model, 'banco_numero')->textInput(['maxlength' => true]) ?>      
+    </div>
+    <div class="col-md-1">
+    <?= $form->field($model, 'agencia')->textInput(['maxlength' => true]) ?>        
+    </div>
+    <div class="col-md-2">
+    <?= $form->field($model, 'conta_corrente')->textInput(['maxlength' => true]) ?>        
+    </div>
+    <div class="col-md-2">
+    <label>Tipo de Conta</label>
+    <select name="Executante[conta_tipo]" class="form-control">
+      <option value="C" <?=$model->conta_tipo=='C' ? 'selected':'' ?>>Conta Corrente</option>
+      <option value="P" <?=$model->conta_tipo=='P' ? 'selected':'' ?>>Poupança</option>
+    </select>
+    </div>
+  </div>
+
+  <div class="row">
   <?php
   $existeTipo = '';
   if(!$model->isNewRecord){
@@ -411,7 +443,7 @@ $this->registerJs("
           ]
       ]); ?>
     </div>
-    <div class="col-md-1">
+    <div class="col-md-2">
     <?= $form->field($model, 'qtd_km_dia')->textInput(['maxlength' => true]) ?>
     </div>
     </div>

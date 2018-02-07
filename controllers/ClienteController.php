@@ -82,6 +82,8 @@ class ClienteController extends Controller
         $searchModel = new ClienteSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+        if(isset($_GET['pagination'])) $dataProvider->pagination = false;  
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
               if(UploadedFile::getInstance($model,'logo') != null){
 

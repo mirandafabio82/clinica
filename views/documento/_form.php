@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use kartik\grid\GridView;
+use yii\grid\GridView;
 use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $model app\models\Documento */
@@ -19,13 +19,13 @@ use yii\helpers\Url;
     margin: 0px;
 }
 
-.summary{
+/*.summary{
   display: none;
 }
 
 #w2{
     display: none;
-}
+}*/
 </style>
 <?php
 $this->registerJs("
@@ -40,17 +40,24 @@ $this->registerJs("
 
 ");
 ?>
+<div class="box box-primary">
+    <div class="box-header with-border">
+
+<div style="background-color: #337ab7;color:white;padding: 10px"><i class="fa fa-file"></i> Documentos </div>
+<div style="margin-bottom:1em;margin-top: 1em">
+    <?= Html::a('Mostrar Todos', ['/documento/create', 'pagination' => true], ['class'=>'btn btn-primary grid-button']) ?>
+</div>
 <?= GridView::widget([
         'dataProvider' => $dataProvider,
         // 'filterModel' => $searchModel,
         'options' => ['style' => 'font-size:12px;'],
         // 'pjax' => true,
         
-        'hover' => true,
+        /*'hover' => true,
         'panel' => [
             'type' => GridView::TYPE_PRIMARY,
             'heading' => '<i class="fa fa-file"></i> Documentos'
-        ],
+        ],*/
         'columns' => [
             // ['class' => 'yii\grid\SerialColumn'],
             [
@@ -116,6 +123,9 @@ $this->registerJs("
             
         ],
     ]); ?>
+</div>
+</div>
+
 <div class="documento-form">
 
 <div class="box box-primary">

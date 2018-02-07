@@ -78,6 +78,8 @@ class TipoexecutanteController extends Controller
         $searchModel = new TipoexecutanteSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+        if(isset($_GET['pagination'])) $dataProvider->pagination = false;
+
         $model = new Tipoexecutante();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {

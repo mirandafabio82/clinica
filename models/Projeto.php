@@ -91,6 +91,7 @@ class Projeto extends \yii\db\ActiveRecord
             [['cliente_id'], 'exist', 'skipOnError' => true, 'targetClass' => Cliente::className(), 'targetAttribute' => ['cliente_id' => 'id']],
             [['contato_id'], 'exist', 'skipOnError' => true, 'targetClass' => Contato::className(), 'targetAttribute' => ['contato_id' => 'usuario_id']],
             [['nome', 'contrato'], 'string', 'max' => 255],
+            [['resumo_escopo','resumo_exclusoes','resumo_premissas','resumo_restricoes','resumo_normas','resumo_documentos','resumo_itens','resumo_prazo','resumo_observacoes', 'desc_resumida'], 'string']
         ];
     }
 
@@ -154,8 +155,8 @@ class Projeto extends \yii\db\ActiveRecord
             'resumo_documentos' =>'6. DOCUMENTOS DE REFÊRENCIA',
             'resumo_itens' =>'7. ITENS DE COMPRA',
             'resumo_prazo' =>'8. PRAZO',
-            'resumo_observacoes' =>'OBSERVAÇÕES'
-            
+            'resumo_observacoes' =>'OBSERVAÇÕES',
+            'desc_resumida' => 'Descrição Resumida dos Serviços'
         ];
     }
 

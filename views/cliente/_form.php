@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use kartik\grid\GridView;
+use yii\grid\GridView;
 use yii\helpers\Url;
 
 /* @var $this yii\web\View */
@@ -51,19 +51,27 @@ $this->registerJs("
     display: none;
 }
 </style>
+
+<div class="box box-primary">
+    <div class="box-header with-border">
+<div style="background-color: #337ab7;color:white;padding: 10px"><i class="fa fa-handshake-o"></i> Clientes </div>
+<div style="margin-bottom:1em;margin-top: 1em">
+    <?= Html::a('Mostrar Todos', ['/cliente/create', 'pagination' => true], ['class'=>'btn btn-primary grid-button']) ?>
+</div>
+
 <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
-        'pjax' => true,        
+        // 'pjax' => true,        
         'options' => ['style' => 'font-size:12px;'],
-        'hover' => true,
+        // 'hover' => true,
         /*'rowOptions' => function ($model, $key, $index, $grid) {
                 return ['id' => $model['id'], 'onclick' => 'window.location = "index.php?r=cliente/update&id="+this.id'];
         },*/
-        'panel' => [
+        /*'panel' => [
             'type' => GridView::TYPE_PRIMARY,
             'heading' => '<i class="fa fa-handshake-o"></i> Clientes'
-        ],
+        ],*/
         'columns' => [
             // ['class' => 'yii\grid\SerialColumn'],
         
@@ -84,6 +92,11 @@ $this->registerJs("
             // ['class' => 'yii\grid\ActionColumn', 'header' => 'Ações'],
         ],
     ]); ?>
+</div>
+</div>
+
+
+
 <div class="cliente-form">
     <div class="box box-primary">
         <div class="box-header with-border">

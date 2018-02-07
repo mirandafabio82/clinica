@@ -81,6 +81,8 @@ class ExecutanteController extends Controller
         $searchModel = new ExecutanteSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+        if(isset($_GET['pagination'])) $dataProvider->pagination = false;
+
         $model = new Executante();
         $user = new DBUser();
         $exectipo = new ExecutanteTipo();

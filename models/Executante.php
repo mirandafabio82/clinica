@@ -37,9 +37,9 @@ class Executante extends \yii\db\ActiveRecord
             [['usuario_id'], 'required'],
             [['usuario_id'], 'integer'],
             [['criado', 'modificado'], 'safe'],
-            [['cpf'], 'string', 'max' => 45],
+            [['cpf','conta_tipo'], 'string', 'max' => 45],
             [['cnpj'], 'string', 'max' => 18],
-            [['cidade', 'endereco', 'cnpj', 'nome_empresa', 'endereco_empresa', 'insc_municipal', 'bairro_empresa', 'cep_empresa', 'uf_empresa', 'cidade_empresa', 'bairro', 'cep', 'endereco_empresa'], 'string', 'max' => 255],
+            [['cidade', 'endereco', 'cnpj', 'nome_empresa', 'endereco_empresa', 'insc_municipal', 'bairro_empresa', 'cep_empresa', 'uf_empresa', 'cidade_empresa', 'bairro', 'cep', 'endereco_empresa','banco','banco_numero','agencia','conta_corrente'], 'string', 'max' => 255],
             [['uf'], 'string', 'max' => 2],
             [['telefone', 'celular'], 'string', 'max' => 15],
             [['vl_hh_tp', 'vl_hh_ej', 'vl_hh_ep', 'vl_hh_es', 'vl_hh_ee', 'vl_km', 'qtd_km_dia'], 'number'],
@@ -70,7 +70,18 @@ class Executante extends \yii\db\ActiveRecord
             'vl_km' => 'Valor KM',
             'qtd_km_dia' => 'Qtd. Km Dia',
             'tipo_id' => 'Tipos',
-            'uf_empresa' => 'UF Empresa',
+            'uf_empresa' => 'UF',
+            'nome_empresa' => 'Nome',
+            'cidade_empresa' => 'Cidade',
+            'bairro_empresa' => 'Bairro',
+            'cep_empresa' => 'Cep',
+            'endereco_empresa' => 'Endereço',
+            'banco' => 'Banco',
+            'banco_numero' => 'Num. Banco',
+            'agencia' => 'Agência',
+            'conta_corrente' => 'Conta Corrente',
+            'conta_tipo' => 'Tipo de Conta'
+
         ];
     }
 

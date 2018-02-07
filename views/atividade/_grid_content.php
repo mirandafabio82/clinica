@@ -93,7 +93,7 @@ tbody {
        
         <tr>
           <th style="width:150em;">Nome</th>
-          <th style="width:1em;padding-right: 1em;">Total de Horas</th>
+          <th style="width:1em;padding-right: 1em;">Horas</th>
           <th style="width:1em;padding-right: 1em;">Executado</th>
           <th style="width:50em;">Status</th>
         </tr>

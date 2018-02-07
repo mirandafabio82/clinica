@@ -27,12 +27,11 @@ class AgendaController extends Controller
                 'class' => AccessControl::className(),
                 'only' => ['*'],
                 'rules' => [
-                    [
-                        // 'actions' => ['index', 'view', 'create', 'update'],
-                        'allow' => true,
-                        'roles' => ['admin'],
-                    ],
+                    ['allow' => true,'roles' => ['admin']],
+                    ['allow' => true,'roles' => ['executante']],                    
+                    ['actions' => ['index', 'view'],'allow' => true,'roles' => ['executante']],
                 ],
+                
             ],
             'verbs' => [
                 'class' => VerbFilter::className(),
@@ -79,6 +78,8 @@ class AgendaController extends Controller
     {
          $searchModel = new AgendaSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        if(isset($_GET['pagination'])) $dataProvider->pagination = false;
 
         $model = new Agenda();
         $model->data =  date('d/m/Y');
@@ -142,6 +143,7 @@ class AgendaController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         $model = $this->findModel($id);
+        if(isset($model->data))
         $model->data = date_format(DateTime::createFromFormat('Y-m-d', $model->data), 'd/m/Y');
         $projetos = Yii::$app->db->createCommand('SELECT projeto.id, nome FROM projeto')->queryAll();
         $listProjetos = ArrayHelper::map($projetos,'id','nome');

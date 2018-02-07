@@ -13,7 +13,7 @@ th, td {
 <img src="logos/<?= Yii::$app->db->createCommand('SELECT cliente.logo FROM cliente JOIN projeto ON cliente.id=projeto.cliente_id WHERE projeto.cliente_id='.$projeto->cliente_id)->queryScalar()?>" alt="User Image" style="float: right;width: 10em">
 
 <div style="margin-top:-3em;font-size: 15pt;font-family: arial; font-weight: bold" line-height= "2em" align="center">AUTORIZAÇÃO </div>
-<div style="margin-top:-0.5em;margin-bottom:1em;font-size: 15pt;font-family: arial; font-weight: bold" line-height= "2em" align="center">DE SERVIÇO (AS) </div>
+<div style="margin-bottom:1em;font-size: 15pt;font-family: arial; font-weight: bold" line-height= "2em" align="center">DE SERVIÇO (AS) </div>
 
 
 <table border="1" align="center" width="100%">
@@ -44,13 +44,13 @@ th, td {
       </tr>
       <tr style="background-color: #d3d3d3;">
             <td style="font-family: arial;font-size: 8pt" align="center" colspan="1">ÓRGÃO </td> 
-            <td style="font-family: arial;font-size: 8pt" align="center" colspan="2">SOLCITANTE </td> 
+            <td style="font-family: arial;font-size: 8pt" align="center" colspan="2">SOLICITANTE </td> 
             <td style="font-family: arial;font-size: 8pt" align="center" colspan="2">CONTRATO Nº</td>                       
             <td style="font-family: arial;font-size: 8pt" align="center" colspan="2">UN</td>
       </tr>
       <tr >
             <td style="font-family: arial;font-size: 8pt" align="center" colspan="1"><?=$projeto->setor ?></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" colspan="2"><?=$projeto->contato ?></td> 
+            <td style="font-family: arial;font-size: 8pt" align="center" colspan="2"><?=Yii::$app->db->createCommand('SELECT nome FROM user JOIN contato ON contato.usuario_id=user.id WHERE user.id='.$projeto->contato_id)->queryScalar() ?></td> 
             <td style="font-family: arial;font-size: 8pt" align="center" colspan="2"><?=$projeto->contrato ?></td>                       
             <td style="font-family: arial;font-size: 8pt" align="center" colspan="2"><?=$projeto->site?></td>
       </tr>
@@ -63,7 +63,7 @@ th, td {
             <td style="font-family: arial;font-size: 8pt" align="center" colspan="7">DESCRIÇÃO RESUMIDA DOS SERVIÇOS</td>                        
       </tr>
       <tr>
-            <td style="font-family: arial;font-size: 8pt" align="center" colspan="7">MUDAR</td>                        
+            <td style="font-family: arial;font-size: 8pt" align="center" colspan="7"><?=$projeto->desc_resumida ?></td>                        
       </tr>
       </tbody>
       </table>
@@ -158,18 +158,18 @@ th, td {
       </tr>
       <tr>
             <td style="font-family: arial;font-size: 8pt" >PROCESSO</td>  
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=str_replace('.',',',sprintf("%.1f", $p_horas_ee)) ?></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=str_replace('.',',',sprintf("%.1f",$p_horas_es)) ?></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=str_replace('.',',',sprintf("%.1f",$p_horas_ep)) ?></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=str_replace('.',',',sprintf("%.1f",$p_horas_ej)) ?></td> 
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=str_replace('.',',',sprintf("%.1f",$p_horas_tp)) ?></td>    
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$p_horas_ee==0 ? '': str_replace('.',',',sprintf("%.1f", $p_horas_ee)) ?></td>
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$p_horas_es==0 ? '': str_replace('.',',',sprintf("%.1f",$p_horas_es)) ?></td>
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$p_horas_ep==0 ? '': str_replace('.',',',sprintf("%.1f",$p_horas_ep)) ?></td>
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$p_horas_ej==0 ? '': str_replace('.',',',sprintf("%.1f",$p_horas_ej)) ?></td> 
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$p_horas_tp==0 ? '': str_replace('.',',',sprintf("%.1f",$p_horas_tp)) ?></td>    
             <td></td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>                 
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=str_replace('.',',',number_format($p_tot, 2, ',', '.')) ?></td> 
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=number_format($money_proc, 2, ',', '.') ?></td> 
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$p_tot==0 ? '': str_replace('.',',',number_format($p_tot, 2, ',', '.')) ?></td> 
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$money_proc==0 ? '': number_format($money_proc, 2, ',', '.') ?></td> 
       </tr>
       <tr>
             <td style="font-family: arial;font-size: 8pt" >TUBULAÇÃO</td>  
@@ -218,33 +218,33 @@ th, td {
       </tr>
       <tr>
             <td style="font-family: arial;font-size: 8pt" >INSTRUMENTAÇÃO</td>  
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=str_replace('.',',',sprintf("%.1f",$i_horas_ee)) ?></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=str_replace('.',',',sprintf("%.1f",$i_horas_es)) ?></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=str_replace('.',',',sprintf("%.1f",$i_horas_ep)) ?></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=str_replace('.',',',sprintf("%.1f",$i_horas_ej)) ?></td> 
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=str_replace('.',',',sprintf("%.1f",$i_horas_tp)) ?></td>    
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$i_horas_ee==0 ? '': str_replace('.',',',sprintf("%.1f",$i_horas_ee)) ?></td>
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$i_horas_es==0 ? '': str_replace('.',',',sprintf("%.1f",$i_horas_es)) ?></td>
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$i_horas_ep==0 ? '': str_replace('.',',',sprintf("%.1f",$i_horas_ep)) ?></td>
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$i_horas_ej==0 ? '': str_replace('.',',',sprintf("%.1f",$i_horas_ej)) ?></td> 
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$i_horas_tp==0 ? '': str_replace('.',',',sprintf("%.1f",$i_horas_tp)) ?></td>    
             <td></td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>                  
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=str_replace('.',',',sprintf("%.1f",$i_tot)) ?></td> 
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=number_format($money_inst, 2, ',', '.') ?></td>
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$i_tot==0 ? '': str_replace('.',',',sprintf("%.1f",$i_tot)) ?></td> 
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$money_inst==0 ? '': number_format($money_inst, 2, ',', '.') ?></td>
       </tr>
       <tr>
             <td style="font-family: arial;font-size: 8pt" >AUTOMAÇÃO</td>  
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=str_replace('.',',',sprintf("%.1f",$a_horas_ee)) ?></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=str_replace('.',',',sprintf("%.1f",$a_horas_es)) ?></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=str_replace('.',',',sprintf("%.1f",$a_horas_ep)) ?></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=str_replace('.',',',sprintf("%.1f",$a_horas_ej)) ?></td> 
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=str_replace('.',',',sprintf("%.1f",$a_horas_tp)) ?></td>    
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$a_horas_ee==0 ? '': str_replace('.',',',sprintf("%.1f",$a_horas_ee)) ?></td>
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$a_horas_es==0 ? '': str_replace('.',',',sprintf("%.1f",$a_horas_es)) ?></td>
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$a_horas_ep==0 ? '': str_replace('.',',',sprintf("%.1f",$a_horas_ep)) ?></td>
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$a_horas_ej==0 ? '': str_replace('.',',',sprintf("%.1f",$a_horas_ej)) ?></td> 
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$a_horas_tp==0 ? '': str_replace('.',',',sprintf("%.1f",$a_horas_tp)) ?></td>    
             <td></td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>                 
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=str_replace('.',',',sprintf("%.1f",$a_tot)) ?></td> 
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=number_format($money_aut, 2, ',', '.') ?></td> 
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$a_tot==0 ? '':str_replace('.',',',sprintf("%.1f",$a_tot)) ?></td> 
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$money_aut==0 ? '':number_format($money_aut, 2, ',', '.') ?></td> 
       </tr>
       <tr>
             <td style="font-family: arial;font-size: 8pt" >CALDEIRARIA</td>  
@@ -278,18 +278,18 @@ th, td {
       </tr>
       <tr style="background-color: #d3d3d3;"> 
             <td style="font-family: arial;font-size: 8pt" >TOTAL DISCIPLINAS</td>  
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=str_replace('.',',',sprintf("%.1f",$p_horas_ee+$i_horas_ee+$a_horas_ee)) ?></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=str_replace('.',',',sprintf("%.1f",$p_horas_es+$i_horas_es+$a_horas_es)) ?></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=str_replace('.',',',sprintf("%.1f",$p_horas_ep+$i_horas_ep+$a_horas_ep))?></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=str_replace('.',',',sprintf("%.1f",$p_horas_ej+$i_horas_ej+$a_horas_ej)) ?></td> 
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=str_replace('.',',',sprintf("%.1f",$p_horas_tp+$i_horas_tp+$a_horas_tp)) ?></td>    
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$p_horas_ee+$i_horas_ee+$a_horas_ee==0 ? '':str_replace('.',',',sprintf("%.1f",$p_horas_ee+$i_horas_ee+$a_horas_ee)) ?></td>
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$p_horas_es+$i_horas_es+$a_horas_es==0 ? '':str_replace('.',',',sprintf("%.1f",$p_horas_es+$i_horas_es+$a_horas_es)) ?></td>
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$p_horas_ep+$i_horas_ep+$a_horas_ep==0 ? '': str_replace('.',',',sprintf("%.1f",$p_horas_ep+$i_horas_ep+$a_horas_ep))?></td>
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$p_horas_ej+$i_horas_ej+$a_horas_ej==0 ? '':str_replace('.',',',sprintf("%.1f",$p_horas_ej+$i_horas_ej+$a_horas_ej)) ?></td> 
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$p_horas_tp+$i_horas_tp+$a_horas_tp==0 ?'':str_replace('.',',',sprintf("%.1f",$p_horas_tp+$i_horas_tp+$a_horas_tp)) ?></td>    
             <td></td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>              
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=str_replace('.',',',sprintf("%.1f",$p_tot+$i_tot+$a_tot)) ?></td> 
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=number_format($money_proc+$money_inst+$money_aut, 2, ',', '.') ?></td>
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$p_tot+$i_tot+$a_tot==0 ? '': str_replace('.',',',sprintf("%.1f",$p_tot+$i_tot+$a_tot)) ?></td> 
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$money_proc+$money_inst+$money_aut==0 ? '':number_format($money_proc+$money_inst+$money_aut, 2, ',', '.') ?></td>
       </tr>
       <tr> 
             <td style="font-family: arial;font-size: 8pt" colspan="11">SUB-CONTRATAÇÃO</td>              
@@ -311,7 +311,7 @@ th, td {
             <td style="font-family: arial;font-size: 8pt" align="center" colspan="3" >CUSTOS DIVERSOS</td>            
      </tr>
      <tr style="background-color: #d3d3d3" >
-            <td style="font-family: arial;font-size: 8pt; width:10px"  >Viagens</td> 
+            <td style="font-family: arial;font-size: 8pt; width:10px">Viagens</td> 
             <td style="font-family: arial;font-size: 8pt" ></td>
             <td style="font-family: arial;font-size: 8pt"  align="center"></td>           
      </tr>
@@ -330,18 +330,26 @@ th, td {
      <tr style="background-color: #d3d3d3;">
             <td style="font-family: arial;font-size: 8pt; width:20em">Translados</td> 
            <td style="font-family: arial;font-size: 8pt; width:20em" align="center">Deslocamento para <?= $projeto->qtd_km ?> Km</td> 
-           <td style="font-family: arial;font-size: 8pt; width:20em" align="right"><?= $projeto->vl_km ?></td> 
+           <td style="font-family: arial;font-size: 8pt; width:2em" align="right"><?= $projeto->vl_km ?></td> 
       </tr>
 
      <tr style="background-color: #d3d3d3;">
             <td style="font-family: arial;font-size: 8pt; width:20em"  >Softwares Especiais</td> 
             <td style="font-family: arial;font-size: 8pt; width:20em" ></td>
-            <td style="font-family: arial;font-size: 8pt; width:20em"  align="center"></td>           
+            <td style="font-family: arial;font-size: 8pt; width:2em"  align="center"></td>           
      </tr>
      <tr style="background-color: #d3d3d3;">
             <td style="font-family: arial;font-size: 8pt; width:20em"  >Aut. Sub-Contratações</td> 
             <td style="font-family: arial;font-size: 8pt; width:20em" ></td>
-            <td style="font-family: arial;font-size: 8pt; width:20em"  align="center"></td>           
+            <td style="font-family: arial;font-size: 8pt; width:2em"  align="center"></td>           
+     </tr>
+     <tr style="background-color: #605f5f;">
+            <td style="font-family: arial;font-size: 8pt; width:20em;color:white"  colspan="2">SUBTOTAL</td>             
+            <td style="font-family: arial;font-size: 8pt; width:2em;color:white"  align="right"><?= number_format($projeto->vl_km, 2, ',', '.') ?></td>           
+     </tr>
+      <tr style="background-color: #605f5f;">
+            <td style="font-family: arial;font-size: 8pt; width:20em;color:white" colspan="2">TOTAL GERAL</td> 
+            <td style="font-family: arial;font-size: 8pt; width:2em;color:white"  align="right"><?= number_format($money_proc+$money_inst+$money_aut+$projeto->vl_km, 2, ',', '.') ?></td>           
      </tr>
 	</tbody>
       </table>

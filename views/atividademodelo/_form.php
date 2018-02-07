@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use kartik\grid\GridView;
+use yii\grid\GridView;
 use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $model app\models\Atividademodelo */
@@ -30,26 +30,36 @@ $this->registerJs("
     margin: 0px;
 }
 
-.summary{
+/*.summary{
   display: none;
 }
 
 #w2{
     display: none;
-}
+}*/
 </style>
+
+
+
+<div class="box box-primary">
+    <div class="box-header with-border">
+    <div style="background-color: #337ab7;color:white;padding: 10px"><i class="fa fa-tablet"></i> Atividades Modelo </div>
+<div style="margin-bottom:1em;margin-top: 1em">
+    <?= Html::a('Mostrar Todos', ['/atividademodelo/create', 'pagination' => true], ['class'=>'btn btn-primary grid-button']) ?>
+</div>
 <div class="atividademodelo-form">
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         // 'filterModel' => $searchModel,
         'options' => ['style' => 'font-size:12px;'],
-        'pjax' => true,        
+        'showHeader' => true,
+        // 'pjax' => true,        
         
-        'hover' => true,
+       /* 'hover' => true,
         'panel' => [
             'type' => GridView::TYPE_PRIMARY,
             'heading' => '<i class="fa fa-map"></i> Atividades Modelo'
-        ],
+        ],*/
         'columns' => [
             
             [
@@ -88,6 +98,8 @@ $this->registerJs("
 
         ],
     ]); ?>
+</div>
+</div>
     <?php $form = ActiveForm::begin(); ?>
      <div class="box box-primary">
     <div class="box-header with-border">

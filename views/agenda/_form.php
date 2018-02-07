@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use kartik\grid\GridView;
+use yii\grid\GridView;
 use yii\helpers\Url;
 
 /* @var $this yii\web\View */
@@ -41,17 +41,23 @@ $this->registerJs("
 </style>
 <!-- mask so funciona com isso -->
 <?php $this->head() ?>
+<div class="box box-primary">
+    <div class="box-header with-border">
+<div style="background-color: #337ab7;color:white;padding: 10px"><i class="fa fa-calendar"></i> Agenda </div>
+<div style="margin-bottom:1em;margin-top: 1em">
+    <?= Html::a('Mostrar Todos', ['/agenda/create', 'pagination' => true], ['class'=>'btn btn-primary grid-button']) ?>
+</div>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         // 'filterModel' => $searchModel,
         'options' => ['style' => 'font-size:12px;'],
-        'pjax' => true,
+        // 'pjax' => true,
         
-        'hover' => true,
-        'panel' => [
+        // 'hover' => true,
+        /*'panel' => [
             'type' => GridView::TYPE_PRIMARY,
             'heading' => '<i class="fa fa-calendar"></i> Agenda'
-        ],
+        ],*/
         'columns' => [
             // ['class' => 'yii\grid\SerialColumn'],
             [
@@ -66,8 +72,19 @@ $this->registerJs("
                     if(isset($data->projeto_id))
                     return Yii::$app->db->createCommand('SELECT nome FROM projeto WHERE id='.$data->projeto_id)->queryScalar();
                 }
-            ],            
+            ],     
             [
+              'attribute' => 'status',
+              'format' => 'raw',
+              'value' => function ($data) {
+
+                $status = Yii::$app->db->createCommand('SELECT status, cor FROM agenda_status WHERE id='.$data->status)->queryOne();
+                
+               return '<span style="color:'.$status['cor'].' "><i class="fa fa-circle" aria-hidden="true"></i> '.$status['status'].'</span>';
+
+               },
+            ],       
+            /*[
               'attribute' => 'status',      
               'class' => 'kartik\grid\EditableColumn',        
               'format' => 'raw',
@@ -83,7 +100,7 @@ $this->registerJs("
               'inputType' => \kartik\editable\Editable::INPUT_DROPDOWN_LIST,
               'data' => $listStatus                
               ]
-            ],
+            ],*/
             [
                 'attribute' => 'data',
                 'value' => function($data){
@@ -106,6 +123,8 @@ $this->registerJs("
             // ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
+    </
+    </
 <div class="agenda-form">
 
     <?php $form = ActiveForm::begin(); ?>

@@ -99,6 +99,8 @@ class ProjetoController extends Controller
         $searchModel = new ProjetoSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+        if(isset($_GET['pagination'])) $dataProvider->pagination = false;
+
         if(Yii::$app->request->post('editableKey')){
             try{
                 $projeto_id = Yii::$app->request->post('editableKey');
@@ -160,7 +162,7 @@ class ProjetoController extends Controller
                     $model->proposta = 'PTC'.'-'.$model->codigo.'-'.$model->site.'-'.$model->rev_proposta;
                 }
                 else{
-                    $model->proposta = 'AS'.'-'.$model->codigo.'-'.$model->site.'-'.preg_replace('/[^0-9]/', '', $model->nome);
+                    $model->proposta = 'AS'.'-'.$model->codigo.'-'.$model->site.'-'.preg_replace('/[^0-9]/', '', $model->nome).'_'.$model->rev_proposta;
                 }
                 
                 if(!empty($_POST['Projeto']['data_proposta'])){
@@ -424,7 +426,7 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
 
          //atualizando os valores de hora e executante do escopo
         if(isset($_POST['Escopo'])){
-
+            
             $totalHoras = 0;
             $valorProposta = 0;
 
@@ -506,12 +508,12 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                 $transaction = $connection->beginTransaction();
 
                 $model->setAttributes($_POST['Projeto']);      
-                if($model->tipo == "P"){
+                /*if($model->tipo == "P"){
                     $model->proposta = 'PTC'.'-'.$model->codigo.'-'.$model->site.'-'.$model->rev_proposta;
                 }
                 else{
                     $model->proposta = 'AS'.'-'.$model->codigo.'-'.$model->site.'-'.preg_replace('/[^0-9]/', '', $model->nome);
-                } 
+                } */
                 if(!empty($_POST['Projeto']['data_proposta'])){
                     $dat = DateTime::createFromFormat('d/m/Y', $_POST['Projeto']['data_proposta']);          
                     $model->data_proposta = date_format($dat, 'Y-m-d');

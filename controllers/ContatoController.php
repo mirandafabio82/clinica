@@ -81,6 +81,8 @@ class ContatoController extends Controller
     {
         $searchModel = new ContatoSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        if(isset($_GET['pagination'])) $dataProvider->pagination = false;
         
         $model = new Contato();
         $user = new DBUser();

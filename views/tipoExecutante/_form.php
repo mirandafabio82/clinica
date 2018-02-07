@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use kartik\grid\GridView;
+use yii\grid\GridView;
 use yii\helpers\Url;
 use kartik\money\MaskMoney;
 /* @var $this yii\web\View */
@@ -18,13 +18,13 @@ use kartik\money\MaskMoney;
     margin: 0px;
 }
 
-.summary{
+/*.summary{
   display: none;
 }
 
 #w2{
     display: none;
-}
+}*/
 </style>
 <?php
 $this->registerJs("
@@ -41,17 +41,26 @@ $this->registerJs("
 ?>
 <!-- mask so funciona com isso -->
 <?php $this->head() ?>
+
+<div class="box box-primary">
+    <div class="box-header with-border">
+
+<div style="background-color: #337ab7;color:white;padding: 10px"><i class="fa fa-vcard"></i> Especialidades </div>
+<div style="margin-bottom:1em;margin-top: 1em">
+    <?= Html::a('Mostrar Todos', ['/tipoexecutante/create', 'pagination' => true], ['class'=>'btn btn-primary grid-button']) ?>
+</div>
+
 <?= GridView::widget([
         'dataProvider' => $dataProvider,
         // 'filterModel' => $searchModel,
         'options' => ['style' => 'font-size:12px;'],
-        'pjax' => true,
+        // 'pjax' => true,
         
-        'hover' => true,
-        'panel' => [
+        // 'hover' => true,
+        /*'panel' => [
             'type' => GridView::TYPE_PRIMARY,
             'heading' => '<i class="fa fa-vcard"></i> Especialidades'
-        ],
+        ],*/
         'columns' => [
             // ['class' => 'yii\grid\SerialColumn'],
             [
@@ -86,6 +95,9 @@ $this->registerJs("
             // ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
+</div>
+</div>
+
 <div class="tipo-executante-form">
 
     <?php $form = ActiveForm::begin(); ?>

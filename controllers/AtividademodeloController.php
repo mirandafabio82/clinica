@@ -76,6 +76,7 @@ class AtividademodeloController extends Controller
         $listDisciplina = ArrayHelper::map($disciplina,'id','nome');
 
         
+        if(isset($_GET['pagination'])) $dataProvider->pagination = false;        
 
         if ($model->load(Yii::$app->request->post()) ) {
 
