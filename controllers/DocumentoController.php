@@ -29,11 +29,9 @@ class DocumentoController extends Controller
                 'class' => AccessControl::className(),
                 'only' => ['*'],
                 'rules' => [
-                    [
-                        // 'actions' => ['index', 'view', 'create', 'update'],
-                        'allow' => true,
-                        'roles' => ['admin'],
-                    ],
+                    ['allow' => true,'roles' => ['admin']],
+                    ['allow' => true,'roles' => ['executante']],                    
+                    ['actions' => ['index', 'view'],'allow' => true,'roles' => ['executante']],
                 ],
             ],
             'verbs' => [

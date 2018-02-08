@@ -96,7 +96,7 @@ tbody {
           <th style="width:1em;padding-right: 1em;">Horas</th>
           <th style="width:1em;padding-right: 1em;">Executado</th>
           <th style="width:50em;padding-right: 1em;">Progresso</th>
-          <th style="width:20em;">Status</th>
+          <th style="width:30em;">Status</th>
         </tr>
       </thead>
       <?php $form = ActiveForm::begin(); ?>
@@ -121,6 +121,7 @@ tbody {
           </div>
         </div>
           </td>
+          <?php $escopoModel->status = $escopoModel->isNewRecord ? 2 : $escopoModel->status; ?>
         <td style="font-size: 15px; padding: 1px;"><?=$form->field($escopoModel, 'status')->dropDownList($listStatus,['class' =>'form-control status', 'id'=>'status-'.$escopo['id'], 'name'=>'Escopo['.$escopo['id'].'][status]', 'disabled'=>$editable])->label(false) ?></td>
       </tr>
       

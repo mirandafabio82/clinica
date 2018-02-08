@@ -789,7 +789,10 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
             $basico = '';
             $detalhamento = '';
             $config = '';
+            $index = 1;
+            $arrayIndex = [1=>'I',2=>'II',3=>'III',4=>'IV',5=>'V',6=>'VI',7=>'VII',8=>'VIII',9=>'IX'];
 
+           
             foreach ($escopos as $key => $escopo) {
                 if($escopo['escopopadrao_id']==1)
                     $basico = 'checked="checked"';
@@ -816,22 +819,31 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
 
             $processo = $this->renderPartial('relatorio/_processo', [
                 'projeto' => $projeto,
-                'escopos' => $processoArray]);
+                'escopos' => $processoArray,
+                'index' => $arrayIndex[$index]]);
+            if(!empty($processoArray)) $index++;
 
             $automacao = $this->renderPartial('relatorio/_automacao', [
                 'projeto' => $projeto,
-                'escopos' => $automacaoArray]);
+                'escopos' => $automacaoArray,
+                'index' => $arrayIndex[$index]]);
+            if(!empty($automacaoArray)) $index++;
 
             $instrumentacao = $this->renderPartial('relatorio/_instrumentacao', [
                 'projeto' => $projeto,
-                'escopos' => $instrumentacaoArray]);
+                'escopos' => $instrumentacaoArray,
+                'index' => $arrayIndex[$index]]);
+            if(!empty($instrumentacaoArray)) $index++;
 
             $resumo = $this->renderPartial('relatorio/_resumo', [
-                'projeto' => $projeto]);
+                'projeto' => $projeto,
+                'index' => $arrayIndex[$index]]);
+            $index++;
 
             $ld_preliminar = $this->renderPartial('relatorio/_ldpreliminar', [
                 'projeto' => $projeto,
-                'ldpreliminarArray' => $ldpreliminarArray]);
+                'ldpreliminarArray' => $ldpreliminarArray,
+                'index' => $arrayIndex[$index]]);
 
 
             

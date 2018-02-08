@@ -16,6 +16,45 @@ th, td {
 <div style="margin-bottom:1em;font-size: 15pt;font-family: arial; font-weight: bold" line-height= "2em" align="center">DE SERVIÇO (AS) </div>
 
 
+<?php 
+      $p_horas_ee=0; $p_horas_es=0; $p_horas_ep=0; $p_horas_ej=0; $p_horas_tp=0; 
+      foreach ($processo as $key => $proc) {
+                  $p_horas_ee += $proc['horas_ee'];
+                  $p_horas_es += $proc['horas_es'];
+                  $p_horas_ep += $proc['horas_ep'];
+                  $p_horas_ej += $proc['horas_ej'];
+                  $p_horas_tp += $proc['horas_tp'];
+      }
+
+      $i_horas_ee=0; $i_horas_es=0; $i_horas_ep=0; $i_horas_ej=0; $i_horas_tp=0; 
+      foreach ($instrumentacao as $key => $inst) {
+                  $i_horas_ee += $inst['horas_ee'];
+                  $i_horas_es += $inst['horas_es'];
+                  $i_horas_ep += $inst['horas_ep'];
+                  $i_horas_ej += $inst['horas_ej'];
+                  $i_horas_tp += $inst['horas_tp'];
+      }
+
+      $a_horas_ee=0; $a_horas_es=0; $a_horas_ep=0; $a_horas_ej=0; $a_horas_tp=0; 
+      foreach ($automacao as $key => $aut) {
+                  $a_horas_ee += $aut['horas_ee'];
+                  $a_horas_es += $aut['horas_es'];
+                  $a_horas_ep += $aut['horas_ep'];
+                  $a_horas_ej += $aut['horas_ej'];
+                  $a_horas_tp += $aut['horas_tp'];
+      }
+
+      $p_tot = $p_horas_ee+$p_horas_es+$p_horas_ep+$p_horas_ej+$p_horas_tp;
+      $i_tot = $i_horas_ee+$i_horas_es+$i_horas_ep+$i_horas_ej+$i_horas_tp;
+      $a_tot = $a_horas_ee+$a_horas_es+$a_horas_ep+$a_horas_ej+$a_horas_tp;
+
+      $money_proc = $p_horas_ee*$tipo_executante[4]['valor_hora']+$p_horas_es*$tipo_executante[3]['valor_hora']+$p_horas_ep*$tipo_executante[2]['valor_hora']+$p_horas_ej*$tipo_executante[1]['valor_hora']+$p_horas_tp*$tipo_executante[0]['valor_hora'];
+
+      $money_inst = $i_horas_ee*$tipo_executante[4]['valor_hora']+$i_horas_es*$tipo_executante[3]['valor_hora']+$i_horas_ep*$tipo_executante[2]['valor_hora']+$i_horas_ej*$tipo_executante[1]['valor_hora']+$i_horas_tp*$tipo_executante[0]['valor_hora'];
+
+      $money_aut = $a_horas_ee*$tipo_executante[4]['valor_hora']+$a_horas_es*$tipo_executante[3]['valor_hora']+$a_horas_ep*$tipo_executante[2]['valor_hora']+$a_horas_ej*$tipo_executante[1]['valor_hora']+$a_horas_tp*$tipo_executante[0]['valor_hora'];
+      ?>
+
 <table border="1" align="center" width="100%">
 <tbody>
       <tr style="background-color: #d3d3d3;">
@@ -78,7 +117,7 @@ th, td {
       <tr>
             <td style="font-family: arial;font-size: 8pt" align="center" colspan="2"><input type="checkbox"  >ADMINISTRAÇÃO <input type="checkbox"  checked="checked">PREÇO GLOBAL</td> 
             <td style="font-family: arial;font-size: 8pt" align="center" colspan="2"><input type="checkbox"  <?=$basico ?>>BÁSICO <input type="checkbox"  <?=$detalhamento ?>>DETALHAMENTO  <input type="checkbox"  <?=$config ?>>CONFIGURAÇÃO</td>                       
-            <td style="font-family: arial;font-size: 8pt" align="center" colspan="3"><?=number_format($projeto->valor_proposta, 2, ',', '.') ?> (<?= escreverValorMoeda($projeto->valor_proposta)?>)</td>
+            <td style="font-family: arial;font-size: 8pt" align="center" colspan="3"><?=number_format($money_proc+$money_inst+$money_aut+$projeto->vl_km, 2, ',', '.') ?> (<?= escreverValorMoeda(number_format($money_proc+$money_inst+$money_aut+$projeto->vl_km, 2, ',', '.'))?>)</td>
       </tr>
       </tbody>
       </table>
@@ -102,44 +141,7 @@ th, td {
             <td></td>         
             <td style="font-family: arial;font-size: 8pt" align="center" colspan="2">TOTAL</td>          
       </tr>
-      <?php 
-      $p_horas_ee=0; $p_horas_es=0; $p_horas_ep=0; $p_horas_ej=0; $p_horas_tp=0; 
-      foreach ($processo as $key => $proc) {
-      		$p_horas_ee += $proc['horas_ee'];
-      		$p_horas_es += $proc['horas_es'];
-      		$p_horas_ep += $proc['horas_ep'];
-      		$p_horas_ej += $proc['horas_ej'];
-      		$p_horas_tp += $proc['horas_tp'];
-      }
-
-      $i_horas_ee=0; $i_horas_es=0; $i_horas_ep=0; $i_horas_ej=0; $i_horas_tp=0; 
-      foreach ($instrumentacao as $key => $inst) {
-      		$i_horas_ee += $inst['horas_ee'];
-      		$i_horas_es += $inst['horas_es'];
-      		$i_horas_ep += $inst['horas_ep'];
-      		$i_horas_ej += $inst['horas_ej'];
-      		$i_horas_tp += $inst['horas_tp'];
-      }
-
-      $a_horas_ee=0; $a_horas_es=0; $a_horas_ep=0; $a_horas_ej=0; $a_horas_tp=0; 
-      foreach ($automacao as $key => $aut) {
-      		$a_horas_ee += $aut['horas_ee'];
-      		$a_horas_es += $aut['horas_es'];
-      		$a_horas_ep += $aut['horas_ep'];
-      		$a_horas_ej += $aut['horas_ej'];
-      		$a_horas_tp += $aut['horas_tp'];
-      }
-
-      $p_tot = $p_horas_ee+$p_horas_es+$p_horas_ep+$p_horas_ej+$p_horas_tp;
-      $i_tot = $i_horas_ee+$i_horas_es+$i_horas_ep+$i_horas_ej+$i_horas_tp;
-      $a_tot = $a_horas_ee+$a_horas_es+$a_horas_ep+$a_horas_ej+$a_horas_tp;
-
-      $money_proc = $p_horas_ee*$tipo_executante[4]['valor_hora']+$p_horas_es*$tipo_executante[3]['valor_hora']+$p_horas_ep*$tipo_executante[2]['valor_hora']+$p_horas_ej*$tipo_executante[1]['valor_hora']+$p_horas_tp*$tipo_executante[0]['valor_hora'];
-
-      $money_inst = $i_horas_ee*$tipo_executante[4]['valor_hora']+$i_horas_es*$tipo_executante[3]['valor_hora']+$i_horas_ep*$tipo_executante[2]['valor_hora']+$i_horas_ej*$tipo_executante[1]['valor_hora']+$i_horas_tp*$tipo_executante[0]['valor_hora'];
-
-      $money_aut = $a_horas_ee*$tipo_executante[4]['valor_hora']+$a_horas_es*$tipo_executante[3]['valor_hora']+$a_horas_ep*$tipo_executante[2]['valor_hora']+$a_horas_ej*$tipo_executante[1]['valor_hora']+$a_horas_tp*$tipo_executante[0]['valor_hora'];
-      ?>
+      
 
       <tr style="background-color: #d3d3d3;">
             <td style="font-family: arial;font-size: 8pt" >PU Médios (R$)</td>  
@@ -171,7 +173,7 @@ th, td {
             <td style="font-family: arial;font-size: 8pt" align="center" ><?=$p_tot==0 ? '': str_replace('.',',',number_format($p_tot, 2, ',', '.')) ?></td> 
             <td style="font-family: arial;font-size: 8pt" align="center" ><?=$money_proc==0 ? '': number_format($money_proc, 2, ',', '.') ?></td> 
       </tr>
-      <tr>
+      <!-- <tr>
             <td style="font-family: arial;font-size: 8pt" >TUBULAÇÃO</td>  
             <td style="font-family: arial;font-size: 8pt" align="center" ></td>
             <td style="font-family: arial;font-size: 8pt" align="center" ></td>
@@ -185,8 +187,8 @@ th, td {
             <td></td>
             <td></td>
             <td></td>               
-      </tr>
-      <tr>
+      </tr> -->
+      <!-- <tr>
             <td style="font-family: arial;font-size: 8pt" >CIVIL/METÁLICA</td>  
             <td style="font-family: arial;font-size: 8pt" align="center" ></td>
             <td style="font-family: arial;font-size: 8pt" align="center" ></td>
@@ -215,7 +217,7 @@ th, td {
             <td></td>
             <td></td>
             <td></td>             
-      </tr>
+      </tr> -->
       <tr>
             <td style="font-family: arial;font-size: 8pt" >INSTRUMENTAÇÃO</td>  
             <td style="font-family: arial;font-size: 8pt" align="center" ><?=$i_horas_ee==0 ? '': str_replace('.',',',sprintf("%.1f",$i_horas_ee)) ?></td>
@@ -246,7 +248,7 @@ th, td {
             <td style="font-family: arial;font-size: 8pt" align="center" ><?=$a_tot==0 ? '':str_replace('.',',',sprintf("%.1f",$a_tot)) ?></td> 
             <td style="font-family: arial;font-size: 8pt" align="center" ><?=$money_aut==0 ? '':number_format($money_aut, 2, ',', '.') ?></td> 
       </tr>
-      <tr>
+      <!-- <tr>
             <td style="font-family: arial;font-size: 8pt" >CALDEIRARIA</td>  
             <td style="font-family: arial;font-size: 8pt" align="center" ></td>
             <td style="font-family: arial;font-size: 8pt" align="center" ></td>
@@ -275,7 +277,7 @@ th, td {
             <td></td>
             <td></td>
             <td></td>              
-      </tr>
+      </tr> -->
       <tr style="background-color: #d3d3d3;"> 
             <td style="font-family: arial;font-size: 8pt" >TOTAL DISCIPLINAS</td>  
             <td style="font-family: arial;font-size: 8pt" align="center" ><?=$p_horas_ee+$i_horas_ee+$a_horas_ee==0 ? '':str_replace('.',',',sprintf("%.1f",$p_horas_ee+$i_horas_ee+$a_horas_ee)) ?></td>

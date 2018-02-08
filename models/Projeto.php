@@ -79,7 +79,7 @@ class Projeto extends \yii\db\ActiveRecord
             [['descricao'], 'string', 'max' => 500],
             [['codigo', 'contato', 'cliente_fatura'], 'string', 'max' => 12],
             [['site', 'planta', 'site_fatura'], 'string', 'max' => 10],
-            [['municipio', 'setor', 'pendencia', 'municipio_fatura'], 'string', 'max' => 20],
+            [['municipio', 'setor', 'municipio_fatura'], 'string', 'max' => 20],
             [['uf', 'uf_fatura', 'tipo'], 'string', 'max' => 2],
             [['cnpj', 'cnpj_fatura'], 'string', 'max' => 18],
             [['tratamento'], 'string', 'max' => 7],
@@ -91,7 +91,7 @@ class Projeto extends \yii\db\ActiveRecord
             [['cliente_id'], 'exist', 'skipOnError' => true, 'targetClass' => Cliente::className(), 'targetAttribute' => ['cliente_id' => 'id']],
             [['contato_id'], 'exist', 'skipOnError' => true, 'targetClass' => Contato::className(), 'targetAttribute' => ['contato_id' => 'usuario_id']],
             [['nome', 'contrato'], 'string', 'max' => 255],
-            [['resumo_escopo','resumo_exclusoes','resumo_premissas','resumo_restricoes','resumo_normas','resumo_documentos','resumo_itens','resumo_prazo','resumo_observacoes', 'desc_resumida'], 'string']
+            [['resumo_escopo','resumo_exclusoes','resumo_premissas','resumo_restricoes','resumo_normas','resumo_documentos','resumo_itens','resumo_prazo','resumo_observacoes', 'desc_resumida', 'pendencia'], 'string']
         ];
     }
 

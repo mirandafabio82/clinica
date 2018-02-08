@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
+use yii\filters\AccessControl;
 
 /**
  * AtividademodeloController implements the CRUD actions for Atividademodelo model.
@@ -21,6 +22,15 @@ class AtividademodeloController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['*'],
+                'rules' => [
+                    ['allow' => true,'roles' => ['admin']],
+                    ['allow' => true,'roles' => ['executante']],                    
+                    ['actions' => ['index', 'view'],'allow' => true,'roles' => ['executante']],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

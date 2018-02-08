@@ -12,12 +12,12 @@ th, td {
 <img src="resources/dist/img/logo_hcn.png" alt="User Image" style="width: 8em">
 <img src="logos/<?= Yii::$app->db->createCommand('SELECT cliente.logo FROM cliente JOIN projeto ON cliente.id=projeto.cliente_id WHERE projeto.cliente_id='.$projeto->cliente_id)->queryScalar()?>" alt="User Image" style="float: right;width: 10em">
 
-<div style="margin-top:-3em;font-size: 10pt;font-family: arial; font-weight: bold" line-height= "2em" align="center">ANEXO III </div>
+<div style="margin-top:-3em;font-size: 10pt;font-family: arial; font-weight: bold" line-height= "2em" align="center">ANEXO <?=$index ?> </div>
 <div style="font-size: 10pt;font-family: arial; font-weight: bold;" line-height= "2em" align="center">ESTIMATIVA DE CUSTO POR ESPECIALIDADE</div>
 <div style="font-size: 10pt;font-family: arial; font-weight: bold" line-height= "2em" align="center">INSTRUMENTAÇÃO </div>
 
-<div style="font-size: 10pt;font-family: arial; font-weight: bold; float: right;" line-height= "2em" ><?=$projeto->nome ?> </div>
-<div style="margin-bottom:1em; font-size: 10pt;font-family: arial; font-weight: bold; float: right;" line-height= "2em" >ÁREA: <?=$projeto->planta ?> </div>
+<div style="font-size: 10pt;font-family: arial; font-weight: bold; float: right;margin-top: 1em;margin-left: 41em" line-height= "2em" ><?=$projeto->nome ?> </div>
+<div style="margin-bottom:1em; font-size: 10pt;font-family: arial; font-weight: bold;margin-left: 41em " line-height= "2em" >ÁREA: <?=$projeto->planta ?> </div>
 
 
 <table width="100%" border="1" align="center" style="page-break-inside:avoid">

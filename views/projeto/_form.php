@@ -693,8 +693,8 @@ tbody {
       </div>
       </div>
       <div class="row">    
-      <div class="col-md-2"> 
-      <?= $form->field($model, 'tipo')->radioList(array('A'=>'Autorização de Serviço','P'=>'AS/Proposta')); ?>        
+      <div class="col-md-2" style="width: 18em"> 
+      <?= $form->field($model, 'tipo')->radioList(array('A'=>'AS Autorização de Serviço','P'=>'Proposta')); ?>        
       </div>
       
         <div class="col-md-2"> 
@@ -704,7 +704,7 @@ tbody {
           <?= $form->field($model, 'descricao')->textarea(['maxlength' => true]) ?>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-3">
         <b> Disciplinas </b>
         <br>
           <?php 
@@ -745,7 +745,7 @@ tbody {
           
         <?php } ?>
         </div>
-        <div class="col-md-8" style="margin-top: -4em;">
+        <div class="col-md-8" style="margin-top: -4em;width: 63em">
         <?= $form->field($model, 'desc_resumida')->textarea(['maxlength' => true]) ?>
 
       </div>
@@ -893,8 +893,8 @@ tbody {
         <?= $form->field($model, 'status')->dropDownList($listStatus) ?>
 
       </div>
-      <div class="col-md-1">
-        <?= $form->field($model, 'pendencia')->textInput(['maxlength' => true,'style'=>'width:6em']) ?>
+      <div class="col-md-4">
+        <?= $form->field($model, 'pendencia')->textarea(['maxlength' => true]) ?>
 
       </div>
       </div>
@@ -1154,7 +1154,13 @@ tbody {
       $total = '<td class="total-td['.$esc['id'].']" style="font-size: 12px">'.$total.'</div>';
 
       
-      if($disciplina_id == 1){        
+      if($disciplina_id == 1){    
+        $CeA_EE =  $total_a_EE * 0.1;
+        $CeA_ES =  $total_a_ES * 0.1;
+        $CeA_EP =  $total_a_EP * 0.1;
+        $CeA_EJ =  $total_a_EJ * 0.1;
+        $CeA_TP =  $total_a_TP * 0.1;
+
         $total_a_EE = $esc["horas_ee"] + $total_a_EE;
         $total_a_ES = $esc["horas_es"] + $total_a_ES;
         $total_a_EP = $esc["horas_ep"] + $total_a_EP;
@@ -1162,6 +1168,8 @@ tbody {
         $total_a_TP = $esc["horas_tp"] + $total_a_TP;
         
           if($descricao=='<tr><td style="font-size: 10px">Coordenação e Administração</td>'){
+            // Yii::$app->db->createCommand('UPDATE escopo SET horas_ee='.$CeA_EE.', horas_es='.$CeA_ES.', horas_ep='.$CeA_EP.', horas_ej='.$CeA_EJ.', horas_tp='.$CeA_TP.' WHERE nome="Coordenação e Administração" AND atividademodelo_id=13 AND projeto_id='.$model->id)->execute();
+
             $bodyA .=  $descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total.'<tr><th>SUBTOTAL ATIVIDADES GERAIS DE PROJETO</th><th></th><th></th><th class="sub-a-tot-ee">'.$total_a_EE.'</th><th class="sub-a-tot-es">'.$total_a_ES.'</th><th class="sub-a-tot-ep">'.$total_a_EP.'</th><th class="sub-a-tot-ej">'.$total_a_EJ.'</th><th class="sub-a-tot-tp">'.$total_a_TP.'</th><th></th><th></th><th></th><th></th><th></th></tr>';  
           }
           else{
@@ -1215,6 +1223,7 @@ tbody {
     if(!isset($entr['entr_horas_a_ej'])) $entr['entr_horas_a_ej'] = 0;
     if(!isset($entr['entr_horas_a_tp'])) $entr['entr_horas_a_tp'] = 0;
     
+    $bodyAOld = $bodyA;
     $bodyA = $bodyA.'<tr><th>SUBTOTAL ATIVIDADES GERAIS DE PROJETO</th><th></th><th></th><th class="sub-a-tot-ee-entregavel">'.$entr['entr_horas_a_ee'].'</th><th class="sub-a-tot-es-entregavel">'.$entr['entr_horas_a_es'].'</th><th class="sub-a-tot-ep-entregavel">'.$entr['entr_horas_a_ep'].'</th><th class="sub-a-tot-ej-entregavel">'.$entr['entr_horas_a_ej'].'</th><th class="sub-a-tot-tp-entregavel">'.$entr['entr_horas_a_tp'].'</th><th></th><th></th><th></th><th></th><th></th></tr>
     <tr><th>HH TOTAL DE ENGENHARIA</th><th></th><th></th><th class="full-a-tot-ee">'.$full['entr_horas_a_ee'].'</th><th class="full-a-tot-es">'.$full['entr_horas_a_es'].'</th><th class="full-a-tot-ep">'.$full['entr_horas_a_ep'].'</th><th class="full-a-tot-ej">'.$full['entr_horas_a_ej'].'</th><th class="full-a-tot-tp">'.$full['entr_horas_a_tp'].'</th><th></th><th></th><th></th><th></th><th></th></tr>';
 
@@ -1234,7 +1243,7 @@ tbody {
     if(!isset($entr['entr_horas_p_ej'])) $entr['entr_horas_p_ej'] = 0;
     if(!isset($entr['entr_horas_p_tp'])) $entr['entr_horas_p_tp'] = 0;
 
-
+    $bodyPOld = $bodyP;
     $bodyP = $bodyP.'<tr><th>SUBTOTAL ATIVIDADES GERAIS DE PROJETO</th><th></th><th></th><th>'.$entr['entr_horas_p_ee'].'</th><th>'.$entr['entr_horas_p_es'].'</th><th>'.$entr['entr_horas_p_ep'].'</th><th>'.$entr['entr_horas_p_ej'].'</th><th>'.$entr['entr_horas_p_tp'].'</th><th></th><th></th><th></th><th></th><th></th></tr>
     <tr><th>HH TOTAL DE ENGENHARIA</th><th></th><th></th><th class="full-p-tot-ee">'.$full['entr_horas_p_ee'].'</th><th class="full-p-tot-es">'.$full['entr_horas_p_es'].'</th><th class="full-p-tot-ep">'.$full['entr_horas_p_ep'].'</th><th class="full-p-tot-ej">'.$full['entr_horas_p_ej'].'</th><th class="full-p-tot-tp">'.$full['entr_horas_p_tp'].'</th><th></th><th></th><th></th><th></th><th></th></tr>';
 
@@ -1254,6 +1263,7 @@ tbody {
     if(!isset($entr['entr_horas_i_ej'])) $entr['entr_horas_i_ej'] = 0;
     if(!isset($entr['entr_horas_i_tp'])) $entr['entr_horas_i_tp'] = 0;
 
+    $bodyIOld = $bodyI;
     $bodyI = $bodyI.'<tr><th>SUBTOTAL ATIVIDADES GERAIS DE PROJETO</th><th></th><th></th><th>'.$entr['entr_horas_i_ee'].'</th><th>'.$entr['entr_horas_i_es'].'</th><th>'.$entr['entr_horas_i_ep'].'</th><th>'.$entr['entr_horas_i_ej'].'</th><th>'.$entr['entr_horas_i_tp'].'</th><th></th><th></th><th></th><th></th><th></th></tr>
     <tr><th>HH TOTAL DE ENGENHARIA</th><th></th><th></th><th class="full-i-tot-ee">'.$full['entr_horas_i_ee'].'</th><th class="full-i-tot-es">'.$full['entr_horas_i_es'].'</th><th class="full-i-tot-ep">'.$full['entr_horas_i_ep'].'</th><th class="full-i-tot-ej">'.$full['entr_horas_i_ej'].'</th><th class="full-i-tot-tp">'.$full['entr_horas_i_tp'].'</th><th></th><th></th><th></th><th></th><th></th></tr>';
 
@@ -1302,16 +1312,16 @@ tbody {
         ],
     ]);
 
-
-    if(!empty($bodyA))
+   
+    if(!empty($bodyAOld))
       $visibleA = true;
     else
       $visibleA = false;
-    if(!empty($bodyP))
+    if(!empty($bodyPOld))
       $visibleP = true;
     else
       $visibleP = false;
-    if(!empty($bodyI))
+    if(!empty($bodyIOld))
       $visibleI = true;
     else
       $visibleI = false;
