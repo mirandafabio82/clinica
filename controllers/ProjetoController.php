@@ -210,7 +210,6 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                     if(isset($_POST['Escopos'])){
 
 
-
                         $escopos = $_POST['Escopos'];
                         $automacoes = isset($escopos['Automação']) ? $escopos['Automação'] : array();
                         $processos = isset($escopos['Processo']) ? $escopos['Processo'] : array();
@@ -424,20 +423,24 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
         $escopoDataProvider = $searchEscopo->search(Yii::$app->request->queryParams);
         $escopoDataProvider->query->join('join','atividademodelo', 'atividademodelo.id=escopo.atividademodelo_id')->where('projeto_id='.$model->id);
 
+        $caId_1=0;$caId_2=0;$caId_3=0;
+        $tot_1=0;$tot_2=0;$tot_3=0;
          //atualizando os valores de hora e executante do escopo
         if(isset($_POST['Escopo'])){
-            
+
             $totalHoras = 0;
             $valorProposta = 0;
+            
 
-            $valor_tp = Yii::$app->db->createCommand('SELECT valor_pago FROM tipo_executante WHERE id=1')->queryScalar();
-            $valor_ej = Yii::$app->db->createCommand('SELECT valor_pago FROM tipo_executante WHERE id=2')->queryScalar();
-            $valor_ep = Yii::$app->db->createCommand('SELECT valor_pago FROM tipo_executante WHERE id=3')->queryScalar();
-            $valor_es = Yii::$app->db->createCommand('SELECT valor_pago FROM tipo_executante WHERE id=4')->queryScalar();
-            $valor_ee = Yii::$app->db->createCommand('SELECT valor_pago FROM tipo_executante WHERE id=5')->queryScalar();
+            $valor_tp = Yii::$app->db->createCommand('SELECT valor_hora FROM tipo_executante WHERE id=1')->queryScalar();
+            $valor_ej = Yii::$app->db->createCommand('SELECT valor_hora FROM tipo_executante WHERE id=2')->queryScalar();
+            $valor_ep = Yii::$app->db->createCommand('SELECT valor_hora FROM tipo_executante WHERE id=3')->queryScalar();
+            $valor_es = Yii::$app->db->createCommand('SELECT valor_hora FROM tipo_executante WHERE id=4')->queryScalar();
+            $valor_ee = Yii::$app->db->createCommand('SELECT valor_hora FROM tipo_executante WHERE id=5')->queryScalar();
 
             foreach ($_POST['Escopo'] as $key => $esc) {
 
+               
                 if(empty($esc['horas_tp'] )) $esc['horas_tp'] = 0;
                 if(empty($esc['horas_ej'] )) $esc['horas_ej'] = 0;
                 if(empty($esc['horas_ep'] )) $esc['horas_ep'] = 0;
@@ -454,9 +457,41 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                                             + $esc['horas_ej'] * $valor_ej
                                             + $esc['horas_ep'] * $valor_ep
                                             + $esc['horas_es'] * $valor_es
-                                            + $esc['horas_ee'] * $valor_ee;                                            
-            }
-            
+                                            + $esc['horas_ee'] * $valor_ee;  
+
+                //busca coordenação e adminstração
+                $coordEAdm_1 = Yii::$app->db->createCommand('SELECT escopo.nome FROM escopo JOIN atividademodelo ON atividademodelo.id=escopo.atividademodelo_id WHERE escopo.id='.$key.' AND disciplina_id=1')->queryScalar();
+                $coordEAdm_2 = Yii::$app->db->createCommand('SELECT escopo.nome FROM escopo JOIN atividademodelo ON atividademodelo.id=escopo.atividademodelo_id WHERE escopo.id='.$key.' AND disciplina_id=2')->queryScalar();
+                $coordEAdm_3 = Yii::$app->db->createCommand('SELECT escopo.nome FROM escopo JOIN atividademodelo ON atividademodelo.id=escopo.atividademodelo_id WHERE escopo.id='.$key.' AND disciplina_id=3')->queryScalar();
+
+                if(Yii::$app->db->createCommand('SELECT atividademodelo.disciplina_id FROM escopo JOIN atividademodelo ON atividademodelo.id=escopo.atividademodelo_id WHERE escopo.id='.$key)->queryScalar()==1){
+                    $tot_1 += $esc['horas_tp'] + $esc['horas_ej']+ $esc['horas_ep']+ $esc['horas_es']+ $esc['horas_ee'];
+                }
+                if(Yii::$app->db->createCommand('SELECT atividademodelo.disciplina_id FROM escopo JOIN atividademodelo ON atividademodelo.id=escopo.atividademodelo_id WHERE escopo.id='.$key)->queryScalar()==2){
+                    $tot_2 += $esc['horas_tp'] + $esc['horas_ej']+ $esc['horas_ep']+ $esc['horas_es']+ $esc['horas_ee'];
+                }
+                if(Yii::$app->db->createCommand('SELECT atividademodelo.disciplina_id FROM escopo JOIN atividademodelo ON atividademodelo.id=escopo.atividademodelo_id WHERE escopo.id='.$key)->queryScalar()==3){
+                    $tot_3 += $esc['horas_tp'] + $esc['horas_ej']+ $esc['horas_ep']+ $esc['horas_es']+ $esc['horas_ee'];
+                }
+
+                if($coordEAdm_1=='Coordenação e Administração'){
+                   $tot_1 -= $esc['horas_es'];
+                   $caId_1 = $key;
+                }
+                if($coordEAdm_2=='Coordenação e Administração'){
+                    $tot_2 -= $esc['horas_es'];
+                    $caId_2 = $key;
+                }
+                if($coordEAdm_3=='Coordenação e Administração'){
+                    $tot_3 -= $esc['horas_es'];
+                    $caId_3 = $key;
+                }
+                
+            }            
+          
+           
+
+            $valorProposta = $valorProposta + $model->vl_km;
             
            Yii::$app->db->createCommand('UPDATE projeto SET total_horas='.$totalHoras.', valor_proposta='.$valorProposta.' WHERE id='.$model->id)->execute();
            $model->total_horas = $totalHoras;
@@ -529,6 +564,7 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
 
                 if($model->save()){                        
                     if(isset($_POST['Escopos'])){
+                        
                         $escopos = $_POST['Escopos'];
                         $automacoes = isset($escopos['Automação']) ? $escopos['Automação'] : array();
                         $processos = isset($escopos['Processo']) ? $escopos['Processo'] : array();
@@ -610,15 +646,19 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                         if(isset($_POST['np'])){
 
                             foreach ($_POST['np'] as $key => $np) {
-
-                               $ativi = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE id='.$np)->queryOne();
-
-                                $escopo_model = new Escopo();
-                                $escopo_model->projeto_id = $model->id;
-                                $escopo_model->atividademodelo_id = $ativi['id'];
-                                $escopo_model->nome = $ativi['nome'];
-                                $escopo_model->descricao = $ativi['nome'];
-                                $escopo_model->save();
+                                
+                               $existsNp = Yii::$app->db->createCommand('SELECT id FROM escopo WHERE atividademodelo_id='.$np.' AND projeto_id='.$model->id)->queryScalar();
+                              
+                               if(empty($existsNp)){
+                                   $ativi = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE id='.$np)->queryOne();
+ 
+                                    $escopo_model = new Escopo();
+                                    $escopo_model->projeto_id = $model->id;
+                                    $escopo_model->atividademodelo_id = $ativi['id'];
+                                    $escopo_model->nome = $ativi['nome'];
+                                    $escopo_model->descricao = $ativi['nome'];
+                                    $escopo_model->save();
+                                }
                             }
                         }
                     }                    
@@ -635,7 +675,12 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                        $proExeModel->save();
                    }
                 }
-
+                $perc = $model->perc_coord_adm/100;
+                
+                 //atualiza valor de coordenação e adminstração
+            Yii::$app->db->createCommand('UPDATE escopo SET horas_es='.$tot_1*$perc.' WHERE id='.$caId_1)->execute();
+            Yii::$app->db->createCommand('UPDATE escopo SET horas_es='.$tot_2*$perc.' WHERE id='.$caId_2)->execute();
+            Yii::$app->db->createCommand('UPDATE escopo SET horas_es='.$tot_3*$perc.' WHERE id='.$caId_3)->execute();
                 $transaction->commit();
                 return $this->redirect(['update', 'id' => $model->id]);
             }

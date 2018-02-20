@@ -154,6 +154,7 @@ $usuario = Yii::$app->db->createCommand('SELECT * FROM user WHERE id='.Yii::$app
         <li class="header">MENU PRINCIPAL</li>
          <?php if(!isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['contato'])){ ?>
         <li><a href="<?= Url::to(['projeto/create']) ?>"><i class="fa fa-folder-open"></i> <span>Projetos</span></a></li>
+        <li><a href="<?= Url::to(['projeto/create']) ?>"><i class="fa fa-folder-open"></i> <span>BM</span></a></li>
         <li><a href="<?= Url::to(['atividademodelo/create']) ?>"><i class="fa fa-tablet"></i> <span>Atividades Modelo</span></a></li>
         <?php } ?>
         <?php if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])){ ?>

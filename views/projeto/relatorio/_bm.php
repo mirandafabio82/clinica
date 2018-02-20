@@ -13,11 +13,9 @@ th, td {
 <img src="resources/dist/img/logo_hcn.png" alt="User Image" style="width: 8em">
 <img src="logos/<?= Yii::$app->db->createCommand('SELECT cliente.logo FROM cliente JOIN projeto ON cliente.id=projeto.cliente_id WHERE projeto.cliente_id='.$projeto->cliente_id)->queryScalar()?>" alt="User Image" style="float: right;width: 10em">
 
-<div style="margin-top:-3em;font-size: 15pt;font-family: arial; font-weight: bold" line-height= "2em" align="center">Boletim </div>
-<div style="margin-bottom:1em;font-size: 15pt;font-family: arial; font-weight: bold" line-height= "2em" align="center">de Medição </div>
+<div style="margin-bottom:1em;margin-top:-3em;font-size: 15pt;font-family: arial; font-weight: bold" line-height= "2em" align="center">Boletim de Medição </div>
 
-
-<div style="font-size: 10pt;font-family: arial; font-weight: bold" line-height= "2em" align="center"><?= Yii::$app->db->createCommand('SELECT cliente.nome FROM cliente JOIN projeto ON cliente.id=projeto.cliente_id WHERE projeto.cliente_id='.$projeto->cliente_id)->queryScalar().' '.Yii::$app->db->createCommand('SELECT cliente.site FROM cliente JOIN projeto ON cliente.id=projeto.cliente_id WHERE projeto.cliente_id='.$projeto->cliente_id)->queryScalar() ?> </div>
+<div style="font-size: 10pt;font-family: arial; font-weight: bold" line-height= "2em" align="center"><?= /*Yii::$app->db->createCommand('SELECT cliente.nome FROM cliente JOIN projeto ON cliente.id=projeto.cliente_id WHERE projeto.cliente_id='.$projeto->cliente_id)->queryScalar().*/'Unidade '.Yii::$app->db->createCommand('SELECT cliente.site FROM cliente JOIN projeto ON cliente.id=projeto.cliente_id WHERE projeto.cliente_id='.$projeto->cliente_id)->queryScalar() ?> </div>
 
 <table border="1" align="center" width="100%">
 <tbody>
@@ -26,11 +24,11 @@ th, td {
 	    <td style="margin-top: 4em;font-size: 10pt;font-family: arial;" line-height= "2em" >BM Número: <?= '/'.date('Y') ?> </td>
 	</tr>
 	<tr>
-		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;" line-height= "2em" >Objeto: <?=$projeto->setor ?> </td>
+		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;" line-height= "2em" >Objeto: Automação </td>
 		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;" line-height= "2em" >Data: <?=date('d/m/Y',strtotime($projeto->data_proposta)) ?></td>
 	</tr>
 	<tr>
-		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;" line-height= "2em" >Contratada: HCN AUTOLAÇÃO LTDA </td>
+		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;" line-height= "2em" >Contratada: HCN AUTOMAÇÃO LTDA </td>
 		
 	</tr>
 	<tr>

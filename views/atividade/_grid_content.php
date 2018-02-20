@@ -103,11 +103,16 @@ tbody {
       <?php foreach ($escopos as $key => $escopo) { 
             $cor = Yii::$app->db->createCommand('SELECT cor FROM escopo_status WHERE id='.$escopo['status'])->queryScalar();
             $escopoModel = Escopo::findIdentity($escopo['id']);
-            $progress = $escopoModel->executado / ($escopoModel['horas_ee']+$escopoModel['horas_es']+$escopoModel['horas_ep']+$escopoModel['horas_ej']+$escopoModel['horas_tp']) * 100;
+            if($escopoModel['horas_ee']+$escopoModel['horas_es']+$escopoModel['horas_ep']+$escopoModel['horas_ej']+$escopoModel['horas_tp'] > 0){
+              $progress = $escopoModel->executado / ($escopoModel['horas_ee']+$escopoModel['horas_es']+$escopoModel['horas_ep']+$escopoModel['horas_ej']+$escopoModel['horas_tp']) * 100;
+            }
+            else{
+              $progress = 0;
+            }
             
-            if($progress <= 30) $progressColor = 'danger'; 
-            if($progress <= 99.9 && $progress > 30) $progressColor = 'warning';
-            if($progress == 100) $progressColor = 'success';
+            if($escopo['status'] == 1) $progressColor = 'warning'; 
+            if($escopo['status'] == 2) $progressColor = 'success';
+            if($escopo['status'] == 3) $progressColor = 'danger';
       ?> 
       
       <tr style="background-color: <?=$cor?> !important">

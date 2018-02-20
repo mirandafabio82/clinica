@@ -416,6 +416,35 @@ $(".horas").focusout(function() {
 
 });
 
+$( ".saveEscopo" ).click(function() {
+  $( "#w1" ).submit();
+});
+
+ count=1;
+$("#add-executante").click(function(ev){            
+    var div = $(".drop-exec").children()[0];
+    $(div).clone().appendTo(".drop-exec");
+    $(div).attr("id","exec_div-"+count);
+     
+    $(div.children[0].children[1]).attr("name","ProjetoExecutante["+count+"]");
+    $(div.children[1]).attr("id","remove-executante["+count+"]");
+    console.log($(div.children[1]));
+    count++;
+
+    $(".remove-exec").click(function(ev){            
+      var id = this.id;       
+      id = id.split("[")[1].split("]")[0];      
+      if(id!=0)
+        $("#exec_div-"+id).remove();
+    });
+  });
+$(".remove-exec").click(function(ev){            
+      var id = this.id;       
+      id = id.split("[")[1].split("]")[0];      
+      if(id!=0)
+        $("#exec_div-"+id).remove();
+    });
+
 ');
 ?>
 <?php
@@ -667,32 +696,51 @@ tbody {
   </div>
   <div class="box box-primary">
     <div class="box-header with-border">
-    <div style="border:1px solid black;padding: 2px; margin-bottom: 1em">
-    <div class="col-md-4">
+    <!-- <div style="border:1px solid black;padding: 2px; margin-bottom: 1em"> -->
+   <!--  <div class="col-md-4">
         <b> Executantes </b>
-    </div>    
-    <br>
+    </div>     -->
+    <!-- <br> -->
        <div class="row">    
     <?php 
 
         $existeExecutante = '';
-    foreach ($listExecutantes as $key => $exe) { 
 
-              if(!$model->isNewRecord){
-                $existeExecutante = Yii::$app->db->createCommand('SELECT executante_id FROM projeto_executante WHERE executante_id='.$key.' AND projeto_id='.$model->id)->queryScalar();
-              }
+        $executantes = Yii::$app->db->createCommand('SELECT usuario_id, nome FROM executante JOIN user ON user.id=executante.usuario_id')->queryAll();
+
+        $listData=ArrayHelper::map($executantes,'usuario_id','nome');
+        
+        /*if(!$model->isNewRecord){
+          $existeExecutante = Yii::$app->db->createCommand('SELECT executante_id FROM projeto_executante WHERE executante_id='.$key.' AND projeto_id='.$model->id)->queryScalar();
+        }*/
       ?>     
-      <div class="col-md-2"> 
-      <?php if(!empty($existeExecutante)){ ?>
-        <input type="checkbox" name="ProjetoExecutante[<?=$key ?>]" value="<?= $key?>" checked> <?= $exe ?>
-      <?php }  else{ ?>
-        <input type="checkbox" name="ProjetoExecutante[<?=$key ?>]" value="<?= $key?>" > <?= $exe ?>
-      <?php } ?>
+      
+      <a style="margin-left: 1em" id="add-executante"> <i class="fa fa-plus-square-o fa-2x"></i></a>
+      <div class="row drop-exec" style="margin-bottom: 1em;margin-left: 1em">
+      <?php if($model->isNewRecord){ ?>
+        <div class="col-md-2" id="exec_div-0">       
+          <?= $form->field($model, 'executante_id')->dropDownList($listData, ['prompt'=>'Selecione um executante', 'name'=>'ProjetoExecutante[0]']); ?>
+          <a class="remove-exec" id="remove-executante[0]"> <i class="fa fa-ban" id="remove-executante[0]"></i></a>
+        </div>
+      <?php } else{ 
+          $myExecutantes = Yii::$app->db->createCommand('SELECT executante_id FROM projeto_executante WHERE projeto_id='.$model->id)->queryAll();
+
+          foreach ($myExecutantes as $key => $myExec){
+        ?>
+        <div class="col-md-2" id="exec_div-<?=$key?>">       
+          <?= $form->field($model, 'executante_id')->dropDownList($listData, ['prompt'=>'Selecione um executante', 'name'=>'ProjetoExecutante['.$key.']', 'options'=>array($myExec['executante_id']=>array('selected'=>'selected'))]); ?>
+          <a class="remove-exec" id="remove-executante[<?=$key?>]"> <i class="fa fa-ban" id="remove-executante[<?=$key?>]"></i></a>
+        </div>
+
+      <?php }} ?>
+       
       </div>
-    <?php } ?>
+    
       </div>
-      </div>
-      <div class="row">    
+      
+
+      <!-- </div> -->
+      <div class="row"> 
       <div class="col-md-2" style="width: 18em"> 
       <?= $form->field($model, 'tipo')->radioList(array('A'=>'AS Autorização de Serviço','P'=>'Proposta')); ?>        
       </div>
@@ -910,6 +958,9 @@ tbody {
         <div class="col-md-2">
           <?= $form->field($model, 'contrato')->textInput(['maxlength' => true]) ?>
         </div>
+        <div class="col-md-2">
+          <?= $form->field($model, 'perc_coord_adm')->textInput(['maxlength' => true]) ?>
+        </div>
       </div>
     
 
@@ -972,7 +1023,7 @@ tbody {
       </div>
       </div>
       </div>
-      <?php ActiveForm::end(); ?>
+      
 
       <?php
       if(!$model->isNewRecord){ ?>
@@ -981,7 +1032,7 @@ tbody {
     <div class="box-header with-border">
      <div class="form-group">
        <?php $form2 = ActiveForm::begin(); ?>
-       <?= Html::submitButton('Salvar Escopo', ['class' =>'btn btn-primary']) ?>
+       <?= Html::submitButton('Salvar Escopo', ['class' =>'btn btn-primary saveEscopo']) ?>
 
       <?= Html::a('<span class="btn-label">Visualizar AS</span>', ['gerarrelatorio', 'id' => $model->id], ['class' => 'btn btn-primary', 'target'=>'_blank', 'style'=> 'float:right']) ?>
 
@@ -1170,7 +1221,8 @@ tbody {
           if($descricao=='<tr><td style="font-size: 10px">Coordenação e Administração</td>'){
             // Yii::$app->db->createCommand('UPDATE escopo SET horas_ee='.$CeA_EE.', horas_es='.$CeA_ES.', horas_ep='.$CeA_EP.', horas_ej='.$CeA_EJ.', horas_tp='.$CeA_TP.' WHERE nome="Coordenação e Administração" AND atividademodelo_id=13 AND projeto_id='.$model->id)->execute();
 
-            $bodyA .=  $descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total.'<tr><th>SUBTOTAL ATIVIDADES GERAIS DE PROJETO</th><th></th><th></th><th class="sub-a-tot-ee">'.$total_a_EE.'</th><th class="sub-a-tot-es">'.$total_a_ES.'</th><th class="sub-a-tot-ep">'.$total_a_EP.'</th><th class="sub-a-tot-ej">'.$total_a_EJ.'</th><th class="sub-a-tot-tp">'.$total_a_TP.'</th><th></th><th></th><th></th><th></th><th></th></tr>';  
+            $bodyA .=  $descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total.'<tr><th>SUBTOTAL ATIVIDADES GERAIS DE PROJETO</th><th></th><th></th><th class="sub-a-tot-ee">'.$total_a_EE.'</th><th class="sub-a-tot-es">'.$total_a_ES.'</th><th class="sub-a-tot-ep">'.$total_a_EP.'</th><th class="sub-a-tot-ej">'.$total_a_EJ.'</th><th class="sub-a-tot-tp">'.$total_a_TP.'</th><th></th><th></th><th></th><th></th><th></th></tr><tr>
+          <th style="width:4.3em;"></th><th style="width:4.3em;"></th><th style="width:4.3em;"></th><th style="width:4.3em;">EE</th><th style="width:4.3em;">ES</th><th style="width:4.3em;">EP</th><th style="width:4.3em;">EJ</th><th style="width:4.3em;">TP</th><th style="width:4.3em;"></th><th style="width:4.3em;"></th><th style="width:4.3em;"></th><th style="width:4.3em;"></th><th style="width:4.3em;">Total</th></tr>';  
           }
           else{
              $bodyA .=  $descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
@@ -1184,7 +1236,8 @@ tbody {
         $total_p_TP = $esc["horas_tp"] + $total_p_TP;
         
         if($descricao=='<tr><td style="font-size: 10px">Coordenação e Administração</td>'){
-            $bodyP .=  $descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total.'<tr><th>SUBTOTAL ATIVIDADES GERAIS DE PROJETO</th><th></th><th></th><th class="sub-p-tot-ee">'.$total_p_EE.'</th><th class="sub-p-tot-es">'.$total_p_ES.'</th><th class="sub-p-tot-ep">'.$total_p_EP.'</th><th class="sub-p-tot-ej">'.$total_p_EJ.'</th><th class="sub-p-tot-tp">'.$total_p_TP.'</th><th></th><th></th><th></th><th></th><th></th></tr>';  
+            $bodyP .=  $descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total.'<tr><th>SUBTOTAL ATIVIDADES GERAIS DE PROJETO</th><th></th><th></th><th class="sub-p-tot-ee">'.$total_p_EE.'</th><th class="sub-p-tot-es">'.$total_p_ES.'</th><th class="sub-p-tot-ep">'.$total_p_EP.'</th><th class="sub-p-tot-ej">'.$total_p_EJ.'</th><th class="sub-p-tot-tp">'.$total_p_TP.'</th><th></th><th></th><th></th><th></th><th></th></tr><tr>
+          <th style="width:4.3em;"></th><th style="width:4.3em;"></th><th style="width:4.3em;"></th><th style="width:4.3em;">EE</th><th style="width:4.3em;">ES</th><th style="width:4.3em;">EP</th><th style="width:4.3em;">EJ</th><th style="width:4.3em;">TP</th><th style="width:4.3em;"></th><th style="width:4.3em;"></th><th style="width:4.3em;"></th><th style="width:4.3em;"></th><th style="width:4.3em;">Total</th></tr>';  
           }
           else{
              $bodyP .=  $descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
@@ -1198,7 +1251,8 @@ tbody {
         $total_i_TP = $esc["horas_tp"] + $total_i_TP;
                
         if($descricao=='<tr><td style="font-size: 10px">Coordenação e Administração</td>'){
-            $bodyI .=  $descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total.'<tr><th>SUBTOTAL ATIVIDADES GERAIS DE PROJETO</th><th></th><th></th><th class="sub-i-tot-ee">'.$total_i_EE.'</th><th class="sub-i-tot-es">'.$total_i_ES.'</th><th class="sub-i-tot-ep">'.$total_i_EP.'</th><th class="sub-i-tot-ej">'.$total_i_EJ.'</th><th class="sub-i-tot-tp">'.$total_i_TP.'</th><th></th><th></th><th></th><th></th><th></th></tr>';  
+            $bodyI .=  $descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total.'<tr><th>SUBTOTAL ATIVIDADES GERAIS DE PROJETO</th><th></th><th></th><th class="sub-i-tot-ee">'.$total_i_EE.'</th><th class="sub-i-tot-es">'.$total_i_ES.'</th><th class="sub-i-tot-ep">'.$total_i_EP.'</th><th class="sub-i-tot-ej">'.$total_i_EJ.'</th><th class="sub-i-tot-tp">'.$total_i_TP.'</th><th></th><th></th><th></th><th></th><th></th></tr><tr>
+          <th style="width:4.3em;"></th><th style="width:4.3em;"></th><th style="width:4.3em;"></th><th style="width:4.3em;">EE</th><th style="width:4.3em;">ES</th><th style="width:4.3em;">EP</th><th style="width:4.3em;">EJ</th><th style="width:4.3em;">TP</th><th style="width:4.3em;"></th><th style="width:4.3em;"></th><th style="width:4.3em;"></th><th style="width:4.3em;"></th><th style="width:4.3em;">Total</th></tr>';  
           }
           else{
              $bodyI .=  $descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
@@ -1375,7 +1429,7 @@ echo TabsX::widget([
   </div>
   </div>
 </div>
-
+<?php ActiveForm::end(); ?>
     <?php ActiveForm::end(); ?>
       <?php } ?>
 

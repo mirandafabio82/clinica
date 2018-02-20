@@ -17,7 +17,7 @@ th, td {
 <div style="font-size: 10pt;font-family: arial; font-weight: bold" line-height= "2em" align="center">AUTOMAÇÃO </div>
 
 <div style="font-size: 10pt;font-family: arial; font-weight: bold; float: right;margin-top: 1em;margin-left: 41em" line-height= "2em" ><?=$projeto->nome ?> </div>
-<div style="margin-bottom:1em; font-size: 10pt;font-family: arial; font-weight: bold;margin-left: 41em " line-height= "2em" >ÁREA: <?=$projeto->planta ?> </div>
+<div style="margin-bottom:1em; font-size: 10pt;font-family: arial; font-weight: bold;margin-left: 41em " line-height= "2em" >PLANTA: <?=$projeto->site ?> </div>
 
 
 <table width="100%" border="1" align="center" style="page-break-inside:avoid">
