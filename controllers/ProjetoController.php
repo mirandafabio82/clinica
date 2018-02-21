@@ -18,6 +18,7 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 use \Datetime;
 use yii\helpers\Url;
+use app\models\Documento;
 // use kartik\mpdf\Pdf;
 
 //require_once  'C:\xampp\htdocs\hcn\vendor\autoload.php';
@@ -891,7 +892,10 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                 'index' => $arrayIndex[$index]]);
 
 
-            
+            if (!file_exists('uploaded-files/'.$projeto['id'])) {
+                mkdir('uploaded-files/'.$projeto['id'], 0777, true);
+            }
+
             $mpdf = new \Mpdf\Mpdf();
             $mpdf->WriteHTML($capa);
             $mpdf->AddPage();
@@ -913,7 +917,20 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
             $mpdf->AddPage();
             $mpdf->WriteHTML($ld_preliminar);
 
-            $mpdf->Output();
+            $mpdf->Output('uploaded-files/'.$projeto['id'].'/'.$projeto['proposta'].'.pdf', 'F');     
+            $mpdf->Output('uploaded-files/'.$projeto['id'].'/'.$projeto['proposta'].'.pdf', 'I');    
+
+            $existsFile = Yii::$app->db->createCommand('SELECT id FROM documento WHERE nome="'.$projeto['proposta'].'.pdf"')->queryScalar();
+
+            if(empty($existsFile)){
+                //cria o registro do arquivo
+                $doc = new Documento();
+                $doc->projeto_id = $projeto['id'];
+                $doc->nome = $projeto['proposta'].'.pdf';
+                $doc->revisao = 0;
+                $doc->path = $projeto['proposta'].'.pdf';
+                $doc->save();
+            }
         }
 
     }

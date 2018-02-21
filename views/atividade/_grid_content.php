@@ -79,6 +79,21 @@ tbody {
 
 </style>
 
+<?php
+$this->registerJs("
+
+    $('.executado').change(function (e) {
+        
+        id = this.name.split('[')[1];
+        id = id.split(']')[0];
+        console.log($('#progress-bar['+id+']'));
+
+        // $('#progress-bar['+id+']').width('10%');
+
+    });
+");
+
+?>
 
 
 
@@ -121,7 +136,7 @@ tbody {
         <td style="font-size: 15px; padding-right: 1em;"><?= $form->field($escopoModel, 'executado')->textInput(['maxlength' => true, 'readonly'=>$editable, 'name'=>'Escopo['.$escopo['id'].'][executado]', 'class' =>'form-control executado'])->label(false) ?>  </td>
         <td style="font-size: 15px; padding-right: 1em;">
         <div class="progress progress-xs">
-          <div class="progress-bar progress-bar-<?=$progressColor ?> progress-bar-striped" style="width: <?= $progress ?>%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+          <div id="progress-bar[<?=$escopo['id'] ?>]" class="progress-bar progress-bar-<?=$progressColor ?> progress-bar-striped" style="width: <?= $progress ?>%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
             <!-- <span class="sr-only">40% Complete</span> -->
           </div>
         </div>

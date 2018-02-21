@@ -1036,7 +1036,7 @@ tbody {
 
       <?= Html::a('<span class="btn-label">Visualizar AS</span>', ['gerarrelatorio', 'id' => $model->id], ['class' => 'btn btn-primary', 'target'=>'_blank', 'style'=> 'float:right']) ?>
 
-      <?= Html::a('<span class="btn-label">Visualizar BM</span>', ['gerarbm', 'id' => $model->id], ['class' => 'btn btn-primary', 'target'=>'_blank', 'style'=> 'float:right; margin-right: 1em']) ?>
+      
   
      </div>
 
