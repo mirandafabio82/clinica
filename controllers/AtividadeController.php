@@ -82,14 +82,13 @@ class AtividadeController extends Controller
             $dataProvider->query->where('cliente_id='.$clienteId);
         }
         if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['executante'])){
-            $projetos_id = Yii::$app->db->createCommand('SELECT projeto.id FROM projeto JOIN escopo ON escopo.projeto_id=projeto.id JOIN executante ON (exe_tp_id='.Yii::$app->user->getId().' OR exe_ej_id='.Yii::$app->user->getId().' OR exe_ep_id='.Yii::$app->user->getId().' OR exe_es_id='.Yii::$app->user->getId().' OR exe_ee_id='.Yii::$app->user->getId().' ) WHERE usuario_id='.Yii::$app->user->getId())->queryAll();
+            $projetos_id = Yii::$app->db->createCommand('SELECT projeto_id as id FROM projeto_executante WHERE executante_id='.Yii::$app->user->getId())->queryAll();
 
             foreach ($projetos_id as $key => $pid) {
-                $dataProvider->query->where('id='.$pid['id']);
+                $dataProvider->query->orWhere('id='.$pid['id']);
             }
             
         }
-
         
         $status = Yii::$app->db->createCommand('SELECT id, status FROM escopo_status')->queryAll();
         $listStatus = ArrayHelper::map($status,'id','status');

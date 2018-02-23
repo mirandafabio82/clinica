@@ -220,11 +220,7 @@ $this->registerJs("
     <div class="col-md-3">
     <?= $form->field($user, 'nome')->textInput(['maxlength' => true]) ?>
     </div>
-    <div class="col-md-2">
-    <?= $form->field($model, 'cnpj')->widget(\yii\widgets\MaskedInput::className(), [
-                        'mask' => '99.999.999/9999-99',
-                    ]) ?> 
-    </div>
+    
     <div class="col-md-2">
     <?= $form->field($user, 'email')->textInput(['maxlength' => true]) ?>
     </div>
@@ -269,6 +265,11 @@ $this->registerJs("
     <div class="row" style="border:1px solid black;padding: 2px; margin-bottom: 1em">      
     <div class="col-md-3">   
     <?= $form->field($model, 'nome_empresa')->textInput(['maxlength' => true]) ?>  
+    </div>
+    <div class="col-md-2">
+    <?= $form->field($model, 'cnpj')->widget(\yii\widgets\MaskedInput::className(), [
+                        'mask' => '99.999.999/9999-99',
+                    ]) ?> 
     </div>
     <div class="col-md-2">
     <?= $form->field($model, 'insc_municipal')->textInput(['maxlength' => true]) ?>      

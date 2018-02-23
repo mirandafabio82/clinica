@@ -474,10 +474,9 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                 if(Yii::$app->db->createCommand('SELECT atividademodelo.disciplina_id FROM escopo JOIN atividademodelo ON atividademodelo.id=escopo.atividademodelo_id WHERE escopo.id='.$key)->queryScalar()==3){
                     $tot_3 += $esc['horas_tp'] + $esc['horas_ej']+ $esc['horas_ep']+ $esc['horas_es']+ $esc['horas_ee'];
                 }
-
                 if($coordEAdm_1=='Coordenação e Administração'){
                    $tot_1 -= $esc['horas_es'];
-                   $caId_1 = $key;
+                   $caId_1 = $key;                   
                 }
                 if($coordEAdm_2=='Coordenação e Administração'){
                     $tot_2 -= $esc['horas_es'];
@@ -489,9 +488,7 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                 }
                 
             }            
-          
-           
-
+                    
             $valorProposta = $valorProposta + $model->vl_km;
             
            Yii::$app->db->createCommand('UPDATE projeto SET total_horas='.$totalHoras.', valor_proposta='.$valorProposta.' WHERE id='.$model->id)->execute();
@@ -500,11 +497,22 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
             foreach ($_POST['Escopo'] as $key => $esc) {
 
                 $escopo = Escopo::findIdentity($key);
-                if(!empty($escopo)){                   
 
+                if(!empty($escopo)){                   
                     $escopo->setAttributes($_POST['Escopo'][$key]);
+                    if($key==$caId_1){
+                        $escopo->horas_es = $tot_1;                        
+                    }
+                    if($key==$caId_2){
+                        $escopo->horas_es = $tot_2;
+                    }
+                    if($key==$caId_3){
+                        $escopo->horas_es = $tot_3;
+                    }
                     $escopo->save();
+                    
                 }
+               
             }
             //salva resumo e outras abas
             if(isset($_POST['Projeto'])){
@@ -565,7 +573,7 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
 
                 if($model->save()){                        
                     if(isset($_POST['Escopos'])){
-                        
+
                         $escopos = $_POST['Escopos'];
                         $automacoes = isset($escopos['Automação']) ? $escopos['Automação'] : array();
                         $processos = isset($escopos['Processo']) ? $escopos['Processo'] : array();
@@ -587,6 +595,8 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                             foreach ($atvmodelos as $key => $atv) {
                                 $existeEscopo = Yii::$app->db->createCommand('SELECT id FROM escopo WHERE projeto_id='.$model->id.' AND atividademodelo_id='.$atv['id'])->queryScalar();
                                 
+
+
                                 if(!$existeEscopo){
                                     $escopo_model = new Escopo();
                                     $escopo_model->projeto_id = $model->id;
@@ -664,6 +674,7 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                         }
                     }                    
                 }
+                
                 Yii::$app->db->createCommand('DELETE FROM projeto_executante WHERE projeto_id='.$model->id)->execute();
 
                 if(isset($_POST['ProjetoExecutante'])){

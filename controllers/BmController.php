@@ -190,15 +190,15 @@ class BmController extends Controller
         if (Yii::$app->request->isAjax) {    
             $data = Yii::$app->db->createCommand('SELECT * FROM projeto WHERE id='.Yii::$app->request->post()['id'])->queryOne(); 
 
-            $horas = Yii::$app->db->createCommand('SELECT SUM(executado) horas_executado, SUM(horas_ee) horas_ee,SUM(horas_es) horas_es,SUM(horas_ep) horas_ep,SUM(horas_ej) horas_ej,SUM(horas_tp) horas_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.Yii::$app->request->post()['id'])->queryOne();
+            $horas = Yii::$app->db->createCommand('SELECT SUM(executado_ee) executado_ee,SUM(executado_es) executado_es,SUM(executado_ep) executado_ep,SUM(executado_ej) executado_ej,SUM(executado_tp) executado_tp, SUM(horas_ee) horas_ee,SUM(horas_es) horas_es,SUM(horas_ep) horas_ep,SUM(horas_ej) horas_ej,SUM(horas_tp) horas_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.Yii::$app->request->post()['id'])->queryOne();
 
             $tot_horas = $horas['horas_ee'] + $horas['horas_es'] + $horas['horas_ep'] + $horas['horas_ej'] + $horas['horas_tp'];
 
-            $exec = $horas['horas_executado'];
+            $exec = $horas['executado_ee']+$horas['executado_es']+$horas['executado_ep']+$horas['executado_ej']+$horas['executado_tp'];
 
             $saldo = $tot_horas - $exec;
             
-            array_push($data, $saldo, $exec);
+            array_push($data, $saldo, $exec,$horas['executado_ee'],$horas['executado_es'],$horas['executado_ep'],$horas['executado_ej'],$horas['executado_tp']);
 
             echo json_encode($data);  
         }
@@ -226,7 +226,7 @@ class BmController extends Controller
         if($_GET['id']){
             $bm = Yii::$app->db->createCommand('SELECT * FROM bm WHERE id='.$_GET['id'])->queryOne();
             $projeto = Projeto::findOne($bm['projeto_id']);
-            $escopos = Yii::$app->db->createCommand('SELECT SUM(horas_tp) h_tp,SUM(horas_ej) h_ej,SUM(horas_ep) h_ep,SUM(horas_es) h_es,SUM(horas_ee) h_ee, escopo.nome as nomeE FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$projeto->id)->queryOne();
+            $escopos = Yii::$app->db->createCommand('SELECT SUM(horas_tp) h_tp,SUM(horas_ej) h_ej,SUM(horas_ep) h_ep,SUM(horas_es) h_es,SUM(horas_ee) h_ee,SUM(executado_tp) executado_tp,SUM(executado_ej) executado_ej,SUM(executado_ep) executado_ep,SUM(executado_es) executado_es,SUM(executado_ee) executado_ee, escopo.nome as nomeE FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$projeto->id)->queryOne();
 
             $tipo_exec = Yii::$app->db->createCommand('SELECT * FROM tipo_executante')->queryAll();
 

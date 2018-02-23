@@ -35,7 +35,7 @@ class Escopo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['item', 'horas_tp',  'exe_tp_id', 'exe_ej_id', 'exe_ep_id', 'exe_ee_id', 'executado', 'qtd', 'projeto_id', 'atividademodelo_id', 'status'], 'integer'],
+            [['item', 'horas_tp',  'exe_tp_id', 'exe_ej_id', 'exe_ep_id', 'exe_ee_id', 'executado_tp','executado_ej','executado_ep','executado_es','executado_ee', 'qtd', 'projeto_id', 'atividademodelo_id', 'status'], 'integer'],
             [['criado', 'modificado'], 'safe'],
             [['nome', 'for', 'horas_tp', 'horas_ej', 'horas_ep', 'horas_es', 'horas_ee'], 'string', 'max' => 255],
             [['descricao'], 'string', 'max' => 160],
@@ -57,7 +57,11 @@ class Escopo extends \yii\db\ActiveRecord
             'horas_ep' => 'Horas EP',
             'horas_es' => 'Horas ES',
             'horas_ee' => 'Horas EE',
-            'executado' => 'Executado',
+            'executado_tp' => 'Executado TP',
+            'executado_ej' => 'Executado EJ',
+            'executado_ep' => 'Executado EP',
+            'executado_es' => 'Executado ES',
+            'executado_ee' => 'Executado EE',
             'qtd' => 'Qtd.',
             'criado' => 'Criado',
             'modificado' => 'Modificado',

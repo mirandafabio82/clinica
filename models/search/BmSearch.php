@@ -12,6 +12,7 @@ use app\models\Bm;
  */
 class BmSearch extends Bm
 {
+    public $projeto;
     /**
      * @inheritdoc
      */
@@ -19,7 +20,7 @@ class BmSearch extends Bm
     {
         return [
             [['id', 'projeto_id'], 'integer'],
-            [['contrato', 'objeto', 'contratada', 'cnpj', 'contato', 'numero_bm', 'data', 'de', 'para', 'descricao'], 'safe'],
+            [['contrato', 'objeto', 'contratada', 'cnpj', 'contato', 'numero_bm', 'data', 'de', 'para', 'descricao', 'projeto'], 'safe'],
         ];
     }
 
@@ -42,8 +43,14 @@ class BmSearch extends Bm
     public function search($params)
     {
         $query = Bm::find();
-
+        $query->joinWith(['projeto']);
         // add conditions that should always apply here
+        $dataProvider->sort->attributes['projeto'] = [
+            // The tables are the ones our relation are configured to
+            // in my case they are prefixed with "tbl_"
+            'asc' => ['projeto.nome' => SORT_ASC],
+            'desc' => ['projeto.nome' => SORT_DESC],
+        ];
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -56,6 +63,8 @@ class BmSearch extends Bm
             // $query->where('0=1');
             return $dataProvider;
         }
+
+        
 
         // grid filtering conditions
         $query->andFilterWhere([
@@ -72,7 +81,8 @@ class BmSearch extends Bm
             ->andFilterWhere(['like', 'cnpj', $this->cnpj])
             ->andFilterWhere(['like', 'contato', $this->contato])
             ->andFilterWhere(['like', 'numero_bm', $this->numero_bm])
-            ->andFilterWhere(['like', 'descricao', $this->descricao]);
+            ->andFilterWhere(['like', 'descricao', $this->descricao])
+            ->andFilterWhere(['like', 'projeto.nome', $this->projeto]);
 
         return $dataProvider;
     }

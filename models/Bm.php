@@ -36,11 +36,11 @@ class Bm extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['projeto_id'], 'integer'],
+            [['projeto_id', 'executado_ee', 'executado_es', 'executado_ep', 'executado_ej', 'executado_tp'], 'integer'],
             [['data', 'de', 'para'], 'safe'],
             [['descricao'], 'string'],
             [['contrato', 'objeto', 'contratada', 'cnpj', 'contato', 'numero_bm'], 'string', 'max' => 255],
-            [['acumulado', 'saldo'], 'number'],
+            [['acumulado', 'saldo', 'km'], 'number'],
         ];
     }
 
@@ -57,11 +57,21 @@ class Bm extends \yii\db\ActiveRecord
             'contratada' => 'Contratada',
             'cnpj' => 'Cnpj',
             'contato' => 'Contato',
-            'numero_bm' => 'Número Bm',
+            'numero_bm' => 'Número',
             'data' => 'Data',
             'de' => 'Período de',
             'para' => 'a',
             'descricao' => 'Descricao',
+            'executado_ee' => 'EE',
+            'executado_es' => 'ES',
+            'executado_ep' => 'EP',
+            'executado_ej' => 'EJ',
+            'executado_tp' => 'TP',
         ];
+    }
+
+    public function getProjeto()
+    {
+        return $this->hasOne(Projeto::className(), ['id' => 'projeto_id']);
     }
 }

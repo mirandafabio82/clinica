@@ -2,12 +2,11 @@
 
 /* @var $this yii\web\View */
 
-$this->title = 'My Yii Application';
+$this->title = 'HCN Automação';
 ?>
-<div class="site-index">
+<div class="site-index" background="resources/dist/img/index-img.jpg">
 
     <div class="jumbotron">
-        <h1>Bem vindo ao Sistema de Gerenciamento da HCN Automação!</h1>
-        <h2>ESSA TELA SOFRERÁ ALTERAÇÕES, ELA APARECE APENAS QUANDO O USUARIO ENTRA. ACEITO SUGESTÕES =D </h2>
+        <img src="resources/dist/img/index-img.jpg" alt="User Image" style="width: 70%">
       
 </div>

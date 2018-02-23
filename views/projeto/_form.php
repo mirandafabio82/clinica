@@ -847,8 +847,8 @@ tbody {
       <div class="col-md-1">
         <?= $form->field($model, 'setor')->textInput(['maxlength' => true,'style'=>'width:6em']) ?>
       </div>
-      <div class="col-md-1">
-        <?= $form->field($model, 'fone_contato')->textInput(['maxlength' => true,'style'=>'width:6em']) ?>
+      <div class="col-md-2">
+        <?= $form->field($model, 'fone_contato')->textInput(['maxlength' => true]) ?>
       </div>
       <div class="col-md-1">
         <?= $form->field($model, 'celular')->textInput(['maxlength' => true]) ?>
@@ -959,7 +959,11 @@ tbody {
           <?= $form->field($model, 'contrato')->textInput(['maxlength' => true]) ?>
         </div>
         <div class="col-md-2">
+        <?php if($model->isNewRecord){ ?>
+          <?= $form->field($model, 'perc_coord_adm')->textInput(['maxlength' => true, 'value'=>10]) ?>
+          <?php } else{ ?>
           <?= $form->field($model, 'perc_coord_adm')->textInput(['maxlength' => true]) ?>
+          <?php } ?>
         </div>
       </div>
     
@@ -1430,8 +1434,8 @@ echo TabsX::widget([
   </div>
 </div>
 <?php ActiveForm::end(); ?>
-    <?php ActiveForm::end(); ?>
       <?php } ?>
+    <?php ActiveForm::end(); ?>
 
    </div>
   </div>

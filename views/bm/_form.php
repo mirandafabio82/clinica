@@ -26,6 +26,11 @@ $this->registerJs('
        $("#bm-descricao").val(resposta["nome"]+"\nDescrição: "+resposta["descricao"]+"\n"+resposta["proposta"]+"\nSite: "+resposta["site"]);
        $("#bm-acumulado").val(resposta[1]);
        $("#bm-saldo").val(resposta[0]);
+       $("#bm-executado_ee").val(resposta[2]);
+       $("#bm-executado_es").val(resposta[3]);
+       $("#bm-executado_ep").val(resposta[4]);
+       $("#bm-executado_ej").val(resposta[5]);
+       $("#bm-executado_tp").val(resposta[6]);
        
      },
      error: function(){
@@ -71,9 +76,11 @@ $this->registerJs('
 <div style="margin-bottom:1em;margin-top: 1em">
     <?= Html::a('Mostrar Todos', ['/bm/create', 'pagination' => true], ['class'=>'btn btn-primary grid-button']) ?>
 </div>
+<div style="overflow: auto;overflow-y: hidden;Height:?">
     		<?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'options' => ['style' => 'font-size:12px;'],
         'columns' => [
             // ['class' => 'yii\grid\SerialColumn'],
 
@@ -84,20 +91,150 @@ $this->registerJs('
               'contentOptions' => ['style' => 'width:5em;  min-width:5em;'],
             ],
             [
-                'attribute'=>'projeto_id',
-                'value'=>function($data){
-                    if(isset($data->projeto_id))
-                        return Yii::$app->db->createCommand('SELECT nome FROM projeto WHERE id='.$data->projeto_id)->queryScalar();
+              'header' => '<span style="color:#337ab7">Projeto</span>',
+              'attribute' => 'projeto',              
+              'format' => 'raw',
+               'value' => function ($data) {
+
+                   return Yii::$app->db->createCommand('SELECT nome FROM projeto WHERE id='.$data->projeto_id)->queryScalar();
+               },
+            ],
+            [
+                'header'=>'AS',
+                'headerOptions' => ['style' => 'color:#337ab7'],
+                'value'=>function($data){  
+                  if(isset($data->projeto_id))                  
+                        return Yii::$app->db->createCommand('SELECT proposta FROM projeto WHERE id='.$data->projeto_id)->queryScalar();
                 }
             ],
             [
+                'header'=>'Valor AS',
+                'headerOptions' => ['style' => 'color:#337ab7'],
+                'value'=>function($data){  
+                  if(isset($data->projeto_id))                  
+                        return Yii::$app->db->createCommand('SELECT valor_proposta FROM projeto WHERE id='.$data->projeto_id)->queryScalar();
+                }
+            ],     
+
+            
+            [
+                'header'=>'EE-AUT',
+                'headerOptions' => ['style' => 'color:#337ab7'],
+                'value'=>function($data){                                      
+                        if(isset($data->projeto_id))                  
+                        return Yii::$app->db->createCommand('SELECT SUM(horas_ee) FROM escopo JOIN projeto ON escopo.projeto_id = projeto.id WHERE projeto.id='.$data->projeto_id)->queryScalar();
+                }
+            ],
+            [
+                'header'=>'ES-AUT',
+                'headerOptions' => ['style' => 'color:#337ab7'],
+                'value'=>function($data){                                      
+                        if(isset($data->projeto_id))                  
+                        return Yii::$app->db->createCommand('SELECT SUM(horas_es) FROM escopo JOIN projeto ON escopo.projeto_id = projeto.id WHERE projeto.id='.$data->projeto_id)->queryScalar();
+                }
+            ],
+            [
+                'header'=>'EP-AUT',
+                'headerOptions' => ['style' => 'color:#337ab7'],
+                'value'=>function($data){                                      
+                        if(isset($data->projeto_id))                  
+                        return Yii::$app->db->createCommand('SELECT SUM(horas_ep) FROM escopo JOIN projeto ON escopo.projeto_id = projeto.id WHERE projeto.id='.$data->projeto_id)->queryScalar();
+                }
+            ],
+            [
+                'header'=>'EJ-AUT',
+                'headerOptions' => ['style' => 'color:#337ab7'],
+                'value'=>function($data){                                      
+                        if(isset($data->projeto_id))                  
+                        return Yii::$app->db->createCommand('SELECT SUM(horas_ej) FROM escopo JOIN projeto ON escopo.projeto_id = projeto.id WHERE projeto.id='.$data->projeto_id)->queryScalar();
+                }
+            ],
+            [
+                'header'=>'TP-AUT',
+                'headerOptions' => ['style' => 'color:#337ab7'],
+                'value'=>function($data){                                      
+                        if(isset($data->projeto_id))                  
+                        return Yii::$app->db->createCommand('SELECT SUM(horas_tp) FROM escopo JOIN projeto ON escopo.projeto_id = projeto.id WHERE projeto.id='.$data->projeto_id)->queryScalar();
+                }
+            ],
+            [
+                'header'=>'BM',
+                'headerOptions' => ['style' => 'color:#337ab7'],
+                'value'=>function($data){    
+                if(isset($data->projeto_id))                  
+                        $projeto = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN projeto ON escopo.projeto_id = projeto.id WHERE projeto.id='.$data->projeto_id)->queryOne();                                  
+                        return 'BM-'.$projeto['codigo'].'-'.$projeto['site'].'-'.preg_replace('/[^0-9]/', '', $projeto['nome']).'_'.$projeto['rev_proposta'];
+                }
+            ],       
+            [
+                'header'=>'EXEC EE-AUT',
+                'headerOptions' => ['style' => 'color:#337ab7'],
+                'value'=>function($data){                                      
+                        return $data->executado_ee;
+                }
+            ],
+            [
+                'header'=>'EXEC ES-AUT',
+                'headerOptions' => ['style' => 'color:#337ab7'],
+                'value'=>function($data){                                      
+                        return $data->executado_es;
+                }
+            ],
+            [
+                'header'=>'EXEC EP-AUT',
+                'headerOptions' => ['style' => 'color:#337ab7'],
+                'value'=>function($data){                                      
+                        return $data->executado_ep;
+                }
+            ],
+            [
+                'header'=>'EXEC EJ-AUT',
+                'headerOptions' => ['style' => 'color:#337ab7'],
+                'value'=>function($data){                                      
+                        return $data->executado_ej;
+                }
+            ],
+            [
+                'header'=>'EXEC TP-AUT',
+                'headerOptions' => ['style' => 'color:#337ab7'],
+                'value'=>function($data){                                      
+                        return $data->executado_tp;
+                }
+            ],
+            [
+                'header'=>'KM',
+                'headerOptions' => ['style' => 'color:#337ab7'],
+                'value'=>function($data){                                      
+                        return $data->km;
+                }
+            ],
+            [
+                'header'=>'Valor',
+                'headerOptions' => ['style' => 'color:#337ab7'],
+                'value'=>function($data){            
+                      $tipo_exec = Yii::$app->db->createCommand('SELECT * FROM tipo_executante')->queryAll();
+                      
+                      if(isset($data->projeto_id))                  
+                        $qtd_km =  Yii::$app->db->createCommand('SELECT qtd_km FROM projeto WHERE projeto.id='.$data->projeto_id)->queryScalar();
+
+                        $vl_km = Yii::$app->db->createCommand('SELECT vl_km FROM executante WHERE usuario_id=61')->queryScalar();
+
+                        return number_format($data->executado_es * $tipo_exec[3]['valor_hora'] +
+                                      $data->executado_ep * $tipo_exec[2]['valor_hora']+
+                                      $data->executado_ej * $tipo_exec[1]['valor_hora']+
+                                      $data->executado_tp * $tipo_exec[0]['valor_hora']+
+                                      $qtd_km * $vl_km, 2, ',', '.');
+                }
+            ],
+            'data',
+            /*[
                 'header'=>'Descrição do Projeto',
                 'headerOptions' => ['style' => 'color:#337ab7'],
                 'value'=>function($data){  
                  	if(isset($data->projeto_id))                  
                         return Yii::$app->db->createCommand('SELECT descricao FROM projeto WHERE id='.$data->projeto_id)->queryScalar();
                 }
-            ],
+            ],*/
             // 'contrato',
             'objeto',
             // 'contratada',
@@ -108,10 +245,12 @@ $this->registerJs('
             //'de',
             //'para',
             //'descricao:ntext',
+            
 
             
         ],
     ]); ?>
+    </div>
     </div>
     </div>
     	<div class="box box-primary">
@@ -164,6 +303,24 @@ $this->registerJs('
 	    <div class="col-md-6"> 
 	    <?= $form->field($model, 'descricao')->textarea(['rows' => 6]) ?>
 	    </div>
+      <div class="col-md-1"> 
+      <?= $form->field($model, 'km')->textInput(['maxlength' => true]) ?>
+    </div>
+      <div class="col-md-1"> 
+      <?= $form->field($model, 'executado_ee')->textInput(['maxlength' => true]) ?>
+    </div>
+    <div class="col-md-1"> 
+      <?= $form->field($model, 'executado_es')->textInput(['maxlength' => true]) ?>
+    </div>
+    <div class="col-md-1"> 
+      <?= $form->field($model, 'executado_ep')->textInput(['maxlength' => true]) ?>
+    </div>
+    <div class="col-md-1"> 
+      <?= $form->field($model, 'executado_ej')->textInput(['maxlength' => true]) ?>
+    </div>
+    <div class="col-md-1"> 
+      <?= $form->field($model, 'executado_tp')->textInput(['maxlength' => true]) ?>
+    </div>
 	</div>
     <?php } else{ ?>
 	    <?php $form = ActiveForm::begin(); ?>
@@ -210,9 +367,31 @@ $this->registerJs('
     <div class="col-md-1"> 
       <?= $form->field($model, 'saldo')->textInput(['maxlength' => true]) ?>
     </div>
-	    <div class="col-md-6"> 
+	    <div class="col-md-10"> 
 	    <?= $form->field($model, 'descricao')->textarea(['rows' => 6]) ?>
 	    </div>
+      <div class="col-md-1"> 
+      <?= $form->field($model, 'km')->textInput(['maxlength' => true]) ?>
+    </div>
+    </div>
+     EXECUTADO
+    <div class="row" style="border:1px solid black;padding: 2px; margin-bottom: 1em">
+      <div class="col-md-1"> 
+      <?= $form->field($model, 'executado_ee')->textInput(['maxlength' => true]) ?>
+    </div>
+    <div class="col-md-1"> 
+      <?= $form->field($model, 'executado_es')->textInput(['maxlength' => true]) ?>
+    </div>
+    <div class="col-md-1"> 
+      <?= $form->field($model, 'executado_ep')->textInput(['maxlength' => true]) ?>
+    </div>
+    <div class="col-md-1"> 
+      <?= $form->field($model, 'executado_ej')->textInput(['maxlength' => true]) ?>
+    </div>
+    <div class="col-md-1"> 
+      <?= $form->field($model, 'executado_tp')->textInput(['maxlength' => true]) ?>
+    </div>
+    </div>
 	</div>
    <?php } ?>
     <div class="form-group">
