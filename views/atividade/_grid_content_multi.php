@@ -107,8 +107,17 @@ $this->registerJs("
     <thead>
        
         <tr>
-          <th style="width:150em;">Nome</th>                    
-          <th style="width:1em;padding-right: 1em;">Executado</th>
+          <th style="width:150em;">Nome</th>          
+          <th style="width:1em;padding-right: 1em;">Horas EE</th>
+          <th style="width:1em;padding-right: 1em;">Executado EE</th>
+          <th style="width:1em;padding-right: 1em;">Horas EP</th>
+          <th style="width:1em;padding-right: 1em;">Executado EP</th>
+          <th style="width:1em;padding-right: 1em;">Horas ES</th>
+          <th style="width:1em;padding-right: 1em;">Executado ES</th>
+          <th style="width:1em;padding-right: 1em;">Horas EJ</th>
+          <th style="width:1em;padding-right: 1em;">Executado EJ</th>
+          <th style="width:1em;padding-right: 1em;">Horas TP</th>
+          <th style="width:1em;padding-right: 1em;">Executado TP</th>
           <th style="width:1em;padding-right: 1em;">Horas Total</th>
           <th style="width:50em;padding-right: 1em;">Progresso</th>
           <th style="width:30em;">Status</th>
@@ -119,7 +128,7 @@ $this->registerJs("
             $cor = Yii::$app->db->createCommand('SELECT cor FROM escopo_status WHERE id='.$escopo['status'])->queryScalar();
             $escopoModel = Escopo::findIdentity($escopo['id']);
             if($escopoModel['horas_ee']+$escopoModel['horas_es']+$escopoModel['horas_ep']+$escopoModel['horas_ej']+$escopoModel['horas_tp'] > 0){
-              $progress = $escopoModel->executado / ($escopoModel['horas_ee']+$escopoModel['horas_es']+$escopoModel['horas_ep']+$escopoModel['horas_ej']+$escopoModel['horas_tp']) * 100;
+              $progress = ($escopoModel->executado_tp + $escopoModel->executado_ej + $escopoModel->executado_ep + $escopoModel->executado_es + $escopoModel->executado_ee) / ($escopoModel['horas_ee']+$escopoModel['horas_es']+$escopoModel['horas_ep']+$escopoModel['horas_ej']+$escopoModel['horas_tp']) * 100;
             }
             else{
               $progress = 0;
@@ -132,10 +141,27 @@ $this->registerJs("
       <?php if($escopo['exe_tp_id']==Yii::$app->user->getId() || $escopo['exe_ej_id']==Yii::$app->user->getId() || $escopo['exe_ep_id']==Yii::$app->user->getId() || $escopo['exe_es_id']==Yii::$app->user->getId() || $escopo['exe_ee_id']==Yii::$app->user->getId() || isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])){ ?>
       <tr style="background-color: <?=$cor?> !important">
         <td style="font-size: 15px; padding: 1px;padding-left: 1em;color: white"><?=$escopo['nome'] ?></td>
-                
-        <td style="font-size: 15px; padding-right: 1em;"><?= $form->field($escopoModel, 'executado')->textInput(['maxlength' => true, 'readonly'=>$editable, 'name'=>'Escopo['.$escopo['id'].'][executado]', 'class' =>'form-control executado'])->label(false) ?>  </td>
+        
+        <td style="font-size: 15px; padding-right: 1em;color: white"><?= isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin']) || $escopo['exe_ee_id']==Yii::$app->user->getId() ? $escopoModel['horas_ee'] : ''?>  </td>
 
-      
+        <td style="font-size: 15px; padding-right: 1em;"><?= (isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin']) && !empty($escopoModel['horas_ee'])) || $escopo['exe_ee_id']==Yii::$app->user->getId() && !empty($escopoModel['horas_ee']) ? $form->field($escopoModel, 'executado_ee')->textInput(['maxlength' => true, 'readonly'=>$editable, 'name'=>'Escopo['.$escopo['id'].'][executado_ee]', 'class' =>'form-control executado'])->label(false) : ''?>  </td>
+
+        <td style="font-size: 15px; padding-right: 1em;color: white"><?= isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin']) || $escopo['exe_es_id']==Yii::$app->user->getId() ? $escopoModel['horas_es'] : '' ?>  </td>
+
+        <td style="font-size: 15px; padding-right: 1em;"><?= (isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin']) && !empty($escopoModel['horas_es'])) || $escopo['exe_es_id']==Yii::$app->user->getId() && !empty($escopoModel['horas_es']) ? $form->field($escopoModel, 'executado_es')->textInput(['maxlength' => true, 'readonly'=>$editable, 'name'=>'Escopo['.$escopo['id'].'][executado_es]', 'class' =>'form-control executado'])->label(false) : '' ?>  </td>
+
+        <td style="font-size: 15px; padding-right: 1em;color: white"><?= isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin']) || $escopo['exe_ep_id']==Yii::$app->user->getId() ? $escopoModel['horas_ep'] : ''?>  </td>
+
+        <td style="font-size: 15px; padding-right: 1em;"><?= (isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin']) && !empty($escopoModel['horas_ep'])) || $escopo['exe_ep_id']==Yii::$app->user->getId() && !empty($escopoModel['horas_ep']) ? $form->field($escopoModel, 'executado_ep')->textInput(['maxlength' => true, 'readonly'=>$editable, 'name'=>'Escopo['.$escopo['id'].'][executado_ep]', 'class' =>'form-control executado'])->label(false) : '' ?>  </td>
+
+        <td style="font-size: 15px; padding-right: 1em;color: white"><?= isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin']) || $escopo['exe_ej_id']==Yii::$app->user->getId() ? $escopoModel['horas_ej'] : '' ?>  </td>
+
+        <td style="font-size: 15px; padding-right: 1em;"><?= (isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin']) && !empty($escopoModel['horas_ej'])) || $escopo['exe_ej_id']==Yii::$app->user->getId() && !empty($escopoModel['horas_ej']) ? $form->field($escopoModel, 'executado_ej')->textInput(['maxlength' => true, 'readonly'=>$editable, 'name'=>'Escopo['.$escopo['id'].'][executado_ej]', 'class' =>'form-control executado'])->label(false) : '' ?>  </td>
+
+        <td style="font-size: 15px; padding-right: 1em;color: white"><?= isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin']) || $escopo['exe_tp_id']==Yii::$app->user->getId() ? $escopoModel['horas_tp'] : '' ?>  </td>
+
+        <td style="font-size: 15px; padding-right: 1em;"><?= (isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin']) && !empty($escopoModel['horas_tp'])) || $escopo['exe_tp_id']==Yii::$app->user->getId() && !empty($escopoModel['horas_tp']) ? $form->field($escopoModel, 'executado_tp')->textInput(['maxlength' => true, 'readonly'=>$editable, 'name'=>'Escopo['.$escopo['id'].'][executado_tp]', 'class' =>'form-control executado'])->label(false) : ''?>  </td>
+
         <td style="font-size: 15px; padding-right: 1em;color: white"><?= $escopoModel['horas_ee']+$escopoModel['horas_es']+$escopoModel['horas_ep']+$escopoModel['horas_ej']+$escopoModel['horas_tp'] ?>  </td>
 
         <td style="font-size: 15px; padding-right: 1em;">
