@@ -69,80 +69,80 @@ th, td {
 
 <table border="1" align="center" width="100%" style="margin-top: 1em">
 	<tr>
-		<td style="background-color: #d3d3d3;margin-top: 0.5em;font-size: 10pt;font-family: arial;"  >Item </td>
+		<td style="background-color: #d3d3d3;margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: center;"  >Item </td>
 		<td style="background-color: #d3d3d3;margin-top: 0.5em;font-size: 10pt;font-family: arial;"  >Descrição</td>
-		<td style="background-color: #d3d3d3;margin-top: 0.5em;font-size: 10pt;font-family: arial;"  >Un</td>
-		<td style="background-color: #d3d3d3;margin-top: 0.5em;font-size: 10pt;font-family: arial;"  >Quantidade</td>
-		<td style="background-color: #d3d3d3;margin-top: 0.5em;font-size: 10pt;font-family: arial;"  >Valor Unitário</td>
-		<td style="background-color: #d3d3d3;margin-top: 0.5em;font-size: 10pt;font-family: arial;"  >Total</td>
+		<td style="background-color: #d3d3d3;margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: center;"  >Un</td>
+		<td style="background-color: #d3d3d3;margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: center;"  >Quantidade</td>
+		<td style="background-color: #d3d3d3;margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: center;"  >Valor Unitário</td>
+		<td style="background-color: #d3d3d3;margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: center;"  >Total</td>
 	</tr>
 	<?php if(!empty($escopos['h_ee'])){ ?>
 	<tr>
 		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  >0<?= $item ?></td>
 		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  >Mão de Obra (EE-AUT)</td>
-		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  >Hh</td>
-		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  ><?= str_replace('.',',',sprintf("%.2f",$escopos['h_ee'])) ?></td>
-		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  ><?= str_replace('.',',',sprintf("%.2f",$tipo_exec[4]['valor_hora'])) ?></td>
-		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  ><?= number_format($bm['executado_ee'] * $tipo_exec[4]['valor_hora'], 2, ',', '.') ?></td>
+		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: center;"  >Hh</td>
+		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: right;"  ><?= str_replace('.',',',sprintf("%.1f",$escopos['h_ee'])) ?></td>
+		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: right;"  ><?= str_replace('.',',',sprintf("%.1f",$tipo_exec[4]['valor_hora'])) ?></td>
+		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: right;"  ><?= number_format($bm['executado_ee'] * $tipo_exec[4]['valor_hora'], 2, ',', '.') ?></td>
 	</tr>	
 	<?php $item++; } ?>
 	<?php if(!empty($bm['executado_es'])){ ?>
 	<tr>
-		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  >0<?= $item ?></td>
+		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: center;"  >0<?= $item ?></td>
 		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  >Mão de Obra (ES-AUT)</td>
-		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  >Hh</td>
-		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  ><?= str_replace('.',',',sprintf("%.2f",$bm['executado_es'])) ?></td>
-		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  ><?=str_replace('.',',',sprintf("%.2f",$tipo_exec[3]['valor_hora'])) ?></td>
-		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  ><?= number_format($bm['executado_es'] * $tipo_exec[3]['valor_hora'], 2, ',', '.') ?></td>
+		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: center;"  >Hh</td>
+		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: right;"  ><?= str_replace('.',',',sprintf("%.1f",$bm['executado_es'])) ?></td>
+		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: right;"  ><?=str_replace('.',',',sprintf("%.1f",$tipo_exec[3]['valor_hora'])) ?></td>
+		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: right;"  ><?= number_format($bm['executado_es'] * $tipo_exec[3]['valor_hora'], 2, ',', '.') ?></td>
 	</tr>	
 	<?php $item++; } ?>	
 	<?php if(!empty($bm['executado_ep'])){ ?>
 	<tr>
-		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  >0<?= $item ?></td>
+		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: center;"  >0<?= $item ?></td>
 		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  >Mão de Obra (EP-AUT)</td>
-		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  >Hh</td>
-		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  ><?= str_replace('.',',',sprintf("%.2f",$bm['executado_ep'])) ?></td>
-		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  ><?= str_replace('.',',',sprintf("%.2f",$tipo_exec[2]['valor_hora'])) ?></td>
-		<td style="margin-top: 1.5em;font-size: 10pt;font-family: arial;"  ><?= number_format($bm['executado_ep'] * $tipo_exec[2]['valor_hora'], 2, ',', '.') ?></td>
+		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: center;"  >Hh</td>
+		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: right;"  ><?= str_replace('.',',',sprintf("%.1f",$bm['executado_ep'])) ?></td>
+		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: right;"  ><?= str_replace('.',',',sprintf("%.1f",$tipo_exec[2]['valor_hora'])) ?></td>
+		<td style="margin-top: 1.5em;font-size: 10pt;font-family: arial;text-align: right;"  ><?= number_format($bm['executado_ep'] * $tipo_exec[2]['valor_hora'], 2, ',', '.') ?></td>
 	</tr>	
 	<?php $item++; } ?>
 	<?php if(!empty($bm['executado_ej'])){ ?>
 	<tr>
-		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  >0<?= $item ?></td>
+		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: center;"  >0<?= $item ?></td>
 		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  >Mão de Obra (EJ-AUT)</td>
-		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  >Hh</td>
-		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  ><?= str_replace('.',',',sprintf("%.2f",$bm['executado_ej'])) ?></td>
-		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  ><?= str_replace('.',',',sprintf("%.2f",$tipo_exec[1]['valor_hora'])) ?></td>
-		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  ><?= number_format($bm['executado_ej'] * $tipo_exec[1]['valor_hora'], 2, ',', '.') ?></td>
+		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: center;"  >Hh</td>
+		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: right;"  ><?= str_replace('.',',',sprintf("%.1f",$bm['executado_ej'])) ?></td>
+		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: right;"  ><?= str_replace('.',',',sprintf("%.1f",$tipo_exec[1]['valor_hora'])) ?></td>
+		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: right;"  ><?= number_format($bm['executado_ej'] * $tipo_exec[1]['valor_hora'], 2, ',', '.') ?></td>
 	</tr>	
 	<?php $item++; } ?>
 	<?php if(!empty($bm['executado_tp'])){ ?>
 	<tr>
-		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  >0<?= $item ?></td>
+		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: center;"  >0<?= $item ?></td>
 		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  >Mão de Obra (TP-AUT)</td>
-		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  >Hh</td>
-		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  ><?= str_replace('.',',',sprintf("%.2f",$bm['executado_tp'])) ?></td>
-		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  ><?= str_replace('.',',',sprintf("%.2f",$tipo_exec[0]['valor_hora'])) ?></td>
-		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  ><?= number_format($bm['executado_tp'] * $tipo_exec[0]['valor_hora'], 2, ',', '.') ?></td>
+		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: center;"  >Hh</td>
+		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: right;"  ><?= str_replace('.',',',sprintf("%.1f",$bm['executado_tp'])) ?></td>
+		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: right;"  ><?= str_replace('.',',',sprintf("%.1f",$tipo_exec[0]['valor_hora'])) ?></td>
+		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: right;"  ><?= number_format($bm['executado_tp'] * $tipo_exec[0]['valor_hora'], 2, ',', '.') ?></td>
 	</tr>	
 	<?php $item++; } ?>
 	
 	<tr>
-		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  >0<?= $item ?></td>
-		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  >Deslocamento para <?= $projeto->qtd_dias ?> dias</td>
-		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  >Km</td>
-		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  ><?= $bm['km'] ?></td>
-		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  ><?= number_format(Yii::$app->db->createCommand('SELECT vl_km FROM executante WHERE usuario_id=61')->queryScalar(), 2, ',', '.') ?></td>
-		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  ><?= number_format($bm['km'] * Yii::$app->db->createCommand('SELECT vl_km FROM executante WHERE usuario_id=61')->queryScalar(), 2, ',', '.') ?></td>
+		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: center;"  >0<?= $item ?></td>
+		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  >Deslocamento para <?= $bm['qtd_dias'] ?> dias</td>
+		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: center;"  >Km</td>
+		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: right;"  ><?= number_format($bm['km'], 1, ',', '.') ?></td>
+		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: right;"  ><?= number_format(Yii::$app->db->createCommand('SELECT vl_km FROM executante WHERE usuario_id=61')->queryScalar(), 2, ',', '.') ?></td>
+		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: right;"  ><?= number_format($bm['km'] * Yii::$app->db->createCommand('SELECT vl_km FROM executante WHERE usuario_id=61')->queryScalar(), 2, ',', '.') ?></td>
 	</tr>
 	<?php $item++; ?>
 	<tr>
-		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  >0<?= $item ?></td>
+		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: center;"  >0<?= $item ?></td>
 		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  >Total desta medição</td>
 		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  ></td>
 		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  ></td>
 		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  ></td>
-		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  ><?= number_format($bm['executado_ee'] * $tipo_exec[4]['valor_hora']+
+		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: right;"  ><?= number_format($bm['executado_ee'] * $tipo_exec[4]['valor_hora']+
 																			$bm['executado_es'] * $tipo_exec[3]['valor_hora'] +
 																			$bm['executado_ep'] * $tipo_exec[2]['valor_hora']+
 																			$bm['executado_ej'] * $tipo_exec[1]['valor_hora']+

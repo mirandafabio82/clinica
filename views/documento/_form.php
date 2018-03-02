@@ -49,7 +49,7 @@ $this->registerJs("
 </div>
 <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        // 'filterModel' => $searchModel,
+        'filterModel' => $searchModel,
         'options' => ['style' => 'font-size:12px;'],
         // 'pjax' => true,
         
@@ -76,7 +76,7 @@ $this->registerJs("
                         $nome, 
                         Yii::$app->basePath.'/web/uploaded-files/'.$data->projeto_id.'/'.$data->path,
                          [                                 // link options
-                         'title'=>'Go!',
+                         'title'=>'Download!',
                          'target'=>'_blank',
                          'class' => 'linksWithTarget',
                          'data-pjax'=>"0"
@@ -85,7 +85,7 @@ $this->registerJs("
                 }
             ],
             [
-                'attribute' => 'projeto_id',
+                'attribute' => 'projeto',
                 'format' => 'raw',
                 'value' => function($data){
                     return Yii::$app->db->createCommand('SELECT nome FROM projeto WHERE id ='.$data->projeto_id)->queryScalar();
@@ -108,15 +108,27 @@ $this->registerJs("
                 },
             ],
 
-            'revisao',
             [
-                'attribute' => 'data',
+                'header' => '<span style="color:#337ab7">Revisão</span>',
+                'value' => function($data){
+                    if(!empty($data->revisao))
+                        return $data->revisao;
+                }
+            ], 
+            [
+                'header' => '<span style="color:#337ab7">Data</span>',
                 'value' => function($data){
                     if(!empty($data->data))
                         return date_format(DateTime::createFromFormat('Y-m-d', $data->data), 'd/m/Y');
                 }
             ], 
-            'tipo',
+            [
+                'header' => '<span style="color:#337ab7">Tipo</span>',
+                'value' => function($data){
+                    if(!empty($data->tipo))
+                        return $data->tipo;
+                }
+            ], 
             // 'criado',
             // 'modificado',
 

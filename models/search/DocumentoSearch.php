@@ -12,6 +12,7 @@ use app\models\Documento;
  */
 class DocumentoSearch extends Documento
 {
+    public $projeto;
     /**
      * @inheritdoc
      */
@@ -19,7 +20,7 @@ class DocumentoSearch extends Documento
     {
         return [
             [['id', 'projeto_id', 'revisao'], 'integer'],
-            [['nome', 'data', 'tipo', 'criado', 'modificado'], 'safe'],
+            [['nome', 'data', 'tipo', 'criado', 'modificado', 'projeto'], 'safe'],
         ];
     }
 
@@ -42,6 +43,14 @@ class DocumentoSearch extends Documento
     public function search($params)
     {
         $query = Documento::find();
+        $query->joinWith(['projeto']);
+        // add conditions that should always apply here
+        $dataProvider->sort->attributes['projeto'] = [
+            // The tables are the ones our relation are configured to
+            // in my case they are prefixed with "tbl_"
+            'asc' => ['projeto.nome' => SORT_ASC],
+            'desc' => ['projeto.nome' => SORT_DESC],
+        ];
 
         // add conditions that should always apply here
 
@@ -71,7 +80,8 @@ class DocumentoSearch extends Documento
         ]);
 
         $query->andFilterWhere(['like', 'nome', $this->nome])
-            ->andFilterWhere(['like', 'tipo', $this->tipo]);
+            ->andFilterWhere(['like', 'tipo', $this->tipo])
+            ->andFilterWhere(['like', 'projeto.nome', $this->projeto]);
 
         return $dataProvider;
     }

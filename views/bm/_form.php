@@ -65,6 +65,8 @@ $this->registerJs('
 #w2{
     display: none;
 }
+
+
 </style>
 <!-- mask so funciona com isso -->
 <?php $this->head() ?>
@@ -101,7 +103,7 @@ $this->registerJs('
             ],
             [
                 'header'=>'AS',
-                'headerOptions' => ['style' => 'color:#337ab7'],
+                'headerOptions' => ['style' => 'color:#337ab7; width:15em'],
                 'value'=>function($data){  
                   if(isset($data->projeto_id))                  
                         return Yii::$app->db->createCommand('SELECT proposta FROM projeto WHERE id='.$data->projeto_id)->queryScalar();
@@ -112,11 +114,53 @@ $this->registerJs('
                 'headerOptions' => ['style' => 'color:#337ab7'],
                 'value'=>function($data){  
                   if(isset($data->projeto_id))                  
-                        return Yii::$app->db->createCommand('SELECT valor_proposta FROM projeto WHERE id='.$data->projeto_id)->queryScalar();
+                        return number_format(Yii::$app->db->createCommand('SELECT valor_proposta FROM projeto WHERE id='.$data->projeto_id)->queryScalar(), 2, ',', '.');
                 }
             ],     
+            [
+                'header'=>'BM',
+                'headerOptions' => ['style' => 'color:#337ab7;width:15em'],
+                'value'=>function($data){    
+                if(isset($data->projeto_id))                  
+                        $projeto = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN projeto ON escopo.projeto_id = projeto.id WHERE projeto.id='.$data->projeto_id)->queryOne();                                  
+                        return 'BM-'.$projeto['codigo'].'-'.$projeto['site'].'-'.preg_replace('/[^0-9]/', '', $projeto['nome']).'_'.$projeto['rev_proposta'];
+                }
+            ],       
+            [
+                'attribute'=>'numero_bm',
+                'headerOptions' => ['style' => 'color:#337ab7'],
+                'value'=>function($data){    
+                    if(isset($data->data))
+                      return $data->numero_bm.'/'.explode('-',$data->data)[0];
+                    else
+                      return $data->numero_bm;
+                }
 
-            
+            ],
+            [
+                'header'=>'Valor BM',
+                'headerOptions' => ['style' => 'color:#337ab7'],
+                'value'=>function($data){    
+                  $tipo_executante = Yii::$app->db->createCommand('SELECT * FROM tipo_executante')->queryAll();
+                    
+                    return number_format($data->executado_tp*$tipo_executante[0]['valor_hora']+$data->executado_ej*$tipo_executante[1]['valor_hora']+$data->executado_ep*$tipo_executante[2]['valor_hora']+$data->executado_es*$tipo_executante[3]['valor_hora']+$data->executado_ee*$tipo_executante[4]['valor_hora']+$data->km * Yii::$app->db->createCommand('SELECT vl_km FROM executante WHERE usuario_id=61')->queryScalar(), 2, ',', '.');
+                }
+
+            ],
+            'acumulado',
+            'saldo',
+            [
+                'attribute'=>'data',
+                'headerOptions' => ['style' => 'color:#337ab7'],
+                'value'=>function($data){    
+                  if(isset($data->data))
+                    return date('d/m/Y', strtotime($data->data));
+                }
+
+            ],
+
+
+            /*
             [
                 'header'=>'EE-AUT',
                 'headerOptions' => ['style' => 'color:#337ab7'],
@@ -156,17 +200,8 @@ $this->registerJs('
                         if(isset($data->projeto_id))                  
                         return Yii::$app->db->createCommand('SELECT SUM(horas_tp) FROM escopo JOIN projeto ON escopo.projeto_id = projeto.id WHERE projeto.id='.$data->projeto_id)->queryScalar();
                 }
-            ],
-            [
-                'header'=>'BM',
-                'headerOptions' => ['style' => 'color:#337ab7'],
-                'value'=>function($data){    
-                if(isset($data->projeto_id))                  
-                        $projeto = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN projeto ON escopo.projeto_id = projeto.id WHERE projeto.id='.$data->projeto_id)->queryOne();                                  
-                        return 'BM-'.$projeto['codigo'].'-'.$projeto['site'].'-'.preg_replace('/[^0-9]/', '', $projeto['nome']).'_'.$projeto['rev_proposta'];
-                }
-            ],       
-            [
+            ],*/
+            /*[
                 'header'=>'EXEC EE-AUT',
                 'headerOptions' => ['style' => 'color:#337ab7'],
                 'value'=>function($data){                                      
@@ -207,8 +242,8 @@ $this->registerJs('
                 'value'=>function($data){                                      
                         return $data->km;
                 }
-            ],
-            [
+            ],*/
+           /* [
                 'header'=>'Valor',
                 'headerOptions' => ['style' => 'color:#337ab7'],
                 'value'=>function($data){            
@@ -225,22 +260,20 @@ $this->registerJs('
                                       $data->executado_tp * $tipo_exec[0]['valor_hora']+
                                       $qtd_km * $vl_km, 2, ',', '.');
                 }
-            ],
-            'data',
+            ],*/
             /*[
                 'header'=>'Descrição do Projeto',
                 'headerOptions' => ['style' => 'color:#337ab7'],
                 'value'=>function($data){  
-                 	if(isset($data->projeto_id))                  
+                  if(isset($data->projeto_id))                  
                         return Yii::$app->db->createCommand('SELECT descricao FROM projeto WHERE id='.$data->projeto_id)->queryScalar();
                 }
             ],*/
             // 'contrato',
-            'objeto',
+            // 'objeto',
             // 'contratada',
             //'cnpj',
             //'contato',
-            'numero_bm',
             // 'data',
             //'de',
             //'para',
@@ -303,23 +336,36 @@ $this->registerJs('
 	    <div class="col-md-6"> 
 	    <?= $form->field($model, 'descricao')->textarea(['rows' => 6]) ?>
 	    </div>
+       <div class="col-md-1"> 
+      <?= $form->field($model, 'qtd_dias')->textInput(['maxlength' => true]) ?>
+    </div>
       <div class="col-md-1"> 
       <?= $form->field($model, 'km')->textInput(['maxlength' => true]) ?>
     </div>
       <div class="col-md-1"> 
-      <?= $form->field($model, 'executado_ee')->textInput(['maxlength' => true]) ?>
+      <?= $form->field($model, 'executado_ee')->textInput(['maxlength' => true])->widget(\yii\widgets\MaskedInput::className(), [
+                        'mask' => '9.9',
+                    ]) ?> 
     </div>
     <div class="col-md-1"> 
-      <?= $form->field($model, 'executado_es')->textInput(['maxlength' => true]) ?>
+      <?= $form->field($model, 'executado_es')->textInput(['maxlength' => true])->widget(\yii\widgets\MaskedInput::className(), [
+                        'mask' => '9.9',
+                    ]) ?> 
     </div>
     <div class="col-md-1"> 
-      <?= $form->field($model, 'executado_ep')->textInput(['maxlength' => true]) ?>
+      <?= $form->field($model, 'executado_ep')->textInput(['maxlength' => true])->widget(\yii\widgets\MaskedInput::className(), [
+                        'mask' => '9.9',
+                    ]) ?> 
     </div>
     <div class="col-md-1"> 
-      <?= $form->field($model, 'executado_ej')->textInput(['maxlength' => true]) ?>
+      <?= $form->field($model, 'executado_ej')->textInput(['maxlength' => true])->widget(\yii\widgets\MaskedInput::className(), [
+                        'mask' => '9.9',
+                    ]) ?> 
     </div>
     <div class="col-md-1"> 
-      <?= $form->field($model, 'executado_tp')->textInput(['maxlength' => true]) ?>
+      <?= $form->field($model, 'executado_tp')->textInput(['maxlength' => true])->widget(\yii\widgets\MaskedInput::className(), [
+                        'mask' => '9.9',
+                    ]) ?> 
     </div>
 	</div>
     <?php } else{ ?>
@@ -371,25 +417,38 @@ $this->registerJs('
 	    <?= $form->field($model, 'descricao')->textarea(['rows' => 6]) ?>
 	    </div>
       <div class="col-md-1"> 
+      <?= $form->field($model, 'qtd_dias')->textInput(['maxlength' => true]) ?>
+    </div>
+      <div class="col-md-1"> 
       <?= $form->field($model, 'km')->textInput(['maxlength' => true]) ?>
     </div>
     </div>
      EXECUTADO
     <div class="row" style="border:1px solid black;padding: 2px; margin-bottom: 1em">
-      <div class="col-md-1"> 
-      <?= $form->field($model, 'executado_ee')->textInput(['maxlength' => true]) ?>
+      <div class="col-md-1" style="text-align: center"> 
+      <?= $form->field($model, 'executado_ee')->textInput(['maxlength' => true])->widget(\yii\widgets\MaskedInput::className(), [
+                        'mask' => '9.9',
+                    ]) ?> 
     </div>
-    <div class="col-md-1"> 
-      <?= $form->field($model, 'executado_es')->textInput(['maxlength' => true]) ?>
+    <div class="col-md-1" style="text-align: center"> 
+      <?= $form->field($model, 'executado_es')->textInput(['maxlength' => true])->widget(\yii\widgets\MaskedInput::className(), [
+                        'mask' => '9.9',
+                    ]) ?> 
     </div>
-    <div class="col-md-1"> 
-      <?= $form->field($model, 'executado_ep')->textInput(['maxlength' => true]) ?>
+    <div class="col-md-1" style="text-align: center"> 
+      <?= $form->field($model, 'executado_ep')->textInput(['maxlength' => true])->widget(\yii\widgets\MaskedInput::className(), [
+                        'mask' => '9.9',
+                    ]) ?> 
     </div>
-    <div class="col-md-1"> 
-      <?= $form->field($model, 'executado_ej')->textInput(['maxlength' => true]) ?>
+    <div class="col-md-1" style="text-align: center"> 
+      <?= $form->field($model, 'executado_ej')->textInput(['maxlength' => true])->widget(\yii\widgets\MaskedInput::className(), [
+                        'mask' => '9.9',
+                    ]) ?> 
     </div>
-    <div class="col-md-1"> 
-      <?= $form->field($model, 'executado_tp')->textInput(['maxlength' => true]) ?>
+    <div class="col-md-1" style="text-align: center"> 
+      <?= $form->field($model, 'executado_tp')->textInput(['maxlength' => true])->widget(\yii\widgets\MaskedInput::className(), [
+                        'mask' => '9.9',
+                    ]) ?> 
     </div>
     </div>
 	</div>

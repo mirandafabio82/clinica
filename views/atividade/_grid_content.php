@@ -133,10 +133,13 @@ $this->registerJs("
       <tr style="background-color: <?=$cor?> !important">
         <td style="font-size: 15px; padding: 1px;padding-left: 1em;color: white"><?=$escopo['nome'] ?></td>
                 
-        <td style="font-size: 15px; padding-right: 1em;"><?= $form->field($escopoModel, 'executado')->textInput(['maxlength' => true, 'readonly'=>$editable, 'name'=>'Escopo['.$escopo['id'].'][executado]', 'class' =>'form-control executado'])->label(false) ?>  </td>
-
+        <?php if(isset(explode('.',$escopo['executado'])[1]) && explode('.',$escopo['executado'])[1]=='00'){ ?>
+        <td style="font-size: 15px; padding-right: 1em;"><?= $form->field($escopoModel, 'executado')->textInput(['maxlength' => true, 'readonly'=>$editable, 'name'=>'Escopo['.$escopo['id'].'][executado]', 'class' =>'form-control executado', 'value'=> explode('.',$escopo['executado'])[0] ])->label(false) ?>  </td>
+        <?php } else{ ?>
+        <td style="font-size: 15px; padding-right: 1em;"><?= $form->field($escopoModel, 'executado')->textInput(['maxlength' => true, 'readonly'=>$editable, 'name'=>'Escopo['.$escopo['id'].'][executado]', 'class' =>'form-control executado' ])->label(false) ?>  </td>
+        <?php } ?>
       
-        <td style="font-size: 15px; padding-right: 1em;color: white"><?= $escopoModel['horas_ee']+$escopoModel['horas_es']+$escopoModel['horas_ep']+$escopoModel['horas_ej']+$escopoModel['horas_tp'] ?>  </td>
+        <td style=" text-align: center;font-size: 15px; padding-right: 0.5em;color: white"><?= $escopoModel['horas_ee']+$escopoModel['horas_es']+$escopoModel['horas_ep']+$escopoModel['horas_ej']+$escopoModel['horas_tp'] ?>  </td>
 
         <td style="font-size: 15px; padding-right: 1em;">
         <div class="progress progress-xs">
