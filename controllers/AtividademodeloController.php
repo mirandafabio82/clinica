@@ -75,6 +75,9 @@ class AtividademodeloController extends Controller
     public function actionCreate()
     {
         $model = new Atividademodelo();
+        $model2 = new Atividademodelo();
+        $model3 = new Atividademodelo();
+        $model4 = new Atividademodelo();
 
         $searchModel = new AtividademodeloSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -88,10 +91,35 @@ class AtividademodeloController extends Controller
         
         if(isset($_GET['pagination'])) $dataProvider->pagination = false;        
 
+        
         if ($model->load(Yii::$app->request->post()) ) {
+            if(empty($model->escopopadrao_id) || !isset($model->escopopadrao_id)){
+                $model->escopopadrao_id = 0;
+            }
+           if($model->disciplina_id==0){
+                $model->disciplina_id = 1;
+                
+                $model2->setAttributes($_POST['Atividademodelo']);
+                $model2->disciplina_id = 2;
+                if(empty($model2->escopopadrao_id) || !isset($model2->escopopadrao_id)){
+                    $model2->escopopadrao_id = 0;
+                }
+                $model2->save();
 
-            $model->setAttributes($_POST['Atividademodelo']);
-           
+                $model3->setAttributes($_POST['Atividademodelo']);
+                $model3->disciplina_id = 3;
+                if(empty($model3->escopopadrao_id) || !isset($model3->escopopadrao_id)){
+                    $model3->escopopadrao_id = 0;
+                }
+                $model3->save();
+
+                $model4->setAttributes($_POST['Atividademodelo']);
+                $model4->disciplina_id = 4;
+                if(empty($model4->escopopadrao_id) || !isset($model4->escopopadrao_id)){
+                    $model4->escopopadrao_id = 0;
+                }
+                $model4->save();
+           }
             $model->save();
 
             return $this->redirect(['create', 'id' => $model->id]);
@@ -115,6 +143,9 @@ class AtividademodeloController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $model2 = new Atividademodelo();
+        $model3 = new Atividademodelo();
+        $model4 = new Atividademodelo();
 
         $searchModel = new AtividademodeloSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -128,7 +159,34 @@ class AtividademodeloController extends Controller
 
         if ($model->load(Yii::$app->request->post()) ) {
             
-            $model->setAttributes($_POST['Atividademodelo']);            
+            $model->setAttributes($_POST['Atividademodelo']); 
+            if(empty($model->escopopadrao_id) || !isset($model->escopopadrao_id)){
+                $model->escopopadrao_id = 0;
+            }
+           if($model->disciplina_id==0){
+                $model->disciplina_id = 1;
+                
+                $model2->setAttributes($_POST['Atividademodelo']);
+                $model2->disciplina_id = 2;
+                if(empty($model2->escopopadrao_id) || !isset($model2->escopopadrao_id)){
+                    $model2->escopopadrao_id = 0;
+                }
+                $model2->save();
+
+                $model3->setAttributes($_POST['Atividademodelo']);
+                $model3->disciplina_id = 3;
+                if(empty($model3->escopopadrao_id) || !isset($model3->escopopadrao_id)){
+                    $model3->escopopadrao_id = 0;
+                }
+                $model3->save();
+
+                $model4->setAttributes($_POST['Atividademodelo']);
+                $model4->disciplina_id = 4;
+                if(empty($model4->escopopadrao_id) || !isset($model4->escopopadrao_id)){
+                    $model4->escopopadrao_id = 0;
+                }
+                $model4->save();
+           }           
 
             $model->save();
 

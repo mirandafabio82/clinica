@@ -210,11 +210,11 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
 
                     if(isset($_POST['Escopos'])){
 
-
                         $escopos = $_POST['Escopos'];
                         $automacoes = isset($escopos['Automação']) ? $escopos['Automação'] : array();
                         $processos = isset($escopos['Processo']) ? $escopos['Processo'] : array();
                         $instrumentacoes = isset($escopos['Instrumentação']) ? $escopos['Instrumentação'] : array();
+                        $diagramas = isset($escopos['Diagrama']) ? $escopos['Diagrama'] : array();
 
                         foreach ($automacoes as $key => $automacao) {
                             $atvmodelos = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE (escopopadrao_id='.$automacao.' OR escopopadrao_id=0) AND disciplina_id = 1 AND isPrioritaria=1')->queryAll();
@@ -252,6 +252,21 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                                 $escopo_model->nome = $atv['nome'];
                                 $escopo_model->descricao = $atv['nome'];
                                 $escopo_model->save();
+                            }
+                        }
+                        foreach ($diagramas as $key => $diagrama) {
+
+                            $atvmodelos = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE (escopopadrao_id='.$diagrama.' OR escopopadrao_id=0) AND disciplina_id = 4 AND isPrioritaria=1')->queryAll();
+
+                            foreach ($atvmodelos as $key => $atv) {
+                                $escopo_model = new Escopo();
+                                $escopo_model->projeto_id = $model->id;
+                                $escopo_model->atividademodelo_id = $atv['id'];
+                                $escopo_model->nome = $atv['nome'];
+                                $escopo_model->descricao = $atv['nome'];
+                                
+                                $escopo_model->save();
+
                             }
                         }
 
@@ -578,6 +593,7 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                         $automacoes = isset($escopos['Automação']) ? $escopos['Automação'] : array();
                         $processos = isset($escopos['Processo']) ? $escopos['Processo'] : array();
                         $instrumentacoes = isset($escopos['Instrumentação']) ? $escopos['Instrumentação'] : array();
+                        $diagramas = isset($escopos['Diagrama']) ? $escopos['Diagrama'] : array();
 
                         
                         if(!isset($automacoes[1]))
@@ -641,6 +657,30 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
 
                         foreach ($instrumentacoes as $key => $instrumentacao) {
                             $atvmodelos = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE (escopopadrao_id='.$instrumentacao.' OR escopopadrao_id=0) AND disciplina_id = 3 AND isPrioritaria=1')->queryAll();
+
+                            foreach ($atvmodelos as $key => $atv) {
+                                $existeEscopo = Yii::$app->db->createCommand('SELECT id FROM escopo WHERE projeto_id='.$model->id.' AND atividademodelo_id='.$atv['id'])->queryScalar();
+                                if(!$existeEscopo){
+                                    $escopo_model = new Escopo();
+                                    $escopo_model->projeto_id = $model->id;
+                                    $escopo_model->atividademodelo_id = $atv['id'];
+                                    $escopo_model->nome = $atv['nome'];
+                                    $escopo_model->descricao = $atv['nome'];
+                                    $escopo_model->save();
+                                }
+                            }
+                        }
+                        if(!isset($diagramas[1]))
+                         Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id NOT IN(SELECT id FROM atividademodelo WHERE (escopopadrao_id=1  OR escopopadrao_id=0) AND disciplina_id=3) AND (horas_tp=null AND horas_ej=null AND horas_ep=null AND horas_es=null AND horas_ee=null) AND projeto_id='.$model->id)->execute();
+
+                        if(!isset($diagramas[2]))
+                         Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id NOT IN(SELECT id FROM atividademodelo WHERE (escopopadrao_id=2 OR escopopadrao_id=0) AND disciplina_id=3) AND (horas_tp=null AND horas_ej=null AND horas_ep=null AND horas_es=null AND horas_ee=null) AND projeto_id='.$model->id )->execute();
+
+                        if(!isset($diagramas[3]))
+                         Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id NOT IN(SELECT id FROM atividademodelo WHERE (escopopadrao_id=3 OR escopopadrao_id=0) AND disciplina_id=3) AND (horas_tp=null AND horas_ej=null AND horas_ep=null AND horas_es=null AND horas_ee=null) AND projeto_id='.$model->id)->execute();
+
+                        foreach ($diagramas as $key => $diagrama) {
+                            $atvmodelos = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE (escopopadrao_id='.$diagrama.' OR escopopadrao_id=0) AND disciplina_id = 4 AND isPrioritaria=1')->queryAll();
 
                             foreach ($atvmodelos as $key => $atv) {
                                 $existeEscopo = Yii::$app->db->createCommand('SELECT id FROM escopo WHERE projeto_id='.$model->id.' AND atividademodelo_id='.$atv['id'])->queryScalar();
@@ -838,6 +878,7 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
             $processoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=2 AND projeto_id='.$projeto->id)->queryAll();
             $automacaoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=1 AND projeto_id='.$projeto->id)->queryAll();
             $instrumentacaoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=3 AND projeto_id='.$projeto->id)->queryAll();
+            $diagramaArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=4 AND projeto_id='.$projeto->id)->queryAll();
 
             $escopos = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$projeto->id)->queryAll();
 
@@ -870,6 +911,7 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                 'processo' => $processoArray,
                 'automacao' => $automacaoArray,
                 'instrumentacao' => $instrumentacaoArray,
+                'diagrama' => $diagramaArray,
                 'basico' => $basico,
                 'detalhamento' => $detalhamento,
                 'config' => $config]);
@@ -891,6 +933,12 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                 'escopos' => $instrumentacaoArray,
                 'index' => $arrayIndex[$index]]);
             if(!empty($instrumentacaoArray)) $index++;
+
+            $diagrama = $this->renderPartial('relatorio/_diagrama', [
+                'projeto' => $projeto,
+                'escopos' => $diagramaArray,
+                'index' => $arrayIndex[$index]]);
+            if(!empty($diagramaArray)) $index++;
 
             $resumo = $this->renderPartial('relatorio/_resumo', [
                 'projeto' => $projeto,
@@ -922,6 +970,10 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
             if(!empty($instrumentacaoArray)){
                 $mpdf->AddPage();
                 $mpdf->WriteHTML($instrumentacao);
+            }
+            if(!empty($diagramaArray)){
+                $mpdf->AddPage();
+                $mpdf->WriteHTML($diagrama);
             }
             $mpdf->AddPage();
             $mpdf->WriteHTML($resumo);

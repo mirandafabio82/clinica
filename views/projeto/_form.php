@@ -73,6 +73,14 @@ $this->registerJs('
     }
   });
 
+  $("#Diagrama_checkbox").change(function(ev){
+    if($(this).prop("checked")){
+      $("#disciplina_Diagrama_div").removeAttr("hidden");
+    }else{
+      $("#disciplina_Diagrama_div").attr("hidden", "hidden");
+    }
+  });
+
 
   $("#projeto-cliente_id").change(function(ev){
     var id = $(this).val();    
@@ -1083,6 +1091,7 @@ tbody {
     $bodyA = '';
     $bodyP = '';
     $bodyI = '';
+    $bodyD = '';
     $exe_tp ='';
     $exe_ej ='';
     $exe_ep ='';
@@ -1262,6 +1271,21 @@ tbody {
              $bodyI .=  $descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
           }
       } 
+      if($disciplina_id == 4){
+        $total_i_EE = $esc["horas_ee"] + $total_i_EE;
+        $total_i_ES = $esc["horas_es"] + $total_i_ES;
+        $total_i_EP = $esc["horas_ep"] + $total_i_EP;
+        $total_i_EJ = $esc["horas_ej"] + $total_i_EJ;
+        $total_i_TP = $esc["horas_tp"] + $total_i_TP;
+               
+        if($descricao=='<tr><td style="font-size: 10px">Coordenação e Administração</td>'){
+            $bodyD .=  $descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total.'<tr><th>SUBTOTAL ATIVIDADES GERAIS DE PROJETO</th><th></th><th></th><th class="sub-d-tot-ee">'.$total_i_EE.'</th><th class="sub-d-tot-es">'.$total_i_ES.'</th><th class="sub-d-tot-ep">'.$total_i_EP.'</th><th class="sub-d-tot-ej">'.$total_i_EJ.'</th><th class="sub-d-tot-tp">'.$total_i_TP.'</th><th></th><th></th><th></th><th></th><th></th></tr><tr>
+          <th style="width:4.3em;"></th><th style="width:4.3em;"></th><th style="width:4.3em;"></th><th style="width:4.3em;">EE</th><th style="width:4.3em;">ES</th><th style="width:4.3em;">EP</th><th style="width:4.3em;">EJ</th><th style="width:4.3em;">TP</th><th style="width:4.3em;"></th><th style="width:4.3em;"></th><th style="width:4.3em;"></th><th style="width:4.3em;"></th><th style="width:4.3em;">Total</th></tr>';  
+          }
+          else{
+             $bodyD .=  $descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
+          }
+      } 
 
           
  } 
@@ -1325,9 +1349,30 @@ tbody {
     $bodyI = $bodyI.'<tr><th>SUBTOTAL ATIVIDADES GERAIS DE PROJETO</th><th></th><th></th><th>'.$entr['entr_horas_i_ee'].'</th><th>'.$entr['entr_horas_i_es'].'</th><th>'.$entr['entr_horas_i_ep'].'</th><th>'.$entr['entr_horas_i_ej'].'</th><th>'.$entr['entr_horas_i_tp'].'</th><th></th><th></th><th></th><th></th><th></th></tr>
     <tr><th>HH TOTAL DE ENGENHARIA</th><th></th><th></th><th class="full-i-tot-ee">'.$full['entr_horas_i_ee'].'</th><th class="full-i-tot-es">'.$full['entr_horas_i_es'].'</th><th class="full-i-tot-ep">'.$full['entr_horas_i_ep'].'</th><th class="full-i-tot-ej">'.$full['entr_horas_i_ej'].'</th><th class="full-i-tot-tp">'.$full['entr_horas_i_tp'].'</th><th></th><th></th><th></th><th></th><th></th></tr>';
 
+    $entr = Yii::$app->db->createCommand('SELECT SUM(horas_ee) entr_horas_d_ee,SUM(horas_es) entr_horas_d_es,SUM(horas_ep) entr_horas_d_ep,SUM(horas_ej) entr_horas_d_ej,SUM(horas_tp) entr_horas_d_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$model->id.' AND isEntregavel=1 AND disciplina_id=3')->queryOne();
+
+    $full = Yii::$app->db->createCommand('SELECT SUM(horas_ee) entr_horas_d_ee,SUM(horas_es) entr_horas_d_es,SUM(horas_ep) entr_horas_d_ep,SUM(horas_ej) entr_horas_d_ej,SUM(horas_tp) entr_horas_d_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=3 AND projeto_id='.$model->id)->queryOne();
+
+    if(!isset($full['entr_horas_d_ee'])) $full['entr_horas_d_ee'] = 0;
+    if(!isset($full['entr_horas_d_es'])) $full['entr_horas_d_es'] = 0;
+    if(!isset($full['entr_horas_d_ep'])) $full['entr_horas_d_ep'] = 0;
+    if(!isset($full['entr_horas_d_ej'])) $full['entr_horas_d_ej'] = 0;
+    if(!isset($full['entr_horas_d_tp'])) $full['entr_horas_d_tp'] = 0;
+
+    if(!isset($entr['entr_horas_d_ee'])) $entr['entr_horas_d_ee'] = 0;
+    if(!isset($entr['entr_horas_d_es'])) $entr['entr_horas_d_es'] = 0;
+    if(!isset($entr['entr_horas_d_ep'])) $entr['entr_horas_d_ep'] = 0;
+    if(!isset($entr['entr_horas_d_ej'])) $entr['entr_horas_d_ej'] = 0;
+    if(!isset($entr['entr_horas_d_tp'])) $entr['entr_horas_d_tp'] = 0;
+
+    $bodyDOld = $bodyD;
+    $bodyD = $bodyD.'<tr><th>SUBTOTAL ATIVIDADES GERAIS DE PROJETO</th><th></th><th></th><th>'.$entr['entr_horas_d_ee'].'</th><th>'.$entr['entr_horas_d_es'].'</th><th>'.$entr['entr_horas_d_ep'].'</th><th>'.$entr['entr_horas_d_ej'].'</th><th>'.$entr['entr_horas_d_tp'].'</th><th></th><th></th><th></th><th></th><th></th></tr>
+    <tr><th>HH TOTAL DE ENGENHARIA</th><th></th><th></th><th class="full-d-tot-ee">'.$full['entr_horas_d_ee'].'</th><th class="full-d-tot-es">'.$full['entr_horas_d_es'].'</th><th class="full-d-tot-ep">'.$full['entr_horas_d_ep'].'</th><th class="full-d-tot-ej">'.$full['entr_horas_d_ej'].'</th><th class="full-d-tot-tp">'.$full['entr_horas_d_tp'].'</th><th></th><th></th><th></th><th></th><th></th></tr>';
+
     $automacao = '<div style="height: 50em; overflow-y: scroll;">'.$header.''.$bodyA.'</table></div>';
     $processo = '<div style="height: 50em; overflow-y: scroll;">'.$header.''.$bodyP.'</table></div>';
     $instrumentacao = '<div style="height: 50em; overflow-y: scroll;">'.$header.''.$bodyI.'</table></div>';
+    $diagrama = '<div style="height: 50em; overflow-y: scroll;">'.$header.''.$bodyD.'</table></div>';
     $as = '<div>'. $form2->field($model, "nota_geral")->textArea() .'</div>';
     $resumo = '<div>'. $form2->field($model, "resumo_escopo")->textArea() .'</div>
                 <div>'. $form2->field($model, "resumo_exclusoes")->textArea() .'</div>
@@ -1383,6 +1428,10 @@ tbody {
       $visibleI = true;
     else
       $visibleI = false;
+    if(!empty($bodyDOld))
+      $visibleD = true;
+    else
+      $visibleD = false;
 
 
 $items = [
@@ -1401,6 +1450,11 @@ $items = [
     'label'=>'Instrumentação',
     'content'=>$instrumentacao, 
     'visible' => $visibleI       
+],
+[
+    'label'=>'Diagrama',
+    'content'=>$diagrama, 
+    'visible' => $visibleD       
 ],
 /*[
     'label'=>'AS',

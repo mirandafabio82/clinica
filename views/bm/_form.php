@@ -333,7 +333,7 @@ $this->registerJs('
     <div class="col-md-1"> 
       <?= $form->field($model, 'saldo')->textInput(['maxlength' => true]) ?>
     </div>
-	    <div class="col-md-6"> 
+	    <div class="col-md-10"> 
 	    <?= $form->field($model, 'descricao')->textarea(['rows' => 6]) ?>
 	    </div>
        <div class="col-md-1"> 
@@ -342,30 +342,34 @@ $this->registerJs('
       <div class="col-md-1"> 
       <?= $form->field($model, 'km')->textInput(['maxlength' => true]) ?>
     </div>
-      <div class="col-md-1"> 
+    </div>
+      EXECUTADO
+    <div class="row" style="border:1px solid black;padding: 2px; margin-bottom: 1em">
+      <div class="col-md-1" style="text-align: center"> 
       <?= $form->field($model, 'executado_ee')->textInput(['maxlength' => true])->widget(\yii\widgets\MaskedInput::className(), [
                         'mask' => '9.9',
                     ]) ?> 
     </div>
-    <div class="col-md-1"> 
+    <div class="col-md-1" style="text-align: center"> 
       <?= $form->field($model, 'executado_es')->textInput(['maxlength' => true])->widget(\yii\widgets\MaskedInput::className(), [
                         'mask' => '9.9',
                     ]) ?> 
     </div>
-    <div class="col-md-1"> 
+    <div class="col-md-1" style="text-align: center"> 
       <?= $form->field($model, 'executado_ep')->textInput(['maxlength' => true])->widget(\yii\widgets\MaskedInput::className(), [
                         'mask' => '9.9',
                     ]) ?> 
     </div>
-    <div class="col-md-1"> 
+    <div class="col-md-1" style="text-align: center"> 
       <?= $form->field($model, 'executado_ej')->textInput(['maxlength' => true])->widget(\yii\widgets\MaskedInput::className(), [
                         'mask' => '9.9',
                     ]) ?> 
     </div>
-    <div class="col-md-1"> 
+    <div class="col-md-1" style="text-align: center"> 
       <?= $form->field($model, 'executado_tp')->textInput(['maxlength' => true])->widget(\yii\widgets\MaskedInput::className(), [
                         'mask' => '9.9',
                     ]) ?> 
+    </div>
     </div>
 	</div>
     <?php } else{ ?>
