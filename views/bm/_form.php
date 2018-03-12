@@ -346,29 +346,19 @@ $this->registerJs('
       EXECUTADO
     <div class="row" style="border:1px solid black;padding: 2px; margin-bottom: 1em">
       <div class="col-md-1" style="text-align: center"> 
-      <?= $form->field($model, 'executado_ee')->textInput(['maxlength' => true])->widget(\yii\widgets\MaskedInput::className(), [
-                        'mask' => '9.9',
-                    ]) ?> 
+      <?= $form->field($model, 'executado_ee')->textInput(['maxlength' => true]) ?> 
     </div>
     <div class="col-md-1" style="text-align: center"> 
-      <?= $form->field($model, 'executado_es')->textInput(['maxlength' => true])->widget(\yii\widgets\MaskedInput::className(), [
-                        'mask' => '9.9',
-                    ]) ?> 
+      <?= $form->field($model, 'executado_es')->textInput(['maxlength' => true]) ?> 
     </div>
     <div class="col-md-1" style="text-align: center"> 
-      <?= $form->field($model, 'executado_ep')->textInput(['maxlength' => true])->widget(\yii\widgets\MaskedInput::className(), [
-                        'mask' => '9.9',
-                    ]) ?> 
+      <?= $form->field($model, 'executado_ep')->textInput(['maxlength' => true]) ?> 
     </div>
     <div class="col-md-1" style="text-align: center"> 
-      <?= $form->field($model, 'executado_ej')->textInput(['maxlength' => true])->widget(\yii\widgets\MaskedInput::className(), [
-                        'mask' => '9.9',
-                    ]) ?> 
+      <?= $form->field($model, 'executado_ej')->textInput(['maxlength' => true]) ?> 
     </div>
     <div class="col-md-1" style="text-align: center"> 
-      <?= $form->field($model, 'executado_tp')->textInput(['maxlength' => true])->widget(\yii\widgets\MaskedInput::className(), [
-                        'mask' => '9.9',
-                    ]) ?> 
+      <?= $form->field($model, 'executado_tp')->textInput(['maxlength' => true]) ?> 
     </div>
     </div>
 	</div>
@@ -430,29 +420,19 @@ $this->registerJs('
      EXECUTADO
     <div class="row" style="border:1px solid black;padding: 2px; margin-bottom: 1em">
       <div class="col-md-1" style="text-align: center"> 
-      <?= $form->field($model, 'executado_ee')->textInput(['maxlength' => true])->widget(\yii\widgets\MaskedInput::className(), [
-                        'mask' => '9.9',
-                    ]) ?> 
+      <?= $form->field($model, 'executado_ee')->textInput(['maxlength' => true]) ?> 
     </div>
     <div class="col-md-1" style="text-align: center"> 
-      <?= $form->field($model, 'executado_es')->textInput(['maxlength' => true])->widget(\yii\widgets\MaskedInput::className(), [
-                        'mask' => '9.9',
-                    ]) ?> 
+      <?= $form->field($model, 'executado_es')->textInput(['maxlength' => true]) ?> 
     </div>
     <div class="col-md-1" style="text-align: center"> 
-      <?= $form->field($model, 'executado_ep')->textInput(['maxlength' => true])->widget(\yii\widgets\MaskedInput::className(), [
-                        'mask' => '9.9',
-                    ]) ?> 
+      <?= $form->field($model, 'executado_ep')->textInput(['maxlength' => true]) ?> 
     </div>
     <div class="col-md-1" style="text-align: center"> 
-      <?= $form->field($model, 'executado_ej')->textInput(['maxlength' => true])->widget(\yii\widgets\MaskedInput::className(), [
-                        'mask' => '9.9',
-                    ]) ?> 
+      <?= $form->field($model, 'executado_ej')->textInput(['maxlength' => true]) ?> 
     </div>
     <div class="col-md-1" style="text-align: center"> 
-      <?= $form->field($model, 'executado_tp')->textInput(['maxlength' => true])->widget(\yii\widgets\MaskedInput::className(), [
-                        'mask' => '9.9',
-                    ]) ?> 
+      <?= $form->field($model, 'executado_tp')->textInput(['maxlength' => true]) ?> 
     </div>
     </div>
 	</div>
