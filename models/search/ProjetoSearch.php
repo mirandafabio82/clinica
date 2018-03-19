@@ -19,7 +19,7 @@ class ProjetoSearch extends Projeto
     {
         return [
             [['id', 'cliente_id', 'contato_id', 'documentos', 'rev_proposta', 'qtd_hh', 'qtd_dias', 'qtd_km'], 'integer'],
-            [['descricao', 'codigo', 'site', 'planta', 'municipio', 'uf', 'cnpj', 'tratamento', 'contato', 'setor', 'fone_contato', 'celular', 'email', 'proposta', 'data_proposta', 'status', 'pendencia', 'comentarios', 'data_entrega', 'cliente_fatura', 'site_fatura', 'municipio_fatura', 'uf_fatura', 'cnpj_fatura', 'criado', 'modificado'], 'safe'],
+            [['descricao', 'codigo', 'site', 'planta', 'municipio', 'uf', 'cnpj', 'tratamento', 'contato', 'setor', 'fone_contato', 'celular', 'email', 'proposta', 'data_proposta', /*'status',*/ 'pendencia', 'comentarios', 'data_entrega', 'cliente_fatura', 'site_fatura', 'municipio_fatura', 'uf_fatura', 'cnpj_fatura', 'criado', 'modificado', 'nome'], 'safe'],
             [['vl_hh', 'total_horas', 'vl_km', 'total_km', 'valor_proposta', 'valor_consumido', 'valor_saldo'], 'number'],
         ];
     }
@@ -49,7 +49,7 @@ class ProjetoSearch extends Projeto
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
-                'pageSize' => 5,
+                'pageSize' => 10,
             ],
         ]);
 
@@ -64,7 +64,7 @@ class ProjetoSearch extends Projeto
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'cliente_id' => $this->cliente_id,
+            'cliente_id' => $this->cliente_id,            
             'contato_id' => $this->contato_id,
             'documentos' => $this->documentos,
             'rev_proposta' => $this->rev_proposta,
@@ -85,6 +85,7 @@ class ProjetoSearch extends Projeto
         ]);
 
         $query->andFilterWhere(['like', 'descricao', $this->descricao])
+            ->andFilterWhere(['like', 'nome', $this->nome])
             ->andFilterWhere(['like', 'codigo', $this->codigo])
             ->andFilterWhere(['like', 'site', $this->site])
             ->andFilterWhere(['like', 'planta', $this->planta])

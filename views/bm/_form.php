@@ -97,7 +97,7 @@ $this->registerJs('
               'attribute' => 'projeto',              
               'format' => 'raw',
                'value' => function ($data) {
-
+                  if(isset($data->projeto_id))
                    return Yii::$app->db->createCommand('SELECT nome FROM projeto WHERE id='.$data->projeto_id)->queryScalar();
                },
             ],

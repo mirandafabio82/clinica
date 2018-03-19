@@ -73,13 +73,13 @@ $this->registerJs('
     }
   });
 
-  $("#Diagrama_checkbox").change(function(ev){
+  /*$("#Diagrama_checkbox").change(function(ev){
     if($(this).prop("checked")){
       $("#disciplina_Diagrama_div").removeAttr("hidden");
     }else{
       $("#disciplina_Diagrama_div").attr("hidden", "hidden");
     }
-  });
+  });*/
 
 
   $("#projeto-cliente_id").change(function(ev){
@@ -154,10 +154,16 @@ $(".ld-create").click(function(ev){
       
   });
 
+  count_prio = 0;
   $(".nao-prioritarios").click(function(ev){              
-     
+    if(count_prio==0){
       $("#nao-prioritarios_div").removeAttr("hidden");    
-      
+      count_prio=1;
+    }
+    else{
+      $("#nao-prioritarios_div").attr("hidden", "hidden");
+      count_prio=0;
+    }
   });
   
 
@@ -601,15 +607,12 @@ tbody {
             [
               'class' => 'yii\grid\ActionColumn',
               'template' => '{delete}',    
-              'contentOptions' => ['style' => 'width:5em;  min-width:5em;'],
-            ],
-            [
-            'attribute' => 'nome', 
-            'contentOptions' => ['style' => 'width:8em;  min-width:8em;'],
+              'contentOptions' => ['style' => 'width:2em;  min-width:2em;'],
             ],
             [
               'attribute' => 'status', 
               'format' => 'raw',
+              'contentOptions' => ['style' => 'width:8em;  min-width:8em;'],
               'value' => function ($data) {
 
                 $status = Yii::$app->db->createCommand('SELECT status, cor FROM projeto_status WHERE id='.$data->status)->queryOne();
@@ -618,6 +621,11 @@ tbody {
 
               }, 
             ],
+            [
+            'attribute' => 'nome', 
+            'contentOptions' => ['style' => 'width:16em;  min-width:16em;'],
+            ],
+            'descricao'
             /*[
               'attribute' => 'status',      
               'class' => 'kartik\grid\EditableColumn',        
@@ -636,7 +644,7 @@ tbody {
               'data' => $listStatus                
               ]
             ],*/
-            [
+            /*[
             'attribute' => 'cliente_id',   
             'format' => 'raw',
             'contentOptions' => ['style' => 'width:10em;'],
@@ -669,12 +677,12 @@ tbody {
             [
             'attribute' => 'uf',  
             'contentOptions' => ['style' => 'width:1em;  min-width:1em;'],
-            ],
+            ],*/
             
             // 'tratamento',
             // 'contato',
             // 'setor',
-            [
+            /*[
             'attribute' => 'fone_contato',
             'format' => 'raw',
             'contentOptions' => ['style' => 'width:8em;  min-width:8em;'],
@@ -684,7 +692,7 @@ tbody {
             'format' => 'raw',
             'contentOptions' => ['style' => 'width:8em;  min-width:8em;'],
             ],
-            'email:email',
+            'email:email',*/
            
             ],
             ]); ?>
@@ -726,7 +734,7 @@ tbody {
       <a style="margin-left: 1em" id="add-executante"> <i class="fa fa-plus-square-o fa-2x"></i></a>
       <div class="row drop-exec" style="margin-bottom: 1em;margin-left: 1em">
       <?php if($model->isNewRecord){ ?>
-        <div class="col-md-2" id="exec_div-0">       
+        <div class="col-md-3" id="exec_div-0">       
           <?= $form->field($model, 'executante_id')->dropDownList($listData, ['prompt'=>'Selecione um executante', 'name'=>'ProjetoExecutante[0]']); ?>
           <a class="remove-exec" id="remove-executante[0]"> <i class="fa fa-ban" id="remove-executante[0]"></i></a>
         </div>
@@ -766,7 +774,11 @@ tbody {
           <?php 
 
         foreach ($listDisciplina as $key => $disciplina) { 
-          
+          if($disciplina=="Diagrama"){
+            continue;
+          }
+
+
           $existeDisciplina = '';
           if(!$model->isNewRecord)
             $existeDisciplina = Yii::$app->db->createCommand('SELECT escopopadrao_id FROM atividademodelo JOIN escopo ON escopo.atividademodelo_id=atividademodelo.id WHERE escopopadrao_id='.$key.' AND projeto_id='.$model->id)->queryScalar();
@@ -864,7 +876,7 @@ tbody {
     </div>
 
     <div class="row">
-     <div class="col-md-2">
+     <div class="col-md-3">
       <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
     </div>
     <div class="col-md-1" >
@@ -966,9 +978,9 @@ tbody {
         <div class="col-md-2">
           <?= $form->field($model, 'contrato')->textInput(['maxlength' => true]) ?>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-1">
         <?php if($model->isNewRecord){ ?>
-          <?= $form->field($model, 'perc_coord_adm')->textInput(['maxlength' => true, 'value'=>10]) ?>
+          <?= $form->field($model, 'perc_coord_adm')->textInput(['maxlength' => true, 'value'=>15, 'style'=>'width:3em']) ?>
           <?php } else{ ?>
           <?= $form->field($model, 'perc_coord_adm')->textInput(['maxlength' => true]) ?>
           <?php } ?>
@@ -1018,19 +1030,23 @@ tbody {
       ?>
 
       <div ><p><a class="btn btn-success nao-prioritarios">Não Prioritários</a></p></div>
+      <?= Html::submitButton($model->isNewRecord ? 'Add Escopo' : 'Add Escopo', ['class' => $model->isNewRecord ? 'btn btn-primary' : 'btn btn-primary']) ?>
       <div id="nao-prioritarios_div" style="margin-bottom: 1em" hidden> 
         <?php foreach ($nao_prioritarios as $key => $np) { ?> 
           <?php 
           if(!$model->isNewRecord){
           $npExists = Yii::$app->db->createCommand('SELECT id FROM escopo WHERE atividademodelo_id='.$np['id'].' AND projeto_id='.$model->id)->queryScalar();
           if(!empty($npExists)){ ?>       
+          <div class="col-md-6" >
               <input type="checkbox" name="np[<?= $key ?>]" value="<?= $np['id']?>" checked> <?= $np['nome'] ?>
+          </div>
          <?php } else{ ?>
+         <div class="col-md-6" >
               <input type="checkbox" name="np[<?= $key ?>]" value="<?= $np['id']?>"> <?= $np['nome'] ?>
+        </div>
          <?php } } } ?>
       </div>
-
-      <?= Html::submitButton($model->isNewRecord ? 'Add Escopo' : 'Add Escopo', ['class' => $model->isNewRecord ? 'btn btn-primary' : 'btn btn-primary']) ?>
+      
 
       </div>
       </div>
@@ -1372,7 +1388,7 @@ tbody {
     $automacao = '<div style="height: 50em; overflow-y: scroll;">'.$header.''.$bodyA.'</table></div>';
     $processo = '<div style="height: 50em; overflow-y: scroll;">'.$header.''.$bodyP.'</table></div>';
     $instrumentacao = '<div style="height: 50em; overflow-y: scroll;">'.$header.''.$bodyI.'</table></div>';
-    $diagrama = '<div style="height: 50em; overflow-y: scroll;">'.$header.''.$bodyD.'</table></div>';
+    // $diagrama = '<div style="height: 50em; overflow-y: scroll;">'.$header.''.$bodyD.'</table></div>';
     $as = '<div>'. $form2->field($model, "nota_geral")->textArea() .'</div>';
     $resumo = '<div>'. $form2->field($model, "resumo_escopo")->textArea() .'</div>
                 <div>'. $form2->field($model, "resumo_exclusoes")->textArea() .'</div>
@@ -1451,11 +1467,11 @@ $items = [
     'content'=>$instrumentacao, 
     'visible' => $visibleI       
 ],
-[
+/*[
     'label'=>'Diagrama',
     'content'=>$diagrama, 
     'visible' => $visibleD       
-],
+],*/
 /*[
     'label'=>'AS',
     'content'=>$as,        

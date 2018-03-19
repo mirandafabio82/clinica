@@ -9,6 +9,7 @@ use Yii;
  *
  * @property integer $id
  * @property integer $cliente_id
+ * @property integer $nome
  * @property integer $contato_id
  * @property integer $escopo_id
  * @property string $descricao
@@ -157,7 +158,8 @@ class Projeto extends \yii\db\ActiveRecord
             'resumo_prazo' =>'8. PRAZO',
             'resumo_observacoes' =>'OBSERVAÇÕES',
             'desc_resumida' => 'Descrição Resumida dos Serviços',
-            'executante_id' => ''
+            'executante_id' => '',
+            'perc_coord_adm' => 'Percentual Coord Admin'
         ];
     }
 

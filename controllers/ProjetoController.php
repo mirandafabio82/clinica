@@ -505,8 +505,10 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
             }            
                     
             $valorProposta = $valorProposta + $model->vl_km;
+
             
-           Yii::$app->db->createCommand('UPDATE projeto SET total_horas='.$totalHoras.', valor_proposta='.$valorProposta.' WHERE id='.$model->id)->execute();
+           
+
            $model->total_horas = $totalHoras;
             
             foreach ($_POST['Escopo'] as $key => $esc) {
@@ -557,6 +559,8 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                 $model->resumo_prazo = $_POST['Projeto']['resumo_prazo'];
                 $model->resumo_observacoes = $_POST['Projeto']['resumo_observacoes'];
                 $model->save();
+
+                Yii::$app->db->createCommand('UPDATE projeto SET total_horas='.$totalHoras.', valor_proposta='.$valorProposta.' WHERE id='.$model->id)->execute();
             }
            
         }
@@ -878,7 +882,7 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
             $processoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=2 AND projeto_id='.$projeto->id)->queryAll();
             $automacaoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=1 AND projeto_id='.$projeto->id)->queryAll();
             $instrumentacaoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=3 AND projeto_id='.$projeto->id)->queryAll();
-            $diagramaArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=4 AND projeto_id='.$projeto->id)->queryAll();
+            // $diagramaArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=4 AND projeto_id='.$projeto->id)->queryAll();
 
             $escopos = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$projeto->id)->queryAll();
 
@@ -911,7 +915,7 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                 'processo' => $processoArray,
                 'automacao' => $automacaoArray,
                 'instrumentacao' => $instrumentacaoArray,
-                'diagrama' => $diagramaArray,
+                // 'diagrama' => $diagramaArray,
                 'basico' => $basico,
                 'detalhamento' => $detalhamento,
                 'config' => $config]);
@@ -934,11 +938,11 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                 'index' => $arrayIndex[$index]]);
             if(!empty($instrumentacaoArray)) $index++;
 
-            $diagrama = $this->renderPartial('relatorio/_diagrama', [
+           /* $diagrama = $this->renderPartial('relatorio/_diagrama', [
                 'projeto' => $projeto,
                 'escopos' => $diagramaArray,
                 'index' => $arrayIndex[$index]]);
-            if(!empty($diagramaArray)) $index++;
+            if(!empty($diagramaArray)) $index++;*/
 
             $resumo = $this->renderPartial('relatorio/_resumo', [
                 'projeto' => $projeto,
@@ -971,10 +975,10 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                 $mpdf->AddPage();
                 $mpdf->WriteHTML($instrumentacao);
             }
-            if(!empty($diagramaArray)){
+            /*if(!empty($diagramaArray)){
                 $mpdf->AddPage();
                 $mpdf->WriteHTML($diagrama);
-            }
+            }*/
             $mpdf->AddPage();
             $mpdf->WriteHTML($resumo);
             $mpdf->AddPage();
