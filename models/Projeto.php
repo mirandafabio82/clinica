@@ -196,5 +196,13 @@ class Projeto extends \yii\db\ActiveRecord
         return $this->hasOne(Contato::className(), ['usuario_id' => 'contato_id']);
     }
 
+     /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProjeto_executante()
+    {
+        return $this->hasOne(ProjetoExecutante::className(), ['projeto_id' => 'id']);
+    }
+
     
 }

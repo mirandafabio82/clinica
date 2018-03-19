@@ -129,6 +129,13 @@ $this->registerJs("
                         return $data->tipo;
                 }
             ], 
+            [
+                'attribute' => 'is_global',
+                'format' => 'raw',
+                'value' => function($data){
+                    return $data->is_global==1 ? 'Sim' : 'Não';
+                },
+            ],
             // 'criado',
             // 'modificado',
 
@@ -161,6 +168,11 @@ $this->registerJs("
 
     <?= $form->field($model, 'tipo')->textInput(['maxlength' => true]) ?>
      </div>
+     <?php if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])){ ?>
+         <div class="col-md-2">
+            <?= $form->field($model, 'is_global')->checkbox(['maxlength' => true]) ?>
+         </div>
+    <?php } ?>
     </div>
    
     

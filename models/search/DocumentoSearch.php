@@ -13,6 +13,7 @@ use app\models\Documento;
 class DocumentoSearch extends Documento
 {
     public $projeto;
+    public $projeto_executante;
     /**
      * @inheritdoc
      */
@@ -20,7 +21,7 @@ class DocumentoSearch extends Documento
     {
         return [
             [['id', 'projeto_id', 'revisao'], 'integer'],
-            [['nome', 'data', 'tipo', 'criado', 'modificado', 'projeto'], 'safe'],
+            [['nome', 'data', 'tipo', 'criado', 'modificado', 'projeto', 'projeto_executante'], 'safe'],
         ];
     }
 
@@ -42,8 +43,17 @@ class DocumentoSearch extends Documento
      */
     public function search($params)
     {
+        
         $query = Documento::find();
         $query->joinWith(['projeto']);
+
+        if(!isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])){      
+            $query->join('LEFT JOIN','projeto_executante', 'projeto.id =projeto_executante.projeto_id');              
+            $query->where(['is_global' => 1, 'projeto_executante.executante_id' => Yii::$app->user->getId()]);
+        }
+
+
+        
         // add conditions that should always apply here
         $dataProvider->sort->attributes['projeto'] = [
             // The tables are the ones our relation are configured to

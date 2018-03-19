@@ -583,6 +583,11 @@ tbody {
 }
 */
 
+<?php 
+$visible = 'hidden = "hidden"';
+if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])){ 
+  $visible = '';
+ } ?>
 
 </style>
 <div class="box box-primary">
@@ -911,14 +916,14 @@ tbody {
       <div class="col-md-1">
         <?= $form->field($model, 'qtd_km')->textInput(['style'=>'width:6em']) ?>
       </div>
-      <div class="col-md-1">
+      <div class="col-md-1" <?=$visible?>>
         <?= $form->field($model, 'vl_km')->textInput(['maxlength' => true, 'style'=>'width:6em']) ?>
       </div>
       </div>
       </div>
       <div class="row">
       
-      <div class="col-md-2">
+      <div class="col-md-2" <?=$visible?>>
         <?= $form->field($model, 'valor_proposta')->textInput(['maxlength' => true,'style'=>'width:1em'])->widget(MaskMoney::classname(), [
           'pluginOptions' => [
               'prefix' => 'R$ ',
@@ -931,7 +936,7 @@ tbody {
       ]); ?>
 
       </div>
-      <div class="col-md-2">
+      <div class="col-md-2" <?=$visible?>>
         <?= $form->field($model, 'valor_consumido')->textInput(['maxlength' => true,'style'=>'width:6em'])->widget(MaskMoney::classname(), [
           'pluginOptions' => [
               'prefix' => 'R$ ',
@@ -944,7 +949,7 @@ tbody {
       ]); ?>
 
       </div>
-      <div class="col-md-2">
+      <div class="col-md-2" <?=$visible?>>
         <?= $form->field($model, 'valor_saldo')->textInput(['maxlength' => true,'style'=>'width:6em'])->widget(MaskMoney::classname(), [
           'pluginOptions' => [
               'prefix' => 'R$ ',
@@ -978,7 +983,7 @@ tbody {
         <div class="col-md-2">
           <?= $form->field($model, 'contrato')->textInput(['maxlength' => true]) ?>
         </div>
-        <div class="col-md-1">
+        <div class="col-md-1" <?=$visible?>>
         <?php if($model->isNewRecord){ ?>
           <?= $form->field($model, 'perc_coord_adm')->textInput(['maxlength' => true, 'value'=>15, 'style'=>'width:3em']) ?>
           <?php } else{ ?>
@@ -1062,7 +1067,9 @@ tbody {
        <?php $form2 = ActiveForm::begin(); ?>
        <?= Html::submitButton('Salvar Escopo', ['class' =>'btn btn-primary saveEscopo']) ?>
 
+       <?php if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])){ ?>
       <?= Html::a('<span class="btn-label">Visualizar AS</span>', ['gerarrelatorio', 'id' => $model->id], ['class' => 'btn btn-primary', 'target'=>'_blank', 'style'=> 'float:right']) ?>
+      <?php } ?>
 
       
   

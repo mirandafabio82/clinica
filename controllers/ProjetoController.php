@@ -996,6 +996,7 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                 $doc->nome = $projeto['proposta'].'.pdf';
                 $doc->revisao = 0;
                 $doc->path = $projeto['proposta'].'.pdf';
+                $doc->is_global = 0;
                 $doc->save();
             }
         }

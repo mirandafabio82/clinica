@@ -255,6 +255,7 @@ class BmController extends Controller
                 $doc->nome = 'BM-'.$projeto->proposta.'_'.$bm['numero_bm'].'.pdf';
                 $doc->revisao = 0;
                 $doc->path = 'BM-'.$projeto->proposta.'_'.$bm['numero_bm'].'.pdf';
+                $doc->is_global = 0;
                 $doc->save();
             }
 

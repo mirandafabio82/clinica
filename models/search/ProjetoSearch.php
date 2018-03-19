@@ -12,6 +12,7 @@ use app\models\Projeto;
  */
 class ProjetoSearch extends Projeto
 {
+    public $projeto_executante;
     /**
      * @inheritdoc
      */
@@ -19,7 +20,7 @@ class ProjetoSearch extends Projeto
     {
         return [
             [['id', 'cliente_id', 'contato_id', 'documentos', 'rev_proposta', 'qtd_hh', 'qtd_dias', 'qtd_km'], 'integer'],
-            [['descricao', 'codigo', 'site', 'planta', 'municipio', 'uf', 'cnpj', 'tratamento', 'contato', 'setor', 'fone_contato', 'celular', 'email', 'proposta', 'data_proposta', /*'status',*/ 'pendencia', 'comentarios', 'data_entrega', 'cliente_fatura', 'site_fatura', 'municipio_fatura', 'uf_fatura', 'cnpj_fatura', 'criado', 'modificado', 'nome'], 'safe'],
+            [['descricao', 'codigo', 'site', 'planta', 'municipio', 'uf', 'cnpj', 'tratamento', 'contato', 'setor', 'fone_contato', 'celular', 'email', 'proposta', 'data_proposta', /*'status',*/ 'pendencia', 'comentarios', 'data_entrega', 'cliente_fatura', 'site_fatura', 'municipio_fatura', 'uf_fatura', 'cnpj_fatura', 'criado', 'modificado', 'nome', 'projeto_executante'], 'safe'],
             [['vl_hh', 'total_horas', 'vl_km', 'total_km', 'valor_proposta', 'valor_consumido', 'valor_saldo'], 'number'],
         ];
     }
@@ -43,6 +44,10 @@ class ProjetoSearch extends Projeto
     public function search($params)
     {
         $query = Projeto::find();
+        if(!isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])){      
+            $query->joinWith('projeto_executante');              
+            $query->where(['projeto_executante.executante_id' => Yii::$app->user->getId()]);
+        }
 
         // add conditions that should always apply here
 

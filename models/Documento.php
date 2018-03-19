@@ -37,7 +37,7 @@ class Documento extends \yii\db\ActiveRecord
     {
         return [
             // [['projeto_id'], 'required'],
-            [['projeto_id', 'revisao'], 'integer'],
+            [['projeto_id', 'revisao', 'is_global'], 'integer'],
             [['data', 'criado', 'modificado'], 'safe'],
             [['nome', 'tipo'], 'string', 'max' => 255],
             [['projeto_id'], 'exist', 'skipOnError' => true, 'targetClass' => Projeto::className(), 'targetAttribute' => ['projeto_id' => 'id']],
@@ -59,6 +59,7 @@ class Documento extends \yii\db\ActiveRecord
             'criado' => 'Criado',
             'modificado' => 'Modificado',
             'path' => 'Arquivo',
+            'is_global' => 'Visível para executantes'
         ];
     }
 
@@ -68,5 +69,12 @@ class Documento extends \yii\db\ActiveRecord
     public function getProjeto()
     {
         return $this->hasOne(Projeto::className(), ['id' => 'projeto_id']);
+    }
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProjeto_executante()
+    {
+        return $this->hasOne(ProjetoExecutante::className(), ['projeto_id' => 'projeto.id']);
     }
 }
