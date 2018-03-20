@@ -196,4 +196,14 @@ class AtividadeController extends Controller
         
     }
 
+    public function actionAttobs(){
+        if (Yii::$app->request->isAjax) {                 
+           
+           Yii::$app->db->createCommand('UPDATE projeto SET obs_atividade ="'.Yii::$app->request->post()['value'].'" WHERE id='.Yii::$app->request->post()['id'])->execute(); 
+
+            echo 'success';
+        }
+        
+    }
+
 }

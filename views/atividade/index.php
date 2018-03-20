@@ -12,6 +12,26 @@ use app\models\Escopo;
 
 $this->registerJs('
 
+    $(".obs_atividade").focusout(function(){
+       id = this.id.split("[")[1];
+       id = id.split("]")[0];
+
+       valor = this.value;
+
+       $.ajax({ 
+              url: "index.php?r=atividade/attobs",
+              data: {id: id, value: valor},
+              type: "POST",
+              success: function(response){
+               console.log(response);
+               
+             },
+             error: function(){
+              console.log("failure");
+            }
+          });       
+    });
+
       $(".save").click(function(){
         
         $( ".executado" ).each(function( index ) {

@@ -77,7 +77,7 @@ class Projeto extends \yii\db\ActiveRecord
             [['id', 'cliente_id', 'contato_id', 'rev_proposta', 'qtd_hh', 'qtd_dias', 'qtd_km', 'status', 'documentos' ,'executante_id', 'perc_coord_adm'], 'integer'],
             [['data_proposta', 'data_entrega', 'criado', 'modificado'], 'safe'],
             [['vl_hh', 'total_horas', 'vl_km', 'total_km', 'valor_proposta', 'valor_consumido', 'valor_saldo'], 'number'],
-            [['descricao'], 'string', 'max' => 500],
+            [['descricao', 'obs_atividade'], 'string'],
             [['codigo', 'contato', 'cliente_fatura'], 'string', 'max' => 12],
             [['site', 'planta', 'site_fatura'], 'string', 'max' => 10],
             [['municipio', 'setor', 'municipio_fatura'], 'string', 'max' => 20],

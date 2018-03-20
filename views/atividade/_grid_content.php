@@ -102,6 +102,10 @@ $this->registerJs("
 <?php Pjax::begin() ?>
 <div id="pjax-status">
 
+<?php $form = ActiveForm::begin(); ?>
+
+<?= $form->field($model, 'obs_atividade')->textArea(['maxlength' => true, 'class' =>'form-control obs_atividade', 'id'=>'Projeto['.$model->id.']'])->label(false) ?>
+
 <table style="width:100%; margin-bottom: 1em" id="tabela-escopo">
     <col width="600">
     <thead>
@@ -114,7 +118,6 @@ $this->registerJs("
           <th style="width:30em;">Status</th>
         </tr>
       </thead>
-      <?php $form = ActiveForm::begin(); ?>
       <?php foreach ($escopos as $key => $escopo) { 
             $cor = Yii::$app->db->createCommand('SELECT cor FROM escopo_status WHERE id='.$escopo['status'])->queryScalar();
             $escopoModel = Escopo::findIdentity($escopo['id']);
@@ -154,8 +157,8 @@ $this->registerJs("
       
       <?php } } ?>
 
-      <?php ActiveForm::end(); ?>
 </table>
+      <?php ActiveForm::end(); ?>
 </div>
 </div>
 </div>
