@@ -44,6 +44,7 @@ class ProjetoSearch extends Projeto
     public function search($params)
     {
         $query = Projeto::find();
+        
         if(!isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])){      
             $query->joinWith('projeto_executante');              
             $query->where(['projeto_executante.executante_id' => Yii::$app->user->getId()]);
@@ -56,6 +57,10 @@ class ProjetoSearch extends Projeto
             'pagination' => [
                 'pageSize' => 10,
             ],
+            'sort' => [
+            'defaultOrder' => [
+                'id' => SORT_DESC,
+            ]]
         ]);
 
         $this->load($params);
