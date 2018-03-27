@@ -569,6 +569,10 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                     $model->resumo_observacoes = $_POST['Projeto']['resumo_observacoes'];
                 $model->save();
 
+
+                //coloca o status do projeto como Emitir AS
+                Yii::$app->db->createCommand('UPDATE projeto SET status=6 WHERE id='.$model->id)->execute();
+
                 Yii::$app->db->createCommand('UPDATE projeto SET total_horas='.$totalHoras.', valor_proposta='.$valorProposta.' WHERE id='.$model->id)->execute();
             }
            

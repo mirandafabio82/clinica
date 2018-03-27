@@ -162,7 +162,7 @@ $usuario = Yii::$app->db->createCommand('SELECT * FROM user WHERE id='.Yii::$app
         <li><a href="<?= Url::to(['contato/create']) ?>"><i class="fa fa-address-book"></i> <span>Contatos</span></a></li>
         <?php } ?>
         <?php if(!isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['contato'])){ ?>
-        <li><a href="<?= Url::to(['agenda/create']) ?>"><i class="fa fa-calendar"></i> <span>Agenda</span></a></li>
+        <li><a href="<?= Url::to(['tarefa/create']) ?>"><i class="fa fa-calendar"></i> <span>Agenda</span></a></li>
         <?php } ?>
         <?php if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])){ ?>
         <li><a href="<?= Url::to(['executante/create']) ?>"><i class="fa fa-wrench"></i> <span>Executantes</span></a></li>

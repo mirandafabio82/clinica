@@ -122,8 +122,9 @@ $this->registerJs('
                 'headerOptions' => ['style' => 'color:#337ab7;width:15em'],
                 'value'=>function($data){    
                 if(isset($data->projeto_id))                  
-                        $projeto = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN projeto ON escopo.projeto_id = projeto.id WHERE projeto.id='.$data->projeto_id)->queryOne();                                  
-                        return 'BM-'.$projeto['codigo'].'-'.$projeto['site'].'-'.preg_replace('/[^0-9]/', '', $projeto['nome']).'_'.$projeto['rev_proposta'];
+                        $projeto = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN projeto ON escopo.projeto_id = projeto.id WHERE projeto.id='.$data->projeto_id)->queryOne();      
+                        if(!empty($projeto))                            
+                              return 'BM-'.$projeto['codigo'].'-'.$projeto['site'].'-'.preg_replace('/[^0-9]/', '', $projeto['nome']).'_'.$projeto['rev_proposta'];
                 }
             ],       
             [
