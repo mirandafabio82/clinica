@@ -1067,10 +1067,8 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
        <?php $form2 = ActiveForm::begin(); ?>
        <?= Html::submitButton('Salvar Escopo', ['class' =>'btn btn-primary saveEscopo']) ?>
 
-       <?php if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])){ ?>
       <?= Html::a('<span class="btn-label">Visualizar AS</span>', ['gerarrelatorio', 'id' => $model->id], ['class' => 'btn btn-primary', 'target'=>'_blank', 'style'=> 'float:right']) ?>
-      <?php } ?>
-
+     
       
   
      </div>

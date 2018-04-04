@@ -15,9 +15,14 @@ th, td {
 <div style="margin-top:5em;font-size: 30pt;font-family: arial" line-height= "2em" align="center">Autorização de Serviço </div>
 <div style="margin-top:2em;font-size: 15pt;font-family: arial" align="center">Nº HCN <?=$projeto->proposta?> </div>
 <div style="margin-top:2em;font-size: 15pt;font-family: arial" align="center"><?=$projeto->nome?> </div>
-<div style="margin-top:1.5em;font-size: 20pt;margin-bottom:12em;font-family: arial" align="center"><?=$projeto->descricao?> </div>
+<div style="margin-top:1.5em;font-size: 20pt;font-family: arial" align="center"><?=$projeto->descricao?> </div>
 
-<table border="1" align="center">
+<?php if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['executante'])){ ?>
+      <div style="margin-top:2em;font-size: 12pt;font-family: arial;" align="center" >
+            EXECUTANTE: <?=Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.Yii::$app->user->getId())->queryScalar() ?> </div>
+<?php } ?>
+
+<table border="1" align="center" style="margin-top:15em;">
 <tbody>
       <tr>
             <td width="64" align="center">REV.</td>

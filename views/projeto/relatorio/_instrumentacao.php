@@ -44,50 +44,107 @@ th, td {
         </tr>
         </thead>
         <?php 
-        $item1 = '1.'; 
-        $count = 0; $total_horas_ee=0;$total_horas_es=0;$total_horas_ep=0;$total_horas_ej=0;$total_horas_tp=0;$total=0;
-        foreach ($escopos as $key => $escopo) { 
-        	if(!$escopo['isEntregavel']){?>
-        <?php
-        	if($escopo['horas_ee']|| $escopo['horas_es']|| $escopo['horas_ep']|| $escopo['horas_ej']|| $escopo['horas_tp']){
-        		$count++;
-        		$item = $item1.$count; 
-        	}
-        	else{
-        		$item ='';
-        	}
+        if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])){
+	        $item1 = '1.'; 
+	        $count = 0; $total_horas_ee=0;$total_horas_es=0;$total_horas_ep=0;$total_horas_ej=0;$total_horas_tp=0;$total=0;
+	        foreach ($escopos as $key => $escopo) { 
+	        	if(!$escopo['isEntregavel']){?>
+	        <?php
+	        	if($escopo['horas_ee']|| $escopo['horas_es']|| $escopo['horas_ep']|| $escopo['horas_ej']|| $escopo['horas_tp']){
+	        		$count++;
+	        		$item = $item1.$count; 
+	        	}
+	        	else{
+	        		$item ='';
+	        	}
 
-        	$total_horas_ee += $escopo['horas_ee'];
-        	$total_horas_es += $escopo['horas_es'];
-        	$total_horas_ep += $escopo['horas_ep'];
-        	$total_horas_ej += $escopo['horas_ej'];
-        	$total_horas_tp += $escopo['horas_tp']; 
-        	$tot = $escopo["horas_tp"]+$escopo["horas_ej"]+$escopo["horas_ep"]+$escopo["horas_es"]+$escopo["horas_ee"];
-        	$total += $escopo["horas_tp"]+$escopo["horas_ej"]+$escopo["horas_ep"]+$escopo["horas_es"]+$escopo["horas_ee"];
+	        	$total_horas_ee += $escopo['horas_ee'];
+	        	$total_horas_es += $escopo['horas_es'];
+	        	$total_horas_ep += $escopo['horas_ep'];
+	        	$total_horas_ej += $escopo['horas_ej'];
+	        	$total_horas_tp += $escopo['horas_tp']; 
+	        	$tot = $escopo["horas_tp"]+$escopo["horas_ej"]+$escopo["horas_ep"]+$escopo["horas_es"]+$escopo["horas_ee"];
+	        	$total += $escopo["horas_tp"]+$escopo["horas_ej"]+$escopo["horas_ep"]+$escopo["horas_es"]+$escopo["horas_ee"];
 
-        	if($tot==0)
-        		$tot='';
-         ?>
-		<tr>
-			<td style="font-size: 8pt" align="center"><?= $item ?></td>
-			<td style="font-size: 8pt" ><?= $escopo['descricao']?></td>
-			<td style="font-size: 8pt;background-color: #d3d3d3;" align="center"></td>
-			<td style="font-size: 8pt;background-color: #d3d3d3;" align="center"></td>
-			<td style="font-size: 8pt" align="center"><?= $escopo['horas_ee']?></td>
-			<td style="font-size: 8pt" align="center"><?= $escopo['horas_es']?></td>
-			<td style="font-size: 8pt" align="center"><?= $escopo['horas_ep']?></td>
-			<td style="font-size: 8pt" align="center"><?= $escopo['horas_ej']?></td>
-			<td style="font-size: 8pt" align="center"><?= $escopo['horas_tp']?></td>
-			<td style="font-size: 8pt" align="center"><?=$tot?></td>
-		</tr>
-		<?php }} ?>
-		<?php 
-			if($total_horas_ee==0) $total_horas_ee='';
-			if($total_horas_es==0) $total_horas_es='';
-			if($total_horas_ep==0) $total_horas_ep='';
-			if($total_horas_ej==0) $total_horas_ej='';
-			if($total_horas_tp==0) $total_horas_tp='';
-			if($total==0) $total='';
+	        	if($tot==0)
+	        		$tot='';
+	         ?>
+			<tr>
+				<td style="font-size: 8pt" align="center"><?= $item ?></td>
+				<td style="font-size: 8pt" ><?= $escopo['descricao']?></td>
+				<td style="font-size: 8pt;background-color: #d3d3d3;" align="center"></td>
+				<td style="font-size: 8pt;background-color: #d3d3d3;" align="center"></td>
+				<td style="font-size: 8pt" align="center"><?= $escopo['horas_ee']?></td>
+				<td style="font-size: 8pt" align="center"><?= $escopo['horas_es']?></td>
+				<td style="font-size: 8pt" align="center"><?= $escopo['horas_ep']?></td>
+				<td style="font-size: 8pt" align="center"><?= $escopo['horas_ej']?></td>
+				<td style="font-size: 8pt" align="center"><?= $escopo['horas_tp']?></td>
+				<td style="font-size: 8pt" align="center"><?=$tot?></td>
+			</tr>
+			<?php }} ?>
+			<?php 
+				if($total_horas_ee==0) $total_horas_ee='';
+				if($total_horas_es==0) $total_horas_es='';
+				if($total_horas_ep==0) $total_horas_ep='';
+				if($total_horas_ej==0) $total_horas_ej='';
+				if($total_horas_tp==0) $total_horas_tp='';
+				if($total==0) $total='';
+			}//diferencia admin de executante
+
+
+			else{//EXECUTANTE			
+				$item1 = '1.'; 
+		        $count = 0; $total_horas_ee=0;$total_horas_es=0;$total_horas_ep=0;$total_horas_ej=0;$total_horas_tp=0;$total=0;
+		        foreach ($escopos as $key => $escopo) { 
+		        	if($escopo['exe_ee_id']!=Yii::$app->user->getId()) $escopo['horas_ee'] = '';
+		        	if($escopo['exe_es_id']!=Yii::$app->user->getId()) $escopo['horas_es'] = '';
+		        	if($escopo['exe_ep_id']!=Yii::$app->user->getId()) $escopo['horas_ep'] = '';
+		        	if($escopo['exe_ej_id']!=Yii::$app->user->getId()) $escopo['horas_ej'] = '';
+		        	if($escopo['exe_tp_id']!=Yii::$app->user->getId()) $escopo['horas_tp'] = '';
+		        	
+		        	if(!$escopo['isEntregavel']){?>
+		        <?php
+		        	if($escopo['horas_ee']|| $escopo['horas_es']|| $escopo['horas_ep']|| $escopo['horas_ej']|| $escopo['horas_tp']){
+		        		$count++;
+		        		$item = $item1.$count; 
+		        	}
+		        	else{
+		        		$item ='';
+		        	}
+
+		        	
+		        	$total_horas_ee += $escopo['horas_ee'];
+		        	$total_horas_es += $escopo['horas_es'];
+		        	$total_horas_ep += $escopo['horas_ep'];
+		        	$total_horas_ej += $escopo['horas_ej'];
+		        	$total_horas_tp += $escopo['horas_tp']; 
+		        	$tot = $escopo["horas_tp"]+$escopo["horas_ej"]+$escopo["horas_ep"]+$escopo["horas_es"]+$escopo["horas_ee"];
+		        	$total += $escopo["horas_tp"]+$escopo["horas_ej"]+$escopo["horas_ep"]+$escopo["horas_es"]+$escopo["horas_ee"];
+
+		        	if($tot==0)
+		        		$tot='';
+		         ?>
+				<tr>
+					<td style="font-size: 8pt" align="center"><?= $item ?></td>
+					<td style="font-size: 8pt" ><?= $escopo['descricao']?></td>
+					<td style="font-size: 8pt;background-color: #d3d3d3;" align="center"></td>
+					<td style="font-size: 8pt;background-color: #d3d3d3;" align="center"></td>
+					<td style="font-size: 8pt" align="center"><?= $escopo['horas_ee']?></td>
+					<td style="font-size: 8pt" align="center"><?= $escopo['horas_es']?></td>
+					<td style="font-size: 8pt" align="center"><?= $escopo['horas_ep']?></td>
+					<td style="font-size: 8pt" align="center"><?= $escopo['horas_ej']?></td>
+					<td style="font-size: 8pt" align="center"><?= $escopo['horas_tp']?></td>
+					<td style="font-size: 8pt" align="center"><?=$tot?></td>
+				</tr>
+				<?php }} ?>
+				<?php 
+					if($total_horas_ee==0) $total_horas_ee='';
+					if($total_horas_es==0) $total_horas_es='';
+					if($total_horas_ep==0) $total_horas_ep='';
+					if($total_horas_ej==0) $total_horas_ej='';
+					if($total_horas_tp==0) $total_horas_tp='';
+					if($total==0) $total='';
+			}
 		?>
 		<tr style="background-color: #d3d3d3;">
 			<td style="font-size: 8pt" align="center"></td>
@@ -103,43 +160,93 @@ th, td {
 		</tr>
 
 		<?php 
-		$item2 = '2.'; 
-        $count = 0; $total_horas_ee_2=0;$total_horas_es_2=0;$total_horas_ep_2=0;$total_horas_ej_2=0;$total_horas_tp_2=0;$total_2=0;
-		foreach ($escopos as $key => $escopo_2) { 
-        	if($escopo_2['isEntregavel']){?>
-        <?php
-        	if($escopo_2['horas_ee']|| $escopo_2['horas_es']|| $escopo_2['horas_ep']|| $escopo_2['horas_ej']|| $escopo_2['horas_tp']){
-        		$count++;
-        		$item = $item2.$count; 
-        	}
-        	else{
-        		$item ='';
-        	}
+		if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])){
+			$item2 = '2.'; 
+	        $count = 0; $total_horas_ee_2=0;$total_horas_es_2=0;$total_horas_ep_2=0;$total_horas_ej_2=0;$total_horas_tp_2=0;$total_2=0;
+			foreach ($escopos as $key => $escopo_2) { 
+	        	if($escopo_2['isEntregavel']){?>
+	        <?php
+	        	if($escopo_2['horas_ee']|| $escopo_2['horas_es']|| $escopo_2['horas_ep']|| $escopo_2['horas_ej']|| $escopo_2['horas_tp']){
+	        		$count++;
+	        		$item = $item2.$count; 
+	        	}
+	        	else{
+	        		$item ='';
+	        	}
 
-        	$total_horas_ee_2 += $escopo_2['horas_ee'];
-        	$total_horas_es_2 += $escopo_2['horas_es'];
-        	$total_horas_ep_2 += $escopo_2['horas_ep'];
-        	$total_horas_ej_2 += $escopo_2['horas_ej'];
-        	$total_horas_tp_2 += $escopo_2['horas_tp']; 
-        	$tot_2 = $escopo_2["horas_tp"]+$escopo_2["horas_ej"]+$escopo_2["horas_ep"]+$escopo_2["horas_es"]+$escopo_2["horas_ee"];
-        	$total += $escopo_2["horas_tp"]+$escopo_2["horas_ej"]+$escopo_2["horas_ep"]+$escopo_2["horas_es"]+$escopo_2["horas_ee"];
+	        	$total_horas_ee_2 += $escopo_2['horas_ee'];
+	        	$total_horas_es_2 += $escopo_2['horas_es'];
+	        	$total_horas_ep_2 += $escopo_2['horas_ep'];
+	        	$total_horas_ej_2 += $escopo_2['horas_ej'];
+	        	$total_horas_tp_2 += $escopo_2['horas_tp']; 
+	        	$tot_2 = $escopo_2["horas_tp"]+$escopo_2["horas_ej"]+$escopo_2["horas_ep"]+$escopo_2["horas_es"]+$escopo_2["horas_ee"];
+	        	$total += $escopo_2["horas_tp"]+$escopo_2["horas_ej"]+$escopo_2["horas_ep"]+$escopo_2["horas_es"]+$escopo_2["horas_ee"];
 
-        	if($tot_2==0)
-        		$tot_2='';
-         ?>
-		<tr>
-			<td style="font-size: 8pt" align="center"><?= $item ?></td>
-			<td style="font-size: 8pt" ><?= $escopo_2['descricao']?></td>
-			<td style="font-size: 8pt" align="center"></td>
-			<td style="font-size: 8pt" align="center"></td>
-			<td style="font-size: 8pt" align="center"><?= $escopo_2['horas_ee']?></td>
-			<td style="font-size: 8pt" align="center"><?= $escopo_2['horas_es']?></td>
-			<td style="font-size: 8pt" align="center"><?= $escopo_2['horas_ep']?></td>
-			<td style="font-size: 8pt" align="center"><?= $escopo_2['horas_ej']?></td>
-			<td style="font-size: 8pt" align="center"><?= $escopo_2['horas_tp']?></td>
-			<td style="font-size: 8pt" align="center"><?=$tot_2?></td>
-		</tr>
-		<?php }} ?>
+	        	if($tot_2==0)
+	        		$tot_2='';
+         	?>
+			<tr>
+				<td style="font-size: 8pt" align="center"><?= $item ?></td>
+				<td style="font-size: 8pt" ><?= $escopo_2['descricao']?></td>
+				<td style="font-size: 8pt" align="center"></td>
+				<td style="font-size: 8pt" align="center"></td>
+				<td style="font-size: 8pt" align="center"><?= $escopo_2['horas_ee']?></td>
+				<td style="font-size: 8pt" align="center"><?= $escopo_2['horas_es']?></td>
+				<td style="font-size: 8pt" align="center"><?= $escopo_2['horas_ep']?></td>
+				<td style="font-size: 8pt" align="center"><?= $escopo_2['horas_ej']?></td>
+				<td style="font-size: 8pt" align="center"><?= $escopo_2['horas_tp']?></td>
+				<td style="font-size: 8pt" align="center"><?=$tot_2?></td>
+			</tr>
+			<?php }}
+
+			}//executante
+			else{
+					$item2 = '2.'; 
+		        $count = 0; $total_horas_ee_2=0;$total_horas_es_2=0;$total_horas_ep_2=0;$total_horas_ej_2=0;$total_horas_tp_2=0;$total_2=0;
+				foreach ($escopos as $key => $escopo_2) {
+					if($escopo_2['exe_ee_id']!=Yii::$app->user->getId()) $escopo_2['horas_ee'] = '';
+		        	if($escopo_2['exe_es_id']!=Yii::$app->user->getId()) $escopo_2['horas_es'] = '';
+		        	if($escopo_2['exe_ep_id']!=Yii::$app->user->getId()) $escopo_2['horas_ep'] = '';
+		        	if($escopo_2['exe_ej_id']!=Yii::$app->user->getId()) $escopo_2['horas_ej'] = '';
+		        	if($escopo_2['exe_tp_id']!=Yii::$app->user->getId()) $escopo_2['horas_tp'] = '';
+		        	 
+		        	if($escopo_2['isEntregavel']){?>
+		        <?php
+		        	if($escopo_2['horas_ee']|| $escopo_2['horas_es']|| $escopo_2['horas_ep']|| $escopo_2['horas_ej']|| $escopo_2['horas_tp']){
+		        		$count++;
+		        		$item = $item2.$count; 
+		        	}
+		        	else{
+		        		$item ='';
+		        	}
+
+		        	$total_horas_ee_2 += $escopo_2['horas_ee'];
+		        	$total_horas_es_2 += $escopo_2['horas_es'];
+		        	$total_horas_ep_2 += $escopo_2['horas_ep'];
+		        	$total_horas_ej_2 += $escopo_2['horas_ej'];
+		        	$total_horas_tp_2 += $escopo_2['horas_tp']; 
+		        	$tot_2 = $escopo_2["horas_tp"]+$escopo_2["horas_ej"]+$escopo_2["horas_ep"]+$escopo_2["horas_es"]+$escopo_2["horas_ee"];
+		        	$total += $escopo_2["horas_tp"]+$escopo_2["horas_ej"]+$escopo_2["horas_ep"]+$escopo_2["horas_es"]+$escopo_2["horas_ee"];
+
+		        	if($tot_2==0)
+		        		$tot_2='';
+	         	?>
+				<tr>
+					<td style="font-size: 8pt" align="center"><?= $item ?></td>
+					<td style="font-size: 8pt" ><?= $escopo_2['descricao']?></td>
+					<td style="font-size: 8pt" align="center"></td>
+					<td style="font-size: 8pt" align="center"></td>
+					<td style="font-size: 8pt" align="center"><?= $escopo_2['horas_ee']?></td>
+					<td style="font-size: 8pt" align="center"><?= $escopo_2['horas_es']?></td>
+					<td style="font-size: 8pt" align="center"><?= $escopo_2['horas_ep']?></td>
+					<td style="font-size: 8pt" align="center"><?= $escopo_2['horas_ej']?></td>
+					<td style="font-size: 8pt" align="center"><?= $escopo_2['horas_tp']?></td>
+					<td style="font-size: 8pt" align="center"><?=$tot_2?></td>
+				</tr>
+			<?php }}
+
+			}
+		 ?>
 		<?php 
 			if($total_horas_ee_2==0) $total_horas_ee_2='';
 			if($total_horas_es_2==0) $total_horas_es_2='';

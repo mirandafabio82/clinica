@@ -982,9 +982,13 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
             }
 
             $mpdf = new \Mpdf\Mpdf();
+
             $mpdf->WriteHTML($capa);
-            $mpdf->AddPage();
-            $mpdf->WriteHTML($as);
+            
+            if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])){
+                $mpdf->AddPage();
+                $mpdf->WriteHTML($as);
+            }
             if(!empty($processoArray)){
                 $mpdf->AddPage();
                 $mpdf->WriteHTML($processo);
@@ -1001,13 +1005,18 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                 $mpdf->AddPage();
                 $mpdf->WriteHTML($diagrama);
             }*/
-            $mpdf->AddPage();
-            $mpdf->WriteHTML($resumo);
-            if(!empty($ldpreliminarArray)){
+            if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])){
+                $mpdf->AddPage();
+                $mpdf->WriteHTML($resumo);
+            }
+            if(!empty($ldpreliminarArray) && isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])){
                 $mpdf->AddPage();
                 $mpdf->WriteHTML($ld_preliminar);
             }
-            $mpdf->Output('uploaded-files/'.$projeto['id'].'/'.$projeto['proposta'].'.pdf', 'F');     
+            
+            if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])){
+                $mpdf->Output('uploaded-files/'.$projeto['id'].'/'.$projeto['proposta'].'.pdf', 'F');   
+            }  
             $mpdf->Output('uploaded-files/'.$projeto['id'].'/'.$projeto['proposta'].'.pdf', 'I');    
 
             $existsFile = Yii::$app->db->createCommand('SELECT id FROM documento WHERE nome="'.$projeto['proposta'].'.pdf"')->queryScalar();
