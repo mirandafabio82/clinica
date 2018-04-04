@@ -153,8 +153,8 @@ $usuario = Yii::$app->db->createCommand('SELECT * FROM user WHERE id='.Yii::$app
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">MENU PRINCIPAL</li>
          <?php if(!isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['contato'])){ ?>
-        <li><a href="<?= Url::to(['projeto/create']) ?>"><i class="fa fa-folder-open"></i> <span>Projetos</span></a></li>        
-        <li><a href="<?= Url::to(['atividademodelo/create']) ?>"><i class="fa fa-tablet"></i> <span>Atividades Modelo</span></a></li>
+        <li><a href="<?= Url::to(['projeto/create']) ?>"><i class="fa fa-folder-open"></i> <span>Projetos</span></a></li>      
+        
         <?php } ?>
         <?php if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])){ ?>
         <li><a href="<?= Url::to(['bm/create']) ?>"><i class="fa fa-list"></i> <span>BM</span></a></li>
@@ -162,7 +162,9 @@ $usuario = Yii::$app->db->createCommand('SELECT * FROM user WHERE id='.Yii::$app
         <li><a href="<?= Url::to(['contato/create']) ?>"><i class="fa fa-address-book"></i> <span>Contatos</span></a></li>
         <?php } ?>
         <?php if(!isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['contato'])){ ?>
-        <li><a href="<?= Url::to(['tarefa/create']) ?>"><i class="fa fa-calendar"></i> <span>Agenda</span></a></li>
+        <li><a href="<?= Url::to(['tarefa/create']) ?>"><i class="fa fa-calendar"></i> <span>Gerenciamento das Atividades</span></a></li>
+        <li><a href="<?= Url::to(['atividade/index']) ?>"><i class="fa fa-hourglass-half"></i> <span>Avanço das Atividades</span></a></li>  
+        <li><a href="<?= Url::to(['atividademodelo/create']) ?>"><i class="fa fa-tablet"></i> <span>Atividades Modelo</span></a></li>
         <?php } ?>
         <?php if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])){ ?>
         <li><a href="<?= Url::to(['executante/create']) ?>"><i class="fa fa-wrench"></i> <span>Executantes</span></a></li>
@@ -174,7 +176,7 @@ $usuario = Yii::$app->db->createCommand('SELECT * FROM user WHERE id='.Yii::$app
         <?php if(!isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['contato'])){ ?>
         <li><a href="<?= Url::to(['documento/create']) ?>"><i class="fa fa-file"></i> <span>Documentos</span></a></li>
         <?php } ?>
-        <li><a href="<?= Url::to(['atividade/index']) ?>"><i class="fa fa-hourglass-half"></i> <span>Gerenciamento das Atividades</span></a></li>        
+              
         <!-- <li><a href="<?//= Url::to(['config/create']) ?>"><i class="fa fa-cog"></i> <span>Configurações</span></a></li> -->
         <li><a>
          <?php
