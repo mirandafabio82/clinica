@@ -748,7 +748,7 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
 
           foreach ($myExecutantes as $key => $myExec){
         ?>
-        <div class="col-md-2" id="exec_div-<?=$key?>">       
+        <div class="col-md-3" id="exec_div-<?=$key?>">       
           <?= $form->field($model, 'executante_id')->dropDownList($listData, ['prompt'=>'Selecione um executante', 'name'=>'ProjetoExecutante['.$key.']', 'options'=>array($myExec['executante_id']=>array('selected'=>'selected'))]); ?>
           <a class="remove-exec" id="remove-executante[<?=$key?>]"> <i class="fa fa-ban" id="remove-executante[<?=$key?>]"></i></a>
         </div>
