@@ -195,14 +195,18 @@ $(".ld-create").click(function(ev){
 
 $("#projeto-qtd_dias").focusout(function() {
     dias = this.value;
+    idExecutante = $("[name=\"ProjetoExecutante[0]\"]")[0].value;
 
     $.ajax({ 
     url: "index.php?r=projeto/preenchekm",
+    data:{idExecutante: idExecutante},
     type: "POST",
     success: function(response){
      var resposta = $.parseJSON(response);     
      var qtd_km = resposta["qtd_km_dia"] * dias;
      var valor_km = qtd_km * resposta["vl_km"];
+
+
      
      $("#projeto-qtd_km").val(qtd_km);
      $("#projeto-vl_km").val(valor_km);
@@ -617,7 +621,7 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
             [
               'attribute' => 'status', 
               'format' => 'raw',
-              'contentOptions' => ['style' => 'width:8em;  min-width:8em;'],
+              'contentOptions' => ['style' => 'width:11em;  min-width:8em;'],
               'value' => function ($data) {
 
                 $status = Yii::$app->db->createCommand('SELECT status, cor FROM projeto_status WHERE id='.$data->status)->queryOne();

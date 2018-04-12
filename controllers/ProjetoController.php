@@ -867,8 +867,14 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
     }
 
     public function actionPreenchekm(){
-        if (Yii::$app->request->isAjax) {                 
-            echo json_encode(Yii::$app->db->createCommand('SELECT qtd_km_dia, vl_km FROM executante WHERE usuario_id=61')->queryOne());  
+        if (Yii::$app->request->isAjax) {        
+                $idExecutante = Yii::$app->request->post()['idExecutante'];
+                if(!empty($idExecutante)){
+                    echo json_encode(Yii::$app->db->createCommand('SELECT qtd_km_dia, vl_km FROM executante WHERE usuario_id='.$idExecutante)->queryOne()); 
+                }
+                else{
+                    echo json_encode(Yii::$app->db->createCommand('SELECT qtd_km_dia, vl_km FROM executante WHERE usuario_id=61')->queryOne());  
+                }
         }
         
     }
