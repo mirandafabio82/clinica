@@ -35,9 +35,9 @@ class Escopo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['item', 'horas_tp',  'exe_tp_id', 'exe_ej_id', 'exe_ep_id', 'exe_ee_id', 'executado_tp','executado_ej','executado_ep','executado_es','executado_ee', 'qtd', 'projeto_id', 'atividademodelo_id', 'status', 'executado'], 'integer'],
+            [['item', 'horas_tp',  'exe_tp_id', 'exe_ej_id', 'exe_ep_id', 'exe_ee_id', 'executado_tp','executado_ej','executado_ep','executado_es','executado_ee', 'qtd', 'projeto_id', 'atividademodelo_id', 'status', 'executado', 'horas_tp', 'horas_ej', 'horas_ep', 'horas_es', 'horas_ee'], 'integer'],
             [['criado', 'modificado'], 'safe'],
-            [['nome', 'for', 'horas_tp', 'horas_ej', 'horas_ep', 'horas_es', 'horas_ee'], 'string', 'max' => 255],
+            [['nome', 'for'], 'string', 'max' => 255],
             [['descricao'], 'string', 'max' => 160],
             [['horas_acumulada', 'horas_bm', 'horas_saldo'], 'number'],
         ];
@@ -58,11 +58,11 @@ class Escopo extends \yii\db\ActiveRecord
             'horas_ep' => 'Horas EP',
             'horas_es' => 'Horas ES',
             'horas_ee' => 'Horas EE',
-            'executado_tp' => 'EXE_TP',
-            'executado_ej' => 'EXE_EJ',
-            'executado_ep' => 'EXE_EP',
-            'executado_es' => 'EXE_ES',
-            'executado_ee' => 'EXE_EE',
+            'executado_tp' => 'TP',
+            'executado_ej' => 'EJ',
+            'executado_ep' => 'EP',
+            'executado_es' => 'ES',
+            'executado_ee' => 'EE',
             'qtd' => 'Qtd.',
             'criado' => 'Criado',
             'modificado' => 'Modificado',

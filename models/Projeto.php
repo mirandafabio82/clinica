@@ -204,5 +204,10 @@ class Projeto extends \yii\db\ActiveRecord
         return $this->hasOne(ProjetoExecutante::className(), ['projeto_id' => 'id']);
     }
 
+    public static function findIdentity($id)
+    {
+        return static::findOne($id);
+    }
+
     
 }

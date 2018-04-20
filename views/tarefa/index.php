@@ -14,34 +14,10 @@ use yii\helpers\ArrayHelper;
 $this->registerJs('
 
       $(".save").click(function(){
-        $( ".executado" ).each(function( index ) {
-          
-          divisor = this.name.split("[")[1];
-
-          id = divisor.split("]")[0];
-
-          tipo = this.name.split("[")[2].split("]")[0];
-          
-          valor = this.value;
-          if(this.value=="") valor = "null";
-
-          $.ajax({ 
-              url: "index.php?r=tarefa/attatividade",
-              data: {id: id, value: valor, tipo: tipo},
-              type: "POST",
-              success: function(response){
-               console.log(response);
-               // location.reload();
-             },
-             error: function(){
-              console.log("failure");
-            }
-          });
-
-          });
-      });
-
-  $("#executante-id").change(function(ev){
+        $(".form-group").submit();        
+    });
+    
+    $("#executante-id").change(function(ev){
       var id = $(this).val();    
       console.log(id);
       $.ajax({ 
@@ -125,7 +101,8 @@ $this->registerJs('
 
 <?php if($isPost){ ?>
 <div style="margin-bottom: 1em">
-  <button type="button" class="btn btn-primary save">Salvar</button>
+  <button type="button" class="btn btn-primary save">Adicionar Horas</button>
+  <?= Html::a('Gerar BM', ['/tarefa/gerarbm&id=', array('projetoid'=>$projeto_selected)], ['class'=>'btn btn-primary']) ?>
 </div>
 
     <?= GridView::widget([

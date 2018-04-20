@@ -7,6 +7,9 @@ use app\models\Tarefa;
 use app\models\search\TarefaSearch;
 use app\models\Escopo;
 use app\models\search\EscopoSearch;
+use app\models\Bm;
+use app\models\search\BmSearch;
+use app\models\Projeto;
 use app\models\search\ProjetoSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -95,10 +98,51 @@ class TarefaController extends Controller
         $executante_id = '';
         $isPost = 0;
 
-        if($_POST){
+        $projeto_selected = '';
+        if(isset($_POST['executante']) && isset($_POST['projeto'])){            
             $dataProvider->query->where('id = '.$_POST['projeto']);
             $executante_id = $_POST['executante'];
+            $projeto_selected = $_POST['projeto'];
             $isPost = 1;
+        }
+
+        if(isset($_POST['Escopo'])){
+           
+           foreach ($_POST['Escopo'] as $key => $escopo) {
+                $modelEscopo = Escopo::findIdentity($key);
+                // $modelEscopo->setAttributes($escopo);
+                $executado_tp=0;
+                $executado_ej=0;
+                $executado_ep=0;
+                $executado_es=0;
+                $executado_ee=0;
+
+
+                if(isset($escopo['executado_tp'])){
+                    $executado_tp = $escopo['executado_tp'];
+                    $modelEscopo->executado_tp = $escopo['executado_tp'] + $modelEscopo->executado_tp;
+                }
+                if(isset($escopo['executado_ej'])){
+                    $executado_ej = $escopo['executado_ej'];
+                    $modelEscopo->executado_ej = $escopo['executado_ej'] + $modelEscopo->executado_ej;
+                }
+                if(isset($escopo['executado_ep'])){
+                    $executado_ep = $escopo['executado_ep'];
+                    $modelEscopo->executado_ep = $escopo['executado_ep'] + $modelEscopo->executado_ep;
+                }
+                if(isset($escopo['executado_es'])){
+                    $executado_es = $escopo['executado_es'];
+                    $modelEscopo->executado_es = $escopo['executado_es'] + $modelEscopo->executado_es;
+                }
+                if(isset($escopo['executado_ee'])){  
+                    $executado_ee = $escopo['executado_ee'];
+                    $modelEscopo->executado_ee = $escopo['executado_ee'] + $modelEscopo->executado_ee;
+                }
+                $modelEscopo->horas_bm = $executado_tp + $executado_ej + $executado_ep + $executado_es + $executado_ee + $modelEscopo->horas_bm;
+                
+                $modelEscopo->save();
+                
+           }
         }
 
 
@@ -110,7 +154,8 @@ class TarefaController extends Controller
             'listExecutantes' => $listExecutantes,
             'escopoModel' => $escopoModel,
             'executante_id' => $executante_id,
-            'isPost' => $isPost
+            'isPost' => $isPost,
+            'projeto_selected' => $projeto_selected,
         ]);
     }
 
@@ -220,6 +265,44 @@ class TarefaController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
+
+        return $this->redirect(['index']);
+    }
+
+    public function actionGerarbm($projetoid)
+    {
+        $projetoModel = Projeto::findIdentity($projetoid);
+        
+        $executadas = Yii::$app->db->createCommand('SELECT SUM(executado_ee) exe_ee, SUM(executado_es) exe_es,SUM(executado_ep) exe_ep,SUM(executado_ej) exe_ej,SUM(executado_tp) exe_tp FROM escopo WHERE projeto_id='.$projetoid)->queryOne();
+        
+        $ultBM = Yii::$app->db->createCommand('SELECT ultimo_bm FROM config')->queryScalar();
+        $ultBM = $ultBM+1;
+
+        $bmModel = new Bm();
+        $bmModel->projeto_id = $projetoModel->id;
+        $bmModel->contrato = $projetoModel->contrato;
+        $bmModel->contratada = "HCN AUTOMAÇÃO LTDA";
+        $bmModel->cnpj = "10.486.000/0001-05";
+        $bmModel->contato = "HÉLDER CÂMARA DO NASCIMENTO";
+        $bmModel->executado_ee = $executadas['exe_ee'];
+        $bmModel->executado_es = $executadas['exe_es'];
+        $bmModel->executado_ep = $executadas['exe_ep'];
+        $bmModel->executado_ej = $executadas['exe_ej'];
+        $bmModel->executado_tp = $executadas['exe_tp'];
+        $bmModel->numero_bm = $ultBM;
+        if(!$bmModel->save()){
+            print_r($bmModel->getErrors());
+            die();
+        }
+
+        Yii::$app->db->createCommand('UPDATE config SET ultimo_bm ='.$ultBM)->execute();
+
+        $escopos = Yii::$app->db->createCommand('SELECT * FROM escopo WHERE projeto_id='.$projetoid)->queryAll();
+
+        foreach ($escopos as $key => $escopo) {
+            $acumulada = $escopo["horas_acumulada"]+$escopo["horas_bm"];
+            Yii::$app->db->createCommand('UPDATE escopo SET horas_acumulada = '.$acumulada.', horas_bm=0 WHERE id='.$escopo["id"])->execute();
+        }
 
         return $this->redirect(['index']);
     }

@@ -36,10 +36,10 @@ class Bm extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['projeto_id', 'qtd_dias'], 'integer'],
+            [['projeto_id', 'qtd_dias', 'numero_bm'], 'integer'],
             [['data', 'de', 'para'], 'safe'],
             [['descricao'], 'string'],
-            [['contrato', 'objeto', 'contratada', 'cnpj', 'contato', 'numero_bm'], 'string', 'max' => 255],
+            [['contrato', 'objeto', 'contratada', 'cnpj', 'contato'], 'string', 'max' => 255],
             [['acumulado', 'saldo', 'km', 'executado_es', 'executado_ep', 'executado_ej', 'executado_tp', 'executado_ee'], 'number'],
         ];
     }
