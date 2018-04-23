@@ -102,7 +102,7 @@ $this->registerJs('
 <?php if($isPost){ ?>
 <div style="margin-bottom: 1em">
   <button type="button" class="btn btn-primary save">Adicionar Horas</button>
-  <?= Html::a('Gerar BM', ['/tarefa/gerarbm&id=', array('projetoid'=>$projeto_selected)], ['class'=>'btn btn-primary']) ?>
+  <?= Html::a('Gerar BM', ['/tarefa/gerarbm', 'projetoid'=>$projeto_selected], ['class'=>'btn btn-primary']) ?>
 </div>
 
     <?= GridView::widget([

@@ -155,7 +155,7 @@ $this->registerJs("
         <div class="row"> 
           <?php if($escopo['exe_tp_id']==$executante_id && !empty($escopoModel['horas_tp'])){ ?>
               <div class="col-md-5"> 
-                <?= $form->field($escopoModel, 'executado_tp')->textInput(['maxlength' => true, 'readonly'=>$editable, 'name'=>'Escopo['.$escopo['id'].'][executado_tp]', 'class' =>'form-control executado_tp', 'value'=> '' ])->label('TP:'.explode('.',$escopoModel['executado_tp'])[0].'/'.$escopoModel['horas_tp']) ?>
+                <?= $form->field($escopoModel, 'executado_tp')->textInput(['maxlength' => true, 'readonly'=>$editable, 'name'=>'Escopo['.$escopo['id'].'][executado_tp]', 'class' =>'form-control executado_tp', 'value'=> '' ])->label('TP:'.explode('.',$escopoModel['executado_tp'])[0].'/'.$escopoModel['horas_tp'].'; BM:'.$escopo['horas_tp_bm']) ?>
               </div>
               <?php } ?>  
 
@@ -167,7 +167,7 @@ $this->registerJs("
 
             <?php if($escopo['exe_ep_id']==$executante_id && !empty($escopoModel['horas_ep'])){ ?>
               <div class="col-md-5"> 
-              <?= $form->field($escopoModel, 'executado_ep')->textInput(['maxlength' => true, 'readonly'=>$editable, 'name'=>'Escopo['.$escopo['id'].'][executado_ep]', 'class' =>'form-control executado_ep', 'value'=> '' ])->label('EP:'.explode('.',$escopoModel['executado_ep'])[0].'/'.$escopoModel['horas_ep']) ?>
+              <?= $form->field($escopoModel, 'executado_ep')->textInput(['maxlength' => true, 'readonly'=>$editable, 'name'=>'Escopo['.$escopo['id'].'][executado_ep]', 'class' =>'form-control executado_ep', 'value'=> '' ])->label('EP:'.explode('.',$escopoModel['executado_ep'])[0].'/'.$escopoModel['horas_ep'].'; BM:'.$escopo['horas_ep_bm']) ?>
               </div>
               <?php } ?>  
 
