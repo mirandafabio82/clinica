@@ -136,6 +136,8 @@ class TarefaController extends Controller
                     $executado_ep = $escopo['executado_ep'];
                     $modelEscopo->executado_ep = $escopo['executado_ep'] + $modelEscopo->executado_ep;
                     $modelEscopo->horas_ep_bm = $modelEscopo->horas_ep_bm + $escopo['executado_ep'];
+
+
                     if(!empty($modelEscopo['exe_ep_id'])) $executante = $modelEscopo['exe_ep_id'];
                 }
                 if(isset($escopo['executado_es'])){
@@ -158,9 +160,6 @@ class TarefaController extends Controller
                 $executante_id = $executante;
                 $projeto_selected = $modelEscopo->projeto_id;
                 $isPost = 1;
-
-
-                
            }
         }
 
@@ -304,10 +303,10 @@ class TarefaController extends Controller
         foreach ($escopos as $key => $escopo) {
             $acumulada = $escopo["horas_acumulada"]+$escopo["horas_bm"];
             $saldo = ($escopo["horas_ee"] + $escopo["horas_es"] + $escopo["horas_ep"] + $escopo["horas_ej"] + $escopo["horas_tp"]) - $acumulada;
-            
+
             Yii::$app->db->createCommand('UPDATE escopo SET horas_acumulada = '.$acumulada.', horas_saldo = '.$saldo.', horas_bm=0, horas_tp_bm="" , horas_ej_bm="" , horas_ep_bm="" , horas_es_bm="" , horas_ee_bm="" WHERE id='.$escopo["id"])->execute();
         }
-        
+
         $acu_saldo = Yii::$app->db->createCommand('SELECT SUM(horas_acumulada) horas_acu, SUM(horas_saldo) h_saldo FROM escopo WHERE projeto_id='.$projetoid)->queryOne();
         
         $bmModel = new Bm();
@@ -326,6 +325,7 @@ class TarefaController extends Controller
         $bmModel->qtd_dias = $projetoModel->qtd_dias;
         $bmModel->km = $projetoModel->qtd_km;
         $bmModel->numero_bm = $ultBM;
+
         if(!$bmModel->save()){
             print_r($bmModel->getErrors());
             die();
@@ -333,7 +333,7 @@ class TarefaController extends Controller
 
         
 
-        return $this->redirect(['index']);
+        return $this->redirect(['bm/update', 'id' => $bmModel->id]);
     }
 
     /**
