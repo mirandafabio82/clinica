@@ -13,6 +13,12 @@ use yii\helpers\ArrayHelper;
 
 $this->registerJs('
 
+  $(document).ajaxStart(function() {
+    $("#loading").show(); // show the gif image when ajax starts
+  }).ajaxStop(function() {
+      $("#loading").hide(); // hide the gif image when ajax completes
+  });
+
       $(".save").click(function(){
         $(".form-group").submit();        
     });
@@ -79,7 +85,10 @@ $this->registerJs('
                 </option>
             <?php } ?>
           </select>
-      </div>     
+      </div>  
+      <div  class="col-md-1">  
+        <img style="z-index: 999999999" src="resources/dist/img/loading.gif" type="hidden" name="loading" id="loading" value="" width="64px" hidden/>        
+      </div> 
       <div class="col-md-3">  
           <select id="projeto-id" class="form-control" name="projeto" >
             <option value="">Selecione um Projeto</option>
@@ -92,6 +101,7 @@ $this->registerJs('
       </div>
      <?php ActiveForm::end(); ?>
     </div>
+    
 </div>
 
 

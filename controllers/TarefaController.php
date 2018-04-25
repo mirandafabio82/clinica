@@ -117,8 +117,7 @@ class TarefaController extends Controller
                 $executado_es=0;
                 $executado_ee=0;
                 $executante = 0;
-
-
+                
                 if(isset($escopo['executado_tp'])){
                     $executado_tp = $escopo['executado_tp'];
                     $modelEscopo->executado_tp = $escopo['executado_tp'] + $modelEscopo->executado_tp;
@@ -132,11 +131,10 @@ class TarefaController extends Controller
                     $modelEscopo->horas_ej_bm = $modelEscopo->horas_ej_bm + $escopo['executado_ej'];
                     if(!empty($modelEscopo['exe_ej_id'])) $executante = $modelEscopo['exe_ej_id'];
                 }
-                if(isset($escopo['executado_ep'])){
+                if(isset($escopo['executado_ep'])){                    
                     $executado_ep = $escopo['executado_ep'];
                     $modelEscopo->executado_ep = $escopo['executado_ep'] + $modelEscopo->executado_ep;
                     $modelEscopo->horas_ep_bm = $modelEscopo->horas_ep_bm + $escopo['executado_ep'];
-
 
                     if(!empty($modelEscopo['exe_ep_id'])) $executante = $modelEscopo['exe_ep_id'];
                 }
@@ -152,15 +150,29 @@ class TarefaController extends Controller
                     $modelEscopo->horas_ee_bm = $modelEscopo->horas_ee_bm + $escopo['executado_ee'];
                     if(!empty($modelEscopo['exe_ee_id'])) $executante = $modelEscopo['exe_ee_id'];
                 }
+                
                 $modelEscopo->horas_bm = $executado_tp + $executado_ej + $executado_ep + $executado_es + $executado_ee + $modelEscopo->horas_bm;
                 
-                $modelEscopo->save();
+                if(!empty($escopo['executado_tp'])) $modelEscopo->executado_tp = $modelEscopo->executado_tp - $escopo['executado_tp']/2;
+                if(!empty($escopo['executado_ej']))$modelEscopo->executado_ej = $modelEscopo->executado_ej - $escopo['executado_ej']/2;
+                if(!empty($escopo['executado_ep']))$modelEscopo->executado_ep = $modelEscopo->executado_ep - $escopo['executado_ep']/2;
+                if(!empty($escopo['executado_es']))$modelEscopo->executado_es = $modelEscopo->executado_es - $escopo['executado_es']/2;
+                if(!empty($escopo['executado_ee']))$modelEscopo->executado_ee = $modelEscopo->executado_ee - $escopo['executado_ee']/2;
 
-                $dataProvider->query->where('id = '.$modelEscopo->projeto_id);
-                $executante_id = $executante;
-                $projeto_selected = $modelEscopo->projeto_id;
-                $isPost = 1;
+                if(!$modelEscopo->save()){
+                    print_r($modelEscopo->getErrors());
+                    die();
+                }              
+
+                
+
+
            }
+
+            $dataProvider->query->where('id = '.$modelEscopo->projeto_id);
+            $executante_id = $executante;
+            $projeto_selected = $modelEscopo->projeto_id;
+            $isPost = 1;
         }
 
 
