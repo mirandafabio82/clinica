@@ -153,11 +153,26 @@ class TarefaController extends Controller
                 
                 $modelEscopo->horas_bm = $executado_tp + $executado_ej + $executado_ep + $executado_es + $executado_ee + $modelEscopo->horas_bm;
                 
-                if(!empty($escopo['executado_tp'])) $modelEscopo->executado_tp = $modelEscopo->executado_tp - $escopo['executado_tp']/2;
-                if(!empty($escopo['executado_ej']))$modelEscopo->executado_ej = $modelEscopo->executado_ej - $escopo['executado_ej']/2;
-                if(!empty($escopo['executado_ep']))$modelEscopo->executado_ep = $modelEscopo->executado_ep - $escopo['executado_ep']/2;
-                if(!empty($escopo['executado_es']))$modelEscopo->executado_es = $modelEscopo->executado_es - $escopo['executado_es']/2;
-                if(!empty($escopo['executado_ee']))$modelEscopo->executado_ee = $modelEscopo->executado_ee - $escopo['executado_ee']/2;
+                if(!empty($escopo['executado_tp'])){
+                    $modelEscopo->executado_tp = $modelEscopo->executado_tp - $escopo['executado_tp']/2;
+                    $modelEscopo->horas_tp_bm = $modelEscopo->horas_tp_bm - $escopo['executado_tp']/2;                    
+                }
+                if(!empty($escopo['executado_ej'])){
+                    $modelEscopo->executado_ej = $modelEscopo->executado_ej - $escopo['executado_ej']/2;
+                    $modelEscopo->horas_ej_bm = $modelEscopo->horas_ej_bm - $escopo['executado_ej']/2;  
+                }
+                if(!empty($escopo['executado_ep'])){
+                    $modelEscopo->executado_ep = $modelEscopo->executado_ep - $escopo['executado_ep']/2;
+                    $modelEscopo->horas_ep_bm = $modelEscopo->horas_ep_bm - $escopo['executado_ep']/2;  
+                }
+                if(!empty($escopo['executado_es'])){
+                    $modelEscopo->executado_es = $modelEscopo->executado_es - $escopo['executado_es']/2;
+                    $modelEscopo->horas_es_bm = $modelEscopo->horas_es_bm - $escopo['executado_es']/2;  
+                }
+                if(!empty($escopo['executado_ee'])){
+                    $modelEscopo->executado_ee = $modelEscopo->executado_ee - $escopo['executado_ee']/2;
+                    $modelEscopo->horas_ee_bm = $modelEscopo->horas_ee_bm - $escopo['executado_ee']/2;  
+                }
 
                 if(!$modelEscopo->save()){
                     print_r($modelEscopo->getErrors());
