@@ -43,34 +43,16 @@ class TarefaController extends Controller
      * Lists all Tarefa models.
      * @return mixed
      */
-    public function actionIndex()
-    {
-        /*if(Yii::$app->request->post('editableKey')){
-
-            $escopo_id = Yii::$app->request->post('editableKey');
-            $escopo = Escopo::findOne($escopo_id);
-
-            $out = Json::encode(['output'=>'', 'message'=>'']);
-            $post =[];
-            $posted = current($_POST['Escopo']);
-            $post['Escopo'] = $posted;
-
-            if($escopo->load($post)){
-                $escopo->save();
-                // $output = 'teste';
-                $out = Json::encode(['output'=>'', 'message'=>'']);
-            }
-            echo $out;
-            return $this->redirect(['index']);
-        }*/
-        // $searchModel = new EscopoSearch();
-        // $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        
-        $escopoModel = new Escopo();
-        
+    public function actionIndex($projeto_id=null, $executante_id=null)
+    {       
+        $escopoModel = new Escopo();        
         $searchModel = new ProjetoSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+        if(!isset($_POST['projeto']) || !isset($_POST['projeto'])){
+            $_POST['projeto'] = $projeto_id;
+            $_POST['executante'] = $executante_id;  
+        } 
                 
         if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['contato'])) {
             $clienteId = Yii::$app->db->createCommand('SELECT cliente_id FROM contato WHERE usuario_id='.Yii::$app->user->getId())->queryScalar();
@@ -104,96 +86,7 @@ class TarefaController extends Controller
             $executante_id = $_POST['executante'];
             $projeto_selected = $_POST['projeto'];
             $isPost = 1;
-        }
-
-        if(isset($_POST['Escopo'])){
-           
-           foreach ($_POST['Escopo'] as $key => $escopo) { //add horas
-                $modelEscopo = Escopo::findIdentity($key);
-                // $modelEscopo->setAttributes($escopo);
-                $executado_tp=0;
-                $executado_ej=0;
-                $executado_ep=0;
-                $executado_es=0;
-                $executado_ee=0;
-                $executante = 0;
-                
-                if(isset($escopo['executado_tp'])){
-                    $executado_tp = $escopo['executado_tp'];
-                    $modelEscopo->executado_tp = $escopo['executado_tp'] + $modelEscopo->executado_tp;
-                    $modelEscopo->horas_tp_bm = $modelEscopo->horas_tp_bm + $escopo['executado_tp'];
-                    if(!empty($modelEscopo['exe_tp_id'])) $executante = $modelEscopo['exe_tp_id'];
-
-                }
-                if(isset($escopo['executado_ej'])){
-                    $executado_ej = $escopo['executado_ej'];
-                    $modelEscopo->executado_ej = $escopo['executado_ej'] + $modelEscopo->executado_ej;
-                    $modelEscopo->horas_ej_bm = $modelEscopo->horas_ej_bm + $escopo['executado_ej'];
-                    if(!empty($modelEscopo['exe_ej_id'])) $executante = $modelEscopo['exe_ej_id'];
-                }
-                if(isset($escopo['executado_ep'])){                    
-                    $executado_ep = $escopo['executado_ep'];
-                    $modelEscopo->executado_ep = $escopo['executado_ep'] + $modelEscopo->executado_ep;
-                    $modelEscopo->horas_ep_bm = $modelEscopo->horas_ep_bm + $escopo['executado_ep'];
-
-                    if(!empty($modelEscopo['exe_ep_id'])) $executante = $modelEscopo['exe_ep_id'];
-                }
-                if(isset($escopo['executado_es'])){
-                    $executado_es = $escopo['executado_es'];
-                    $modelEscopo->executado_es = $escopo['executado_es'] + $modelEscopo->executado_es;
-                    $modelEscopo->horas_es_bm = $modelEscopo->horas_es_bm + $escopo['executado_es'];
-                    if(!empty($modelEscopo['exe_es_id'])) $executante = $modelEscopo['exe_es_id'];
-                }
-                if(isset($escopo['executado_ee'])){  
-                    $executado_ee = $escopo['executado_ee'];
-                    $modelEscopo->executado_ee = $escopo['executado_ee'] + $modelEscopo->executado_ee;
-                    $modelEscopo->horas_ee_bm = $modelEscopo->horas_ee_bm + $escopo['executado_ee'];
-                    if(!empty($modelEscopo['exe_ee_id'])) $executante = $modelEscopo['exe_ee_id'];
-                }
-                
-                $modelEscopo->horas_bm = $executado_tp + $executado_ej + $executado_ep + $executado_es + $executado_ee + $modelEscopo->horas_bm;
-                
-                if(!empty($escopo['executado_tp'])){
-                    $modelEscopo->executado_tp = $modelEscopo->executado_tp - $escopo['executado_tp']/2;
-                    $modelEscopo->horas_tp_bm = $modelEscopo->horas_tp_bm - $escopo['executado_tp']/2;    
-                    $modelEscopo->horas_bm = $modelEscopo->horas_bm - $executado_tp/2;                
-                }
-                if(!empty($escopo['executado_ej'])){
-                    $modelEscopo->executado_ej = $modelEscopo->executado_ej - $escopo['executado_ej']/2;
-                    $modelEscopo->horas_ej_bm = $modelEscopo->horas_ej_bm - $escopo['executado_ej']/2;  
-                    $modelEscopo->horas_bm = $modelEscopo->horas_bm - $executado_ej/2; 
-                }
-                if(!empty($escopo['executado_ep'])){
-                    $modelEscopo->executado_ep = $modelEscopo->executado_ep - $escopo['executado_ep']/2;
-                    $modelEscopo->horas_ep_bm = $modelEscopo->horas_ep_bm - $escopo['executado_ep']/2;  
-                    $modelEscopo->horas_bm = $modelEscopo->horas_bm - $executado_ep/2;
-                }
-                if(!empty($escopo['executado_es'])){
-                    $modelEscopo->executado_es = $modelEscopo->executado_es - $escopo['executado_es']/2;
-                    $modelEscopo->horas_es_bm = $modelEscopo->horas_es_bm - $escopo['executado_es']/2;  
-                    $modelEscopo->horas_bm = $modelEscopo->horas_bm - $executado_es/2;
-                }
-                if(!empty($escopo['executado_ee'])){
-                    $modelEscopo->executado_ee = $modelEscopo->executado_ee - $escopo['executado_ee']/2;
-                    $modelEscopo->horas_ee_bm = $modelEscopo->horas_ee_bm - $escopo['executado_ee']/2;  
-                    $modelEscopo->horas_bm = $modelEscopo->horas_bm - $executado_ee/2;
-                }
-                
-
-                if(!$modelEscopo->save()){
-                    print_r($modelEscopo->getErrors());
-                    die();
-                }              
-                
-
-           }
-
-            $dataProvider->query->where('id = '.$modelEscopo->projeto_id);
-            $executante_id = $executante;
-            $projeto_selected = $modelEscopo->projeto_id;
-            $isPost = 1;
-        }
-
+        }        
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -398,11 +291,48 @@ class TarefaController extends Controller
     public function actionAttatividade(){
         if (Yii::$app->request->isAjax) {                 
            // Yii::$app->db->createCommand('UPDATE escopo SET status='.Yii::$app->request->post()['status'].' WHERE id='.Yii::$app->request->post()['id'])->execute();  
-           
-           Yii::$app->db->createCommand('UPDATE escopo SET '.Yii::$app->request->post()['tipo'].'='.Yii::$app->request->post()['value'].' WHERE id='.Yii::$app->request->post()['id'])->execute(); 
+
+            $projeto_id = Yii::$app->db->createCommand('SELECT projeto_id FROM escopo WHERE id='.Yii::$app->request->post()['id'])->queryScalar();
+
+            if(Yii::$app->request->post()['tipo']=='executado_tp'){
+                $exe = 'exe_tp_id';
+                $tipo_bm = "horas_tp_bm";
+            }
+            if(Yii::$app->request->post()['tipo']=='executado_ej'){
+                $exe = 'exe_ej_id';
+                $tipo_bm = "horas_ej_bm";
+            }
+            if(Yii::$app->request->post()['tipo']=='executado_ep'){
+                $exe = 'exe_ep_id';
+                $tipo_bm = "horas_ep_bm";
+            }
+            if(Yii::$app->request->post()['tipo']=='executado_es'){
+                $exe = 'exe_es_id';
+                $tipo_bm = "horas_es_bm";
+            }
+            if(Yii::$app->request->post()['tipo']=='executado_ee'){
+                $exe = 'exe_ee_id';
+                $tipo_bm = "horas_ee_bm";
+            }
+
+            $executante = Yii::$app->db->createCommand('SELECT '.$exe.' FROM escopo WHERE id='.Yii::$app->request->post()['id'])->queryScalar();
+
+            $tipo_value = Yii::$app->db->createCommand('SELECT '.Yii::$app->request->post()['tipo'].' FROM escopo WHERE id='.Yii::$app->request->post()['id'])->queryScalar();
+
+            $bm_value = Yii::$app->db->createCommand('SELECT horas_bm FROM escopo WHERE id='.Yii::$app->request->post()['id'])->queryScalar();
+
+            $tipo_bm_value = Yii::$app->db->createCommand('SELECT '.$tipo_bm.' FROM escopo WHERE id='.Yii::$app->request->post()['id'])->queryScalar();
+
+            if($tipo_value==null) $tipo_value = 0;
+            if($bm_value==null) $bm_value = 0;
+            if($tipo_bm_value==null) $tipo_bm_value = 0;
+
+            if(Yii::$app->request->post()['value']!='null'){
+                Yii::$app->db->createCommand('UPDATE escopo SET '.Yii::$app->request->post()['tipo'].'='.$tipo_value.'+'.Yii::$app->request->post()['value'].', horas_bm = '.$bm_value.' +'.Yii::$app->request->post()['value'].', '.$tipo_bm.' = '.$tipo_bm_value.'+ '.Yii::$app->request->post()['value'].' WHERE id='.Yii::$app->request->post()['id'])->execute(); 
+            }
 
             echo 'success';
+           return $this->redirect(['tarefa/index', 'projeto_id' => $projeto_id, 'executante_id' => $executante]);
         }
-        
     }
 }

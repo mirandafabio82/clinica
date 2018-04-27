@@ -6,6 +6,7 @@ use kartik\grid\GridView;
 use yii\helpers\Url;
 use app\models\Escopo;
 use yii\helpers\ArrayHelper;
+use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Agenda */
@@ -14,14 +15,40 @@ use yii\helpers\ArrayHelper;
 $this->registerJs('
 
   $(document).ajaxStart(function() {
+    $("#projeto-id").attr("readonly", true);
     $("#loading").show(); // show the gif image when ajax starts
   }).ajaxStop(function() {
+    $("#projeto-id").attr("readonly", false);
       $("#loading").hide(); // hide the gif image when ajax completes
   });
 
-      $(".save").click(function(){
-        $(".form-group").submit();        
-    });
+     $(".save").click(function(){
+        
+        $( ".executado" ).each(function( index ) {
+          
+          divisor = this.name.split("[")[1];
+
+          id = divisor.split("]")[0];
+
+          tipo = this.name.split("[")[2].split("]")[0];
+          console.log(tipo);
+          valor = this.value;
+          if(this.value=="") valor = "null";
+
+          $.ajax({ 
+              url: "index.php?r=tarefa/attatividade",
+              data: {id: id, value: valor, tipo: tipo},
+              type: "POST",
+              success: function(response){
+               console.log(response);
+               
+             },
+             error: function(){
+              console.log("failure");
+            }
+          });
+        });
+      });
     
     $("#executante-id").change(function(ev){
       var id = $(this).val();    
@@ -114,7 +141,7 @@ $this->registerJs('
   <button type="button" class="btn btn-primary save">Adicionar Horas</button>
   <?= Html::a('Gerar BM', ['/tarefa/gerarbm', 'projetoid'=>$projeto_selected], ['class'=>'btn btn-primary']) ?>
 </div>
-
+  <?php Pjax::begin(['id' => 'pjax-grid-view']) ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         // 'filterModel' => $searchModel,
@@ -151,4 +178,6 @@ $this->registerJs('
             // ['class' => 'yii\grid\ActionColumn'],
         ],
     ]);
-    } ?>
+    Pjax::end(); } 
+
+   ?>
