@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\Executante;
 use app\models\ExecutanteTipo;
+use app\models\ExecutanteDisciplina;
 use app\models\DBUser;
 use app\models\search\ExecutanteSearch;
 use yii\web\Controller;
@@ -86,9 +87,13 @@ class ExecutanteController extends Controller
         $model = new Executante();
         $user = new DBUser();
         $exectipo = new ExecutanteTipo();
+        $execdisc = new ExecutanteDisciplina();
 
         $tipos_executantes = Yii::$app->db->createCommand('SELECT id, cargo FROM tipo_executante')->queryAll();
+        $diciplinas = Yii::$app->db->createCommand('SELECT id, nome FROM disciplina')->queryAll();
+        
         $listTipos = ArrayHelper::map($tipos_executantes,'id','cargo');
+        $listDisc = ArrayHelper::map($diciplinas,'id','nome');
 
         if ($_POST) {
             $connection = \Yii::$app->db;
@@ -111,6 +116,12 @@ class ExecutanteController extends Controller
                     }
                 }
 
+                if(isset($_POST['Disciplinas'])){
+                    foreach ($_POST['Disciplinas'] as $key => $disc) {
+                        Yii::$app->db->createCommand('INSERT INTO executante_disciplina (disciplina_id, executante_id) VALUES ('.$disc.', '.$model->usuario_id.')')->execute();    
+                    }
+                }
+
                 $auth = \Yii::$app->authManager;
                 $authorRole = $auth->getRole('executante');
                 $auth->assign($authorRole, $user->getId());  
@@ -128,6 +139,7 @@ class ExecutanteController extends Controller
                 'model' => $model,
                 'user' => $user,
                 'listTipos' => $listTipos,
+                'listDisc' => $listDisc,
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
             ]);
@@ -150,7 +162,10 @@ class ExecutanteController extends Controller
         $beforeSenha = $user->password;
 
         $tipos_executantes = Yii::$app->db->createCommand('SELECT id, cargo FROM tipo_executante')->queryAll();
+        $diciplinas = Yii::$app->db->createCommand('SELECT id, nome FROM disciplina')->queryAll();
+
         $listTipos = ArrayHelper::map($tipos_executantes,'id','cargo');
+        $listDisc = ArrayHelper::map($diciplinas,'id','nome');
 
         if ($_POST) {
             $connection = \Yii::$app->db;
@@ -182,6 +197,15 @@ class ExecutanteController extends Controller
                     $executanteTipo->tipo_id = $tipo;                    
                     $executanteTipo->save();
                 }
+
+                Yii::$app->db->createCommand('DELETE FROM executante_disciplina WHERE executante_id='.$model->usuario_id)->execute();
+
+                foreach ($_POST['Disciplinas'] as $key => $disc) {
+                    $executanteTipo = new ExecutanteDisciplina();
+                    $executanteTipo->executante_id = $model->usuario_id;
+                    $executanteTipo->disciplina_id = $disc;                    
+                    $executanteTipo->save();
+                }
                
 
                 $transaction->commit();
@@ -197,6 +221,7 @@ class ExecutanteController extends Controller
                 'model' => $model,
                 'user' => $user,
                 'listTipos' => $listTipos,
+                'listDisc' => $listDisc,
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
             ]);

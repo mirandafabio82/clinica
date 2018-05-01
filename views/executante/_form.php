@@ -216,6 +216,24 @@ $this->registerJs("
         <?php } ?>
         
     </div>
+
+    <div id="disciplinaExecutantes" style="margin-top: 1em">
+    <label>Disciplinas</label>
+    <br>
+     <?php     
+        foreach ($listDisc as $key => $disc) { 
+          $existeTipo = '';
+          if(!$model->isNewRecord)
+            $existeTipo = Yii::$app->db->createCommand('SELECT disciplina_id FROM executante_disciplina WHERE disciplina_id='.$key.' AND executante_id='.$model->usuario_id)->queryScalar();
+          ?>
+          <?php if(!empty($existeTipo)){ ?>
+            <input type="checkbox" name="Disciplinas[<?=$key?>]" value="<?= $key?>" class="disc-<?=$key?>" checked="1"><?= $disc ?>
+          <?php }else{ ?>        
+            <input type="checkbox" name="Disciplinas[<?=$key?>]" value="<?= $key?>" class="disc-<?=$key?>"><?= $disc ?>
+          <?php } ?>
+        <?php } ?>
+        
+    </div>
   </div>
     <div class="col-md-3">
     <?= $form->field($user, 'nome')->textInput(['maxlength' => true]) ?>
