@@ -230,7 +230,7 @@ class TarefaController extends Controller
             $acumulada = $escopo["horas_acumulada"]+$escopo["horas_bm"];
             $saldo = ($escopo["horas_ee"] + $escopo["horas_es"] + $escopo["horas_ep"] + $escopo["horas_ej"] + $escopo["horas_tp"]) - $acumulada;
 
-            Yii::$app->db->createCommand('UPDATE escopo SET horas_acumulada = '.$acumulada.', horas_saldo = '.$saldo.', horas_bm=0, horas_tp_bm="" , horas_ej_bm="" , horas_ep_bm="" , horas_es_bm="" , horas_ee_bm="" WHERE id='.$escopo["id"])->execute();
+            Yii::$app->db->createCommand('UPDATE escopo SET horas_acumulada = '.$acumulada.', horas_saldo = '.$saldo.', horas_bm=0, horas_tp_bm=0.00 , horas_ej_bm=0.00 , horas_ep_bm=0.00 , horas_es_bm=0.00 , horas_ee_bm=0.00 WHERE id='.$escopo["id"])->execute();
         }
 
         $acu_saldo = Yii::$app->db->createCommand('SELECT SUM(horas_acumulada) horas_acu, SUM(horas_saldo) h_saldo FROM escopo WHERE projeto_id='.$projetoid)->queryOne();
