@@ -49,7 +49,9 @@ class TarefaController extends Controller
         $searchModel = new ProjetoSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        if(!isset($_POST['projeto']) || !isset($_POST['projeto'])){
+        
+        
+        if(!isset($_POST['projeto']) || !isset($_POST['executante'])){
             $_POST['projeto'] = $projeto_id;
             $_POST['executante'] = $executante_id;  
         } 

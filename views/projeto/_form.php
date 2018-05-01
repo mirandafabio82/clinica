@@ -439,7 +439,12 @@ $( ".saveEscopo" ).click(function() {
 });
 
  count=1;
-$("#add-executante").click(function(ev){            
+$("#add-executante").click(function(ev){   
+  count = 0;
+  $( ".executante_dropdown" ).each(function() {
+    count++;
+  });
+    
     var div = $(".drop-exec").children()[0];
     $(div).clone().appendTo(".drop-exec");
     $(div).attr("id","exec_div-"+count);
@@ -456,6 +461,7 @@ $("#add-executante").click(function(ev){
         $("#exec_div-"+id).remove();
     });
   });
+  
 $(".remove-exec").click(function(ev){            
       var id = this.id;       
       id = id.split("[")[1].split("]")[0];      
@@ -744,7 +750,7 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
       <div class="row drop-exec" style="margin-bottom: 1em;margin-left: 1em">
       <?php if($model->isNewRecord){ ?>
         <div class="col-md-3" id="exec_div-0">       
-          <?= $form->field($model, 'executante_id')->dropDownList($listData, ['prompt'=>'Selecione um executante', 'name'=>'ProjetoExecutante[0]']); ?>
+          <?= $form->field($model, 'executante_id')->dropDownList($listData, ['prompt'=>'Selecione um executante', 'name'=>'ProjetoExecutante[0]', 'class' => 'executante_dropdown form-control ']); ?>
           <a class="remove-exec" id="remove-executante[0]"> <i class="fa fa-ban" id="remove-executante[0]"></i></a>
         </div>
       <?php } else{ 
@@ -753,7 +759,7 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
           foreach ($myExecutantes as $key => $myExec){
         ?>
         <div class="col-md-3" id="exec_div-<?=$key?>">       
-          <?= $form->field($model, 'executante_id')->dropDownList($listData, ['prompt'=>'Selecione um executante', 'name'=>'ProjetoExecutante['.$key.']', 'options'=>array($myExec['executante_id']=>array('selected'=>'selected'))]); ?>
+          <?= $form->field($model, 'executante_id')->dropDownList($listData, ['prompt'=>'Selecione um executante' , 'class' => 'executante_dropdown form-control', 'name'=>'ProjetoExecutante['.$key.']', 'options'=>array($myExec['executante_id']=>array('selected'=>'selected'))]); ?>
           <a class="remove-exec" id="remove-executante[<?=$key?>]"> <i class="fa fa-ban" id="remove-executante[<?=$key?>]"></i></a>
         </div>
 

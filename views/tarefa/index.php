@@ -12,6 +12,37 @@ use yii\widgets\Pjax;
 /* @var $model app\models\Agenda */
 /* @var $form yii\widgets\ActiveForm */
 
+if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['executante'])){
+  $this->registerJs('   
+    $( document ).ready(function() {
+        var id = '.Yii::$app->user->getId().';    
+        $("#executante-id").val(id);
+        $.ajax({ 
+          url: "index.php?r=tarefa/preencheprojeto",
+          data: {id: id},
+          type: "POST",
+          success: function(response){
+           var resposta = $.parseJSON(response);
+           console.log(resposta);
+           var myOptions = resposta;
+
+           $("#projeto-id").children("option:not(:first)").remove();
+           var mySelect = $("#projeto-id");
+           $.each(myOptions, function(val, text) {
+            mySelect.append(
+            $("<option></option>").val(text["id"]).html(text["nome"])
+            );
+          });
+        },
+        error: function(){
+          console.log("failure");
+        }
+      });
+    });
+
+');
+}
+
 $this->registerJs('
 
   $(document).ajaxStart(function() {
@@ -101,7 +132,11 @@ $this->registerJs('
     <div class="box-header with-border">
     <?php $form = ActiveForm::begin(); ?>
       <div class="row"> 
-      <div class="col-md-3">  
+      <?php if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])){ ?>
+        <div class="col-md-3"> 
+      <?php } else{?>
+      <div class="col-md-3" hidden>
+      <?php } ?> 
           <select  id="executante-id" class="form-control executante" name="executante" >
             <option value="">Selecione um Executante</option>
             <?php                  
@@ -113,6 +148,7 @@ $this->registerJs('
             <?php } ?>
           </select>
       </div>  
+      
       <div  class="col-md-1">  
         <img style="z-index: 999999999" src="resources/dist/img/loading.gif" type="hidden" name="loading" id="loading" value="" width="64px" hidden/>        
       </div> 
