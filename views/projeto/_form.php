@@ -1145,8 +1145,20 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
     $total_i_EJ = 0;
     $total_i_TP = 0;
 
+    $esc_basicoA = '';
+    $esc_detalhamentoA = '';
+    $esc_configuracaoA = '';
+
+    $esc_basicoP = '';
+    $esc_detalhamentoP = '';
+    $esc_configuracaoP = '';
+
+    $esc_basicoI = '';
+    $esc_detalhamentoI = '';
+    $esc_configuracaoI = '';
 
     foreach ($escopoArray as $key => $esc) { 
+
         $escopoModel =  Escopo::findOne($esc['id']);  
         if(!empty($exe_tp))
           $exe_tp = Yii::$app->db->createCommand('SELECT nome FROM executante WHERE id='.$esc['exe_tp_id'])->queryScalar();
@@ -1158,9 +1170,14 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
           $exe_es = Yii::$app->db->createCommand('SELECT nome FROM executante WHERE id='.$esc['exe_es_id'])->queryScalar();
         if(!empty($exe_ee))
           $exe_ee = Yii::$app->db->createCommand('SELECT nome FROM executante WHERE id='.$esc['exe_ee_id'])->queryScalar();
+        
+        $escopo_padrao_id = Yii::$app->db->createCommand('SELECT escopopadrao_id FROM atividademodelo WHERE id='.$esc['atividademodelo_id'])->queryScalar();
+
+        
 
        //==============================COLUNAS========================================================
       $descricao = '<tr><td style="font-size: 10px">'.$esc['descricao'].'</td>'; 
+
       
       $disciplina = '<td style="font-size: 10px">'.Yii::$app->db->createCommand('SELECT disciplina.nome FROM disciplina JOIN atividademodelo ON atividademodelo.disciplina_id=disciplina.id WHERE atividademodelo.id='.$esc['atividademodelo_id'])->queryScalar().'</td>';
 
@@ -1240,10 +1257,6 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
       echo $form2->field($escopoModel, 'exe_ee_id')->textInput(['style'=>'width:4em;', 'name' => 'Escopo['.$esc["id"].'][exe_ee_id]','id' => 'escopoee-'.$esc["id"], 'type' => 'number', 'hidden'=>'hidden'])->label(false);
       
 
-     
-
-      
-
 
       $total = $esc["horas_tp"]+$esc["horas_ej"]+$esc["horas_ep"]+$esc["horas_es"]+$esc["horas_ee"];
       $total = '<td class="total-td['.$esc['id'].']" style="font-size: 12px">'.$total.'</div>';
@@ -1261,6 +1274,8 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
         $total_a_EP = $esc["horas_ep"] + $total_a_EP;
         $total_a_EJ = $esc["horas_ej"] + $total_a_EJ;
         $total_a_TP = $esc["horas_tp"] + $total_a_TP;
+
+
         
           if($descricao=='<tr><td style="font-size: 10px">Coordenação e Administração</td>'){
             // Yii::$app->db->createCommand('UPDATE escopo SET horas_ee='.$CeA_EE.', horas_es='.$CeA_ES.', horas_ep='.$CeA_EP.', horas_ej='.$CeA_EJ.', horas_tp='.$CeA_TP.' WHERE nome="Coordenação e Administração" AND atividademodelo_id=13 AND projeto_id='.$model->id)->execute();
@@ -1269,7 +1284,19 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
           <th style="width:4.3em;"></th><th style="width:4.3em;"></th><th style="width:4.3em;"></th><th style="width:4.3em;">EE</th><th style="width:4.3em;">ES</th><th style="width:4.3em;">EP</th><th style="width:4.3em;">EJ</th><th style="width:4.3em;">TP</th><th style="width:4.3em;"></th><th style="width:4.3em;"></th><th style="width:4.3em;"></th><th style="width:4.3em;"></th><th style="width:4.3em;">Total</th></tr>';  
           }
           else{
-             $bodyA .=  $descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
+              if($escopo_padrao_id==1){
+                $esc_basicoA.= ' '.$descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
+              }
+              else if($escopo_padrao_id==2){
+               $esc_detalhamentoA.= ' '.$descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
+              }
+              else if($escopo_padrao_id==3){
+                $esc_configuracaoA.= ' '.$descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
+              }
+              else{
+                  $bodyA .= $descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
+              }
+
           }
       }
       if($disciplina_id == 2){
@@ -1284,7 +1311,18 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
           <th style="width:4.3em;"></th><th style="width:4.3em;"></th><th style="width:4.3em;"></th><th style="width:4.3em;">EE</th><th style="width:4.3em;">ES</th><th style="width:4.3em;">EP</th><th style="width:4.3em;">EJ</th><th style="width:4.3em;">TP</th><th style="width:4.3em;"></th><th style="width:4.3em;"></th><th style="width:4.3em;"></th><th style="width:4.3em;"></th><th style="width:4.3em;">Total</th></tr>';  
           }
           else{
-             $bodyP .=  $descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
+             if($escopo_padrao_id==1){
+                $esc_basicoP.= ' '.$descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
+              }
+              else if($escopo_padrao_id==2){
+               $esc_detalhamentoP.= ' '.$descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
+              }
+              else if($escopo_padrao_id==3){
+                $esc_configuracaoP.= ' '.$descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
+              }
+              else{
+                  $bodyP .= $descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
+              }
           }
       }
       if($disciplina_id == 3){
@@ -1299,7 +1337,18 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
           <th style="width:4.3em;"></th><th style="width:4.3em;"></th><th style="width:4.3em;"></th><th style="width:4.3em;">EE</th><th style="width:4.3em;">ES</th><th style="width:4.3em;">EP</th><th style="width:4.3em;">EJ</th><th style="width:4.3em;">TP</th><th style="width:4.3em;"></th><th style="width:4.3em;"></th><th style="width:4.3em;"></th><th style="width:4.3em;"></th><th style="width:4.3em;">Total</th></tr>';  
           }
           else{
-             $bodyI .=  $descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
+             if($escopo_padrao_id==1){
+                $esc_basicoI.= ' '.$descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
+              }
+              else if($escopo_padrao_id==2){
+               $esc_detalhamentoI.= ' '.$descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
+              }
+              else if($escopo_padrao_id==3){
+                $esc_configuracaoI.= ' '.$descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
+              }
+              else{
+                  $bodyI .= $descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
+              }
           }
       } 
       if($disciplina_id == 4){
@@ -1320,6 +1369,26 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
 
           
  } 
+    if(!empty($esc_basicoA)) 
+      $bodyA .= '<tr style="background: aquamarine;"><td>BÁSICO</td><td></td><td></td><td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'.$esc_basicoA;
+    if(!empty($esc_detalhamentoA))
+    $bodyA .= '<tr style="background: aquamarine;"><td>DETALHAMENTO</td><td></td><td></td><td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'.$esc_detalhamentoA;
+    if(!empty($esc_configuracaoA))
+    $bodyA .= '<tr style="background: aquamarine;"><td>CONFIGURAÇÃO</td><td></td><td></td><td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'.$esc_configuracaoA;
+    if(!empty($esc_basicoP))
+      $bodyP .= '<tr style="background: aquamarine;"><td>BÁSICO</td><td></td><td></td><td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'.$esc_basicoP;
+    if(!empty($esc_detalhamentoP))
+      $bodyP .= '<tr style="background: aquamarine;"><td>DETALHAMENTO</td><td></td><td></td><td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'.$esc_detalhamentoP;
+    if(!empty($esc_configuracaoP))
+      $bodyP .= '<tr style="background: aquamarine;"><td>CONFIGURAÇÃO</td><td></td><td></td><td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'.$esc_configuracaoP;
+    if(!empty($esc_basicoI))
+      $bodyI .= '<tr style="background: aquamarine;"><td>BÁSICO</td><td></td><td></td><td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'.$esc_basicoI;
+    if(!empty($esc_detalhamentoI))
+      $bodyI .= '<tr style="background: aquamarine;"><td>DETALHAMENTO</td><td></td><td></td><td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'.$esc_detalhamentoI;
+    if(!empty($esc_configuracaoI))
+      $bodyI .= '<tr style="background: aquamarine;"><td>CONFIGURAÇÃO</td><td></td><td></td><td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'.$esc_configuracaoI;
+  
+
     $entr = Yii::$app->db->createCommand('SELECT SUM(horas_ee) entr_horas_a_ee,SUM(horas_es) entr_horas_a_es,SUM(horas_ep) entr_horas_a_ep,SUM(horas_ej) entr_horas_a_ej,SUM(horas_tp) entr_horas_a_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$model->id.' AND isEntregavel=1 AND disciplina_id=1')->queryOne();
 
     $full = Yii::$app->db->createCommand('SELECT SUM(horas_ee) entr_horas_a_ee,SUM(horas_es) entr_horas_a_es,SUM(horas_ep) entr_horas_a_ep,SUM(horas_ej) entr_horas_a_ej,SUM(horas_tp) entr_horas_a_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=1 AND projeto_id='.$model->id)->queryOne();
