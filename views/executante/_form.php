@@ -157,7 +157,7 @@ $this->registerJs("
                    return Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.$data->usuario_id)->queryScalar();
                },
             ],
-            [
+            /*[
               'header' => '<span style="color:#337ab7">Tipo</span>',              
               'format' => 'raw',
                'value' => function ($data) {
@@ -179,9 +179,9 @@ $this->registerJs("
 
                    return Yii::$app->db->createCommand('SELECT email FROM user WHERE id='.$data->usuario_id)->queryScalar();
                },
-            ],
-            'telefone',
-            'celular',
+            ],*/
+            // 'telefone',
+            // 'celular',
             
             // 'modificado',
 

@@ -70,6 +70,7 @@ $this->registerJs("
             [   
                 'attribute' => 'path',
                 'format' => 'raw',
+                'contentOptions' => ['style' => 'width:20em;  min-width:4em;'],
                 'value' => function($data){
                     $nome = Yii::$app->db->createCommand('SELECT path FROM documento WHERE id ='.$data->id)->queryScalar(); 
                     return Html::a(

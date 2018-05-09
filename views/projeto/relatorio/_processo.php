@@ -188,7 +188,7 @@ th, td {
 			<tr>
 				<td style="font-size: 8pt" align="center"><?= $item ?></td>
 				<td style="font-size: 8pt" ><?= $escopo_2['descricao']?></td>
-				<td style="font-size: 8pt" align="center"></td>
+				<td style="font-size: 8pt" align="center"><?= $escopo_2['qtd']==0 ? "" : $escopo_2['qtd'] ?></td>
 				<td style="font-size: 8pt" align="center"></td>
 				<td style="font-size: 8pt" align="center"><?= $escopo_2['horas_ee']?></td>
 				<td style="font-size: 8pt" align="center"><?= $escopo_2['horas_es']?></td>

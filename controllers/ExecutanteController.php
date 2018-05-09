@@ -199,12 +199,13 @@ class ExecutanteController extends Controller
                 }
 
                 Yii::$app->db->createCommand('DELETE FROM executante_disciplina WHERE executante_id='.$model->usuario_id)->execute();
-
-                foreach ($_POST['Disciplinas'] as $key => $disc) {
-                    $executanteTipo = new ExecutanteDisciplina();
-                    $executanteTipo->executante_id = $model->usuario_id;
-                    $executanteTipo->disciplina_id = $disc;                    
-                    $executanteTipo->save();
+                if(isset($_POST['Disciplinas'])){
+                    foreach ($_POST['Disciplinas'] as $key => $disc) {
+                        $executanteTipo = new ExecutanteDisciplina();
+                        $executanteTipo->executante_id = $model->usuario_id;
+                        $executanteTipo->disciplina_id = $disc;                    
+                        $executanteTipo->save();
+                    }
                 }
                
 
