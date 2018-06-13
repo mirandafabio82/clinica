@@ -143,7 +143,7 @@ th, td {
 	<tr>
 		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: center;"  >0<?= $item ?></td>
 		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  >Total desta medição</td>
-		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  ></td>
+		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  >Teste6</td>
 		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  ></td>
 		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  ></td>
 		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: right;"  ><?= number_format($bm['executado_ee'] * $tipo_exec[4]['valor_hora']+
@@ -151,7 +151,7 @@ th, td {
 																			$bm['executado_ep'] * $tipo_exec[2]['valor_hora']+
 																			$bm['executado_ej'] * $tipo_exec[1]['valor_hora']+
 																			$bm['executado_tp'] * $tipo_exec[0]['valor_hora']+
-																			$projeto->qtd_km * Yii::$app->db->createCommand('SELECT vl_km FROM executante WHERE usuario_id='.$idExecutante)->queryScalar(), 2, ',', '.')?>
+																			$bm['km'] * Yii::$app->db->createCommand('SELECT vl_km FROM executante WHERE usuario_id='.$idExecutante)->queryScalar(), 2, ',', '.')?>
 																				
 		</td>
 	</tr>
