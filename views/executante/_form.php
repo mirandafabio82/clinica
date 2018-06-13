@@ -11,8 +11,12 @@ use kartik\money\MaskMoney;
 ?>
 <style>
 .table-bordered > tbody > tr > td{
-  padding-top: 0px !important;
-  padding-bottom: 0px !important;
+  padding-top: 3px !important;
+  padding-bottom: 3px !important;
+}
+
+.table-striped > tbody > tr:nth-of-type(odd){
+  background-color: #b6b6b6 !important;
 }
 .pagination{
     margin: 0px;

@@ -14,7 +14,7 @@ th, td {
 
 <div style="margin-top:-3em;font-size: 10pt;font-family: arial; font-weight: bold" line-height= "2em" align="center">ANEXO <?=$index ?> </div>
 <div style="font-size: 10pt;font-family: arial; font-weight: bold;" line-height= "2em" align="center">ESTIMATIVA DE CUSTO POR ESPECIALIDADE</div>
-<div style="font-size: 10pt;font-family: arial; font-weight: bold" line-height= "2em" align="center">INSTRUMENTAÇÃO </div>
+<div style="font-size: 10pt;font-family: arial; font-weight: bold" line-height= "2em" align="center">INSTRUMENTAÇÃO (DETALHAMENTO) </div>
 
 <div style="font-size: 10pt;font-family: arial; font-weight: bold; float: right;margin-top: 1em;margin-left: 41em" line-height= "2em" ><?=$projeto->nome ?> </div>
 <div style="margin-bottom:1em; font-size: 10pt;font-family: arial; font-weight: bold;margin-left: 41em " line-height= "2em" >PLANTA: <?=$projeto->site ?> </div>

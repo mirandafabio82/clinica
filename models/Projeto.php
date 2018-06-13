@@ -159,7 +159,7 @@ class Projeto extends \yii\db\ActiveRecord
             'resumo_observacoes' =>'OBSERVAÇÕES',
             'desc_resumida' => 'Descrição Resumida dos Serviços',
             'executante_id' => '',
-            'perc_coord_adm' => 'Percentual Coord Admin'
+            'perc_coord_adm' => '% Coord Admin'
         ];
     }
 

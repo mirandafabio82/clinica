@@ -14,7 +14,7 @@ th, td {
 
 <div style="margin-top:-3em;font-size: 10pt;font-family: arial; font-weight: bold" line-height= "2em" align="center">ANEXO <?=$index ?> </div>
 <div style="font-size: 10pt;font-family: arial; font-weight: bold;" line-height= "2em" align="center">ESTIMATIVA DE CUSTO POR ESPECIALIDADE</div>
-<div style="font-size: 10pt;font-family: arial; font-weight: bold" line-height= "2em" align="center">AUTOMAÇÃO </div>
+<div style="font-size: 10pt;font-family: arial; font-weight: bold" line-height= "2em" align="center">INSTRUMENTAÇÃO (BÁSICO) </div>
 
 <div style="font-size: 10pt;font-family: arial; font-weight: bold; float: right;margin-top: 1em;margin-left: 41em" line-height= "2em" ><?=$projeto->nome ?> </div>
 <div style="margin-bottom:1em; font-size: 10pt;font-family: arial; font-weight: bold;margin-left: 41em " line-height= "2em" >PLANTA: <?=$projeto->site ?> </div>
@@ -189,7 +189,7 @@ th, td {
 				<td style="font-size: 8pt" align="center"><?= $item ?></td>
 				<td style="font-size: 8pt" ><?= $escopo_2['descricao']?></td>
 				<td style="font-size: 8pt" align="center"><?= $escopo_2['qtd']==0 ? "" : $escopo_2['qtd'] ?></td>
-				<td style="font-size: 8pt" align="center"><?= $escopo_2['for']?></td>
+				<td style="font-size: 8pt" align="center"></td>
 				<td style="font-size: 8pt" align="center"><?= $escopo_2['horas_ee']?></td>
 				<td style="font-size: 8pt" align="center"><?= $escopo_2['horas_es']?></td>
 				<td style="font-size: 8pt" align="center"><?= $escopo_2['horas_ep']?></td>

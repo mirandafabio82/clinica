@@ -1,4 +1,8 @@
-<?php $item = 1; ?>
+<?php $item = 1; 
+
+$idExecutante = Yii::$app->db->createCommand('SELECT executante_id FROM projeto_executante WHERE projeto_id='.$projeto->id)->queryScalar();
+
+?>
 <style>
 table, th, td {
     border: 1px solid black;
@@ -132,8 +136,8 @@ th, td {
 		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  >Deslocamento para <?= $bm['qtd_dias'] ?> dias</td>
 		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: center;"  >Km</td>
 		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: right;"  ><?= number_format($bm['km'], 1, ',', '.') ?></td>
-		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: right;"  ><?= number_format(Yii::$app->db->createCommand('SELECT vl_km FROM executante WHERE usuario_id=61')->queryScalar(), 2, ',', '.') ?></td>
-		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: right;"  ><?= number_format($bm['km'] * Yii::$app->db->createCommand('SELECT vl_km FROM executante WHERE usuario_id=61')->queryScalar(), 2, ',', '.') ?></td>
+		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: right;"  ><?= number_format(Yii::$app->db->createCommand('SELECT vl_km FROM executante WHERE usuario_id='.$idExecutante)->queryScalar(), 2, ',', '.') ?></td>
+		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: right;"  ><?= number_format($bm['km'] * Yii::$app->db->createCommand('SELECT vl_km FROM executante WHERE usuario_id='.$idExecutante)->queryScalar(), 2, ',', '.') ?></td>
 	</tr>
 	<?php $item++; ?>
 	<tr>
@@ -147,7 +151,7 @@ th, td {
 																			$bm['executado_ep'] * $tipo_exec[2]['valor_hora']+
 																			$bm['executado_ej'] * $tipo_exec[1]['valor_hora']+
 																			$bm['executado_tp'] * $tipo_exec[0]['valor_hora']+
-																			$projeto->qtd_km * Yii::$app->db->createCommand('SELECT vl_km FROM executante WHERE usuario_id=61')->queryScalar(), 2, ',', '.')?>
+																			$projeto->qtd_km * Yii::$app->db->createCommand('SELECT vl_km FROM executante WHERE usuario_id='.$idExecutante)->queryScalar(), 2, ',', '.')?>
 																				
 		</td>
 	</tr>

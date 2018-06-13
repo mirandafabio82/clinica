@@ -95,13 +95,22 @@ $this->registerJs("
     // $('input').removeClass('form-control');     
   });
 
+
     $('.executado').change(function (e) {
         
         id = this.name.split('[')[1];
         id = id.split(']')[0];
-        console.log($('#progress-bar['+id+']'));
+        var total_executada = 0;
+        $('.executado').each(function(){
+          tempVal = parseInt(this.value);
+          if(this.value==''){
+            tempVal = 0;
+          }
 
-        // $('#progress-bar['+id+']').width('10%');
+          total_executada = total_executada + tempVal;
+        });
+        
+        $('#total-executada')[0].innerText = total_executada; 
 
     });
 ");
@@ -112,7 +121,11 @@ $this->registerJs("
 
 <div class="box-header with-border">
      <div class="form-group">
-<?php  ?>
+<?php  
+    $totalBm = 0;
+    $totalAcumulada = 0;
+    $totalSaldo = 0;
+?>
 <div id="pjax-status">
 
 <?php $form = ActiveForm::begin(); ?>
@@ -201,12 +214,25 @@ $this->registerJs("
         <td style=" text-align: center;font-size: 15px; padding-right: 0.5em;color: #000"><?= $escopoModel['horas_acumulada'] ?>  </td>    
 
          <td style=" text-align: center;font-size: 15px; padding-right: 0.5em;color: #000"><?= $escopoModel['horas_saldo'] ?>  </td>      
-
-         
       </tr>
-      
-      <?php } } ?>
 
+      
+      <?php 
+          $totalBm = $totalBm + $escopoModel['horas_bm'];
+          $totalAcumulada = $totalAcumulada + $escopoModel['horas_acumulada'];
+          $totalSaldo = $totalSaldo + $escopoModel['horas_saldo'];
+
+      } } ?>
+      <!-- row de total -->
+      <tr> 
+        <td style=" padding: 1em;font-size: 15px;color: #000">Total</td>
+
+        <td style=" text-align: center;font-size: 15px; padding-right: 0.5em;color: #000" id="total-executada"> 0.00 </td>    
+
+         <td style=" text-align: center;font-size: 15px; padding-right: 0.5em;color: #000" id="total-bm"> <?= $totalBm ?></td> 
+         <td style=" text-align: center;font-size: 15px; padding-right: 0.5em;color: #000" id="total-acumulada"> 0.00 </td> 
+         <td style=" text-align: center;font-size: 15px; padding-right: 0.5em;color: #000" id="total-saldo"> 0.00 </td>      
+      </tr>
 </table>
       <?php ActiveForm::end(); ?>
 </div>

@@ -216,4 +216,8 @@ $this->registerJs('
     ]);
     Pjax::end(); } 
 
-   ?>
+$this->registerJs('
+  $(".kv-expand-row").click(); // iniciar a pagina com a tabela expandida
+');
+
+?>

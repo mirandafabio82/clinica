@@ -6,7 +6,7 @@ use yii\grid\GridView;
 use yii\widgets\Pjax;
 use yii\helpers\ArrayHelper;
 use app\models\Escopo;
-use app\models\AtividadeModelo;
+use app\models\Atividademodelo;
 use yii\helpers\Url;
 use kartik\money\MaskMoney;
 use kartik\tabs\TabsX;
@@ -18,8 +18,12 @@ use yii\bootstrap\Modal;
 ?>
 <style>
 .table-bordered > tbody > tr > td{
-  padding-top: 0px !important;
-  padding-bottom: 0px !important;
+  padding-top: 3px !important;
+  padding-bottom: 3px !important;
+}
+
+.table-striped > tbody > tr:nth-of-type(odd){
+  background-color: #b6b6b6 !important;
 }
 
 .summary{

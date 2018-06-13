@@ -508,8 +508,6 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
             $valorProposta = $valorProposta + $model->vl_km;
 
             
-           
-
            $model->total_horas = $totalHoras;
             
             foreach ($_POST['Escopo'] as $key => $esc) {
@@ -527,7 +525,13 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                     if($key==$caId_3){
                         $escopo->horas_es = $tot_3;
                     }
-                    $escopo->save();
+
+
+                    if(!$escopo->save()){
+                        print_r($escopo->getErrors());
+                        print_r($escopo->executado);
+                        die();
+                    }
                     
                 }
                
@@ -607,6 +611,7 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
 
                 if($model->save()){     
                     if(isset($_POST['Escopos'])){
+
                         if($_POST['Projeto']['tipo'] == "A"){                   
 
                             $escopos = $_POST['Escopos'];
@@ -925,8 +930,19 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
             $projeto = Projeto::findOne($_GET['id']);          
             
             $processoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=2 AND projeto_id='.$projeto->id)->queryAll();
+            $processoBasicoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=2 AND escopopadrao_id=1 AND projeto_id='.$projeto->id)->queryAll();
+            $processoDetalhamentoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=2 AND escopopadrao_id=2 AND projeto_id='.$projeto->id)->queryAll();
+            $processoConfiguracaoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=2 AND escopopadrao_id=3 AND projeto_id='.$projeto->id)->queryAll();
+
             $automacaoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=1 AND projeto_id='.$projeto->id)->queryAll();
+            $automacaoBasicoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=1 AND escopopadrao_id=1 AND projeto_id='.$projeto->id)->queryAll();
+            $automacaoDetalhamentoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=1 AND escopopadrao_id=2 AND projeto_id='.$projeto->id)->queryAll();
+            $automacaoConfiguracaoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=1 AND escopopadrao_id=3 AND projeto_id='.$projeto->id)->queryAll();
+
             $instrumentacaoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=3 AND projeto_id='.$projeto->id)->queryAll();
+            $instrumentacaoBasicoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=3 AND escopopadrao_id=1 AND projeto_id='.$projeto->id)->queryAll();
+            $instrumentacaoDetalhamentoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=3 AND escopopadrao_id=2 AND projeto_id='.$projeto->id)->queryAll();
+            $instrumentacaoConfiguracaoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=3 AND escopopadrao_id=3 AND projeto_id='.$projeto->id)->queryAll();
             
             if($projeto->tipo == "P"){            
                 $atividadeArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$projeto->id)->queryAll();
@@ -969,23 +985,53 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                 'config' => $config]);
 
             if($projeto->tipo == "A"){
-                $processo = $this->renderPartial('relatorio/_processo', [
+                $processoBasico = $this->renderPartial('relatorio/_processo_basico', [
                     'projeto' => $projeto,
-                    'escopos' => $processoArray,
+                    'escopos' => $processoBasicoArray,
                     'index' => $arrayIndex[$index]]);
-                if(!empty($processoArray)) $index++;
+                if(!empty($processoBasicoArray)) $index++;
+                $processoDetalhamento = $this->renderPartial('relatorio/_processo_detalhamento', [
+                    'projeto' => $projeto,
+                    'escopos' => $processoDetalhamentoArray,
+                    'index' => $arrayIndex[$index]]);
+                if(!empty($processoDetalhamentoArray)) $index++;
+                $processoConfiguracao = $this->renderPartial('relatorio/_processo_configuracao', [
+                    'projeto' => $projeto,
+                    'escopos' => $processoConfiguracaoArray,
+                    'index' => $arrayIndex[$index]]);
+                if(!empty($processoConfiguracaoArray)) $index++;
 
-                $automacao = $this->renderPartial('relatorio/_automacao', [
+                $automacaoBasico = $this->renderPartial('relatorio/_automacao_basico', [
                     'projeto' => $projeto,
-                    'escopos' => $automacaoArray,
+                    'escopos' => $automacaoBasicoArray,
                     'index' => $arrayIndex[$index]]);
-                if(!empty($automacaoArray)) $index++;
+                if(!empty($automacaoBasicoArray)) $index++;
+                $automacaoDetalhamento = $this->renderPartial('relatorio/_automacao_detalhamento', [
+                    'projeto' => $projeto,
+                    'escopos' => $automacaoDetalhamentoArray,
+                    'index' => $arrayIndex[$index]]);
+                if(!empty($automacaoDetalhamentoArray)) $index++;
+                $automacaoConfiguracao = $this->renderPartial('relatorio/_automacao_configuracao', [
+                    'projeto' => $projeto,
+                    'escopos' => $automacaoConfiguracaoArray,
+                    'index' => $arrayIndex[$index]]);
+                if(!empty($automacaoConfiguracaoArray)) $index++;
 
-                $instrumentacao = $this->renderPartial('relatorio/_instrumentacao', [
+                $instrumentacaoBasico = $this->renderPartial('relatorio/_instrumentacao_basico', [
                     'projeto' => $projeto,
-                    'escopos' => $instrumentacaoArray,
+                    'escopos' => $instrumentacaoBasicoArray,
                     'index' => $arrayIndex[$index]]);
-                if(!empty($instrumentacaoArray)) $index++;
+                if(!empty($instrumentacaoBasicoArray)) $index++;
+                $instrumentacaoDetalhamento = $this->renderPartial('relatorio/_instrumentacao_detalhamento', [
+                    'projeto' => $projeto,
+                    'escopos' => $instrumentacaoDetalhamentoArray,
+                    'index' => $arrayIndex[$index]]);
+                if(!empty($instrumentacaoDetalhamentoArray)) $index++;
+                $instrumentacaoConfiguracao = $this->renderPartial('relatorio/_instrumentacao_configuracao', [
+                    'projeto' => $projeto,
+                    'escopos' => $instrumentacaoConfiguracaoArray,
+                    'index' => $arrayIndex[$index]]);
+                if(!empty($instrumentacaoConfiguracaoArray)) $index++;
             }
             if($projeto->tipo == "P"){
                 $atividade = $this->renderPartial('relatorio/_atividade', [
@@ -1018,17 +1064,43 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                 $mpdf->WriteHTML($as);
             }
             if($projeto->tipo == "A"){
-                if(!empty($processoArray)){
+                if(!empty($processoBasicoArray)){
                     $mpdf->AddPage();
-                    $mpdf->WriteHTML($processo);
+                    $mpdf->WriteHTML($processoBasico);
                 }
-                if(!empty($automacaoArray)){
+                if(!empty($processoDetalhamentoArray)){
                     $mpdf->AddPage();
-                    $mpdf->WriteHTML($automacao);
+                    $mpdf->WriteHTML($processoDetalhamento);
                 }
-                if(!empty($instrumentacaoArray)){
+                if(!empty($processoConfiguracaoArray)){
                     $mpdf->AddPage();
-                    $mpdf->WriteHTML($instrumentacao);
+                    $mpdf->WriteHTML($processoConfiguracao);
+                }
+
+                if(!empty($automacaoBasicoArray)){
+                    $mpdf->AddPage();
+                    $mpdf->WriteHTML($automacaoBasico);
+                }
+                if(!empty($automacaoDetalhamentoArray)){
+                    $mpdf->AddPage();
+                    $mpdf->WriteHTML($automacaoDetalhamento);
+                }
+                if(!empty($automacaoConfiguracaoArray)){
+                    $mpdf->AddPage();
+                    $mpdf->WriteHTML($automacaoConfiguracao);
+                }
+
+                if(!empty($instrumentacaoBasicoArray)){
+                    $mpdf->AddPage();
+                    $mpdf->WriteHTML($instrumentacaoBasico);
+                }
+                if(!empty($instrumentacaoDetalhamentoArray)){
+                    $mpdf->AddPage();
+                    $mpdf->WriteHTML($instrumentacaoDetalhamento);
+                }
+                if(!empty($instrumentacaoConfiguracaoArray)){
+                    $mpdf->AddPage();
+                    $mpdf->WriteHTML($instrumentacaoConfiguracao);
                 }
             }
             if($projeto->tipo == "P"){
