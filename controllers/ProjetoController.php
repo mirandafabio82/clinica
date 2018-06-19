@@ -179,7 +179,7 @@ class ProjetoController extends Controller
                     $model->data_entrega = date_format($dat, 'Y-m-d');
                 }
 
-                $model->resumo_escopo = '1.1- Elaboração de projeto básico, com base no PROJETO CONCEITUAL BK-BA07-00200-PC-03-00003 Rev. 1 Migração para PLC do intertravamento de alta temperatura na purificação de eteno.
+                /*$model->resumo_escopo = '1.1- Elaboração de projeto básico, com base no PROJETO CONCEITUAL BK-BA07-00200-PC-03-00003 Rev. 1 Migração para PLC do intertravamento de alta temperatura na purificação de eteno.
 1.2- Implementar no PLC de segurança o intertravamento por alta temperatura (TAHH) respectivo das colunas de purificação de eteno C-2107, C-2109, C-2111, C-2112, C-2113 e C-2115, além do TAH da coluna C-2103.
 1.3- Elaboração de MEMORA DE CÁLCULO SIL, considerando a instrumentação existe do alarme de TAHH respectivo das colunas de purificação de eteno C-2107, C-2109, C-2111, C-2112, C-2113 e C-2115, além do TAH da coluna C-2103, conforme solicitado pelo conceitual. Incluindo as sugestões de adequação das funções para atendimento do SIL requerido, (caso necessário).';
                 $model->resumo_exclusoes = '2.1- Participação em reuniões de HAZOP e Analise de risco.
@@ -198,9 +198,9 @@ class ProjetoController extends Controller
                 $model->resumo_normas = 'Padrão Normativo de Engenharia - PN-0502-00062 - Critérios para Projetos de Instrumentação
 Sistemas Instrumentados de Segurança PNE-80-00087';
 
-                $model->resumo_documentos = 'PROJETO CONCEITUAL BK-BA07-00200-PC-03-00003 Rev. 1 Migração para PLC do intertravamento de alta temperatura na purificação de eteno.';
+                $model->resumo_documentos = 'PROJETO CONCEITUAL BK-BA07-00200-PC-03-00003 Rev. 1 Migração para PLC do intertravamento de alta temperatura na purificação de eteno.';*/
                 $model->resumo_observacoes ='1- O valor desta proposta refere-se ao número de horas previstas na tabela do ANEXO I;                                                     
-2 - As condições e valores dessa proposta estão de acordo com o contrato N° 4600008691/2015 firmado entre a BRASKEM e a HCN Automação;                                                      
+2 - As condições e valores dessa proposta estão de acordo com o contrato N° 4600015210/2015 firmado entre a BRASKEM e a HCN Automação;                                                      
 3 - Esta AS é válida por 30 dias, contados da data da sua emissão;                                                      
 4 - Em caso de aprovação desta proposta, favor enviar e-mail para helder@hcnautomacao.com.br ou contato telefônico no número 71-98867-3010                                                      
      para esclarecimentos da emissão do pedido de compra, e posteriormente para andamento dos serviços.                                                     
@@ -225,6 +225,16 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                                     $escopo_model->atividademodelo_id = $atv['id'];
                                     $escopo_model->nome = $atv['nome'];
                                     $escopo_model->descricao = $atv['nome'];
+
+                                    //Quando é coordenação e administração
+                                    if($escopo_model->nome == "Coordenação e Administração"){
+                                        $escopo_model->exe_tp_id = 61;
+                                        $escopo_model->exe_ej_id = 61;
+                                        $escopo_model->exe_ep_id = 61;
+                                        $escopo_model->exe_es_id = 61;
+                                        $escopo_model->exe_ee_id = 61;
+                                    }
+                                    
                                     $escopo_model->save();
                                 }
                             }
@@ -238,6 +248,16 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                                     $escopo_model->atividademodelo_id = $atv['id'];
                                     $escopo_model->nome = $atv['nome'];
                                     $escopo_model->descricao = $atv['nome'];
+
+                                    //Quando é coordenação e administração
+                                    if($escopo_model->nome == "Coordenação e Administração"){
+                                        $escopo_model->exe_tp_id = 61;
+                                        $escopo_model->exe_ej_id = 61;
+                                        $escopo_model->exe_ep_id = 61;
+                                        $escopo_model->exe_es_id = 61;
+                                        $escopo_model->exe_ee_id = 61;
+                                    }
+
                                     $escopo_model->save();
                                 }
                             }
@@ -251,6 +271,16 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                                     $escopo_model->atividademodelo_id = $atv['id'];
                                     $escopo_model->nome = $atv['nome'];
                                     $escopo_model->descricao = $atv['nome'];
+
+                                    //Quando é coordenação e administração
+                                    if($escopo_model->nome == "Coordenação e Administração"){
+                                        $escopo_model->exe_tp_id = 61;
+                                        $escopo_model->exe_ej_id = 61;
+                                        $escopo_model->exe_ep_id = 61;
+                                        $escopo_model->exe_es_id = 61;
+                                        $escopo_model->exe_ee_id = 61;
+                                    }
+
                                     $escopo_model->save();
                                 }
                             }
@@ -264,6 +294,15 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                                     $escopo_model->atividademodelo_id = $atv['id'];
                                     $escopo_model->nome = $atv['nome'];
                                     $escopo_model->descricao = $atv['nome'];
+
+                                    //Quando é coordenação e administração
+                                    if($escopo_model->nome == "Coordenação e Administração"){
+                                        $escopo_model->exe_tp_id = 61;
+                                        $escopo_model->exe_ej_id = 61;
+                                        $escopo_model->exe_ep_id = 61;
+                                        $escopo_model->exe_es_id = 61;
+                                        $escopo_model->exe_ee_id = 61;
+                                    }
                                     
                                     $escopo_model->save();
 

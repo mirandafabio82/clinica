@@ -309,7 +309,7 @@ $this->registerJs('
 	    <?= $form->field($model, 'contratada')->textInput(['maxlength' => true, 'value' => 'HCN AUTOMAÇÃO LTDA']) ?>
  		</div>
 	    <div class="col-md-2">  
-	    <?= $form->field($model, 'cnpj')->textInput(['maxlength' => true, 'value' => '10.486.000/0001-05']) ?>
+	    <?= $form->field($model, 'cnpj')->textInput(['maxlength' => true, 'value' => '10.486.000/0002-88']) ?>
 	    </div>
 	    <div class="col-md-3"> 
 	    <?= $form->field($model, 'contato')->textInput(['maxlength' => true, 'value' => 'HÉLDER CÂMARA DO NASCIMENTO']) ?>
@@ -425,19 +425,44 @@ $this->registerJs('
      EXECUTADO
     <div class="row" style="border:1px solid black;padding: 2px; margin-bottom: 1em">
       <div class="col-md-1" style="text-align: center"> 
-      <?= $form->field($model, 'executado_ee')->textInput(['maxlength' => true]) ?> 
+        <?php if(!empty(Yii::$app->db->createCommand('SELECT SUM(horas_ee) FROM escopo WHERE projeto_id='.$model->projeto_id)->queryScalar())){ ?>
+      <?= $form->field($model, 'executado_ee')->textInput(['maxlength' => true])->label("EE / ".Yii::$app->db->createCommand('SELECT SUM(horas_ee) FROM escopo WHERE projeto_id='.$model->projeto_id)->queryScalar()) ?> 
+      <?php } else{ ?>
+        <?= $form->field($model, 'executado_ee')->textInput(['maxlength' => true])?>
+      <?php  } ?>
     </div>
+
     <div class="col-md-1" style="text-align: center"> 
-      <?= $form->field($model, 'executado_es')->textInput(['maxlength' => true]) ?> 
+      <?php if(!empty(Yii::$app->db->createCommand('SELECT SUM(horas_es) FROM escopo WHERE projeto_id='.$model->projeto_id)->queryScalar())){ ?>
+      <?= $form->field($model, 'executado_es')->textInput(['maxlength' => true])->label("ES / ".Yii::$app->db->createCommand('SELECT SUM(horas_es) FROM escopo WHERE projeto_id='.$model->projeto_id)->queryScalar()) ?> 
+      <?php } else{ ?>
+        <?= $form->field($model, 'executado_es')->textInput(['maxlength' => true])?>
+      <?php  } ?>
     </div>
+
     <div class="col-md-1" style="text-align: center"> 
-      <?= $form->field($model, 'executado_ep')->textInput(['maxlength' => true]) ?> 
+       <?php if(!empty(Yii::$app->db->createCommand('SELECT SUM(horas_ep) FROM escopo WHERE projeto_id='.$model->projeto_id)->queryScalar())){ ?>
+      <?= $form->field($model, 'executado_ep')->textInput(['maxlength' => true])->label("EP / ".Yii::$app->db->createCommand('SELECT SUM(horas_ep) FROM escopo WHERE projeto_id='.$model->projeto_id)->queryScalar()) ?> 
+      <?php } else{ ?>
+        <?= $form->field($model, 'executado_ep')->textInput(['maxlength' => true])?>
+      <?php  } ?>
     </div>
+
     <div class="col-md-1" style="text-align: center"> 
-      <?= $form->field($model, 'executado_ej')->textInput(['maxlength' => true]) ?> 
+      <?php if(!empty(Yii::$app->db->createCommand('SELECT SUM(horas_ej) FROM escopo WHERE projeto_id='.$model->projeto_id)->queryScalar())){ ?>
+      <?= $form->field($model, 'executado_ej')->textInput(['maxlength' => true])->label("EJ / ".Yii::$app->db->createCommand('SELECT SUM(horas_ej) FROM escopo WHERE projeto_id='.$model->projeto_id)->queryScalar()) ?> 
+      <?php } else{ ?>
+        <?= $form->field($model, 'executado_ej')->textInput(['maxlength' => true])?>
+      <?php  } ?>
     </div>
+
     <div class="col-md-1" style="text-align: center"> 
-      <?= $form->field($model, 'executado_tp')->textInput(['maxlength' => true]) ?> 
+      <?php if(!empty(Yii::$app->db->createCommand('SELECT SUM(horas_tp) FROM escopo WHERE projeto_id='.$model->projeto_id)->queryScalar())){ ?>
+          <?= $form->field($model, 'executado_tp')->textInput(['maxlength' => true])->label("TP / ".Yii::$app->db->createCommand('SELECT SUM(horas_tp) FROM escopo WHERE projeto_id='.$model->projeto_id)->queryScalar()) ?> 
+      <?php } else{ ?>
+          <?= $form->field($model, 'executado_tp')->textInput(['maxlength' => true])?> 
+      <?php  } ?>
+
     </div>
     </div>
 	</div>

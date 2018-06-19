@@ -234,6 +234,17 @@ class TarefaController extends Controller
         }
 
         $acu_saldo = Yii::$app->db->createCommand('SELECT SUM(horas_acumulada) horas_acu, SUM(horas_saldo) h_saldo FROM escopo WHERE projeto_id='.$projetoid)->queryOne();
+
+        //quantidade de bms do projeto
+        $numbm = count(Yii::$app->db->createCommand('SELECT id FROM bm WHERE projeto_id='.$projetoModel->id)->queryAll()) + 1;
+
+        $horasAS = Yii::$app->db->createCommand('SELECT SUM(horas_ee) h_ee, SUM(horas_es) h_es, SUM(horas_ep) h_ep, SUM(horas_ej) h_ej, SUM(horas_tp) h_tp FROM escopo WHERE projeto_id='.$projetoid)->queryOne();
+
+        $totalHoras = $horasAS['h_ee']+$horasAS['h_es']+$horasAS['h_ep']+$horasAS['h_ej']+$horasAS['h_tp'];
+       
+
+        $percBm = sprintf("%.2f",(($executadas['ee_bm']+$executadas['es_bm']+$executadas['ep_bm']+$executadas['ej_bm']+$executadas['tp_bm']) * 100) / $totalHoras);
+        $percAcumulada = sprintf("%.2f",($acu_saldo['horas_acu'] * 100) / $totalHoras);
         
         $bmModel = new Bm();
         $bmModel->projeto_id = $projetoModel->id;
@@ -251,6 +262,7 @@ class TarefaController extends Controller
         $bmModel->qtd_dias = $projetoModel->qtd_dias;
         $bmModel->km = $projetoModel->qtd_km;
         $bmModel->numero_bm = $ultBM;
+        $bmModel->descricao = $projetoModel->desc_resumida.'.'.PHP_EOL.'Esse '.$numbm.' Boletim de Medição corresponde a '.$percBm.'% das atividades citadas na '.$projetoModel->nome.''.PHP_EOL.'A medição total acumulada incluindo este BM corresponde a '.$percAcumulada.'% das atividades realizadas.';
 
         if(!$bmModel->save()){
             print_r($bmModel->getErrors());
