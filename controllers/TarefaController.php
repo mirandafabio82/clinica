@@ -8,6 +8,7 @@ use app\models\search\TarefaSearch;
 use app\models\Escopo;
 use app\models\search\EscopoSearch;
 use app\models\Bm;
+use app\models\Bmescopo;
 use app\models\search\BmSearch;
 use app\models\Projeto;
 use app\models\search\ProjetoSearch;
@@ -224,14 +225,8 @@ class TarefaController extends Controller
 
         Yii::$app->db->createCommand('UPDATE config SET ultimo_bm ='.$ultBM)->execute();
 
-        $escopos = Yii::$app->db->createCommand('SELECT * FROM escopo WHERE projeto_id='.$projetoid)->queryAll();
+        $numeroBmAtual = count(Yii::$app->db->createCommand('SELECT COUNT(id) FROM bm WHERE projeto_id='.$projetoid)->queryAll()) + 1;
 
-        foreach ($escopos as $key => $escopo) {
-            $acumulada = $escopo["horas_acumulada"]+$escopo["horas_bm"];
-            $saldo = ($escopo["horas_ee"] + $escopo["horas_es"] + $escopo["horas_ep"] + $escopo["horas_ej"] + $escopo["horas_tp"]) - $acumulada;
-
-            Yii::$app->db->createCommand('UPDATE escopo SET horas_acumulada = '.$acumulada.', horas_saldo = '.$saldo.', horas_bm=0, horas_tp_bm=0.00 , horas_ej_bm=0.00 , horas_ep_bm=0.00 , horas_es_bm=0.00 , horas_ee_bm=0.00 WHERE id='.$escopo["id"])->execute();
-        }
 
         $acu_saldo = Yii::$app->db->createCommand('SELECT SUM(horas_acumulada) horas_acu, SUM(horas_saldo) h_saldo FROM escopo WHERE projeto_id='.$projetoid)->queryOne();
 
@@ -262,6 +257,7 @@ class TarefaController extends Controller
         $bmModel->qtd_dias = $projetoModel->qtd_dias;
         $bmModel->km = $projetoModel->qtd_km;
         $bmModel->numero_bm = $ultBM;
+        $bmModel->num_bm_proj = $numeroBmAtual;
         $bmModel->descricao = $projetoModel->desc_resumida.'.'.PHP_EOL.'Esse '.$numbm.' Boletim de Medição corresponde a '.$percBm.'% das atividades citadas na '.$projetoModel->nome.''.PHP_EOL.'A medição total acumulada incluindo este BM corresponde a '.$percAcumulada.'% das atividades realizadas.';
 
         if(!$bmModel->save()){
@@ -269,6 +265,24 @@ class TarefaController extends Controller
             die();
         }
 
+        $escopos = Yii::$app->db->createCommand('SELECT * FROM escopo WHERE projeto_id='.$projetoid)->queryAll();
+        //salva as horas de cada escopo do BM e zera os valores
+        foreach ($escopos as $key => $escopo) {
+            $acumulada = $escopo["horas_acumulada"]+$escopo["horas_bm"];
+            $saldo = ($escopo["horas_ee"] + $escopo["horas_es"] + $escopo["horas_ep"] + $escopo["horas_ej"] + $escopo["horas_tp"]) - $acumulada;
+            //armazena os valores do bm de cada executante
+            $bmescopo = new Bmescopo();
+            $bmescopo->bm_id = $bmModel->id;
+            $bmescopo->escopo_id = $escopo['id'];
+            $bmescopo->horas_tp = $escopo["horas_tp_bm"];
+            $bmescopo->horas_ej = $escopo["horas_ej_bm"];
+            $bmescopo->horas_ep = $escopo["horas_ep_bm"];
+            $bmescopo->horas_es = $escopo["horas_es_bm"];
+            $bmescopo->horas_ee = $escopo["horas_ee_bm"];
+            $bmescopo->save();
+
+            Yii::$app->db->createCommand('UPDATE escopo SET horas_acumulada = '.$acumulada.', horas_saldo = '.$saldo.', horas_bm=0, horas_tp_bm=0.00 , horas_ej_bm=0.00 , horas_ep_bm=0.00 , horas_es_bm=0.00 , horas_ee_bm=0.00 WHERE id='.$escopo["id"])->execute();
+        }
         
 
         return $this->redirect(['bm/update', 'id' => $bmModel->id]);

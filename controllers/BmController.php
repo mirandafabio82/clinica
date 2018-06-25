@@ -158,11 +158,16 @@ class BmController extends Controller
             return $this->redirect(['update', 'id' => $model->id]);
         }
 
+        //horas de cada executante
+        $bmescopos = Yii::$app->db->createCommand('SELECT escopo_id, exe_tp_id, exe_ej_id, exe_ep_id, exe_es_id, exe_ee_id, SUM(bm_escopo.horas_tp) h_tp, SUM(bm_escopo.horas_ej) h_ej, SUM(bm_escopo.horas_ep) h_ep, SUM(bm_escopo.horas_es) h_es, SUM(bm_escopo.horas_ee) h_ee FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE (bm_escopo.horas_tp!=0 || bm_escopo.horas_ej!=0 || bm_escopo.horas_ep!=0 || bm_escopo.horas_es!=0 || bm_escopo.horas_ee!=0) AND bm_id = '.$model->id.' GROUP BY escopo_id')->queryAll();
+        
+       
         return $this->render('update', [
             'model' => $model,
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
             'listProjetos' => $listProjetos,
+            'bmescopos' => $bmescopos,
         ]);
     }
 

@@ -232,7 +232,7 @@ $("#projeto-qtd_dias").focusout(function() {
      
      $("#projeto-qtd_km").val(qtd_km);
      $("#projeto-vl_km").val(valor_km);
-
+     $("#projeto-vl_km-disp").val(valor_km ).trigger("mask.maskMoney");
 
   },
   error: function(){
@@ -953,7 +953,16 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
         <?= $form->field($model, 'qtd_km')->textInput(['style'=>'width:6em']) ?>
       </div>
       <div class="col-md-1" <?=$visible?>>
-        <?= $form->field($model, 'vl_km')->textInput(['maxlength' => true, 'style'=>'width:6em']) ?>
+        <?= $form->field($model, 'vl_km')->textInput(['maxlength' => true, 'style'=>'width:6em'])->widget(MaskMoney::classname(), [
+          'pluginOptions' => [
+              'prefix' => 'R$ ',
+              'thousands' => '.',
+              'decimal' => ',',
+              // 'suffix' => ' ¢',
+              'allowNegative' => false
+
+          ]
+      ]); ?>
       </div>
       </div>
       </div>

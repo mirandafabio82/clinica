@@ -50,6 +50,14 @@ $this->registerJs('
 ');
 ?>
 <style>
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 50%;
+}
+td, th {
+    border: 1px solid #dddddd;    
+}
 .table-bordered > tbody > tr > td{
   padding-top: 3px !important;
   padding-bottom: 3px !important;
@@ -69,6 +77,7 @@ $this->registerJs('
 #w2{
     display: none;
 }
+
 
 
 </style>
@@ -128,7 +137,7 @@ $this->registerJs('
                 if(isset($data->projeto_id))                  
                         $projeto = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN projeto ON escopo.projeto_id = projeto.id WHERE projeto.id='.$data->projeto_id)->queryOne();      
                         if(!empty($projeto))                            
-                              return 'BM-'.$projeto['codigo'].'-'.$projeto['site'].'-'.preg_replace('/[^0-9]/', '', $projeto['nome']).'_'.$projeto['rev_proposta'];
+                              return 'BM-'.$projeto['codigo'].'-'.$projeto['site'].'-'.preg_replace('/[^0-9]/', '', $projeto['nome']).'_'.$data->num_bm_proj;
                 }
             ],       
             [
@@ -465,13 +474,52 @@ $this->registerJs('
 
     </div>
     </div>
+    <table>
+  <tr>
+    <th>Executante</th>
+    <th>Horas TP</th>
+    <th>Horas EJ</th>
+    <th>Horas EP</th>
+    <th>Horas ES</th>
+    <th>Horas EE</th>
+  </tr>
+  
+ <?php 
+  $executantes = Yii::$app->db->createCommand('SELECT user.id, nome FROM projeto_executante JOIN user ON projeto_executante.executante_id=user.id WHERE projeto_id='.$model->projeto_id)->queryAll();
+ foreach ($executantes as $key => $exec) { ?>
+  <tr>
+   <td><?= $exec['nome']?></td> 
+
+   <td align="center"><?= empty(Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_tp) h_tp FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$model->id.' AND exe_tp_id='.$exec['id'])->queryScalar()) ? '0.00' : Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_tp) h_tp FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$model->id.' AND exe_tp_id='.$exec['id'])->queryScalar();
+   ?></td>
+  
+  <td align="center"><?= empty(Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_ej) h_ej FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$model->id.' AND exe_ej_id='.$exec['id'])->queryScalar()) ? '0.00' : Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_ej) h_ej FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$model->id.' AND exe_ej_id='.$exec['id'])->queryScalar();
+   ?></td>
+
+   <td align="center"><?= empty(Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_ep) h_ep FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$model->id.' AND exe_ep_id='.$exec['id'])->queryScalar()) ? '0.00' : Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_ep) h_ep FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$model->id.' AND exe_ep_id='.$exec['id'])->queryScalar();
+   ?></td>
+
+   <td align="center"><?= empty(Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_es) h_es FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$model->id.' AND exe_es_id='.$exec['id'])->queryScalar()) ? '0.00' : Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_es) h_es FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$model->id.' AND exe_es_id='.$exec['id'])->queryScalar();
+   ?></td>
+
+   <td align="center"><?= empty(Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_ee) h_ee FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$model->id.' AND exe_ee_id='.$exec['id'])->queryScalar()) ? '0.00' : Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_ee) h_ee FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$model->id.' AND exe_ee_id='.$exec['id'])->queryScalar();
+   ?></td>
+  </tr>
+ <?php } ?>
+
+</table>
 	</div>
    <?php } ?>
     <div class="form-group">
         <?= Html::submitButton('Salvar', ['class' => 'btn btn-primary']) ?>
         <?php if(!$model->isNewRecord){ ?>
         <?= Html::a('<span class="btn-label">Visualizar BM</span>', ['gerarbm', 'id' => $model->id], ['class' => 'btn btn-primary', 'target'=>'_blank', 'style'=> ' margin-right: 1em']) ?>
+
+        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#emailModal">Email</button>
         <?php } ?>
+
+
+        
     </div>
 
     <?php ActiveForm::end(); ?>
@@ -479,3 +527,76 @@ $this->registerJs('
 </div>
 </div>
 </div>
+
+<?php if(!$model->isNewRecord){ ?>
+
+<?php 
+  $solicitante = Yii::$app->db->createCommand('SELECT user.nome FROM user JOIN projeto ON projeto.contato_id=user.id WHERE projeto.id='.$model->projeto_id)->queryScalar();
+  
+  $descricao = $model->descricao;
+
+  $dataEmail = date('d') < 15 ? '14/'.date('m/Y') : '25/'.date('m/Y'); 
+
+  $numberBM = $model->num_bm_proj;
+//transforma o numero de decimal para romano
+  $map = array('M' => 1000, 'CM' => 900, 'D' => 500, 'CD' => 400, 'C' => 100, 'XC' => 90, 'L' => 50, 'XL' => 40, 'X' => 10, 'IX' => 9, 'V' => 5, 'IV' => 4, 'I' => 1);
+    $numRoman = '';
+    while ($numberBM > 0) {
+        foreach ($map as $roman => $int) {
+            if($numberBM >= $int) {
+                $numberBM -= $int;
+                $numRoman .= $roman;
+                break;
+            }
+        }
+    }
+
+?>
+
+<!-- Modal -->
+<div id="emailModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Email</h4>
+      </div>
+      <div class="modal-body">
+        <label>Remetente(s)</label>
+        <input type="text" id="remetente" name="remetente" class="form-control">
+
+        <label>Assunto</label>
+        <input type="text" id="assunto" name="assunto" class="form-control">
+
+        <label>Corpo do Email</label>
+        <textarea rows="15" cols="100" id="corpoEmail" name="corpoEmail" class="form-control">          
+Bom dia, <?= $solicitante ?>!
+
+Segue nosso <?= $numRoman ?> Boletim de Medição para <?= $descricao ?>
+
+
+Solicitamos sua aprovação para a emissão da FRS, preferencialmente até <?= $dataEmail ?>.
+
+
+
+
+Atenciosamente,
+
+Hélder Câmara
+HCN Automação
+71 98867-3010 (Vivo)
+71 99295-5214 (Tim)
+        </textarea>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+        <button type="button" class="btn btn-success" id="enviarEmail" data-dismiss="modal">Enviar</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+<?php } ?>

@@ -57,6 +57,10 @@ class BmSearch extends Bm
             'pagination' => [
                 'pageSize' => 10,
             ],
+            'sort' => [
+            'defaultOrder' => [
+                'id' => SORT_DESC,
+            ]]
         ]);
 
         $this->load($params);

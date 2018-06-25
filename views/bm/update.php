@@ -18,6 +18,7 @@ $this->params['breadcrumbs'][] = 'Update';
         'dataProvider' => $dataProvider,
         'searchModel' => $searchModel,
         'listProjetos' => $listProjetos,
+        'bmescopos' => $bmescopos,
     ]) ?>
 
 </div>
