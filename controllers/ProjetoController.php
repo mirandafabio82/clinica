@@ -146,7 +146,7 @@ class ProjetoController extends Controller
         $listStatus = ArrayHelper::map($status,'id','status');
 
         $status_geral = Yii::$app->db->createCommand('SELECT id, status FROM status_geral')->queryAll();
-        $listStatusGeral = ArrayHelper::map($status_geral,'id','status_geral');
+        $listStatusGeral = ArrayHelper::map($status_geral,'id','status');
 
         $executantes = Yii::$app->db->createCommand('SELECT usuario_id, nome FROM executante JOIN user ON executante.usuario_id = user.id')->queryAll();
         $listExecutantes = ArrayHelper::map($executantes,'usuario_id','nome');

@@ -733,9 +733,12 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
            
             ],
             ]); ?>
-            <div status="align:center">
-              <img src="resources/dist/img/status/status_<?= $model->status_geral - 1 ?>.png" style="width: 70%">
-            </div>
+            <?php if(!$model->isNewRecord){ ?>
+                <div status="align:center">
+                  <img src="resources/dist/img/status/status_<?= $model->status_geral - 1 ?>.png" style="width: 70%">
+                </div>
+            <?php }?>
+          
             </div>
             </div>
 
