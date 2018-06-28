@@ -74,7 +74,7 @@ class Projeto extends \yii\db\ActiveRecord
     {
         return [
             // [['cliente_id', 'contato_id', 'nome', 'status', 'site', 'planta'], 'required'],
-            [['id', 'cliente_id', 'contato_id', 'rev_proposta', 'qtd_hh', 'qtd_dias', 'qtd_km', 'status', 'documentos' ,'executante_id', 'perc_coord_adm'], 'integer'],
+            [['id', 'cliente_id', 'contato_id', 'rev_proposta', 'qtd_hh', 'qtd_dias', 'qtd_km', 'status', 'status_geral', 'documentos' ,'executante_id', 'perc_coord_adm'], 'integer'],
             [['data_proposta', 'data_entrega', 'criado', 'modificado'], 'safe'],
             [['vl_hh', 'total_horas', 'vl_km', 'total_km', 'valor_proposta', 'valor_consumido', 'valor_saldo'], 'number'],
             [['descricao', 'obs_atividade'], 'string'],
@@ -132,6 +132,7 @@ class Projeto extends \yii\db\ActiveRecord
             'valor_consumido' => 'Valor Consumido',
             'valor_saldo' => 'Valor Saldo',
             'status' => 'Status',
+            'status_geral' => 'Status Geral',
             'pendencia' => 'Pendencia',
             'comentarios' => 'Comentarios',
             'data_entrega' => 'Data de Entrega',

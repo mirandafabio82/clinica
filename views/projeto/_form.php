@@ -733,6 +733,9 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
            
             ],
             ]); ?>
+            <div status="align:center">
+              <img src="resources/dist/img/status/status_<?= $model->status_geral - 1 ?>.png" style="width: 70%">
+            </div>
             </div>
             </div>
 
@@ -1049,6 +1052,11 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
           'mask' => '99/99/9999',
           ]) ?>
         </div>
+
+        <div class="col-md-2">
+        <?= $form->field($model, 'status_geral')->dropDownList($listStatusGeral) ?>
+
+      </div>
         </div>
 
    <!-- <div class="row">

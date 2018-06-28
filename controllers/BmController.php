@@ -266,4 +266,29 @@ class BmController extends Controller
 
         }
     }
+
+    public function actionEnviaremail(){
+        if (Yii::$app->request->isAjax) {   
+            $remetentes = Yii::$app->request->post()['remetentes'];
+            $assunto = Yii::$app->request->post()['assunto'];
+            $corpoEmail = Yii::$app->request->post()['corpoEmail'];
+
+            $remetentesArr = explode(",", $remetentes);
+
+            foreach ($remetentesArr as $key => $rem) {
+                try{
+                Yii::$app->mailer->compose()
+                ->setFrom('hcnautomacaoweb@gmail.com')
+                ->setTo(trim($rem))
+                ->setSubject($assunto)
+                ->setTextBody($corpoEmail)
+                ->send();    
+                }
+                catch(Exception $e){
+                    return $e;
+                }
+            }
+            return "success";
+        }
+    }
 }

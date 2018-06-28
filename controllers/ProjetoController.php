@@ -145,6 +145,9 @@ class ProjetoController extends Controller
         $status = Yii::$app->db->createCommand('SELECT id, status FROM projeto_status')->queryAll();
         $listStatus = ArrayHelper::map($status,'id','status');
 
+        $status_geral = Yii::$app->db->createCommand('SELECT id, status FROM status_geral')->queryAll();
+        $listStatusGeral = ArrayHelper::map($status_geral,'id','status_geral');
+
         $executantes = Yii::$app->db->createCommand('SELECT usuario_id, nome FROM executante JOIN user ON executante.usuario_id = user.id')->queryAll();
         $listExecutantes = ArrayHelper::map($executantes,'usuario_id','nome');
 
@@ -354,6 +357,7 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                 'listSites' => $listSites,
                 'listNomes' => $listNomes,
                 'listStatus' => $listStatus,
+                'listStatusGeral' => $listStatusGeral,
                 'listDisciplina' => $listDisciplina,
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
@@ -453,6 +457,9 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
 
         $status = Yii::$app->db->createCommand('SELECT id, status FROM projeto_status')->queryAll();
         $listStatus = ArrayHelper::map($status,'id','status');
+
+        $status_geral = Yii::$app->db->createCommand('SELECT id, status FROM status_geral')->queryAll();
+        $listStatusGeral = ArrayHelper::map($status_geral,'id','status');
 
         $escopoArray = Yii::$app->db->createCommand('SELECT * FROM atividademodelo JOIN escopo  ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$model->id.' ORDER BY isEntregavel ASC, atividademodelo.id ASC')->queryAll();
 
@@ -841,6 +848,7 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                 'listSites' => $listSites,
                 'listNomes' => $listNomes,
                 'listStatus' => $listStatus,
+                'listStatusGeral' => $listStatusGeral,
                 'listDisciplina' => $listDisciplina,
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,

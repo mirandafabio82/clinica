@@ -47,6 +47,21 @@ $this->registerJs('
         }
     });
 
+    $("#enviarEmail").click(function (e) {
+        $.ajax({ 
+          url: "index.php?r=bm/enviaremail",
+          data: {remetentes: $("#remetente").val(), assunto: $("#assunto").val(), corpoEmail: $("#corpoEmail").val()},
+          type: "POST",
+          success: function(response){
+           console.log(response);
+       
+         },
+         error: function(){
+          console.log("failure");
+        }
+  });
+    });
+
 ');
 ?>
 <style>

@@ -19,6 +19,7 @@ $this->params['breadcrumbs'][] = 'Update';
         'listContatos' => $listContatos,
         'listSites' => $listSites,
         'listStatus' => $listStatus,
+        'listStatusGeral' => $listStatusGeral,
         'listEscopo' => $listEscopo,
         'listDisciplina' => $listDisciplina,
         'searchModel' => $searchModel,
