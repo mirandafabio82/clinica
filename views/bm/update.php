@@ -19,6 +19,7 @@ $this->params['breadcrumbs'][] = 'Update';
         'searchModel' => $searchModel,
         'listProjetos' => $listProjetos,
         'bmescopos' => $bmescopos,
+        'valor_total' => $valor_total,
     ]) ?>
 
 </div>

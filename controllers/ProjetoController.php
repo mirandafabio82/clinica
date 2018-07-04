@@ -97,6 +97,7 @@ class ProjetoController extends Controller
         $model = new Projeto();
         $model->tipo = 'A';
         $model->data_proposta =  date('d/m/Y');
+        $model->contrato='CT 4600015210';
         $searchModel = new ProjetoSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -212,7 +213,7 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                 if($model->save()){     
                     if($_POST['Projeto']['tipo'] == "A"){
                         if(isset($_POST['Escopos'])){
-
+                            $countCoordAdm = 0;
                             $escopos = $_POST['Escopos'];
                             $automacoes = isset($escopos['Automação']) ? $escopos['Automação'] : array();
                             $processos = isset($escopos['Processo']) ? $escopos['Processo'] : array();
@@ -221,6 +222,7 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
 
                             foreach ($automacoes as $key => $automacao) {
                                 $atvmodelos = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE (escopopadrao_id='.$automacao.' OR escopopadrao_id=0) AND disciplina_id = 1 AND isPrioritaria=1')->queryAll();
+
                                 
                                 foreach ($atvmodelos as $key => $atv) {
                                     $escopo_model = new Escopo();
@@ -236,6 +238,11 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                                         $escopo_model->exe_ep_id = 61;
                                         $escopo_model->exe_es_id = 61;
                                         $escopo_model->exe_ee_id = 61;
+
+                                        $countCoordAdm++;
+                                    }
+                                    if($countCoordAdm==2){
+                                        continue;
                                     }
                                     
                                     $escopo_model->save();
@@ -244,7 +251,7 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                             foreach ($processos as $key => $processo) {
 
                                 $atvmodelos = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE (escopopadrao_id='.$processo.' OR escopopadrao_id=0) AND disciplina_id = 2 AND isPrioritaria=1')->queryAll();
-
+                                $countCoordAdm = 0;
                                 foreach ($atvmodelos as $key => $atv) {
                                     $escopo_model = new Escopo();
                                     $escopo_model->projeto_id = $model->id;
@@ -259,6 +266,11 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                                         $escopo_model->exe_ep_id = 61;
                                         $escopo_model->exe_es_id = 61;
                                         $escopo_model->exe_ee_id = 61;
+
+                                        $countCoordAdm++;
+                                    }
+                                    if($countCoordAdm==2){
+                                        continue;
                                     }
 
                                     $escopo_model->save();
@@ -267,7 +279,7 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                             foreach ($instrumentacoes as $key => $instrumentacao) {
 
                                 $atvmodelos = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE (escopopadrao_id='.$instrumentacao.' OR escopopadrao_id=0) AND disciplina_id = 3 AND isPrioritaria=1')->queryAll();
-
+                                $countCoordAdm = 0;
                                 foreach ($atvmodelos as $key => $atv) {
                                     $escopo_model = new Escopo();
                                     $escopo_model->projeto_id = $model->id;
@@ -282,6 +294,11 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                                         $escopo_model->exe_ep_id = 61;
                                         $escopo_model->exe_es_id = 61;
                                         $escopo_model->exe_ee_id = 61;
+
+                                        $countCoordAdm++;
+                                    }
+                                    if($countCoordAdm==2){
+                                        continue;
                                     }
 
                                     $escopo_model->save();
@@ -380,6 +397,8 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
     {
 
         $model = $this->findModel($id); 
+
+
         
         if(!empty($model->data_pendencia))
             $model->data_pendencia = date_format(DateTime::createFromFormat('Y-m-d', $model->data_pendencia), 'd/m/Y');
@@ -584,6 +603,13 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
             }
             //salva resumo e outras abas
             if(isset($_POST['Projeto'])){
+
+                //atualiza status geral
+                if($model->as_aprovada==0 && $_POST['Projeto']['as_aprovada']==1){                  
+                    Yii::$app->db->createCommand('UPDATE projeto SET status_geral=3 WHERE id='.$model->id)->execute();
+                }
+                                                 
+
                 $model->setAttributes($_POST['Projeto']);
 
                 if(!empty($model->data_pendencia)){
@@ -973,8 +999,13 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
     }
     public function actionGerarrelatorio()
     {
+
         if($_GET['id']){
-            $projeto = Projeto::findOne($_GET['id']);          
+            $projeto = Projeto::findOne($_GET['id']);        
+
+            //atualiza status geral
+            Yii::$app->db->createCommand('UPDATE projeto SET status_geral=2 WHERE id='.$projeto->id)->execute(); 
+            Yii::$app->db->createCommand('UPDATE projeto SET as_aprovada=0 WHERE id='.$projeto->id)->execute();  
             
             $processoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=2 AND projeto_id='.$projeto->id)->queryAll();
             $processoBasicoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=2 AND escopopadrao_id=1 AND projeto_id='.$projeto->id)->queryAll();

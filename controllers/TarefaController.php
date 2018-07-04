@@ -217,6 +217,9 @@ class TarefaController extends Controller
     public function actionGerarbm($projetoid)
     {
         $projetoModel = Projeto::findIdentity($projetoid);
+
+        //atualiza status geral
+        Yii::$app->db->createCommand('UPDATE projeto SET status_geral=5 WHERE id='.$projetoid)->execute(); 
         
         $executadas = Yii::$app->db->createCommand('SELECT SUM(horas_ee_bm) ee_bm, SUM(horas_es_bm) es_bm,SUM(horas_ep_bm) ep_bm,SUM(horas_ej_bm) ej_bm,SUM(horas_tp_bm) tp_bm, SUM(horas_acumulada) h_acu, SUM(horas_saldo) h_saldo FROM escopo WHERE projeto_id='.$projetoid)->queryOne();
         
@@ -238,14 +241,16 @@ class TarefaController extends Controller
         $totalHoras = $horasAS['h_ee']+$horasAS['h_es']+$horasAS['h_ep']+$horasAS['h_ej']+$horasAS['h_tp'];
        
 
-        $percBm = sprintf("%.2f",(($executadas['ee_bm']+$executadas['es_bm']+$executadas['ep_bm']+$executadas['ej_bm']+$executadas['tp_bm']) * 100) / $totalHoras);
+        
         $percAcumulada = sprintf("%.2f",($acu_saldo['horas_acu'] * 100) / $totalHoras);
         
         $bmModel = new Bm();
         $bmModel->projeto_id = $projetoModel->id;
         $bmModel->contrato = $projetoModel->contrato;
+        $bmModel->objeto = 'Automação';
         $bmModel->contratada = "HCN AUTOMAÇÃO LTDA";
-        $bmModel->cnpj = "10.486.000/0001-05";
+        $bmModel->cnpj = "10.486.000/0002-88";
+        $bmModel->data = Date('Y-m-d');
         $bmModel->contato = "HÉLDER CÂMARA DO NASCIMENTO";
         $bmModel->executado_ee = $executadas['ee_bm']==0 ? null : $executadas['ee_bm'];
         $bmModel->executado_es = $executadas['es_bm']==0 ? null : $executadas['es_bm'];
@@ -254,11 +259,21 @@ class TarefaController extends Controller
         $bmModel->executado_tp = $executadas['tp_bm']==0 ? null : $executadas['tp_bm'];
         $bmModel->acumulado = $acu_saldo['horas_acu'];
         $bmModel->saldo = $acu_saldo['h_saldo'];
-        $bmModel->qtd_dias = $projetoModel->qtd_dias;
-        $bmModel->km = $projetoModel->qtd_km;
+        // $bmModel->qtd_dias = $projetoModel->qtd_dias;
+        // $bmModel->km = $projetoModel->qtd_km;
         $bmModel->numero_bm = $ultBM;
         $bmModel->num_bm_proj = $numeroBmAtual;
-        $bmModel->descricao = $projetoModel->desc_resumida.'.'.PHP_EOL.'Esse '.$numbm.' Boletim de Medição corresponde a '.$percBm.'% das atividades citadas na '.$projetoModel->nome.''.PHP_EOL.'A medição total acumulada incluindo este BM corresponde a '.$percAcumulada.'% das atividades realizadas.';
+
+        $tipo_exec = Yii::$app->db->createCommand('SELECT * FROM tipo_executante')->queryAll();
+        $valorTotalBm = number_format($bmModel->executado_ee * $tipo_exec[4]['valor_hora']+
+                        $bmModel->executado_es * $tipo_exec[3]['valor_hora'] +
+                        $bmModel->executado_ep * $tipo_exec[2]['valor_hora']+
+                        $bmModel->executado_ej * $tipo_exec[1]['valor_hora']+
+                        $bmModel->executado_tp * $tipo_exec[0]['valor_hora']+
+                        $bmModel['km'] * Yii::$app->db->createCommand('SELECT vl_km FROM executante WHERE usuario_id=61')->queryScalar(), 2, ',', '.');
+        $percBm = number_format(($valorTotalBm * 100) / $projetoModel->valor_proposta, 2, ',', '.');
+
+        $bmModel->descricao = $projetoModel->desc_resumida.'.'.PHP_EOL.'Esse '.$numbm.'º Boletim de Medição corresponde a '.$percBm.'% das atividades citadas na '.$projetoModel->nome.''.PHP_EOL.'A medição total acumulada incluindo este BM corresponde a '.$percAcumulada.'% das atividades realizadas.';
 
         if(!$bmModel->save()){
             print_r($bmModel->getErrors());
@@ -321,6 +336,9 @@ class TarefaController extends Controller
            // Yii::$app->db->createCommand('UPDATE escopo SET status='.Yii::$app->request->post()['status'].' WHERE id='.Yii::$app->request->post()['id'])->execute();  
 
             $projeto_id = Yii::$app->db->createCommand('SELECT projeto_id FROM escopo WHERE id='.Yii::$app->request->post()['id'])->queryScalar();
+
+            //atualiza status geral
+            Yii::$app->db->createCommand('UPDATE projeto SET status_geral=4 WHERE id='.$projeto_id)->execute(); 
 
             if(Yii::$app->request->post()['tipo']=='executado_tp'){
                 $exe = 'exe_tp_id';

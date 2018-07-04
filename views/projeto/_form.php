@@ -733,11 +733,7 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
            
             ],
             ]); ?>
-            <?php if(!$model->isNewRecord){ ?>
-                <div status="align:center">
-                  <img src="resources/dist/img/status/status_<?= $model->status_geral - 1 ?>.png" style="width: 70%">
-                </div>
-            <?php }?>
+            
           
             </div>
             </div>
@@ -1045,7 +1041,7 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
     
 
     <div class="row">
-      <div class="col-md-8">
+      <div class="col-md-6">
         <?= $form->field($model, 'nota_geral')->textarea(['maxlength' => true]) ?>
 
       </div>
@@ -1056,10 +1052,10 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
           ]) ?>
         </div>
 
-        <div class="col-md-2">
-        <?= $form->field($model, 'status_geral')->dropDownList($listStatusGeral) ?>
-
-      </div>
+        
+      <div class="col-md-2">
+       <?= $form->field($model, 'as_aprovada')->checkbox(); ?>
+     </div>
         </div>
 
    <!-- <div class="row">
@@ -1092,6 +1088,11 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
 
       <div ><p><a class="btn btn-success nao-prioritarios">Não Prioritários</a></p></div>
       <?= Html::submitButton($model->isNewRecord ? 'Add Escopo' : 'Add Escopo', ['class' => $model->isNewRecord ? 'btn btn-primary' : 'btn btn-primary']) ?>
+      <?php if(!$model->isNewRecord){ ?>
+                <div status="align:center" style="margin-top: 1em;">
+                  <img src="resources/dist/img/status/status_<?= $model->status_geral - 1 ?>.png" style="width: 100%">
+                </div>
+            <?php }?>
       <div id="nao-prioritarios_div" style="margin-bottom: 1em" hidden> 
         <?php foreach ($nao_prioritarios as $key => $np) { ?> 
           <?php 

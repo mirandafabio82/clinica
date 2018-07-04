@@ -161,6 +161,13 @@ class BmController extends Controller
         //horas de cada executante
         $bmescopos = Yii::$app->db->createCommand('SELECT escopo_id, exe_tp_id, exe_ej_id, exe_ep_id, exe_es_id, exe_ee_id, SUM(bm_escopo.horas_tp) h_tp, SUM(bm_escopo.horas_ej) h_ej, SUM(bm_escopo.horas_ep) h_ep, SUM(bm_escopo.horas_es) h_es, SUM(bm_escopo.horas_ee) h_ee FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE (bm_escopo.horas_tp!=0 || bm_escopo.horas_ej!=0 || bm_escopo.horas_ep!=0 || bm_escopo.horas_es!=0 || bm_escopo.horas_ee!=0) AND bm_id = '.$model->id.' GROUP BY escopo_id')->queryAll();
         
+        $tipo_exec = Yii::$app->db->createCommand('SELECT * FROM tipo_executante')->queryAll();
+        $valor_total = number_format($model->executado_ee * $tipo_exec[4]['valor_hora']+
+                        $model->executado_es * $tipo_exec[3]['valor_hora'] +
+                        $model->executado_ep * $tipo_exec[2]['valor_hora']+
+                        $model->executado_ej * $tipo_exec[1]['valor_hora']+
+                        $model->executado_tp * $tipo_exec[0]['valor_hora']+
+                        $model['km'] * Yii::$app->db->createCommand('SELECT vl_km FROM executante WHERE usuario_id=61')->queryScalar(), 2, ',', '.');
        
         return $this->render('update', [
             'model' => $model,
@@ -168,6 +175,7 @@ class BmController extends Controller
             'searchModel' => $searchModel,
             'listProjetos' => $listProjetos,
             'bmescopos' => $bmescopos,
+            'valor_total' => $valor_total,
         ]);
     }
 
@@ -272,8 +280,10 @@ class BmController extends Controller
             $remetentes = Yii::$app->request->post()['remetentes'];
             $assunto = Yii::$app->request->post()['assunto'];
             $corpoEmail = Yii::$app->request->post()['corpoEmail'];
+            $nomeArquivo =  Yii::$app->request->post()['nomeArquivo'];
 
             $remetentesArr = explode(",", $remetentes);
+            
 
             foreach ($remetentesArr as $key => $rem) {
                 try{
@@ -282,13 +292,14 @@ class BmController extends Controller
                 ->setTo(trim($rem))
                 ->setSubject($assunto)
                 ->setTextBody($corpoEmail)
-                ->send();    
+                ->attach(Yii::$app->basePath .''. $nomeArquivo.'.pdf')
+                ->send();
                 }
                 catch(Exception $e){
                     return $e;
                 }
             }
-            return "success";
+            return Yii::$app->basePath .''. $nomeArquivo.'.pdf';
         }
     }
 }

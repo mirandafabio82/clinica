@@ -4,16 +4,23 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\grid\GridView;
 use yii\helpers\Url;
+use kartik\money\MaskMoney;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Bm */
 /* @var $form yii\widgets\ActiveForm */
 
+$fileName = '';
+if(!$model->isNewRecord){ 
+  $fileName = '/web/uploaded-files/'.$model->projeto_id.'/BM-'.Yii::$app->db->createCommand("SELECT proposta FROM projeto WHERE id=".$model->projeto_id)->queryScalar().'_'.$model->numero_bm; 
+}
+
+
 $this->registerJs('
 
     $("#bm-projeto_id").change(function (e) {
     	var id = $(this).val();
-	console.log(id);
+	     console.log(id);
 	
        $.ajax({ 
       url: "index.php?r=bm/preencheform",
@@ -48,16 +55,19 @@ $this->registerJs('
     });
 
     $("#enviarEmail").click(function (e) {
+      $("#loading").show(); // show the gif image when ajax starts
         $.ajax({ 
           url: "index.php?r=bm/enviaremail",
-          data: {remetentes: $("#remetente").val(), assunto: $("#assunto").val(), corpoEmail: $("#corpoEmail").val()},
+          data: {remetentes: $("#remetente").val(), assunto: $("#assunto").val(), corpoEmail: $("#corpoEmail").val(), nomeArquivo: "'.$fileName.'"},
           type: "POST",
           success: function(response){
+           $("#loading").hide();
+           $("#close_modal").click(); 
+           alert("Email enviado com sucesso!");
            console.log(response);
-       
          },
-         error: function(){
-          console.log("failure");
+         error: function(request, status, error){
+          alert(request.responseText);
         }
   });
     });
@@ -445,6 +455,11 @@ td, th {
       <div class="col-md-1"> 
       <?= $form->field($model, 'km')->textInput(['maxlength' => true]) ?>
     </div>
+
+    <div class="col-md-2"> 
+      <label>Valor Total</label>
+      <input type="text" name="total_bm" value="R$ <?= $valor_total ?>" class="form-control" disabled>
+    </div>
     </div>
      EXECUTADO
     <div class="row" style="border:1px solid black;padding: 2px; margin-bottom: 1em">
@@ -547,6 +562,10 @@ td, th {
 
 <?php 
   $solicitante = Yii::$app->db->createCommand('SELECT user.nome FROM user JOIN projeto ON projeto.contato_id=user.id WHERE projeto.id='.$model->projeto_id)->queryScalar();
+
+  $projetoNome = Yii::$app->db->createCommand('SELECT nome FROM projeto WHERE id='.$model->projeto_id)->queryScalar();
+
+  $descricaoProjeto = Yii::$app->db->createCommand('SELECT descricao FROM projeto WHERE id='.$model->projeto_id)->queryScalar();
   
   $descricao = $model->descricao;
 
@@ -554,7 +573,7 @@ td, th {
 
   $numberBM = $model->num_bm_proj;
 //transforma o numero de decimal para romano
-  $map = array('M' => 1000, 'CM' => 900, 'D' => 500, 'CD' => 400, 'C' => 100, 'XC' => 90, 'L' => 50, 'XL' => 40, 'X' => 10, 'IX' => 9, 'V' => 5, 'IV' => 4, 'I' => 1);
+/*  $map = array('M' => 1000, 'CM' => 900, 'D' => 500, 'CD' => 400, 'C' => 100, 'XC' => 90, 'L' => 50, 'XL' => 40, 'X' => 10, 'IX' => 9, 'V' => 5, 'IV' => 4, 'I' => 1);
     $numRoman = '';
     while ($numberBM > 0) {
         foreach ($map as $roman => $int) {
@@ -564,7 +583,7 @@ td, th {
                 break;
             }
         }
-    }
+    }*/
 
 ?>
 
@@ -576,20 +595,25 @@ td, th {
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <div  class="col-md-12" align="center">  
+            <img style="z-index: 999999999" src="resources/dist/img/loading.gif" type="hidden" name="loading" id="loading" value="" width="64px" hidden/>        
+          </div> 
         <h4 class="modal-title">Email</h4>
       </div>
+
       <div class="modal-body">
-        <label>Remetente(s)</label>
+
+        <label>Destinatário(s)</label>
         <input type="text" id="remetente" name="remetente" class="form-control">
 
         <label>Assunto</label>
-        <input type="text" id="assunto" name="assunto" class="form-control">
-
+        <input type="text" id="assunto" name="assunto" class="form-control" value="HCN - BM <?= $model->numero_bm ?>/<?= Date('Y') ?> - <?= $projetoNome ?> ">
+       
         <label>Corpo do Email</label>
         <textarea rows="15" cols="100" id="corpoEmail" name="corpoEmail" class="form-control">          
-Bom dia, <?= $solicitante ?>!
+Bom dia, <?= explode(" ", $solicitante)[0] ?>!
 
-Segue nosso <?= $numRoman ?> Boletim de Medição para <?= $descricao ?>
+Segue nosso <?= $numberBM ?>º Boletim de Medição para o <?= $projetoNome ?> - <?= $descricaoProjeto ?>.
 
 
 Solicitamos sua aprovação para a emissão da FRS, preferencialmente até <?= $dataEmail ?>.
@@ -607,8 +631,8 @@ HCN Automação
         
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-        <button type="button" class="btn btn-success" id="enviarEmail" data-dismiss="modal">Enviar</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal" id="close_modal">Fechar</button>
+        <button type="button" class="btn btn-success" id="enviarEmail" >Enviar</button>
       </div>
     </div>
 
