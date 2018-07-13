@@ -45,12 +45,39 @@ if(!$model->isNewRecord){
   $scroll = 'window.scrollTo(0, 1200);';
 }
 
+$fileName = '';
+if(!$model->isNewRecord){ 
+  $fileName = '/web/uploaded-files/'.$model->id.'/AS'.'-'.$model->codigo.'-'.$model->site.'-'.preg_replace('/[^0-9]/', '', $model->nome).'_'.$model->rev_proposta;  
+}
+
 $this->registerJs('
 
   $( document ).ready(function() {
     '.$scroll.'
 
+    $("#enviarEmail").click(function (e) {
+      $("#loading").show(); // show the gif image when ajax starts
+        $.ajax({ 
+          url: "index.php?r=projeto/enviaremail",
+          data: {remetentes: $("#remetente").val(), assunto: $("#assunto").val(), corpoEmail: $("#corpoEmail").val(), nomeArquivo: "'.$fileName.'"},
+          type: "POST",
+          success: function(response){
+           $("#loading").hide();
+           $("#close_modal").click(); 
+           alert("Email enviado com sucesso!");
+           console.log(response);
+         },
+         error: function(request, status, error){
+          alert(request.responseText);
+        }
+      });
+    });
+
     $("input").removeClass("form-control");
+    
+    $("input[id^=\'projeto\']").addClass("form-control");
+    $("#projeto-as_aprovada").removeClass("form-control");
+
     $(".messages-inline").text("");
 
     //se tiver marcado como Projeto
@@ -796,9 +823,9 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
 
       <!-- </div> -->
       <div class="row"> 
-      <div class="col-md-2" style="width: 18em"> 
-      <?= $form->field($model, 'tipo')->radioList(array('A'=>'AS Autorização de Serviço','P'=>'Proposta')); ?>        
-      </div>
+        <div class="col-md-2" style="width: 18em"> 
+          <?= $form->field($model, 'tipo')->radioList(array('A'=>'AS Autorização de Serviço','P'=>'Proposta')); ?>        
+        </div>
       
         <div class="col-md-2"> 
           <?= $form->field($model, 'nome')->textInput(['maxlength' => true]) ?>  
@@ -862,58 +889,62 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
       </div>
       </div>
       <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-3">
           <?= $form->field($model, 'cliente_id')->dropDownList($listClientes,['prompt'=>'Selecione um Cliente']) ?>
         </div>
 
         <div class="col-md-1">
-          <?= $form->field($model, 'codigo')->textInput(['maxlength' => true,'style'=>'width:6em']) ?>   
+          <?= $form->field($model, 'codigo')->textInput(['maxlength' => true]) ?>   
         </div>
 
         <div class="col-md-1">
-          <?= $form->field($model, 'site')->textInput(['maxlength' => true,'style'=>'width:6em']) ?>
+          <?= $form->field($model, 'site')->textInput(['maxlength' => true]) ?>
         </div>
 
         <div class="col-md-1">
           
-          <?= $form->field($model, 'planta')->textInput(['maxlength' => true,'style'=>'width:6em']) ?>
+          <?= $form->field($model, 'planta')->textInput(['maxlength' => true]) ?>
         </div>
 
-        <div class="col-md-1" style="width: 1em">
-          <?= $form->field($model, 'uf')->textInput(['maxlength' => true,'style'=>'width:2em']) ?>
+        <div class="col-md-3" >
+          <div class="col-md-4" >
+            <?= $form->field($model, 'uf')->textInput(['maxlength' => true]) ?>
+          </div>
+          <div class="col-md-7">
+            <?= $form->field($model, 'municipio')->textInput(['maxlength' => true]) ?>
+          </div>
         </div>
-
+        
         <div class="col-md-2">
-          <?= $form->field($model, 'municipio')->textInput(['maxlength' => true,'style'=>'margin-right:-2em']) ?>
-        </div>
-        <div class="col-md-1">
           <?= $form->field($model, 'cnpj')->textInput(['maxlength' => true]) ?>
         </div>
 
       </div>
       <div class="row">
-       <div class="col-md-4">
+       <div class="col-md-3">
         <?php if($model->isNewRecord){ ?>
         <?= $form->field($model, 'contato_id')->dropDownList(['prompt'=>'Selecione um Contato']) ?>
         <?php } else{ ?>
         <?= $form->field($model, 'contato_id')->dropDownList($listContatos,['prompt'=>'Selecione um Contato']) ?>
         <?php } ?>
-      </div>
+      </div>      
 
-      <div class="col-md-1">
-        <?= $form->field($model, 'tratamento')->textInput(['maxlength' => true,'style'=>'width:6em']) ?>
+      <div class="col-md-4">
+        <div class="col-md-4" style="padding-left: 0px;">
+          <?= $form->field($model, 'tratamento')->textInput(['maxlength' => true]) ?>
+        </div>
+        <div class="col-md-4">
+          <?= $form->field($model, 'contato')->textInput(['maxlength' => true]) ?>
+        </div>
+        <div class="col-md-4">
+          <?= $form->field($model, 'setor')->textInput(['maxlength' => true]) ?>
+        </div>
       </div>
-
-      <div class="col-md-1">
-        <?= $form->field($model, 'contato')->textInput(['maxlength' => true,'style'=>'width:6em']) ?>
-      </div>
-      <div class="col-md-1">
-        <?= $form->field($model, 'setor')->textInput(['maxlength' => true,'style'=>'width:6em']) ?>
-      </div>
+      
       <div class="col-md-2">
         <?= $form->field($model, 'fone_contato')->textInput(['maxlength' => true]) ?>
       </div>
-      <div class="col-md-1">
+      <div class="col-md-2">
         <?= $form->field($model, 'celular')->textInput(['maxlength' => true]) ?>
       </div>
     </div>
@@ -923,18 +954,31 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
       <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
     </div>
     <div class="col-md-1" >
-      <?= $form->field($model, 'documentos')->textInput(['maxlength' => true,'style'=>'width:2em']) ?>
+      <div class="col-md-12" >
+        <?= $form->field($model, 'documentos')->textInput(['maxlength' => true]) ?>
+      </div>
     </div>
-    <div class="col-md-2">
+    <div class="col-md-3">
       <?= $form->field($model, 'proposta')->textInput(['maxlength' => true]) ?>        
     </div>
     <div class="col-md-1">
-      <?= $form->field($model, 'rev_proposta')->textInput(['maxlength' => true,'style'=>'width:3em']) ?>
+        <div class="col-md-12">
+          <?= $form->field($model, 'rev_proposta')->textInput(['maxlength' => true]) ?>
+        </div>
     </div>
-    <div class="col-md-1">
-      <?= $form->field($model, 'data_proposta')->widget(\yii\widgets\MaskedInput::className(), [
-        'mask' => '99/99/9999',
-        ])->textInput(['style'=>'width:6em']) ?>
+    <div class="col-md-4">
+      <div class="col-md-4">
+          <?= $form->field($model, 'data_proposta')->widget(\yii\widgets\MaskedInput::className(), [
+          'mask' => '99/99/9999',
+          ])->textInput() ?>
+        </div>
+        <div class="col-md-3">
+          <?= $form->field($model, 'qtd_dias')->textInput() ?>
+        </div>
+        <div class="col-md-3">
+          <?= $form->field($model, 'qtd_km')->textInput() ?>
+        </div>
+        
       </div>
       <!-- <div class="col-md-1">
         <?//= $form->field($model, 'qtd_hh')->textInput(['style'=>'width:4em']) ?>
@@ -946,116 +990,94 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
         <?//= $form->field($model, 'total_horas')->textInput(['maxlength' => true]) ?>
       </div>
     </div> -->
-
-    <div class="row">
-      <div class="col-md-1">
-        <?= $form->field($model, 'qtd_dias')->textInput(['style'=>'width:6em']) ?>
-      </div>
-      <div class="col-md-1">
-        <?= $form->field($model, 'qtd_km')->textInput(['style'=>'width:6em']) ?>
-      </div>
-      <div class="col-md-1" <?=$visible?>>
-        <?= $form->field($model, 'vl_km')->textInput(['maxlength' => true, 'style'=>'width:6em'])->widget(MaskMoney::classname(), [
-          'pluginOptions' => [
-              'prefix' => 'R$ ',
-              'thousands' => '.',
-              'decimal' => ',',
-              // 'suffix' => ' ¢',
-              'allowNegative' => false
-
-          ]
-      ]); ?>
-      </div>
-      </div>
-      </div>
+</div>
+    
       <div class="row">
       
-      <div class="col-md-2" <?=$visible?>>
-        <?= $form->field($model, 'valor_proposta')->textInput(['maxlength' => true,'style'=>'width:1em'])->widget(MaskMoney::classname(), [
-          'pluginOptions' => [
-              'prefix' => 'R$ ',
-              'thousands' => '.',
-              'decimal' => ',',
-              // 'suffix' => ' ¢',
-              'allowNegative' => false
+        <div class="col-md-5">
+          <div class="col-md-4" style="padding-left: 0px;" <?=$visible?>>
+              <?= $form->field($model, 'valor_proposta')->textInput(['maxlength' => true])->widget(MaskMoney::classname(), [
+                'pluginOptions' => [
+                    'prefix' => 'R$ ',
+                    'thousands' => '.',
+                    'decimal' => ',',
+                    // 'suffix' => ' ¢',
+                    'allowNegative' => false
 
-          ]
-      ]); ?>
+                ]
+            ]); ?>
+          </div>
+          <div class="col-md-4" <?=$visible?>>
+              <?= $form->field($model, 'valor_consumido')->textInput(['maxlength' => true])->widget(MaskMoney::classname(), [
+                'pluginOptions' => [
+                    'prefix' => 'R$ ',
+                    'thousands' => '.',
+                    'decimal' => ',',
+                    // 'suffix' => ' ¢',
+                    'allowNegative' => false
 
+                ]
+            ]); ?>
+          </div>
+          <div class="col-md-4" <?=$visible?>>
+            <?= $form->field($model, 'valor_saldo')->textInput(['maxlength' => true])->widget(MaskMoney::classname(), [
+              'pluginOptions' => [
+                  'prefix' => 'R$ ',
+                  'thousands' => '.',
+                  'decimal' => ',',
+                  // 'suffix' => ' ¢',
+                  'allowNegative' => false
+
+              ]
+            ]); ?>
+          </div>          
+      </div>    
+        <div class="col-md-6">
+            <?= $form->field($model, 'pendencia')->textarea(['maxlength' => true]) ?>
+        </div>
       </div>
-      <div class="col-md-2" <?=$visible?>>
-        <?= $form->field($model, 'valor_consumido')->textInput(['maxlength' => true,'style'=>'width:6em'])->widget(MaskMoney::classname(), [
-          'pluginOptions' => [
-              'prefix' => 'R$ ',
-              'thousands' => '.',
-              'decimal' => ',',
-              // 'suffix' => ' ¢',
-              'allowNegative' => false
 
-          ]
-      ]); ?>
-
-      </div>
-      <div class="col-md-2" <?=$visible?>>
-        <?= $form->field($model, 'valor_saldo')->textInput(['maxlength' => true,'style'=>'width:6em'])->widget(MaskMoney::classname(), [
-          'pluginOptions' => [
-              'prefix' => 'R$ ',
-              'thousands' => '.',
-              'decimal' => ',',
-              // 'suffix' => ' ¢',
-              'allowNegative' => false
-
-          ]
-      ]); ?>
-
-      </div>
-      <div class="col-md-2">
-        <?= $form->field($model, 'status')->dropDownList($listStatus) ?>
-
-      </div>
-      <div class="col-md-4">
-        <?= $form->field($model, 'pendencia')->textarea(['maxlength' => true]) ?>
-
-      </div>
-      </div>
-      
       <div class="row">
         <div class="col-md-2">
+          <?= $form->field($model, 'status')->dropDownList($listStatus) ?>
+        </div>
+        <div class="col-md-2">
+              <?= $form->field($model, 'data_entrega')->widget(\yii\widgets\MaskedInput::className(), [
+                'mask' => '99/99/9999',
+              ]) ?>
+        </div>
+        <div class="col-md-1">
           <?= $form->field($model, 'data_pendencia')->widget(\yii\widgets\MaskedInput::className(), [
           'mask' => '99/99/9999',])->textInput(['maxlength' => true]) ?>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-1">
           <?= $form->field($model, 'total_horas')->textInput(['maxlength' => true]) ?>
         </div>
         <div class="col-md-2">
-          <?= $form->field($model, 'contrato')->textInput(['maxlength' => true]) ?>
-        </div>
-        <div class="col-md-1" <?=$visible?>>
-        <?php if($model->isNewRecord){ ?>
-          <?= $form->field($model, 'perc_coord_adm')->textInput(['maxlength' => true, 'value'=>15, 'style'=>'width:3em']) ?>
-          <?php } else{ ?>
-          <?= $form->field($model, 'perc_coord_adm')->textInput(['maxlength' => true]) ?>
-          <?php } ?>
-        </div>
+            <?= $form->field($model, 'contrato')->textInput(['maxlength' => true]) ?>
+          </div>
+          <div class="col-md-1" <?=$visible?>>
+          <?php if($model->isNewRecord){ ?>
+            <?= $form->field($model, 'perc_coord_adm')->textInput(['maxlength' => true, 'value'=>15]) ?>
+            <?php } else{ ?>
+            <?= $form->field($model, 'perc_coord_adm')->textInput(['maxlength' => true]) ?>
+            <?php } ?>
+          </div>
+          <div class="col-md-2">
+             <?= $form->field($model, 'as_aprovada')->checkbox(); ?>
+          </div>
       </div>
-    
+         
 
     <div class="row">
       <div class="col-md-6">
         <?= $form->field($model, 'nota_geral')->textarea(['maxlength' => true]) ?>
 
       </div>
-      <div class="col-md-2">
-
-        <?= $form->field($model, 'data_entrega')->widget(\yii\widgets\MaskedInput::className(), [
-          'mask' => '99/99/9999',
-          ]) ?>
-        </div>
+      
 
         
-      <div class="col-md-2">
-       <?= $form->field($model, 'as_aprovada')->checkbox(); ?>
-     </div>
+      
         </div>
 
    <!-- <div class="row">
@@ -1089,6 +1111,7 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
       <div ><p><a class="btn btn-success nao-prioritarios">Não Prioritários</a></p></div>
       <?= Html::submitButton($model->isNewRecord ? 'Add Escopo' : 'Add Escopo', ['class' => $model->isNewRecord ? 'btn btn-primary' : 'btn btn-primary']) ?>
       <?php if(!$model->isNewRecord){ ?>
+            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#emailModal">Email</button>
                 <div status="align:center" style="margin-top: 1em;">
                   <img src="resources/dist/img/status/status_<?= $model->status_geral - 1 ?>.png" style="width: 100%">
                 </div>
@@ -1681,5 +1704,61 @@ echo TabsX::widget([
 </div>
 </div>
     
+<?php if(!$model->isNewRecord){ ?>
 
-  
+<!-- Modal -->
+<div id="emailModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <div  class="col-md-12" align="center">  
+            <img style="z-index: 999999999" src="resources/dist/img/loading.gif" type="hidden" name="loading" id="loading" value="" width="64px" hidden/>        
+          </div> 
+        <h4 class="modal-title">Email</h4>
+      </div>
+
+      <div class="modal-body">
+
+        <label>Destinatário(s)</label>
+        <br>
+        <input type="text" id="remetente" name="remetente" class="form-control" value="<?= Yii::$app->db->createCommand('SELECT email FROM user WHERE id='.$model->contato_id)->queryScalar() ?>, ">
+        <br>
+
+        <label>Assunto</label>
+        <br>
+        <input type="text" id="assunto" name="assunto" class="form-control" value="HCN - AS <?= $model->nome ?>/<?= Date('Y') ?> -  ">
+        <br>
+       
+        <label>Corpo do Email</label>
+        <br>
+        <textarea rows="15" cols="100" id="corpoEmail" name="corpoEmail" class="form-control">          
+Bom dia, <?= $model->contato ?>!
+
+Segue nossa AS revisada para serviço de emissão de <?= $model->descricao ?> para o <?= $model->nome ?>.
+
+ 
+
+Estamos à disposição para mais esclarecimentos.
+
+
+Atenciosamente,
+
+Hélder Câmara
+HCN Automação
+71 98867-3010 (Vivo)
+71 99295-5214 (Tim)
+        </textarea>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" id="close_modal">Fechar</button>
+        <button type="button" class="btn btn-success" id="enviarEmail" >Enviar</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+  <?php } ?>

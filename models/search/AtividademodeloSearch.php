@@ -51,6 +51,9 @@ class AtividademodeloSearch extends Atividademodelo
             'pagination' => [
                 'pageSize' => 10,
             ],
+            'sort'=>array(
+              'defaultOrder'=>'escopopadrao_id DESC',
+            ),
         ]);
 
         $this->load($params);

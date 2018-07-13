@@ -10,7 +10,9 @@ use yii\helpers\Url;
 ?>
 <?php
 $this->registerJs("
-
+    $( document ).ready(function() {
+        window.scrollTo(0, 50000);
+    });
     $('td').click(function (e) {
         var id = $(this).closest('tr').attr('data-key');
         if(id != null){

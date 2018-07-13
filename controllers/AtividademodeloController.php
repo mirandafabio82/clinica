@@ -155,6 +155,12 @@ class AtividademodeloController extends Controller
 
         $disciplina = Yii::$app->db->createCommand('SELECT id, nome FROM disciplina')->queryAll();
         $listDisciplina = ArrayHelper::map($disciplina,'id','nome');
+
+        $dataProvider->pagination = false;   
+        $sort = '-escopopadrao_id';
+        if(!empty($_GET['sort'])){
+            $sort = $_GET['sort'];           
+        }
         
 
         if ($model->load(Yii::$app->request->post()) ) {
@@ -190,7 +196,7 @@ class AtividademodeloController extends Controller
 
             $model->save();
 
-            return $this->redirect(['create', 'id' => $model->id]);
+            return $this->redirect(['update', 'id' => $model->id, 'sort' => $sort]);
         } else {
             return $this->render('create', [
                 'model' => $model,

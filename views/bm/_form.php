@@ -18,32 +18,54 @@ if(!$model->isNewRecord){
 
 $this->registerJs('
 
+    $("#salvarHoras").click(function(){
+        var horas_escopo = "";
+        
+        $(".horas_bm").each(function(i, obj) {            
+            horas_escopo = horas_escopo + obj.id+"-"+obj.value+";";            
+        });
+        console.log(horas_escopo);
+
+        $.ajax({ 
+            url: "index.php?r=bm/editahoras",
+            data: {horas_escopo: horas_escopo},
+            type: "POST",
+            success: function(response){
+              alert("Atualizado com sucesso!");
+              location.reload();
+           },
+           error: function(request, status, error){
+              alert(request.responseText);
+          }
+        });
+    });
+
     $("#bm-projeto_id").change(function (e) {
     	var id = $(this).val();
 	     console.log(id);
 	
        $.ajax({ 
-      url: "index.php?r=bm/preencheform",
-      data: {id: id},
-      type: "POST",
-      success: function(response){
-       console.log(response);
-       var resposta = $.parseJSON(response);
-       $("#bm-objeto").val(resposta["setor"]);
-       $("#bm-descricao").val(resposta["nome"]+"\nDescrição: "+resposta["descricao"]+"\n"+resposta["proposta"]+"\nSite: "+resposta["site"]);
-       $("#bm-acumulado").val(resposta[1]);
-       $("#bm-saldo").val(resposta[0]);
-       $("#bm-executado_ee").val(resposta[2]);
-       $("#bm-executado_es").val(resposta[3]);
-       $("#bm-executado_ep").val(resposta[4]);
-       $("#bm-executado_ej").val(resposta[5]);
-       $("#bm-executado_tp").val(resposta[6]);
-       
-     },
-     error: function(){
-      console.log("failure");
-    }
-  });
+          url: "index.php?r=bm/preencheform",
+          data: {id: id},
+          type: "POST",
+          success: function(response){
+           console.log(response);
+           var resposta = $.parseJSON(response);
+           $("#bm-objeto").val(resposta["setor"]);
+           $("#bm-descricao").val(resposta["nome"]+"\nDescrição: "+resposta["descricao"]+"\n"+resposta["proposta"]+"\nSite: "+resposta["site"]);
+           $("#bm-acumulado").val(resposta[1]);
+           $("#bm-saldo").val(resposta[0]);
+           $("#bm-executado_ee").val(resposta[2]);
+           $("#bm-executado_es").val(resposta[3]);
+           $("#bm-executado_ep").val(resposta[4]);
+           $("#bm-executado_ej").val(resposta[5]);
+           $("#bm-executado_tp").val(resposta[6]);
+           
+         },
+         error: function(){
+          console.log("failure");
+        }
+      });
     });
 
     $("td").click(function (e) {
@@ -545,6 +567,8 @@ td, th {
         <?php if(!$model->isNewRecord){ ?>
         <?= Html::a('<span class="btn-label">Visualizar BM</span>', ['gerarbm', 'id' => $model->id], ['class' => 'btn btn-primary', 'target'=>'_blank', 'style'=> ' margin-right: 1em']) ?>
 
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#horasModal">Editar Horas</button>
+        
         <button type="button" class="btn btn-info" data-toggle="modal" data-target="#emailModal">Email</button>
         <?php } ?>
 
@@ -566,12 +590,16 @@ td, th {
   $projetoNome = Yii::$app->db->createCommand('SELECT nome FROM projeto WHERE id='.$model->projeto_id)->queryScalar();
 
   $descricaoProjeto = Yii::$app->db->createCommand('SELECT descricao FROM projeto WHERE id='.$model->projeto_id)->queryScalar();
+
+  $emailContato = Yii::$app->db->createCommand('SELECT email FROM projeto WHERE id='.$model->projeto_id)->queryScalar();
   
   $descricao = $model->descricao;
 
   $dataEmail = date('d') < 15 ? '14/'.date('m/Y') : '25/'.date('m/Y'); 
 
   $numberBM = $model->num_bm_proj;
+
+  $escopos_bm = Yii::$app->db->createCommand('SELECT escopo_id, bm_id, nome, bm_escopo.horas_ee, bm_escopo.horas_es, bm_escopo.horas_ep, bm_escopo.horas_ej, bm_escopo.horas_tp FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id='.$model->id)->queryAll();
 //transforma o numero de decimal para romano
 /*  $map = array('M' => 1000, 'CM' => 900, 'D' => 500, 'CD' => 400, 'C' => 100, 'XC' => 90, 'L' => 50, 'XL' => 40, 'X' => 10, 'IX' => 9, 'V' => 5, 'IV' => 4, 'I' => 1);
     $numRoman = '';
@@ -604,7 +632,7 @@ td, th {
       <div class="modal-body">
 
         <label>Destinatário(s)</label>
-        <input type="text" id="remetente" name="remetente" class="form-control">
+        <input type="text" id="remetente" name="remetente" class="form-control" value="<?= $emailContato ?>, ">
 
         <label>Assunto</label>
         <input type="text" id="assunto" name="assunto" class="form-control" value="HCN - BM <?= $model->numero_bm ?>/<?= Date('Y') ?> - <?= $projetoNome ?> ">
@@ -633,6 +661,55 @@ HCN Automação
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal" id="close_modal">Fechar</button>
         <button type="button" class="btn btn-success" id="enviarEmail" >Enviar</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Modal -->
+<div id="horasModal" class="modal fade" role="dialog">
+  <div class="modal-dialog" style="width: 64%;">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <div  class="col-md-12" align="center">  
+            <img style="z-index: 999999999" src="resources/dist/img/loading.gif" type="hidden" name="loading" id="loading" value="" width="64px" hidden/>        
+          </div> 
+        <h4 class="modal-title">Horas BM</h4>
+      </div>
+
+      <div class="modal-body">
+      <table style="width: 100%;">
+        <tr>
+          <th>Escopo</th>
+          <th>Horas TP</th>
+          <th>Horas EJ</th>
+          <th>Horas EP</th>
+          <th>Horas ES</th>
+          <th>Horas EE</th>
+        </tr>
+        <?php foreach ($escopos_bm as $key => $esc) {   ?>
+          <tr>
+            <td><?= $esc['nome'] ?></td>
+            <td><input type="text" class="horas_bm" name="fname" id="bm-horas_tp-<?= $esc['escopo_id'] ?>" value="<?= $esc['horas_tp'] ?>" style="width: 3em;"></td>
+            <td><input type="text" class="horas_bm" name="fname" id="bm-horas_ej-<?= $esc['escopo_id'] ?>" value="<?= $esc['horas_ej'] ?>" style="width: 3em;"></td>
+            <td><input type="text" class="horas_bm" name="fname" id="bm-horas_ep-<?= $esc['escopo_id'] ?>" value="<?= $esc['horas_ep'] ?>" style="width: 3em;"></td>
+            <td><input type="text" class="horas_bm" name="fname" id="bm-horas_es-<?= $esc['escopo_id'] ?>" value="<?= $esc['horas_es'] ?>" style="width: 3em;"></td>
+            <td><input type="text" class="horas_bm" name="fname" id="bm-horas_ee-<?= $esc['escopo_id'] ?>" value="<?= $esc['horas_ee'] ?>" style="width: 3em;"></td>
+          </tr>         
+        
+        <?php } ?>
+        
+      </table>
+     
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" id="close_modal">Fechar</button>
+        <button type="button" class="btn btn-success" id="salvarHoras" >Salvar</button>
       </div>
     </div>
 

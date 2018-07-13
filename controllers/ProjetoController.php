@@ -1216,4 +1216,32 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
         }
 
     }
+    
+    public function actionEnviaremail(){
+        if (Yii::$app->request->isAjax) {   
+            $remetentes = Yii::$app->request->post()['remetentes'];
+            $assunto = Yii::$app->request->post()['assunto'];
+            $corpoEmail = Yii::$app->request->post()['corpoEmail'];
+            $nomeArquivo =  Yii::$app->request->post()['nomeArquivo'];
+
+            $remetentesArr = explode(",", $remetentes);
+            
+
+            foreach ($remetentesArr as $key => $rem) {
+                try{
+                Yii::$app->mailer->compose()
+                ->setFrom('hcnautomacaoweb@gmail.com')
+                ->setTo(trim($rem))
+                ->setSubject($assunto)
+                ->setTextBody($corpoEmail)
+                ->attach(Yii::$app->basePath .''. $nomeArquivo.'.pdf')
+                ->send();
+                }
+                catch(Exception $e){
+                    return $e;
+                }
+            }
+            return Yii::$app->basePath .''. $nomeArquivo.'.pdf';
+        }
+    }
 }

@@ -275,6 +275,89 @@ class BmController extends Controller
         }
     }
 
+    public function actionEditahoras(){
+        if (Yii::$app->request->isAjax) {
+            try{   
+                $connection = \Yii::$app->db;
+                $transaction = $connection->beginTransaction();
+
+                $horas_escopo = explode(";", Yii::$app->request->post()['horas_escopo']);
+
+                $tot_ee=0;
+                $tot_es=0;
+                $tot_ep=0;
+                $tot_ej=0;
+                $tot_tp=0;
+                
+                foreach ($horas_escopo as $key => $esc_h) {
+                    if(!isset(explode("-", $esc_h)[1])){
+                        continue;
+                    }
+                    $sql = 'UPDATE bm_escopo SET '.explode("-", $esc_h)[1].' = '.explode("-", $esc_h)[3].' WHERE escopo_id='.explode("-", $esc_h)[2];
+                    Yii::$app->db->createCommand($sql)->execute();  
+
+                    $bm_id = Yii::$app->db->createCommand('SELECT bm_id FROM bm_escopo WHERE escopo_id='.explode("-", $esc_h)[2])->queryScalar();  
+
+                    if(explode("_", explode("-", $esc_h)[1])[1]=='ee'){
+                        $tot_ee= $tot_ee + explode("-", $esc_h)[3];
+                    }
+                    if(explode("_", explode("-", $esc_h)[1])[1]=='es'){
+                        $tot_es= $tot_es + explode("-", $esc_h)[3];
+                    }
+                    if(explode("_", explode("-", $esc_h)[1])[1]=='ep'){
+                        $tot_ep= $tot_ep + explode("-", $esc_h)[3];
+                    }
+                    if(explode("_", explode("-", $esc_h)[1])[1]=='ej'){
+                        $tot_ej= $tot_ej + explode("-", $esc_h)[3];
+                    }
+                    if(explode("_", explode("-", $esc_h)[1])[1]=='tp'){
+                        $tot_tp= $tot_tp + explode("-", $esc_h)[3];
+                    }
+       
+                }
+
+                $bmArr = Yii::$app->db->createCommand('SELECT * FROM bm WHERE id='.$bm_id)->queryOne(); 
+
+                $projetoArr = Yii::$app->db->createCommand('SELECT * FROM projeto WHERE id='.$bmArr['projeto_id'])->queryOne(); 
+
+                $horasAS = Yii::$app->db->createCommand('SELECT SUM(horas_ee) h_ee, SUM(horas_es) h_es, SUM(horas_ep) h_ep, SUM(horas_ej) h_ej, SUM(horas_tp) h_tp FROM escopo WHERE projeto_id='.$projetoArr['id'])->queryOne();
+
+                $totalHoras = $horasAS['h_ee']+$horasAS['h_es']+$horasAS['h_ep']+$horasAS['h_ej']+$horasAS['h_tp'];
+                
+                //quantidade de bms do projeto
+                $numbm = count(Yii::$app->db->createCommand('SELECT id FROM bm WHERE projeto_id='.$projetoArr['id'])->queryAll()) + 1;                
+
+                $saldo = $totalHoras - ($tot_ee + $tot_es + $tot_ep + $tot_ej + $tot_tp);
+
+                $acumulada = $tot_ee + $tot_es + $tot_ep + $tot_ej + $tot_tp;
+
+                $percAcumulada = sprintf("%.2f",($acumulada * 100) / $totalHoras);
+
+                $tipo_exec = Yii::$app->db->createCommand('SELECT * FROM tipo_executante')->queryAll();
+                $valorTotalBm = number_format($tot_ee * $tipo_exec[4]['valor_hora']+
+                        $tot_es * $tipo_exec[3]['valor_hora'] +
+                        $tot_ep * $tipo_exec[2]['valor_hora']+
+                        $tot_ej * $tipo_exec[1]['valor_hora']+
+                        $tot_tp * $tipo_exec[0]['valor_hora']+
+                        $bmArr['km'] * Yii::$app->db->createCommand('SELECT vl_km FROM executante WHERE usuario_id=61')->queryScalar(), 2, ',', '.');  
+                
+                $percBm = number_format(($valorTotalBm * 100) / number_format($projetoArr['valor_proposta'], 2, ',', '.'), 2, ',', '.');
+
+                $descricao = $projetoArr['desc_resumida'].'.'.PHP_EOL.'Esse '.$numbm.'º Boletim de Medição corresponde a '.$percBm.'% das atividades citadas na '.$projetoArr['nome'].''.PHP_EOL.'A medição total acumulada incluindo este BM corresponde a '.$percAcumulada.'% das atividades realizadas.';
+
+                Yii::$app->db->createCommand('UPDATE bm SET executado_ee= '.$tot_ee.', executado_es= '.$tot_es.', executado_ep= '.$tot_ep.', executado_ej= '.$tot_ej.', executado_tp= '.$tot_tp.', descricao="'.$descricao.'", saldo ='.$saldo.', acumulado= '.$acumulada.' WHERE id='.$bm_id)->execute();
+                
+
+                $transaction->commit();
+                return 'success';
+            }
+            catch(Exception $e){
+                $transaction->rollBack();
+                return $e;
+            }
+        }
+    }
+
     public function actionEnviaremail(){
         if (Yii::$app->request->isAjax) {   
             $remetentes = Yii::$app->request->post()['remetentes'];
