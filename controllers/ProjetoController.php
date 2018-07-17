@@ -6,6 +6,7 @@ use Yii;
 use app\models\Projeto;
 use app\models\search\LdpreliminarSearch;
 use app\models\Cliente;
+use app\models\Atividademodelo;
 use app\models\Contato;
 use app\models\ProjetoExecutante;
 use app\models\Escopo;
@@ -334,7 +335,7 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
 
                 if(isset($_POST['np'])){
 
-                    foreach ($_POST['np'] as $key => $np) {
+                    /*foreach ($_POST['np'] as $key => $np) {
 
                        $ativi = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE id='.$np)->queryOne();
 
@@ -344,7 +345,7 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                         $escopo_model->nome = $ativi['nome'];
                         $escopo_model->descricao = $ativi['nome'];
                         $escopo_model->save();
-                    }
+                    }*/
                 }
                      
 
@@ -480,7 +481,7 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
         $status_geral = Yii::$app->db->createCommand('SELECT id, status FROM status_geral')->queryAll();
         $listStatusGeral = ArrayHelper::map($status_geral,'id','status');
 
-        $escopoArray = Yii::$app->db->createCommand('SELECT * FROM atividademodelo JOIN escopo  ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$model->id.' ORDER BY isEntregavel ASC, atividademodelo.id ASC')->queryAll();
+        $escopoArray = Yii::$app->db->createCommand('SELECT * FROM atividademodelo JOIN escopo  ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$model->id.' ORDER BY isEntregavel ASC, escopo.id ASC')->queryAll();
 
         /*$executantes_tp = Yii::$app->db->createCommand('SELECT executante.usuario_id as exec_id, nome FROM executante JOIN executante_tipo ON executante_tipo.executante_id=executante.usuario_id JOIN tipo_executante ON executante_tipo.tipo_id=tipo_executante.id JOIN user ON user.id=executante.usuario_id JOIN projeto_executante ON projeto_executante.executante_id=executante.usuario_id WHERE tipo_executante.id =1 AND projeto_executante.projeto_id='.$model->id)->queryAll();
         $listExecutantes_tp = ArrayHelper::map($executantes_tp,'exec_id','nome'); 
@@ -804,34 +805,65 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                             }
                         }*/
                         if(isset($_POST['np'])){
-                            $npCadastradas = Yii::$app->db->createCommand('SELECT atividademodelo.id FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE isPrioritaria=0 AND projeto_id='.$model->id)->queryAll();
-                            $exc = 0;
+                            
+                            $npCadastradas = Yii::$app->db->createCommand('SELECT atividademodelo.id, atividademodelo.nome FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE isPrioritaria=0 AND projeto_id='.$model->id)->queryAll();
+                                                        
+                            $i = 0;
                             //checa as que foram excluídas
                             foreach ($npCadastradas as $key => $npCad) {
-                                foreach ($_POST['np'] as $key2 => $npPost) {
-                                    if($npCad['id'] == $npPost){         
-                                        $exc = 1;    
-                                    }                                    
-                                }
-                                if($exc==0){                                           
-                                    Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id='.$npCad['id'])->execute();   
-                                }
-                                $exc = 0;
+                                foreach($_POST['np'] as $key2 => $npPost) { 
+                                    if(empty($_POST['np'][$i])){  //se for excluido
+                                        Yii::$app->db->createCommand('DELETE FROM escopo WHERE nome="'.$npCadastradas[$i]['nome'].'"')->execute();
+                                        continue;
+                                    }  
+                                    if($_POST['np'][$i] != $npCadastradas[$i]['nome']){ //se os nomes forem diferentes 
+                                        $id_atividade_np = Yii::$app->db->createCommand('SELECT id FROM atividademodelo WHERE nome="'.$_POST['np'][$i].'"')->queryScalar();
+                                        
+                                        //nao existe essa atividade ainda
+                                        if(empty($id_atividade_np)){
+                                            $modelAtividadeModelo = new AtividadeModelo;
+                                            $modelAtividadeModelo->nome = $_POST['np'][$i];
+                                            $modelAtividadeModelo->isPrioritaria = 0;
+                                            $modelAtividadeModelo->isEntregavel = 1;
+                                            $modelAtividadeModelo->escopopadrao_id = 3;
+                                            $modelAtividadeModelo->disciplina_id = 1;
+                                            $modelAtividadeModelo->save();
+
+                                            $id_atividade_np = $modelAtividadeModelo->id;
+                                        }
+                                        Yii::$app->db->createCommand('UPDATE escopo SET nome="'.$_POST['np'][$i].'", descricao="'.$_POST['np'][$i].'", atividademodelo_id='.$id_atividade_np.' WHERE nome="'.$npCadastradas[$i]['nome'].'"')->execute();
+                                    }                                
+                                }    
+                                $i++;            
                             }
-                                
                             
+                            //novo cadastro de escopo
                             foreach ($_POST['np'] as $key => $np) {
                                 
-                               $existsNp = Yii::$app->db->createCommand('SELECT id FROM escopo WHERE atividademodelo_id='.$np.' AND projeto_id='.$model->id)->queryScalar();
+                               $existsNp = Yii::$app->db->createCommand('SELECT id FROM escopo WHERE nome="'.$np.'" AND projeto_id='.$model->id)->queryScalar();
   
                                if(empty($existsNp)){
-                                   $ativi = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE id='.$np)->queryOne();
+                                   $ativi = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE nome="'.$np.'"')->queryOne();
+                                   $id_atividade_np = $ativi['id'];
+                                   $nome_np = $ativi['nome'];
+                                   if(empty($ativi)){
+                                        $modelAtividadeModelo = new AtividadeModelo;
+                                        $modelAtividadeModelo->nome = $np;
+                                        $modelAtividadeModelo->isPrioritaria = 0;
+                                        $modelAtividadeModelo->isEntregavel = 1;
+                                        $modelAtividadeModelo->escopopadrao_id = 3;
+                                        $modelAtividadeModelo->disciplina_id = 1;
+                                        $modelAtividadeModelo->save();
+
+                                        $id_atividade_np = $modelAtividadeModelo->id;
+                                        $nome_np = $modelAtividadeModelo->nome;
+                                    }
  
                                     $escopo_model = new Escopo();
                                     $escopo_model->projeto_id = $model->id;
-                                    $escopo_model->atividademodelo_id = $ativi['id'];
-                                    $escopo_model->nome = $ativi['nome'];
-                                    $escopo_model->descricao = $ativi['nome'];
+                                    $escopo_model->atividademodelo_id = $id_atividade_np;
+                                    $escopo_model->nome = $nome_np;
+                                    $escopo_model->descricao = $nome_np;
                                     $escopo_model->save();
                                 }
                             }
