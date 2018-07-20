@@ -219,116 +219,94 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                             $automacoes = isset($escopos['Automação']) ? $escopos['Automação'] : array();
                             $processos = isset($escopos['Processo']) ? $escopos['Processo'] : array();
                             $instrumentacoes = isset($escopos['Instrumentação']) ? $escopos['Instrumentação'] : array();
-                            $diagramas = isset($escopos['Diagrama']) ? $escopos['Diagrama'] : array();
+                            // $diagramas = isset($escopos['Diagrama']) ? $escopos['Diagrama'] : array();
+
+                            if(empty($automacoes)){
+                                Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id IN(SELECT id FROM atividademodelo WHERE disciplina_id=1) AND projeto_id='.$model->id)->execute();
+                            }
+                            if(empty($processos)){
+                                Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id IN(SELECT id FROM atividademodelo WHERE disciplina_id=2) AND projeto_id='.$model->id)->execute();
+                            }
+                            if(empty($instrumentacoes)){
+                                Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id IN(SELECT id FROM atividademodelo WHERE disciplina_id=3) AND projeto_id='.$model->id)->execute();
+                            }
+                            
+                            if(!isset($automacoes[1]) || empty($automacoes[1])){
+                             Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id  IN(SELECT id FROM atividademodelo WHERE (escopopadrao_id=1  OR escopopadrao_id=0) AND disciplina_id=1) AND ((horas_tp=null OR horas_tp="") AND (horas_ej=null OR horas_ej="") AND (horas_ep=null OR horas_ep="") AND (horas_es=null OR horas_es="" OR horas_es=0) AND (horas_ee=null OR horas_ee="")) AND projeto_id='.$model->id)->execute();
+
+                            }
+
+                            if(!isset($automacoes[2]) || empty($automacoes[2]))
+                             Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id  IN(SELECT id FROM atividademodelo WHERE (escopopadrao_id=2 OR escopopadrao_id=0) AND disciplina_id=1) AND ((horas_tp=null OR horas_tp="") AND (horas_ej=null OR horas_ej="") AND (horas_ep=null OR horas_ep="") AND (horas_es=null OR horas_es="" OR horas_es=0) AND (horas_ee=null OR horas_ee="")) AND projeto_id='.$model->id )->execute();
+
+                            if(!isset($automacoes[3]) || empty($automacoes[3]))
+                             Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id  IN(SELECT id FROM atividademodelo WHERE (escopopadrao_id=3 OR escopopadrao_id=0) AND disciplina_id=1) AND ((horas_tp=null OR horas_tp="") AND (horas_ej=null OR horas_ej="") AND (horas_ep=null OR horas_ep="") AND (horas_es=null OR horas_es="" OR horas_es=0) AND (horas_ee=null OR horas_ee="")) AND projeto_id='.$model->id)->execute();
+
 
                             foreach ($automacoes as $key => $automacao) {
                                 $atvmodelos = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE (escopopadrao_id='.$automacao.' OR escopopadrao_id=0) AND disciplina_id = 1 AND isPrioritaria=1')->queryAll();
 
-                                
                                 foreach ($atvmodelos as $key => $atv) {
-                                    $escopo_model = new Escopo();
-                                    $escopo_model->projeto_id = $model->id;
-                                    $escopo_model->atividademodelo_id = $atv['id'];
-                                    $escopo_model->nome = $atv['nome'];
-                                    $escopo_model->descricao = $atv['nome'];
-
-                                    //Quando é coordenação e administração
-                                    if($escopo_model->nome == "Coordenação e Administração"){
-                                        $escopo_model->exe_tp_id = 61;
-                                        $escopo_model->exe_ej_id = 61;
-                                        $escopo_model->exe_ep_id = 61;
-                                        $escopo_model->exe_es_id = 61;
-                                        $escopo_model->exe_ee_id = 61;
-
-                                        $countCoordAdm++;
-                                    }
-                                    if($countCoordAdm==2){
-                                        continue;
-                                    }
+                                    $existeEscopo = Yii::$app->db->createCommand('SELECT id FROM escopo WHERE projeto_id='.$model->id.' AND atividademodelo_id='.$atv['id'])->queryScalar();
                                     
-                                    $escopo_model->save();
+
+                                    if(!$existeEscopo){
+                                        $escopo_model = new Escopo();
+                                        $escopo_model->projeto_id = $model->id;
+                                        $escopo_model->atividademodelo_id = $atv['id'];
+                                        $escopo_model->nome = $atv['nome'];
+                                        $escopo_model->descricao = $atv['nome'];
+                                        $escopo_model->save();
+                                    }
                                 }
                             }
+                            if(!isset($processos[1]) || empty($processos[1]))
+                             Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id  IN(SELECT id FROM atividademodelo WHERE (escopopadrao_id=1  OR escopopadrao_id=0) AND disciplina_id=2) AND ((horas_tp=null OR horas_tp="") AND (horas_ej=null OR horas_ej="") AND (horas_ep=null OR horas_ep="") AND (horas_es=null OR horas_es="" OR horas_es=0) AND (horas_ee=null OR horas_ee="")) AND projeto_id='.$model->id)->execute();
+
+                            if(!isset($processos[2]) || empty($processos[2]))
+                             Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id  IN(SELECT id FROM atividademodelo WHERE (escopopadrao_id=2 OR escopopadrao_id=0) AND disciplina_id=2) AND ((horas_tp=null OR horas_tp="") AND (horas_ej=null OR horas_ej="") AND (horas_ep=null OR horas_ep="") AND (horas_es=null OR horas_es="" OR horas_es=0) AND (horas_ee=null OR horas_ee="")) AND projeto_id='.$model->id )->execute();
+
+                            if(!isset($processos[3]) || empty($processos[3]))
+                             Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id  IN(SELECT id FROM atividademodelo WHERE (escopopadrao_id=3 OR escopopadrao_id=0) AND disciplina_id=2) AND ((horas_tp=null OR horas_tp="") AND (horas_ej=null OR horas_ej="") AND (horas_ep=null OR horas_ep="") AND (horas_es=null OR horas_es="" OR horas_es=0) AND (horas_ee=null OR horas_ee="")) AND projeto_id='.$model->id)->execute();
                             foreach ($processos as $key => $processo) {
-
                                 $atvmodelos = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE (escopopadrao_id='.$processo.' OR escopopadrao_id=0) AND disciplina_id = 2 AND isPrioritaria=1')->queryAll();
-                                $countCoordAdm = 0;
+
                                 foreach ($atvmodelos as $key => $atv) {
-                                    $escopo_model = new Escopo();
-                                    $escopo_model->projeto_id = $model->id;
-                                    $escopo_model->atividademodelo_id = $atv['id'];
-                                    $escopo_model->nome = $atv['nome'];
-                                    $escopo_model->descricao = $atv['nome'];
-
-                                    //Quando é coordenação e administração
-                                    if($escopo_model->nome == "Coordenação e Administração"){
-                                        $escopo_model->exe_tp_id = 61;
-                                        $escopo_model->exe_ej_id = 61;
-                                        $escopo_model->exe_ep_id = 61;
-                                        $escopo_model->exe_es_id = 61;
-                                        $escopo_model->exe_ee_id = 61;
-
-                                        $countCoordAdm++;
+                                    $existeEscopo = Yii::$app->db->createCommand('SELECT id FROM escopo WHERE projeto_id='.$model->id.' AND atividademodelo_id='.$atv['id'])->queryScalar();
+                                    if(!$existeEscopo){
+                                        $escopo_model = new Escopo();
+                                        $escopo_model->projeto_id = $model->id;
+                                        $escopo_model->atividademodelo_id = $atv['id'];
+                                        $escopo_model->nome = $atv['nome'];
+                                        $escopo_model->descricao = $atv['nome'];
+                                        $escopo_model->save();
                                     }
-                                    if($countCoordAdm==2){
-                                        continue;
-                                    }
-
-                                    $escopo_model->save();
                                 }
                             }
+                            if(!isset($instrumentacoes[1]) || empty($instrumentacoes[1]))
+                             Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id  IN(SELECT id FROM atividademodelo WHERE (escopopadrao_id=1  OR escopopadrao_id=0) AND disciplina_id=3) AND ((horas_tp=null OR horas_tp="") AND (horas_ej=null OR horas_ej="") AND (horas_ep=null OR horas_ep="") AND (horas_es=null OR horas_es="" OR horas_es=0) AND (horas_ee=null OR horas_ee="")) AND projeto_id='.$model->id)->execute();
+
+                            if(!isset($instrumentacoes[2]) || empty($instrumentacoes[2]))
+                             Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id  IN(SELECT id FROM atividademodelo WHERE (escopopadrao_id=2 OR escopopadrao_id=0) AND disciplina_id=3) AND ((horas_tp=null OR horas_tp="") AND (horas_ej=null OR horas_ej="") AND (horas_ep=null OR horas_ep="") AND (horas_es=null OR horas_es="" OR horas_es=0) AND (horas_ee=null OR horas_ee="")) AND projeto_id='.$model->id )->execute();
+
+                            if(!isset($instrumentacoes[3]) || empty($instrumentacoes[3]))
+                             Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id  IN(SELECT id FROM atividademodelo WHERE (escopopadrao_id=3 OR escopopadrao_id=0) AND disciplina_id=3) AND ((horas_tp=null OR horas_tp="") AND (horas_ej=null OR horas_ej="") AND (horas_ep=null OR horas_ep="") AND (horas_es=null OR horas_es="" OR horas_es=0) AND (horas_ee=null OR horas_ee="")) AND projeto_id='.$model->id)->execute();
+
                             foreach ($instrumentacoes as $key => $instrumentacao) {
-
                                 $atvmodelos = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE (escopopadrao_id='.$instrumentacao.' OR escopopadrao_id=0) AND disciplina_id = 3 AND isPrioritaria=1')->queryAll();
-                                $countCoordAdm = 0;
+
                                 foreach ($atvmodelos as $key => $atv) {
-                                    $escopo_model = new Escopo();
-                                    $escopo_model->projeto_id = $model->id;
-                                    $escopo_model->atividademodelo_id = $atv['id'];
-                                    $escopo_model->nome = $atv['nome'];
-                                    $escopo_model->descricao = $atv['nome'];
-
-                                    //Quando é coordenação e administração
-                                    if($escopo_model->nome == "Coordenação e Administração"){
-                                        $escopo_model->exe_tp_id = 61;
-                                        $escopo_model->exe_ej_id = 61;
-                                        $escopo_model->exe_ep_id = 61;
-                                        $escopo_model->exe_es_id = 61;
-                                        $escopo_model->exe_ee_id = 61;
-
-                                        $countCoordAdm++;
+                                    $existeEscopo = Yii::$app->db->createCommand('SELECT id FROM escopo WHERE projeto_id='.$model->id.' AND atividademodelo_id='.$atv['id'])->queryScalar();
+                                    if(!$existeEscopo){
+                                        $escopo_model = new Escopo();
+                                        $escopo_model->projeto_id = $model->id;
+                                        $escopo_model->atividademodelo_id = $atv['id'];
+                                        $escopo_model->nome = $atv['nome'];
+                                        $escopo_model->descricao = $atv['nome'];
+                                        $escopo_model->save();
                                     }
-                                    if($countCoordAdm==2){
-                                        continue;
-                                    }
-
-                                    $escopo_model->save();
                                 }
                             }
-                            foreach ($diagramas as $key => $diagrama) {
-
-                                $atvmodelos = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE (escopopadrao_id='.$diagrama.' OR escopopadrao_id=0) AND disciplina_id = 4 AND isPrioritaria=1')->queryAll();
-
-                                foreach ($atvmodelos as $key => $atv) {
-                                    $escopo_model = new Escopo();
-                                    $escopo_model->projeto_id = $model->id;
-                                    $escopo_model->atividademodelo_id = $atv['id'];
-                                    $escopo_model->nome = $atv['nome'];
-                                    $escopo_model->descricao = $atv['nome'];
-
-                                    //Quando é coordenação e administração
-                                    if($escopo_model->nome == "Coordenação e Administração"){
-                                        $escopo_model->exe_tp_id = 61;
-                                        $escopo_model->exe_ej_id = 61;
-                                        $escopo_model->exe_ep_id = 61;
-                                        $escopo_model->exe_es_id = 61;
-                                        $escopo_model->exe_ee_id = 61;
-                                    }
-                                    
-                                    $escopo_model->save();
-
-                                }
-                            }                        
                         }                    
                     }
                 }

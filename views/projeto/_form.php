@@ -1066,8 +1066,20 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
     
       <div class="row">
       
-        <div class="col-md-5">
-          <div class="col-md-4" style="padding-left: 0px;" <?=$visible?>>
+        <div class="col-md-7">
+          <div class="col-md-3">
+            <?= $form->field($model, 'vl_km')->textInput()->textInput(['maxlength' => true])->widget(MaskMoney::classname(), [
+                'pluginOptions' => [
+                    'prefix' => 'R$ ',
+                    'thousands' => '.',
+                    'decimal' => ',',
+                    // 'suffix' => ' ¢',
+                    'allowNegative' => false
+
+                ]
+            ]); ?>
+          </div>
+          <div class="col-md-3" style="padding-left: 0px;" <?=$visible?>>
               <?= $form->field($model, 'valor_proposta')->textInput(['maxlength' => true])->widget(MaskMoney::classname(), [
                 'pluginOptions' => [
                     'prefix' => 'R$ ',
@@ -1079,7 +1091,7 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
                 ]
             ]); ?>
           </div>
-          <div class="col-md-4" <?=$visible?>>
+          <div class="col-md-3" <?=$visible?>>
               <?= $form->field($model, 'valor_consumido')->textInput(['maxlength' => true])->widget(MaskMoney::classname(), [
                 'pluginOptions' => [
                     'prefix' => 'R$ ',
@@ -1091,7 +1103,7 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
                 ]
             ]); ?>
           </div>
-          <div class="col-md-4" <?=$visible?>>
+          <div class="col-md-3" <?=$visible?>>
             <?= $form->field($model, 'valor_saldo')->textInput(['maxlength' => true])->widget(MaskMoney::classname(), [
               'pluginOptions' => [
                   'prefix' => 'R$ ',
@@ -1104,7 +1116,7 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
             ]); ?>
           </div>          
       </div>    
-        <div class="col-md-6">
+        <div class="col-md-4">
             <?= $form->field($model, 'pendencia')->textarea(['maxlength' => true]) ?>
         </div>
       </div>
