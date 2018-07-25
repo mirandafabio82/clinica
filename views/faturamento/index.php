@@ -26,19 +26,30 @@ $this->registerJs('
 	  });
 	});
 
+	
+	
 	$("#frs_btn").click(function(ev){
-		file_frs = "";
-		console.log("frs");
+		
+		var fileInput = document.getElementById("frs_file");
+		var file = fileInput.files[0];
+		var formData = new FormData();
+		formData.append("file", file);
+		console.log(formData);
 		$.ajax({ 
-	      url: "index.php?r=faturamento/readfrs",
-	      data: {file: file_frs},
-	      type: "POST",
-	      success: function(response){
-	      	console.log(response);
-	      },
-	      error: function(){
-	       console.log("failure");
-	      }
+		      url: "index.php?r=faturamento/readfrs",
+		      data: formData,
+		      type: "POST",
+		      cache: false,
+	          //dataType: "json",
+	          processData: false, // Dont process the files
+	          contentType: false,
+		      success: function(response){
+		      	console.log(response);
+		      	$("#frs_content").val(response);
+		      },
+		      error: function(){
+		       console.log("failure");
+		      }
 	  });
 	});
 
@@ -92,7 +103,7 @@ $this->registerJs('
 	  					';
 
 	$frs_content = '<div style="margin-top:1em">
-						<form action="/action_page.php">
+						<form id="form_frs" method="post" enctype="multipart/form-data">
 							<div class="row">
 								<div class="col-md-12"> 
 									<label>Arquivo FRS</label>
@@ -100,7 +111,7 @@ $this->registerJs('
 							</div
 							<div class="row">
 								<div class="col-md-4"> 
-			  						<input type="file" id="frs_file" accept="application/pdf">
+			  						<input type="file" id="frs_file" accept="application/pdf" name="frs_file">
 			  					</div>
 			  					<div class="col-md-4">
 			  						<button type="button" class="btn btn-primary" id="frs_btn">Extrair Informações</button>
@@ -143,11 +154,11 @@ $this->registerJs('
 		[
 		    'label'=>'BM',
 		    'content'=>$bm_content,
-		    'active'=>true,		    
 		],
 		[
 		    'label'=>'FRS',
 		    'content'=>$frs_content,
+		    'active'=>true,		    
 		],
 		[
 		    'label'=>'NFSe',
