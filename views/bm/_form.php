@@ -632,13 +632,14 @@ td, th {
       <div class="modal-body">
 
         <label>Destinatário(s)</label>
-        <input type="text" id="remetente" name="remetente" class="form-control" value="<?= $emailContato ?>, ">
+        <input type="text" id="remetente" name="remetente" class="form-control" value="helder010161@uol.com.br ">
 
         <label>Assunto</label>
         <input type="text" id="assunto" name="assunto" class="form-control" value="HCN - BM <?= $model->numero_bm ?>/<?= Date('Y') ?> - <?= $projetoNome ?> ">
        
         <label>Corpo do Email</label>
-        <textarea rows="15" cols="100" id="corpoEmail" name="corpoEmail" class="form-control">          
+        <textarea rows="15" cols="100" id="corpoEmail" name="corpoEmail" class="form-control">         
+<?= $emailContato ?> 
 Bom dia, <?= explode(" ", $solicitante)[0] ?>!
 
 Segue nosso <?= $numberBM ?>º Boletim de Medição para o <?= $projetoNome ?> - <?= $descricaoProjeto ?>.

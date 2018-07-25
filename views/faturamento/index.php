@@ -28,13 +28,13 @@ $this->registerJs('
 
 	$("#frs_btn").click(function(ev){
 		file_frs = "";
-		console.log("click");
+		console.log("frs");
 		$.ajax({ 
 	      url: "index.php?r=faturamento/readfrs",
 	      data: {file: file_frs},
 	      type: "POST",
 	      success: function(response){
-	      
+	      	console.log(response);
 	      },
 	      error: function(){
 	       console.log("failure");
@@ -103,7 +103,7 @@ $this->registerJs('
 			  						<input type="file" id="frs_file" accept="application/pdf">
 			  					</div>
 			  					<div class="col-md-4">
-			  						<button type="button" class="btn btn-primary" id="nfse_btn">Extrair Informações</button>
+			  						<button type="button" class="btn btn-primary" id="frs_btn">Extrair Informações</button>
 			  					</div>			  							  					
 		  					</div>
 		  					<div class="row" style="margin-top:1em">

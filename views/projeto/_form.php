@@ -1811,7 +1811,7 @@ echo TabsX::widget([
 
         <label>Destinatário(s)</label>
         <br>
-        <input type="text" id="remetente" name="remetente" class="form-control" value="<?= Yii::$app->db->createCommand('SELECT email FROM user WHERE id='.$model->contato_id)->queryScalar() ?>, ">
+        <input type="text" id="remetente" name="remetente" class="form-control" value="helder010161@uol.com.br">
         <br>
 
         <label>Assunto</label>
@@ -1821,7 +1821,8 @@ echo TabsX::widget([
        
         <label>Corpo do Email</label>
         <br>
-        <textarea rows="15" cols="100" id="corpoEmail" name="corpoEmail" class="form-control">          
+        <textarea rows="15" cols="100" id="corpoEmail" name="corpoEmail" class="form-control">        
+<?= Yii::$app->db->createCommand('SELECT email FROM user WHERE id='.$model->contato_id)->queryScalar() ?>  
 Bom dia, <?= $model->contato ?>!
 
 Segue nossa AS revisada para serviço de emissão de <?= $model->descricao ?> para o <?= $model->nome ?>.
