@@ -76,13 +76,18 @@ class FaturamentoController extends \yii\web\Controller
 
                             if(!empty($projeto_arr)){
                                 if(copy($path, $path_projeto)){//copia o arquivo para a pasta correta
-                                    $doc = new Documento();
-                                    $doc->projeto_id = $projeto_arr['id'];
-                                    $doc->nome = 'FRS-'.$projeto_arr['codigo'].'-'.$projeto_arr['site'].'-'.$num_proj.'_'.$num_bm.'_'.$ano.'.pdf';
-                                    $doc->revisao = 0;
-                                    $doc->path = 'FRS-'.$projeto_arr['codigo'].'-'.$projeto_arr['site'].'-'.$num_proj.'_'.$num_bm.'_'.$ano.'.pdf';
-                                    $doc->is_global = 0;
-                                    $doc->save();
+                                    $exists_frs = Yii::$app->db->createCommand('SELECT id FROM documento WHERE nome="FRS-'.$projeto_arr['codigo'].'-'.$projeto_arr['site'].'-'.$num_proj.'_'.$num_bm.'_'.$ano.'.pdf"')->queryScalar();
+
+                                    if(empty($exists_frs)){
+                                        $doc = new Documento();
+                                        $doc->projeto_id = $projeto_arr['id'];
+                                        $doc->nome = 'FRS-'.$projeto_arr['codigo'].'-'.$projeto_arr['site'].'-'.$num_proj.'_'.$num_bm.'_'.$ano.'.pdf';
+                                        $doc->revisao = 0;
+                                        $doc->path = 'FRS-'.$projeto_arr['codigo'].'-'.$projeto_arr['site'].'-'.$num_proj.'_'.$num_bm.'_'.$ano.'.pdf';
+                                        $doc->is_global = 0;
+                                        $doc->data = Date('Y-m-d');
+                                        $doc->save();
+                                    }                                    
                                 }  
                             }
                             else{
