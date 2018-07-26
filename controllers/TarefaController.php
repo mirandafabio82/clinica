@@ -46,6 +46,7 @@ class TarefaController extends Controller
      */
     public function actionIndex($projeto_id=null, $executante_id=null)
     {       
+
         $escopoModel = new Escopo();        
         $searchModel = new ProjetoSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -85,7 +86,7 @@ class TarefaController extends Controller
 
         $projeto_selected = '';
         if(isset($_POST['executante']) && isset($_POST['projeto'])){    //filtro         
-            $dataProvider->query->where('id = '.$_POST['projeto']);
+            $dataProvider->query->where('projeto.id = '.$_POST['projeto']);
             $executante_id = $_POST['executante'];
             $projeto_selected = $_POST['projeto'];
             $isPost = 1;

@@ -85,7 +85,7 @@ class AtividadeController extends Controller
             $projetos_id = Yii::$app->db->createCommand('SELECT projeto_id as id FROM projeto_executante WHERE executante_id='.Yii::$app->user->getId())->queryAll();
 
             foreach ($projetos_id as $key => $pid) {
-                $dataProvider->query->orWhere('id='.$pid['id']);
+                $dataProvider->query->orWhere('projeto.id='.$pid['id']);
             }
             
         }
