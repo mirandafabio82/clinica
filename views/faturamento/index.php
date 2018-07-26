@@ -44,8 +44,11 @@ $this->registerJs('
 	          processData: false, // Dont process the files
 	          contentType: false,
 		      success: function(response){
+
 		      	console.log(response);
-		      	$("#frs_content").val(response);
+		      	$("#frs_content").val(response.split("##")[0]);
+		      	$("#label_download").attr("href",response.split("##")[1]);
+		      	$("#label_download").removeAttr("hidden");
 		      },
 		      error: function(){
 		       console.log("failure");
@@ -115,11 +118,12 @@ $this->registerJs('
 			  					</div>
 			  					<div class="col-md-4">
 			  						<button type="button" class="btn btn-primary" id="frs_btn">Extrair Informações</button>
-			  					</div>			  							  					
+			  					</div>
 		  					</div>
+			  				<a target="_blank" id="label_download" hidden>Download do Arquivo</a>
 		  					<div class="row" style="margin-top:1em">
 		  						<div class="col-md-12">
-		  							<textarea rows="10" cols="100" id="frs_content"></textarea>
+		  							<textarea rows="15" cols="100" id="frs_content"></textarea>
 		  						</div>
 		  					</div>	
 	  					</form>
