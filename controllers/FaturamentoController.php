@@ -61,37 +61,48 @@ class FaturamentoController extends \yii\web\Controller
                             $cliente = Yii::$app->db->createCommand('SELECT * FROM cliente WHERE cnpj="'.$cnpj.'"')->queryOne();
 
                             $valor_total = trim(explode(' ', trim(explode(',00', $text)[1]))[0]);
-
-                            $num_bm = trim(explode('/', explode('PGT BM ', $text)[1])[0]);
-
-                            $ano = trim(explode(' ',trim(explode('/', explode('PGT BM ', $text)[1])[1]))[0]);
-
-                            $projeto_id = Yii::$app->db->createCommand('SELECT projeto_id FROM bm WHERE numero_bm='.$num_bm)->queryScalar();
-
-                            $projeto_arr = Yii::$app->db->createCommand('SELECT * FROM projeto WHERE id='.$projeto_id)->queryOne();
-
-                            $num_proj = explode('-', $projeto_arr['nome'])[1];
-
-                            $path_projeto = Yii::$app->basePath . '/web/uploaded-files/'.$projeto_arr['id'].'/FRS-'.$projeto_arr['codigo'].'-'.$projeto_arr['site'].'-'.$num_proj.'_'.$num_bm.'_'.$ano.'.pdf';
-
-                            if(!empty($projeto_arr)){
-                                if(copy($path, $path_projeto)){//copia o arquivo para a pasta correta
-                                    $exists_frs = Yii::$app->db->createCommand('SELECT id FROM documento WHERE nome="FRS-'.$projeto_arr['codigo'].'-'.$projeto_arr['site'].'-'.$num_proj.'_'.$num_bm.'_'.$ano.'.pdf"')->queryScalar();
-
-                                    if(empty($exists_frs)){
-                                        $doc = new Documento();
-                                        $doc->projeto_id = $projeto_arr['id'];
-                                        $doc->nome = 'FRS-'.$projeto_arr['codigo'].'-'.$projeto_arr['site'].'-'.$num_proj.'_'.$num_bm.'_'.$ano.'.pdf';
-                                        $doc->revisao = 0;
-                                        $doc->path = 'FRS-'.$projeto_arr['codigo'].'-'.$projeto_arr['site'].'-'.$num_proj.'_'.$num_bm.'_'.$ano.'.pdf';
-                                        $doc->is_global = 0;
-                                        $doc->data = Date('Y-m-d');
-                                        $doc->save();
-                                    }                                    
-                                }  
+                          
+                            
+                            if(!strpos($text, 'PGT BM') && empty($_POST['frs_num_bm'])){ //nao possui BM na FRS
+                              return 'sem_num_bm';
                             }
                             else{
-                                echo 'Essa FRS não foi salva pois não existe nenhum BM com esse número cadastrado no sistema.';
+                              if(!strpos($text, 'PGT BM')){
+                                $num_bm = $_POST['frs_num_bm'];
+                                $ano = trim('20'.explode(' ', explode('.20', $text)[1])[0]);
+                              }
+                              else{
+                                $num_bm = trim(explode('/', explode('PGT BM ', $text)[1])[0]);  
+                                $ano = trim(explode(' ',trim(explode('/', explode('PGT BM ', $text)[1])[1]))[0]);
+                              }
+
+                              $projeto_id = Yii::$app->db->createCommand('SELECT projeto_id FROM bm WHERE numero_bm='.$num_bm)->queryScalar();
+
+                              $projeto_arr = Yii::$app->db->createCommand('SELECT * FROM projeto WHERE id='.$projeto_id)->queryOne();
+
+                              $num_proj = explode('-', $projeto_arr['nome'])[1];
+
+                              $path_projeto = Yii::$app->basePath . '/web/uploaded-files/'.$projeto_arr['id'].'/FRS-'.$projeto_arr['codigo'].'-'.$projeto_arr['site'].'-'.$num_proj.'_'.$num_bm.'_'.$ano.'.pdf';
+
+                              if(!empty($projeto_arr)){
+                                  if(copy($path, $path_projeto)){//copia o arquivo para a pasta correta
+                                      $exists_frs = Yii::$app->db->createCommand('SELECT id FROM documento WHERE nome="FRS-'.$projeto_arr['codigo'].'-'.$projeto_arr['site'].'-'.$num_proj.'_'.$num_bm.'_'.$ano.'.pdf"')->queryScalar();
+
+                                      if(empty($exists_frs)){
+                                          $doc = new Documento();
+                                          $doc->projeto_id = $projeto_arr['id'];
+                                          $doc->nome = 'FRS-'.$projeto_arr['codigo'].'-'.$projeto_arr['site'].'-'.$num_proj.'_'.$num_bm.'_'.$ano.'.pdf';
+                                          $doc->revisao = 0;
+                                          $doc->path = 'FRS-'.$projeto_arr['codigo'].'-'.$projeto_arr['site'].'-'.$num_proj.'_'.$num_bm.'_'.$ano.'.pdf';
+                                          $doc->is_global = 0;
+                                          $doc->data = Date('Y-m-d');
+                                          $doc->save();
+                                      }                                    
+                                  }  
+                              }
+                              else{
+                                  echo 'Essa FRS não foi salva pois não existe nenhum BM com esse número cadastrado no sistema.';
+                              }
                             }
 
 

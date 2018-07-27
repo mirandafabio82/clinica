@@ -34,7 +34,8 @@ $this->registerJs('
 		var file = fileInput.files[0];
 		var formData = new FormData();
 		formData.append("file", file);
-		console.log(formData);
+		formData.append("frs_num_bm", $("#frs_num_bm").val());
+		
 		$.ajax({ 
 		      url: "index.php?r=faturamento/readfrs",
 		      data: formData,
@@ -45,10 +46,19 @@ $this->registerJs('
 	          contentType: false,
 		      success: function(response){
 
-		      	console.log(response);
-		      	$("#frs_content").val(response.split("##")[0]);
-		      	$("#label_download").attr("href",response.split("##")[1]);
-		      	$("#label_download").removeAttr("hidden");
+		      	//se não tem numero de BM na FRS
+		      	if(response=="sem_num_bm"){
+		      		$("#frs_num_bm_div").removeAttr("hidden");
+		      		$("#frs_content").val("Essa FRS não possui número do BM. Favor informar o número do BM no campo acima e tentar novamente clicando em Extrair Informações!");
+		      	}
+		      	else{
+		      		console.log(response);
+			      	$("#frs_content").val(response.split("##")[0]);
+			      	$("#label_download").attr("href",response.split("##")[1]);
+			      	$("#label_download").removeAttr("hidden");
+		      	}
+
+		      	
 		      },
 		      error: function(){
 		       console.log("failure");
@@ -120,7 +130,13 @@ $this->registerJs('
 			  						<button type="button" class="btn btn-primary" id="frs_btn">Extrair Informações</button>
 			  					</div>
 		  					</div>
-			  				<a target="_blank" id="label_download" hidden>Download do Arquivo</a>
+		  					<div class="col-md-4" style="margin-bottom:1em" id="frs_num_bm_div" hidden>
+			  					Número do BM:  
+			  					<input type="text" id="frs_num_bm" name="frs_num_bm" style="width:3em">
+			  				</div>
+			  				<div class="col-md-12" style="margin-bottom:1em">
+			  					<a target="_blank" id="label_download" style="color:#00a1ff" hidden>Download do Arquivo</a>
+			  				</div>
 		  					<div class="row" style="margin-top:1em">
 		  						<div class="col-md-12">
 		  							<textarea rows="15" cols="100" id="frs_content"></textarea>
