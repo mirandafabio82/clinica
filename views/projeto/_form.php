@@ -626,13 +626,15 @@ $(".remove-exec").click(function(ev){
 
     $( ".np_autocomplete" ).each(function() {
         var nome = this.value;
+        var projeto_id = window.location.href.split("id=")[1];
+        console.log(projeto_id);
+
         $.ajax({ 
           url: "index.php?r=projeto/addatividadeavulsa",
-          data: {nome: nome, projeto_id:'.$_GET['id'].'},
+          data: {nome: nome, projeto_id: projeto_id},
           type: "POST",
           success: function(response){
            if(response=="success"){
-
              count_novas2++;
              if(count_novas2 == count_novas1){
               location.reload();
@@ -640,8 +642,7 @@ $(".remove-exec").click(function(ev){
            }
            else{
               alert("algum erro ocorreu");
-           }
-           
+           }           
          },
          error: function(){
           console.log("failure");
