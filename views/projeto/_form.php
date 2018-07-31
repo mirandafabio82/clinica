@@ -1274,14 +1274,13 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
 
           <?php } ?>
 
-        <?php // if(empty($nao_prioritarios) && !$model->isNewRecord){ ?>
+        <?php  if(!$model->isNewRecord){ ?>
           <div class="autocomplete col-md-3" style="width:300px;" id="autocomplete_div_0">
             <input class="np_autocomplete" id="autocomplete_0" type="text" name="np[0]" placeholder="Digite uma atividade">
             <a class="remove-np" id="remove-np[0]"> <i class="fa fa-ban" ></i></a>
-          </div>
-          
+          </div>         
 
-         <?php // } ?>
+         <?php  } ?>
         </div>
       </div>
       <div class="row" id="div_save_avulsas_btn" hidden>
