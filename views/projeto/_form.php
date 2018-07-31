@@ -1215,32 +1215,34 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
 
       ?>
       
-      <div ><p><a class="btn btn-success nao-prioritarios">Não Prioritários</a></p></div>
+      <div ><p><a class="btn btn-success nao-prioritarios"><i class="fa fa-plus"></i> Atividades Avulsas</a></p></div>
       <div id="nao-prioritarios_div" style="margin-bottom: 1em" hidden>   
         <a style="margin-left: 1em" id="add-np"> <i class="fa fa-plus-square-o fa-2x"></i></a><br>
-        <?php foreach ($nao_prioritarios as $key => $np) { ?> 
+        <!-- <//?php foreach ($nao_prioritarios as $key => $np) { ?>--> 
           <?php 
-          if(!$model->isNewRecord){
-            $npExists = Yii::$app->db->createCommand('SELECT id FROM escopo WHERE atividademodelo_id='.$np['id'].' AND projeto_id='.$model->id)->queryScalar();
-            if(!empty($npExists)){ ?>    
+          //if(!$model->isNewRecord){
+            //$npExists = Yii::$app->db->createCommand('SELECT id FROM escopo WHERE atividademodelo_id='.$np['id'].' AND projeto_id='.$model->id)->queryScalar();
+            //if(!empty($npExists)){ ?>    
 
-            <div class="autocomplete col-md-3" style="width:300px;" id="autocomplete_div_<?= $np_id_increment ?>">
-              <input id="autocomplete_<?= $np_id_increment ?>" type="text" name="np[<?= $np_id_increment ?>]" value="<?= $np['nome'] ?>" class="np_autocomplete">
+            <!-- <div class="autocomplete col-md-3" style="width:300px;" id="autocomplete_div_<?= $np_id_increment ?>">
+              <input id="autocomplete_<?= $np_id_increment ?>" type="text" name="np[<?= $np_id_increment ?>]" value="<//?= $np['nome'] ?>" class="np_autocomplete">
               <a class="remove-np" id="remove-np[<?= $np_id_increment ?>]"> <i class="fa fa-ban" ></i></a>
-            </div>               
-           <?php $np_id_increment++; }  ?>
+            </div>        -->        
+           <?php // $np_id_increment++; }  ?>
            
-           <?php } ?>
+           <?php //} ?>
             
-         <?php } } ?>
+         <?php //} ?>  
 
-        <?php if(empty($nao_prioritarios) && !$model->isNewRecord){ ?>
+          <?php } ?>
+
+        <?php // if(empty($nao_prioritarios) && !$model->isNewRecord){ ?>
           <div class="autocomplete col-md-3" style="width:300px;" id="autocomplete_div_0">
             <input class="np_autocomplete" id="autocomplete_0" type="text" name="np[0]" placeholder="Digite uma atividade">
             <a class="remove-np" id="remove-np[0]"> <i class="fa fa-ban" ></i></a>
           </div>
 
-        <?php } ?>
+         <?php // } ?>
         </div>
       </div>
 
@@ -1885,7 +1887,7 @@ HCN Automação
 <?php 
   
  $nPrioritarios = '';
- $nao_prioritarios_array = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE isPrioritaria=0')->queryAll();
+ $nao_prioritarios_array = Yii::$app->db->createCommand('SELECT * FROM atividademodelo')->queryAll();
 
 foreach ($nao_prioritarios_array as $key => $np) {  
     $nPrioritarios .= '"'.$np['nome'].'", ';
