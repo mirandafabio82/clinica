@@ -101,6 +101,7 @@ $this->registerJs("
                     return $data->isEntregavel==1 ? 'Sim' : 'Não';
                 }
             ],
+            'ordem',
 
         ],
     ]); ?>
@@ -118,6 +119,9 @@ $this->registerJs("
         </div>
         <div class="col-md-2"> 
         <?= $form->field($model, 'escopopadrao_id')->dropDownList($listEscopo,['prompt'=>'Selecione um Escopo']) ?>
+        </div>
+        <div class="col-md-2"> 
+        <?= $form->field($model, 'ordem')->textInput(['maxlength' => true]) ?>
         </div>
         <div class="col-md-2"> 
         <?= $form->field($model,'isPrioritaria')->checkBox() ?>        

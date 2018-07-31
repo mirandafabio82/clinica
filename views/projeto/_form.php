@@ -590,6 +590,30 @@ $(".remove-exec").click(function(ev){
         $("#exec_div-"+id).remove();
     });
 
+ $(".icon-delete-atividade").click(function(e){
+      id = this.id.split("_")[2];
+
+      $.ajax({ 
+          url: "index.php?r=projeto/deleteatividade",
+          data: {id: id},
+          type: "POST",
+          success: function(response){
+           if(response=="success"){
+              console.log(response);
+              $("#tabela-escopo")[0].deleteRow($("#delete_atividade_"+id).parent().parent()[0].rowIndex);
+           }
+           else{
+              alert("algum erro ocorreu");
+           }
+           
+         },
+         error: function(){
+          console.log("failure");
+        }
+      });
+      
+  });
+
 ');
 ?>
 <?php
@@ -1363,7 +1387,12 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
         
 
        //==============================COLUNAS========================================================
-      $descricao = '<tr><td style="font-size: 10px">'.$esc['descricao'].'</td>'; 
+      
+      $col_delete = '<a class="icon-delete-atividade" id="delete_atividade_'.$esc["id"].'" style="margin-right: 1em;"><i class="fa fa-trash" aria-hidden="true"></i></a>'; 
+
+      $descricao = '<tr><td style="font-size: 10px">'.$esc['descricao'].'</td>';
+
+      $descricao_entregavel = '<tr id="row_'.$key.'"><td style="font-size: 10px">'.$col_delete.$esc['descricao'].'</td>'; 
 
       
       $disciplina = '<td style="font-size: 10px">'.Yii::$app->db->createCommand('SELECT disciplina.nome FROM disciplina JOIN atividademodelo ON atividademodelo.disciplina_id=disciplina.id WHERE atividademodelo.id='.$esc['atividademodelo_id'])->queryScalar().'</td>';
@@ -1473,13 +1502,13 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
           else{
               if($isEntregavel){
                 if($escopo_padrao_id==1){
-                  $esc_basicoA.= ' '.$descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
+                  $esc_basicoA.= ' '.$descricao_entregavel.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
                 }
                 else if($escopo_padrao_id==2){
-                 $esc_detalhamentoA.= ' '.$descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
+                 $esc_detalhamentoA.= ' '.$descricao_entregavel.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
                 }
                 else{
-                  $esc_configuracaoA.= ' '.$descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
+                  $esc_configuracaoA.= ' '.$descricao_entregavel.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
                 }
               }
               else{

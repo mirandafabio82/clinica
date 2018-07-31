@@ -55,7 +55,7 @@ $this->registerJs('
 		      		console.log(response);
 			      	$("#frs_content").val(response.split("##")[0]);
 			      	$("#label_download").attr("href",response.split("##")[1]);
-			      	$("#label_download").removeAttr("hidden");
+			      	$("#label_download").removeAttr("hidden");			      	
 		      	}
 
 		      	

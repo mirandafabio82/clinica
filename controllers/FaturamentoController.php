@@ -118,7 +118,8 @@ AG: 0933 C/C PJ: 13000565-3.
 
 CNPJ: '.$cnpj.'
 Inscrição Municipal: '.$cliente['insc_municipal'].'
-Valor: '.$valor_total;
+Valor: '.$valor_total.'
+Número do BM: '.$num_bm;
 
 
 

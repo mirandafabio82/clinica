@@ -27,7 +27,7 @@ class Atividademodelo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['isPrioritaria', 'isEntregavel', 'escopopadrao_id', 'disciplina_id'], 'integer'],
+            [['isPrioritaria', 'isEntregavel', 'escopopadrao_id', 'disciplina_id', 'ordem'], 'integer'],
             [['nome'], 'string', 'max' => 255],
         ];
     }
@@ -44,6 +44,7 @@ class Atividademodelo extends \yii\db\ActiveRecord
             'isEntregavel' => 'Entregável',
             'escopopadrao_id' => 'Escopo',
             'disciplina_id' => 'Disciplina',
+            'ordem' => 'Ordem',
         ];
     }
 }

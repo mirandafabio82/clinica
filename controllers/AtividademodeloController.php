@@ -96,7 +96,17 @@ class AtividademodeloController extends Controller
             if(empty($model->escopopadrao_id) || !isset($model->escopopadrao_id)){
                 $model->escopopadrao_id = 0;
             }
-           if($model->disciplina_id==0){
+            //atualiza ordem
+            $existePosicao = Yii::$app->db->createCommand('SELECT id FROM atividademodelo WHERE escopopadrao_id='.$model->escopopadrao_id.' AND ordem='.$model->ordem)->queryScalar();
+
+            if(!empty($existePosicao)){
+                $atividades = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE escopopadrao_id='.$model->escopopadrao_id.' AND ordem > '.$model->ordem)->queryAll();
+                foreach ($atividades as $key => $atv) {
+                    Yii::$app->db->createCommand('UPDATE atividademodelo SET ordem=ordem+1 WHERE id='.$atv['id'])->execute();
+                }
+            }
+
+           if($model->disciplina_id==0){ //se não tiver disciplina
                 $model->disciplina_id = 1;
                 
                 $model2->setAttributes($_POST['Atividademodelo']);
