@@ -660,8 +660,9 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                     $model->data_entrega = date_format($dat, 'Y-m-d');
                 }
 
-                if($model->save()){     
-                    if(isset($_POST['Escopos'])){
+                if($model->save()){
+                    //Remover esse comentario caso queira adicionar atividades depois     
+                    /*if(isset($_POST['Escopos'])){
 
                         if($_POST['Projeto']['tipo'] == "A"){                   
 
@@ -758,30 +759,7 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                                 }
                             }
                         }
-                        /*if(!isset($diagramas[1]))
-                         Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id  IN(SELECT id FROM atividademodelo WHERE (escopopadrao_id=1  OR escopopadrao_id=0) AND disciplina_id=3) AND ((horas_tp=null OR horas_tp="") AND (horas_ej=null OR horas_ej="") AND (horas_ep=null OR horas_ep="") AND (horas_es=null OR horas_es="" OR horas_es=0) AND (horas_ee=null OR horas_ee="")) AND projeto_id='.$model->id)->execute();
-
-                        if(!isset($diagramas[2]))
-                         Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id  IN(SELECT id FROM atividademodelo WHERE (escopopadrao_id=2 OR escopopadrao_id=0) AND disciplina_id=3) AND ((horas_tp=null OR horas_tp="") AND (horas_ej=null OR horas_ej="") AND (horas_ep=null OR horas_ep="") AND (horas_es=null OR horas_es="" OR horas_es=0) AND (horas_ee=null OR horas_ee="")) AND projeto_id='.$model->id )->execute();
-
-                        if(!isset($diagramas[3]))
-                         Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id  IN(SELECT id FROM atividademodelo WHERE (escopopadrao_id=3 OR escopopadrao_id=0) AND disciplina_id=3) AND ((horas_tp=null OR horas_tp="") AND (horas_ej=null OR horas_ej="") AND (horas_ep=null OR horas_ep="") AND (horas_es=null OR horas_es="" OR horas_es=0) AND (horas_ee=null OR horas_ee="")) AND projeto_id='.$model->id)->execute();
-
-                        foreach ($diagramas as $key => $diagrama) {
-                            $atvmodelos = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE (escopopadrao_id='.$diagrama.' OR escopopadrao_id=0) AND disciplina_id = 4 AND isPrioritaria=1')->queryAll();
-
-                            foreach ($atvmodelos as $key => $atv) {
-                                $existeEscopo = Yii::$app->db->createCommand('SELECT id FROM escopo WHERE projeto_id='.$model->id.' AND atividademodelo_id='.$atv['id'])->queryScalar();
-                                if(!$existeEscopo){
-                                    $escopo_model = new Escopo();
-                                    $escopo_model->projeto_id = $model->id;
-                                    $escopo_model->atividademodelo_id = $atv['id'];
-                                    $escopo_model->nome = $atv['nome'];
-                                    $escopo_model->descricao = $atv['nome'];
-                                    $escopo_model->save();
-                                }
-                            }
-                        }*/
+                        
                         if(isset($_POST['np'])){
                             
                             $npCadastradas = Yii::$app->db->createCommand('SELECT atividademodelo.id, atividademodelo.nome FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE isPrioritaria=0 AND projeto_id='.$model->id)->queryAll();
@@ -846,7 +824,7 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                                 }
                             }
                         }
-                    }                    
+                    } */                   
                 }
                 
                 Yii::$app->db->createCommand('DELETE FROM projeto_executante WHERE projeto_id='.$model->id)->execute();
@@ -1233,6 +1211,28 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
 
             try{
                 Yii::$app->db->createCommand('DELETE FROM escopo WHERE id='.$id)->execute();
+            }
+            catch(Exception $e){
+                return 'failed';
+            }
+            return 'success';
+        }
+    }
+
+     public function actionAddatividadeavulsa(){
+        if (Yii::$app->request->isAjax) {   
+            $nome = Yii::$app->request->post()['nome'];
+            $projeto_id = Yii::$app->request->post()['projeto_id'];
+
+            try{
+                $atv_modelo_id = Yii::$app->db->createCommand('SELECT id FROM atividademodelo WHERE nome="'.$nome.'"')->queryScalar();
+                
+                $escopo_model = new Escopo();
+                $escopo_model->projeto_id = $projeto_id;
+                $escopo_model->atividademodelo_id = $atv_modelo_id;
+                $escopo_model->nome = $nome;
+                $escopo_model->descricao = $nome;
+                $escopo_model->save();
             }
             catch(Exception $e){
                 return 'failed';

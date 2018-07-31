@@ -242,11 +242,14 @@ $(".ld-create").click(function(ev){
   count_prio = 0;
   $(".nao-prioritarios").click(function(ev){              
     if(count_prio==0){
-      $("#nao-prioritarios_div").removeAttr("hidden");    
+      $("#nao-prioritarios_div").removeAttr("hidden"); 
+      $("#div_save_avulsas_btn").removeAttr("hidden"); 
+         
       count_prio=1;
     }
     else{
       $("#nao-prioritarios_div").attr("hidden", "hidden");
+      $("#div_save_avulsas_btn").attr("hidden", "hidden");
       count_prio=0;
     }
   });
@@ -612,6 +615,40 @@ $(".remove-exec").click(function(ev){
         }
       });
       
+  });
+
+  $("#btn_save_avulsas").click(function(e){
+    var count_novas1 = 0;
+    var count_novas2 = 0;
+    $( ".np_autocomplete" ).each(function() {
+      count_novas1++;
+    });
+
+    $( ".np_autocomplete" ).each(function() {
+        var nome = this.value;
+        $.ajax({ 
+          url: "index.php?r=projeto/addatividadeavulsa",
+          data: {nome: nome, projeto_id:'.$_GET['id'].'},
+          type: "POST",
+          success: function(response){
+           if(response=="success"){
+
+             count_novas2++;
+             if(count_novas2 == count_novas1){
+              location.reload();
+             } 
+           }
+           else{
+              alert("algum erro ocorreu");
+           }
+           
+         },
+         error: function(){
+          console.log("failure");
+          }
+        });
+    });
+
   });
 
 ');
@@ -1241,10 +1278,14 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
             <input class="np_autocomplete" id="autocomplete_0" type="text" name="np[0]" placeholder="Digite uma atividade">
             <a class="remove-np" id="remove-np[0]"> <i class="fa fa-ban" ></i></a>
           </div>
+          
 
          <?php // } ?>
         </div>
       </div>
+      <div class="row" id="div_save_avulsas_btn" hidden>
+          <div class="col-md-3"><p><a class="btn btn-primary" id="btn_save_avulsas"><i class="fa fa-save"></i> Salvar Avulsas</a></p></div>
+        </div>
 
       <?= Html::submitButton($model->isNewRecord ? 'Add Escopo' : 'Add Escopo', ['class' => $model->isNewRecord ? 'btn btn-primary' : 'btn btn-primary']) ?>
       <?php if(!$model->isNewRecord){ ?>
