@@ -68,6 +68,17 @@ input[type=number]::-webkit-outer-spin-button {
   background-color: DodgerBlue !important; 
   color: #ffffff; 
 }
+.barra-btn{
+  display:block;
+  position:fixed;
+  width:100%;
+  bottom:0vh;
+  left:0;
+  background:#3c8dbc;
+  text-align:center;
+  padding: 20px 0;
+  z-index: 99999999999;
+}
 </style>
 
 
@@ -1287,9 +1298,22 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
           <div class="col-md-3"><p><a class="btn btn-primary" id="btn_save_avulsas"><i class="fa fa-save"></i> Salvar Avulsas</a></p></div>
         </div>
 
-      <?= Html::submitButton($model->isNewRecord ? 'Add Escopo' : 'Add Escopo', ['class' => $model->isNewRecord ? 'btn btn-primary' : 'btn btn-primary']) ?>
+        <div class="barra-btn" >
+          <?= Html::submitButton($model->isNewRecord ? 'Add Escopo' : 'Add Escopo', ['class' => $model->isNewRecord ? 'btn btn-info' : 'btn btn-info']) ?>
+          <?php if(!$model->isNewRecord){ ?>
+            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#emailModal">Email</button>
+            <?php if($model->tipo=="A"){ ?>
+                <?= Html::a('<span class="btn-label">Visualizar AS</span>', ['gerarrelatorio', 'id' => $model->id], ['class' => 'btn btn-danger', 'target'=>'_blank']) ?>
+            <?php } ?>
+            <?php if($model->tipo=="P"){ ?>
+                <?= Html::a('<span class="btn-label">Visualizar Proposta</span>', ['gerarrelatorio', 'id' => $model->id], ['class' => 'btn btn-primary', 'target'=>'_blank']) ?>
+            <?php } ?>
+          <?php } ?>
+        </div>
+
+      
       <?php if(!$model->isNewRecord){ ?>
-            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#emailModal">Email</button>
+            
                 <div status="align:center" style="margin-top: 1em;">
                   <img src="resources/dist/img/status/status_<?= $model->status_geral - 1 ?>.png" style="width: 100%">
                 </div>
@@ -1308,12 +1332,7 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
        <?php $form2 = ActiveForm::begin(); ?>
        <?= Html::submitButton('Salvar Escopo', ['class' =>'btn btn-primary saveEscopo']) ?>
 
-       <?php if($model->tipo=="A"){ ?>
-            <?= Html::a('<span class="btn-label">Visualizar AS</span>', ['gerarrelatorio', 'id' => $model->id], ['class' => 'btn btn-primary', 'target'=>'_blank', 'style'=> 'float:right']) ?>
-        <?php } ?>
-        <?php if($model->tipo=="P"){ ?>
-            <?= Html::a('<span class="btn-label">Visualizar Proposta</span>', ['gerarrelatorio', 'id' => $model->id], ['class' => 'btn btn-primary', 'target'=>'_blank', 'style'=> 'float:right']) ?>
-        <?php } ?>
+       
       
   
      </div>
@@ -1936,6 +1955,8 @@ foreach ($nao_prioritarios_array as $key => $np) {
 
 
 ?>
+
+
 
 
 
