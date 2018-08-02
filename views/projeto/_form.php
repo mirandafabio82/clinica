@@ -1452,8 +1452,8 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
             
           }
           
-        $qtd = '<td style="font-size: 10px; padding: 1px;">'.$form2->field($escopoModel, 'qtd')->textInput(['style'=>' width:4em', 'name' => 'Escopo['.$esc["id"].'][qtd]', 'type' => 'number'])->label(false).'</td>'; 
-        $for = '<td style="font-size: 10px; padding: 1px;">'.$form2->field($escopoModel, 'for')->textInput(['style'=>' width:4em', 'name' => 'Escopo['.$esc["id"].'][for]'])->label(false).'</td>';
+        $qtd = '<td style="font-size: 10px; padding: 1px;">'.$form2->field($escopoModel, 'qtd')->textInput(['style'=>' width:4em', 'name' => 'Escopo['.$esc["id"].'][qtd]', 'type' => 'number', 'min' => '0'])->label(false).'</td>'; 
+        $for = '<td style="font-size: 10px; padding: 1px;">'.$form2->field($escopoModel, 'for')->textInput(['style'=>' width:4em', 'name' => 'Escopo['.$esc["id"].'][for]', 'min' => '0'])->label(false).'</td>';
 
         $separaEntregavel++;
       }
@@ -1495,23 +1495,23 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
 
        $disciplina_id = Yii::$app->db->createCommand('SELECT disciplina_id FROM atividademodelo WHERE id='.$esc['atividademodelo_id'])->queryScalar();
 
-      $horas_tp = '<td style="font-size: 10px; padding: 1px;"><div class="row"><div class="col-md-8">'.$form2->field($escopoModel, 'horas_tp')->textInput(['style'=>'width:4em', 'name' => 'Escopo['.$esc["id"].'][horas_tp]', 'type' => 'number', 'class' => 'Escopo['.$esc["id"].'][horas_tp] horas', 'id' => 'horas_tp-'.$disciplina_id.'-'.$esc["id"]])->label(false).'</div><div class="col-md-4" style="padding-left:1px;margin-left:-1em">'.$popTP.'</div></td>'; 
+      $horas_tp = '<td style="font-size: 10px; padding: 1px;"><div class="row"><div class="col-md-8">'.$form2->field($escopoModel, 'horas_tp')->textInput(['style'=>'width:4em', 'name' => 'Escopo['.$esc["id"].'][horas_tp]', 'type' => 'number', 'class' => 'Escopo['.$esc["id"].'][horas_tp] horas', 'id' => 'horas_tp-'.$disciplina_id.'-'.$esc["id"], 'min' => '0'])->label(false).'</div><div class="col-md-4" style="padding-left:1px;margin-left:-1em">'.$popTP.'</div></td>'; 
 
       echo $form2->field($escopoModel, 'exe_tp_id')->textInput(['style'=>'width:4em;', 'name' => 'Escopo['.$esc["id"].'][exe_tp_id]','id' => 'escopotp-'.$esc["id"], 'type' => 'number','hidden'=>'hidden'])->label(false);
 
-      $horas_ej = '<td style="font-size: 10px; padding: 1px;"><div class="row"><div class="col-md-8">'.$form2->field($escopoModel, 'horas_ej')->textInput(['style'=>'width:4em', 'name' =>'Escopo['.$esc["id"].'][horas_ej]', 'type' => 'number', 'class' => 'Escopo['.$esc["id"].'][horas_ej] horas', 'id' => 'horas_ej-'.$disciplina_id.'-'.$esc["id"]])->label(false).'</div><div class="col-md-4" style="padding-left:1px;margin-left:-1em">'.$popEJ.'</div></td>'; 
+      $horas_ej = '<td style="font-size: 10px; padding: 1px;"><div class="row"><div class="col-md-8">'.$form2->field($escopoModel, 'horas_ej')->textInput(['style'=>'width:4em', 'name' =>'Escopo['.$esc["id"].'][horas_ej]', 'type' => 'number', 'class' => 'Escopo['.$esc["id"].'][horas_ej] horas', 'id' => 'horas_ej-'.$disciplina_id.'-'.$esc["id"], 'min' => '0'])->label(false).'</div><div class="col-md-4" style="padding-left:1px;margin-left:-1em">'.$popEJ.'</div></td>'; 
 
       echo $form2->field($escopoModel, 'exe_ej_id')->textInput(['style'=>'width:4em;', 'name' => 'Escopo['.$esc["id"].'][exe_ej_id]','id' => 'escopoej-'.$esc["id"], 'type' => 'number', 'hidden'=>'hidden'])->label(false);
 
-      $horas_ep = '<td style="font-size: 10px; padding: 1px;"><div class="row"><div class="col-md-8">'.$form2->field($escopoModel, 'horas_ep')->textInput(['style'=>'width:4em', 'name' =>'Escopo['.$esc["id"].'][horas_ep]', 'type' => 'number', 'class' => 'Escopo['.$esc["id"].'][horas_ep] horas', 'id' => 'horas_ep-'.$disciplina_id.'-'.$esc["id"]])->label(false).'</div><div class="col-md-4" style="padding-left:1px;margin-left:-1em">'.$popEP.'</div></td>';
+      $horas_ep = '<td style="font-size: 10px; padding: 1px;"><div class="row"><div class="col-md-8">'.$form2->field($escopoModel, 'horas_ep')->textInput(['style'=>'width:4em', 'name' =>'Escopo['.$esc["id"].'][horas_ep]', 'type' => 'number', 'class' => 'Escopo['.$esc["id"].'][horas_ep] horas', 'id' => 'horas_ep-'.$disciplina_id.'-'.$esc["id"], 'min' => '0'])->label(false).'</div><div class="col-md-4" style="padding-left:1px;margin-left:-1em">'.$popEP.'</div></td>';
 
       echo $form2->field($escopoModel, 'exe_ep_id')->textInput(['style'=>'width:4em;', 'name' => 'Escopo['.$esc["id"].'][exe_ep_id]','id' => 'escopoep-'.$esc["id"], 'type' => 'number', 'hidden'=>'hidden'])->label(false);
 
-      $horas_es = '<td style="font-size: 10px; padding: 1px;"><div class="row"><div class="col-md-8">'.$form2->field($escopoModel, 'horas_es')->textInput(['style'=>'width:4em', 'name' =>'Escopo['.$esc["id"].'][horas_es]', 'type' => 'number', 'class' => 'Escopo['.$esc["id"].'][horas_es] horas', 'id' => 'horas_es-'.$disciplina_id.'-'.$esc["id"]])->label(false).'</div><div class="col-md-4" style="padding-left:1px;margin-left:-1em">'.$popES.'</div></td>';
+      $horas_es = '<td style="font-size: 10px; padding: 1px;"><div class="row"><div class="col-md-8">'.$form2->field($escopoModel, 'horas_es')->textInput(['style'=>'width:4em', 'name' =>'Escopo['.$esc["id"].'][horas_es]', 'type' => 'number', 'class' => 'Escopo['.$esc["id"].'][horas_es] horas', 'id' => 'horas_es-'.$disciplina_id.'-'.$esc["id"], 'min' => '0'])->label(false).'</div><div class="col-md-4" style="padding-left:1px;margin-left:-1em">'.$popES.'</div></td>';
 
       echo $form2->field($escopoModel, 'exe_es_id')->textInput(['style'=>'width:4em;', 'name' => 'Escopo['.$esc["id"].'][exe_es_id]','id' => 'escopoes-'.$esc["id"], 'type' => 'number', 'hidden'=>'hidden'])->label(false);
 
-      $horas_ee = '<td style="font-size: 10px; padding: 1px;"><div class="row"><div class="col-md-8">'.$form2->field($escopoModel, 'horas_ee')->textInput(['style'=>'width:4em', 'name' =>'Escopo['.$esc["id"].'][horas_ee]', 'type' => 'number', 'class' => 'Escopo['.$esc["id"].'][horas_ee] horas', 'id' => 'horas_ee-'.$disciplina_id.'-'.$esc["id"]])->label(false).'</div><div class="col-md-4" style="padding-left:1px;margin-left:-1em">'.$popEE.'</div></td>';
+      $horas_ee = '<td style="font-size: 10px; padding: 1px;"><div class="row"><div class="col-md-8">'.$form2->field($escopoModel, 'horas_ee')->textInput(['style'=>'width:4em', 'name' =>'Escopo['.$esc["id"].'][horas_ee]', 'type' => 'number', 'class' => 'Escopo['.$esc["id"].'][horas_ee] horas', 'id' => 'horas_ee-'.$disciplina_id.'-'.$esc["id"], 'min' => '0'])->label(false).'</div><div class="col-md-4" style="padding-left:1px;margin-left:-1em">'.$popEE.'</div></td>';
 
       echo $form2->field($escopoModel, 'exe_ee_id')->textInput(['style'=>'width:4em;', 'name' => 'Escopo['.$esc["id"].'][exe_ee_id]','id' => 'escopoee-'.$esc["id"], 'type' => 'number', 'hidden'=>'hidden'])->label(false);
       
@@ -1639,21 +1639,21 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
     if(!empty($esc_basicoA)) 
       $bodyA .= '<tr style="background: aquamarine;"><td>BÁSICO</td><td></td><td></td><td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'.$esc_basicoA;
     if(!empty($esc_detalhamentoA))
-    $bodyA .= '<tr style="background: aquamarine;"><td>DETALHAMENTO</td><td></td><td></td><td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'.$esc_detalhamentoA;
+    $bodyA .= '<tr style="background: aquamarine;"><td>DETALHAMENTO</td><td></td><td></td><td>EE<td>ES</td><td>EP</td><td>EP</td><td>TP</td><td></td><td></td><td></td><td></td><td>Total</td></tr>'.$esc_detalhamentoA;
     if(!empty($esc_configuracaoA))
-    $bodyA .= '<tr style="background: aquamarine;"><td>CONFIGURAÇÃO</td><td></td><td></td><td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'.$esc_configuracaoA;
+    $bodyA .= '<tr style="background: aquamarine;"><td>CONFIGURAÇÃO</td><td></td><td></td><td>EE<td>ES</td><td>EP</td><td>EP</td><td>TP</td><td></td><td></td><td></td><td></td><td>Total</td></tr>'.$esc_configuracaoA;
     if(!empty($esc_basicoP))
-      $bodyP .= '<tr style="background: aquamarine;"><td>BÁSICO</td><td></td><td></td><td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'.$esc_basicoP;
+      $bodyP .= '<tr style="background: aquamarine;"><td>BÁSICO</td><td></td><td></td><td>EE<td>ES</td><td>EP</td><td>EP</td><td>TP</td><td></td><td></td><td></td><td></td><td>Total</td></tr>'.$esc_basicoP;
     if(!empty($esc_detalhamentoP))
-      $bodyP .= '<tr style="background: aquamarine;"><td>DETALHAMENTO</td><td></td><td></td><td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'.$esc_detalhamentoP;
+      $bodyP .= '<tr style="background: aquamarine;"><td>DETALHAMENTO</td><td></td><td></td><td>EE<td>ES</td><td>EP</td><td>EP</td><td>TP</td><td></td><td></td><td></td><td></td><td>Total</td></tr>'.$esc_detalhamentoP;
     if(!empty($esc_configuracaoP))
-      $bodyP .= '<tr style="background: aquamarine;"><td>CONFIGURAÇÃO</td><td></td><td></td><td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'.$esc_configuracaoP;
+      $bodyP .= '<tr style="background: aquamarine;"><td>CONFIGURAÇÃO</td><td></td><td></td><td>EE<td>ES</td><td>EP</td><td>EP</td><td>TP</td><td></td><td></td><td></td><td></td><td>Total</td></tr>'.$esc_configuracaoP;
     if(!empty($esc_basicoI))
-      $bodyI .= '<tr style="background: aquamarine;"><td>BÁSICO</td><td></td><td></td><td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'.$esc_basicoI;
+      $bodyI .= '<tr style="background: aquamarine;"><td>BÁSICO</td><td></td><td></td><td>EE<td>ES</td><td>EP</td><td>EP</td><td>TP</td><td></td><td></td><td></td><td></td><td>Total</td></tr>'.$esc_basicoI;
     if(!empty($esc_detalhamentoI))
-      $bodyI .= '<tr style="background: aquamarine;"><td>DETALHAMENTO</td><td></td><td></td><td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'.$esc_detalhamentoI;
+      $bodyI .= '<tr style="background: aquamarine;"><td>DETALHAMENTO</td><td></td><td></td><td>EE<td>ES</td><td>EP</td><td>EP</td><td>TP</td><td></td><td></td><td></td><td></td><td>Total</td></tr>'.$esc_detalhamentoI;
     if(!empty($esc_configuracaoI))
-      $bodyI .= '<tr style="background: aquamarine;"><td>CONFIGURAÇÃO</td><td></td><td></td><td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'.$esc_configuracaoI;
+      $bodyI .= '<tr style="background: aquamarine;"><td>CONFIGURAÇÃO</td><td></td><td></td><td>EE<td>ES</td><td>EP</td><td>EP</td><td>TP</td><td></td><td></td><td></td><td></td><td>Total</td></tr>'.$esc_configuracaoI;
 
 
     $entr = Yii::$app->db->createCommand('SELECT SUM(horas_ee) entr_horas_a_ee,SUM(horas_es) entr_horas_a_es,SUM(horas_ep) entr_horas_a_ep,SUM(horas_ej) entr_horas_a_ej,SUM(horas_tp) entr_horas_a_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$model->id.' AND isEntregavel=1 AND disciplina_id=1')->queryOne();
