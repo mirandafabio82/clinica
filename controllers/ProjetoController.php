@@ -560,6 +560,9 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
 
                 if(!empty($escopo)){                   
                     $escopo->setAttributes($_POST['Escopo'][$key]);
+                    
+                    $escopo->horas_saldo = $escopo->horas_tp + $escopo->horas_ej + $escopo->horas_ep + $escopo->horas_es + $escopo->horas_ee;
+                    
                     if($key==$caId_1){
                         $escopo->horas_es = $tot_1;                        
                     }
@@ -842,9 +845,9 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                 $perc = $model->perc_coord_adm/100;
                 
                  //atualiza valor de coordenação e adminstração
-            Yii::$app->db->createCommand('UPDATE escopo SET horas_es='.$tot_1*$perc.' WHERE id='.$caId_1)->execute();
-            Yii::$app->db->createCommand('UPDATE escopo SET horas_es='.$tot_2*$perc.' WHERE id='.$caId_2)->execute();
-            Yii::$app->db->createCommand('UPDATE escopo SET horas_es='.$tot_3*$perc.' WHERE id='.$caId_3)->execute();
+            Yii::$app->db->createCommand('UPDATE escopo SET horas_es='.$tot_1*$perc.', horas_saldo='.$tot_1*$perc.' WHERE id='.$caId_1)->execute();
+            Yii::$app->db->createCommand('UPDATE escopo SET horas_es='.$tot_2*$perc.', horas_saldo='.$tot_2*$perc.' WHERE id='.$caId_2)->execute();
+            Yii::$app->db->createCommand('UPDATE escopo SET horas_es='.$tot_3*$perc.', horas_saldo='.$tot_3*$perc.' WHERE id='.$caId_3)->execute();
                 $transaction->commit();
                 return $this->redirect(['update', 'id' => $model->id]);
             }
@@ -1223,9 +1226,10 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
         if (Yii::$app->request->isAjax) {   
             $nome = Yii::$app->request->post()['nome'];
             $projeto_id = Yii::$app->request->post()['projeto_id'];
+            $disciplina_id = Yii::$app->request->post()['disciplina'];
 
             try{
-                $atv_modelo_id = Yii::$app->db->createCommand('SELECT id FROM atividademodelo WHERE nome="'.$nome.'"')->queryScalar();
+                $atv_modelo_id = Yii::$app->db->createCommand('SELECT id FROM atividademodelo WHERE nome="'.$nome.'" AND disciplina_id='.$disciplina_id)->queryScalar();
                 
                 $escopo_model = new Escopo();
                 $escopo_model->projeto_id = $projeto_id;

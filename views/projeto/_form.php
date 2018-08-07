@@ -77,7 +77,7 @@ input[type=number]::-webkit-outer-spin-button {
   background:#3c8dbc;
   text-align:center;
   padding: 20px 0;
-  z-index: 99999999999;
+  z-index: 99;
 }
 </style>
 
@@ -319,6 +319,14 @@ $("#projeto-qtd_dias").focusout(function() {
 
 });
 
+var hora_anterior = 0;
+$(".horas").focusin(function() {
+  hora_anterior = $(this).val();
+  if(hora_anterior==""){
+    hora_anterior = 0;
+  }
+});
+
 $(".horas").focusout(function() {
   id = this.className.split("[")[1];
   id = id.split("]")[0];
@@ -356,175 +364,175 @@ $(".horas").focusout(function() {
         if(tipo=="ee"){
           if(disc==1){
             if (tds[i].className == "sub-a-tot-ee-entregavel") {  
-              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML) + hora_anterior;
             }  
              if (tds[i].className == "sub-a-tot-ee") {  
-              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML) - parseInt(hora_anterior);
             } 
             if (tds[i].className == "full-a-tot-ee") {  
-              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML) - parseInt(hora_anterior);
             }  
           }
           if(disc==2){
             if (tds[i].className == "sub-p-tot-ee-entregavel") {  
-              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML) - parseInt(hora_anterior);
             }  
              if (tds[i].className == "sub-p-tot-ee") {  
-              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML) - parseInt(hora_anterior);
             } 
             if (tds[i].className == "full-p-tot-ee") {  
-              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML) - parseInt(hora_anterior);
             }  
           }
           if(disc==3){
             if (tds[i].className == "sub-i-tot-ee-entregavel") {  
-              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML) - parseInt(hora_anterior);
             }  
              if (tds[i].className == "sub-i-tot-ee") {  
-              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML) - parseInt(hora_anterior);
             } 
             if (tds[i].className == "full-i-tot-ee") {  
-              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML) - parseInt(hora_anterior);
             }  
           }
         }
         if(tipo=="es"){
           if(disc==1){
             if (tds[i].className == "sub-a-tot-es-entregavel") {  
-              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML) - parseInt(hora_anterior);
             } 
              if (tds[i].className == "sub-a-tot-es") {  
-              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML) - parseInt(hora_anterior);
             } 
             if (tds[i].className == "full-a-tot-es") {  
-              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML) - parseInt(hora_anterior);
             }   
           }
           if(disc==2){
             if (tds[i].className == "sub-p-tot-es-entregavel") {  
-              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML) - parseInt(hora_anterior);
             } 
              if (tds[i].className == "sub-p-tot-es") {  
-              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML) - parseInt(hora_anterior);
             } 
             if (tds[i].className == "full-p-tot-es") {  
-              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML) - parseInt(hora_anterior);
             }   
           }
           if(disc==3){
             if (tds[i].className == "sub-i-tot-es-entregavel") {  
-              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML) - parseInt(hora_anterior);
             } 
              if (tds[i].className == "sub-i-tot-es") {  
-              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML) - parseInt(hora_anterior);
             } 
             if (tds[i].className == "full-i-tot-es") {  
-              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML) - parseInt(hora_anterior);
             }   
           }
         }
         if(tipo=="ep"){
           if(disc==1){
             if (tds[i].className == "sub-a-tot-ep-entregavel") {  
-              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML) - parseInt(hora_anterior);
             } 
              if (tds[i].className == "sub-a-tot-ep") {  
-              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML) - parseInt(hora_anterior);
             } 
             if (tds[i].className == "full-a-tot-ep") {  
-              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML) - parseInt(hora_anterior);
             }   
           }
           if(disc==2){
             if (tds[i].className == "sub-p-tot-ep-entregavel") {  
-              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML) - parseInt(hora_anterior);
             } 
              if (tds[i].className == "sub-p-tot-ep") {  
-              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML) - parseInt(hora_anterior);
             } 
             if (tds[i].className == "full-p-tot-ep") {  
-              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML) - parseInt(hora_anterior);
             }   
           }
           if(disc==3){
             if (tds[i].className == "sub-i-tot-ep-entregavel") {  
-              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML) - parseInt(hora_anterior);
             } 
              if (tds[i].className == "sub-i-tot-ep") {  
-              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML) - parseInt(hora_anterior);
             } 
             if (tds[i].className == "full-i-tot-ep") {  
-              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML) - parseInt(hora_anterior);
             }   
           }
         }
         if(tipo=="ej"){
           if(disc==1){
             if (tds[i].className == "sub-a-tot-ej-entregavel") {  
-              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML) - parseInt(hora_anterior);
             }  
             if (tds[i].className == "sub-a-tot-ej") {  
-              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML) - parseInt(hora_anterior);
             } 
             if (tds[i].className == "full-a-tot-ej") {  
-              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML) - parseInt(hora_anterior);
             }   
           }
           if(disc==2){
             if (tds[i].className == "sub-p-tot-ej-entregavel") {  
-              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML) - parseInt(hora_anterior);
             }  
             if (tds[i].className == "sub-p-tot-ej") {  
-              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML) - parseInt(hora_anterior);
             } 
             if (tds[i].className == "full-p-tot-ej") {  
-              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML) - parseInt(hora_anterior);
             }   
           }
           if(disc==3){
             if (tds[i].className == "sub-i-tot-ej-entregavel") {  
-              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML) - parseInt(hora_anterior);
             }  
             if (tds[i].className == "sub-i-tot-ej") {  
-              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML) - parseInt(hora_anterior);
             } 
             if (tds[i].className == "full-i-tot-ej") {  
-              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML) - parseInt(hora_anterior);
             }   
           }
         }
         if(tipo=="tp"){
           if(disc==1){
             if (tds[i].className == "sub-a-tot-tp-entregavel") {  
-              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML) - parseInt(hora_anterior);
             }  
             if (tds[i].className == "sub-a-tot-tp") {  
-              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML) - parseInt(hora_anterior);
             } 
             if (tds[i].className == "full-a-tot-tp") {  
-              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML) - parseInt(hora_anterior);
             }  
           }
           if(disc==2){
             if (tds[i].className == "sub-p-tot-tp-entregavel") {  
-              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML) - parseInt(hora_anterior);
             }  
             if (tds[i].className == "sub-p-tot-tp") {  
-              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML) - parseInt(hora_anterior);
             } 
             if (tds[i].className == "full-p-tot-tp") {  
-              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML) - parseInt(hora_anterior);
             }  
           }
           if(disc==3){
             if (tds[i].className == "sub-i-tot-tp-entregavel") {  
-              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML) - parseInt(hora_anterior);
             }  
             if (tds[i].className == "sub-i-tot-tp") {  
-              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML) - parseInt(hora_anterior);
             } 
             if (tds[i].className == "full-i-tot-tp") {  
-              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML);
+              tds[i].innerHTML = parseInt($(this).val()) + parseInt(tds[i].innerHTML) - parseInt(hora_anterior);
             }  
           }
         }
@@ -638,11 +646,19 @@ $(".remove-exec").click(function(ev){
     $( ".np_autocomplete" ).each(function() {
         var nome = this.value;
         var projeto_id = window.location.href.split("id=")[1];
-        console.log(projeto_id);
-
+        var disciplina = 0;
+        if($("#aut_radio").prop("checked")){
+          disciplina = 1;
+        }
+        else if($("#proc_radio").prop("checked")){
+          disciplina = 2
+        }
+        else{
+          disciplina = 3;
+        }
         $.ajax({ 
           url: "index.php?r=projeto/addatividadeavulsa",
-          data: {nome: nome, projeto_id: projeto_id},
+          data: {nome: nome, projeto_id: projeto_id, disciplina: disciplina},
           type: "POST",
           success: function(response){
            if(response=="success"){
@@ -1264,9 +1280,7 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
 
       ?>
       
-      <div ><p><a class="btn btn-success nao-prioritarios"><i class="fa fa-plus"></i> Atividades Avulsas</a></p></div>
-      <div id="nao-prioritarios_div" style="margin-bottom: 1em" hidden>   
-        <a style="margin-left: 1em" id="add-np"> <i class="fa fa-plus-square-o fa-2x"></i></a><br>
+      
         <!-- <//?php foreach ($nao_prioritarios as $key => $np) { ?>--> 
           <?php 
           //if(!$model->isNewRecord){
@@ -1286,6 +1300,14 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
           <?php } ?>
 
         <?php  if(!$model->isNewRecord){ ?>
+          <div ><p><a class="btn btn-success nao-prioritarios"><i class="fa fa-plus"></i> Atividades Avulsas</a></p></div>
+
+          <div id="nao-prioritarios_div" style="margin-bottom: 1em" hidden>   
+           <input type="radio" name="disc_radio" value="auto" checked="checked" id="aut_radio"> Automação
+          <input type="radio" name="disc_radio" value="proc" id="proc_radio"> Processo
+          <input type="radio" name="disc_radio" value="inst" id="inst_radio"> Instrumentação<br>
+            <a style="margin-left: 1em" id="add-np"> <i class="fa fa-plus-square-o fa-2x"></i></a><br>          
+          
           <div class="autocomplete col-md-3" style="width:300px;" id="autocomplete_div_0">
             <input class="np_autocomplete" id="autocomplete_0" type="text" name="np[0]" placeholder="Digite uma atividade">
             <a class="remove-np" id="remove-np[0]"> <i class="fa fa-ban" ></i></a>
@@ -1299,7 +1321,7 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
         </div>
 
         <div class="barra-btn" >
-          <?= Html::submitButton($model->isNewRecord ? 'Add Escopo' : 'Add Escopo', ['class' => $model->isNewRecord ? 'btn btn-info' : 'btn btn-info']) ?>
+          <?= Html::submitButton($model->isNewRecord ? 'Cadastrar' : 'Atualizar', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-info']) ?>
           <?php if(!$model->isNewRecord){ ?>
             <button type="button" class="btn btn-success" data-toggle="modal" data-target="#emailModal">Email</button>
             <?php if($model->tipo=="A"){ ?>
@@ -1309,6 +1331,7 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
                 <?= Html::a('<span class="btn-label">Visualizar Proposta</span>', ['gerarrelatorio', 'id' => $model->id], ['class' => 'btn btn-primary', 'target'=>'_blank']) ?>
             <?php } ?>
           <?php } ?>
+          <?= Html::submitButton('Salvar Escopo', ['class' =>'btn btn-primary saveEscopo']) ?>
         </div>
 
       
@@ -1330,11 +1353,7 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
     <div class="box-header with-border">
      <div class="form-group">
        <?php $form2 = ActiveForm::begin(); ?>
-       <?= Html::submitButton('Salvar Escopo', ['class' =>'btn btn-primary saveEscopo']) ?>
-
-       
-      
-  
+       <!-- <//?= Html::submitButton('Salvar Escopo', ['class' =>'btn btn-primary saveEscopo']) ?> -->
      </div>
 
 
@@ -1658,21 +1677,21 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
     if(!empty($esc_basicoA)) 
       $bodyA .= '<tr style="background: aquamarine;"><td>BÁSICO</td><td></td><td></td><td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'.$esc_basicoA;
     if(!empty($esc_detalhamentoA))
-    $bodyA .= '<tr style="background: aquamarine;"><td>DETALHAMENTO</td><td></td><td></td><td>EE<td>ES</td><td>EP</td><td>EP</td><td>TP</td><td></td><td></td><td></td><td></td><td>Total</td></tr>'.$esc_detalhamentoA;
+    $bodyA .= '<tr style="background: aquamarine;"><td>DETALHAMENTO</td><td></td><td></td><td>EE<td>ES</td><td>EP</td><td>EJ</td><td>TP</td><td></td><td></td><td></td><td></td><td>Total</td></tr>'.$esc_detalhamentoA;
     if(!empty($esc_configuracaoA))
-    $bodyA .= '<tr style="background: aquamarine;"><td>CONFIGURAÇÃO</td><td></td><td></td><td>EE<td>ES</td><td>EP</td><td>EP</td><td>TP</td><td></td><td></td><td></td><td></td><td>Total</td></tr>'.$esc_configuracaoA;
+    $bodyA .= '<tr style="background: aquamarine;"><td>CONFIGURAÇÃO</td><td></td><td></td><td>EE<td>ES</td><td>EP</td><td>EJ</td><td>TP</td><td></td><td></td><td></td><td></td><td>Total</td></tr>'.$esc_configuracaoA;
     if(!empty($esc_basicoP))
-      $bodyP .= '<tr style="background: aquamarine;"><td>BÁSICO</td><td></td><td></td><td>EE<td>ES</td><td>EP</td><td>EP</td><td>TP</td><td></td><td></td><td></td><td></td><td>Total</td></tr>'.$esc_basicoP;
+      $bodyP .= '<tr style="background: aquamarine;"><td>BÁSICO</td><td></td><td></td><td>EE<td>ES</td><td>EP</td><td>EJ</td><td>TP</td><td></td><td></td><td></td><td></td><td>Total</td></tr>'.$esc_basicoP;
     if(!empty($esc_detalhamentoP))
-      $bodyP .= '<tr style="background: aquamarine;"><td>DETALHAMENTO</td><td></td><td></td><td>EE<td>ES</td><td>EP</td><td>EP</td><td>TP</td><td></td><td></td><td></td><td></td><td>Total</td></tr>'.$esc_detalhamentoP;
+      $bodyP .= '<tr style="background: aquamarine;"><td>DETALHAMENTO</td><td></td><td></td><td>EE<td>ES</td><td>EP</td><td>EJ</td><td>TP</td><td></td><td></td><td></td><td></td><td>Total</td></tr>'.$esc_detalhamentoP;
     if(!empty($esc_configuracaoP))
-      $bodyP .= '<tr style="background: aquamarine;"><td>CONFIGURAÇÃO</td><td></td><td></td><td>EE<td>ES</td><td>EP</td><td>EP</td><td>TP</td><td></td><td></td><td></td><td></td><td>Total</td></tr>'.$esc_configuracaoP;
+      $bodyP .= '<tr style="background: aquamarine;"><td>CONFIGURAÇÃO</td><td></td><td></td><td>EE<td>ES</td><td>EP</td><td>EJ</td><td>TP</td><td></td><td></td><td></td><td></td><td>Total</td></tr>'.$esc_configuracaoP;
     if(!empty($esc_basicoI))
-      $bodyI .= '<tr style="background: aquamarine;"><td>BÁSICO</td><td></td><td></td><td>EE<td>ES</td><td>EP</td><td>EP</td><td>TP</td><td></td><td></td><td></td><td></td><td>Total</td></tr>'.$esc_basicoI;
+      $bodyI .= '<tr style="background: aquamarine;"><td>BÁSICO</td><td></td><td></td><td>EE<td>ES</td><td>EP</td><td>EJ</td><td>TP</td><td></td><td></td><td></td><td></td><td>Total</td></tr>'.$esc_basicoI;
     if(!empty($esc_detalhamentoI))
-      $bodyI .= '<tr style="background: aquamarine;"><td>DETALHAMENTO</td><td></td><td></td><td>EE<td>ES</td><td>EP</td><td>EP</td><td>TP</td><td></td><td></td><td></td><td></td><td>Total</td></tr>'.$esc_detalhamentoI;
+      $bodyI .= '<tr style="background: aquamarine;"><td>DETALHAMENTO</td><td></td><td></td><td>EE<td>ES</td><td>EP</td><td>EJ</td><td>TP</td><td></td><td></td><td></td><td></td><td>Total</td></tr>'.$esc_detalhamentoI;
     if(!empty($esc_configuracaoI))
-      $bodyI .= '<tr style="background: aquamarine;"><td>CONFIGURAÇÃO</td><td></td><td></td><td>EE<td>ES</td><td>EP</td><td>EP</td><td>TP</td><td></td><td></td><td></td><td></td><td>Total</td></tr>'.$esc_configuracaoI;
+      $bodyI .= '<tr style="background: aquamarine;"><td>CONFIGURAÇÃO</td><td></td><td></td><td>EE<td>ES</td><td>EP</td><td>EJ</td><td>TP</td><td></td><td></td><td></td><td></td><td>Total</td></tr>'.$esc_configuracaoI;
 
 
     $entr = Yii::$app->db->createCommand('SELECT SUM(horas_ee) entr_horas_a_ee,SUM(horas_es) entr_horas_a_es,SUM(horas_ep) entr_horas_a_ep,SUM(horas_ej) entr_horas_a_ej,SUM(horas_tp) entr_horas_a_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$model->id.' AND isEntregavel=1 AND disciplina_id=1')->queryOne();
@@ -1885,7 +1904,7 @@ echo TabsX::widget([
 <?php if(!$model->isNewRecord){ ?>
 
 <!-- Modal -->
-<div id="emailModal" class="modal fade" role="dialog">
+<div id="emailModal" class="modal fade" role="dialog" style="z-index: 999999999">
   <div class="modal-dialog">
 
     <!-- Modal content-->
@@ -1907,7 +1926,7 @@ echo TabsX::widget([
 
         <label>Assunto</label>
         <br>
-        <input type="text" id="assunto" name="assunto" class="form-control" value="HCN - AS <?= $model->nome ?>/<?= Date('Y') ?> -  ">
+        <input type="text" id="assunto" name="assunto" class="form-control" value="HCN - AS: <?= $model->nome ?>">
         <br>
        
         <label>Corpo do Email</label>
@@ -1916,8 +1935,8 @@ echo TabsX::widget([
 <?= Yii::$app->db->createCommand('SELECT email FROM user WHERE id='.$model->contato_id)->queryScalar() ?>  
 Bom dia, <?= $model->contato ?>!
 
-Segue nossa AS revisada para serviço de emissão de <?= $model->descricao ?> para o <?= $model->nome ?>.
-
+Segue nossa AS para:
+<?= $model->desc_resumida ?> para o <?= $model->nome ?>.
  
 
 Estamos à disposição para mais esclarecimentos.

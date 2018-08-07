@@ -51,7 +51,7 @@ th, td {
 		<td style="background-color: #d3d3d3;margin-top: 0.5em;font-size: 10pt;font-family: arial;font-weight: bold"  >Descrição do Serviço </td>
     </tr>	
     <tr>
-		<td style="margin-top: 0.5em;font-size:8pt;font-family: arial;height: 5em"  valign="top"><?=$bm['descricao'] ?> </td>
+		<td style="margin-top: 0.5em;font-size:8pt;font-family: arial;height: 5em"  valign="top"><?=nl2br($bm['descricao']) ?> </td>
     </tr>
 </table>
 
@@ -79,7 +79,7 @@ th, td {
 		<td style="background-color: #d3d3d3;margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: center;font-weight: bold"  >Valor Unitário</td>
 		<td style="background-color: #d3d3d3;margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: center;font-weight: bold"  >Total</td>
 	</tr>
-	<?php if(!empty($escopos['h_ee'])){ ?>
+	<?php if(!empty($escopos['executado_ee']) && $bm['executado_ee']!=0){ ?>
 	<tr>
 		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  >0<?= $item ?></td>
 		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  >Mão de Obra (EE-AUT)</td>
@@ -89,7 +89,7 @@ th, td {
 		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: right;"  ><?= number_format($bm['executado_ee'] * $tipo_exec[4]['valor_hora'], 2, ',', '.') ?></td>
 	</tr>	
 	<?php $item++; } ?>
-	<?php if(!empty($bm['executado_es'])){ ?>
+	<?php if(!empty($bm['executado_es']) && $bm['executado_es']!=0){ ?>
 	<tr>
 		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: center;"  >0<?= $item ?></td>
 		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  >Mão de Obra (ES-AUT)</td>
@@ -99,7 +99,7 @@ th, td {
 		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: right;"  ><?= number_format($bm['executado_es'] * $tipo_exec[3]['valor_hora'], 2, ',', '.') ?></td>
 	</tr>	
 	<?php $item++; } ?>	
-	<?php if(!empty($bm['executado_ep'])){ ?>
+	<?php if(!empty($bm['executado_ep']) && $bm['executado_ep']!=0){ ?>
 	<tr>
 		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: center;"  >0<?= $item ?></td>
 		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  >Mão de Obra (EP-AUT)</td>
@@ -109,7 +109,7 @@ th, td {
 		<td style="margin-top: 1.5em;font-size: 10pt;font-family: arial;text-align: right;"  ><?= number_format($bm['executado_ep'] * $tipo_exec[2]['valor_hora'], 2, ',', '.') ?></td>
 	</tr>	
 	<?php $item++; } ?>
-	<?php if(!empty($bm['executado_ej'])){ ?>
+	<?php if(!empty($bm['executado_ej']) && $bm['executado_ej']!=0){ ?>
 	<tr>
 		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: center;"  >0<?= $item ?></td>
 		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  >Mão de Obra (EJ-AUT)</td>
@@ -119,7 +119,7 @@ th, td {
 		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: right;"  ><?= number_format($bm['executado_ej'] * $tipo_exec[1]['valor_hora'], 2, ',', '.') ?></td>
 	</tr>	
 	<?php $item++; } ?>
-	<?php if(!empty($bm['executado_tp'])){ ?>
+	<?php if(!empty($bm['executado_tp']) && $bm['executado_tp']!=0){ ?>
 	<tr>
 		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: center;"  >0<?= $item ?></td>
 		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  >Mão de Obra (TP-AUT)</td>

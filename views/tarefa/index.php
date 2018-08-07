@@ -42,6 +42,41 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['exec
 
 ');
 }
+else{
+    $this->registerJs('   
+    $( document ).ready(function() {
+       var id = $("#projeto-id").val();    
+          console.log(id);
+          $.ajax({ 
+            url: "index.php?r=tarefa/preencheexecutante",
+            data: {id: id},
+            type: "POST",
+            success: function(response){
+             var resposta = $.parseJSON(response);
+             console.log(resposta);
+             var myOptions = resposta;
+
+             $("#executante-id").children("option:not(:first)").remove();
+             var mySelect = $("#executante-id");
+             $.each(myOptions, function(val, text) {
+              mySelect.append(
+              $("<option></option>").val(text["id"]).html(text["nome"])
+              );
+            });
+
+            $("#executante-id").val('.$_POST['executante'].');
+
+          },
+          error: function(){
+            console.log("failure");
+          }
+        });
+    });
+   
+
+');
+
+}
 
 $this->registerJs('
 
@@ -81,7 +116,7 @@ $this->registerJs('
         });
       });
     
-    $("#executante-id").change(function(ev){
+    /*$("#executante-id").change(function(ev){
       var id = $(this).val();    
       console.log(id);
       $.ajax({ 
@@ -95,6 +130,32 @@ $this->registerJs('
 
          $("#projeto-id").children("option:not(:first)").remove();
          var mySelect = $("#projeto-id");
+         $.each(myOptions, function(val, text) {
+          mySelect.append(
+          $("<option></option>").val(text["id"]).html(text["nome"])
+          );
+        });
+      },
+      error: function(){
+        console.log("failure");
+      }
+    });
+    });*/
+
+    $("#projeto-id").change(function(ev){
+      var id = $(this).val();    
+      console.log(id);
+      $.ajax({ 
+        url: "index.php?r=tarefa/preencheexecutante",
+        data: {id: id},
+        type: "POST",
+        success: function(response){
+         var resposta = $.parseJSON(response);
+         console.log(resposta);
+         var myOptions = resposta;
+
+         $("#executante-id").children("option:not(:first)").remove();
+         var mySelect = $("#executante-id");
          $.each(myOptions, function(val, text) {
           mySelect.append(
           $("<option></option>").val(text["id"]).html(text["nome"])
@@ -126,12 +187,44 @@ $this->registerJs('
 #w2{
     display: none;
 }
+
+.barra-btn{
+  display:block;
+  position:fixed;
+  width:100%;
+  bottom:0vh;
+  left:0;
+  background:#3c8dbc;
+  text-align:center;
+  padding: 20px 0;
+  z-index: 99;
+}
 </style>
 
 <div class="box box-primary">
     <div class="box-header with-border">
     <?php $form = ActiveForm::begin(); ?>
       <div class="row"> 
+            
+      
+      <div class="col-md-3">  
+          <select id="projeto-id" class="form-control" name="projeto" >
+            <option value="">Selecione um Projeto</option>
+            <?php                  
+              foreach ($listProjetos as $key => $list) {                   
+                ?> 
+                <option 
+                  value="<?=$key?>" <?= isset($_POST['projeto']) && $key == $_POST['projeto'] ? "selected" :"" ?>><?=$list ?>                      
+                </option>
+            <?php } ?>
+            
+          </select>
+      </div>
+
+      <div  class="col-md-1">  
+        <img style="z-index: 999999999" src="resources/dist/img/loading.gif" type="hidden" name="loading" id="loading" value="" width="64px" hidden/>        
+      </div> 
+
       <?php if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])){ ?>
         <div class="col-md-3"> 
       <?php } else{?>
@@ -139,25 +232,9 @@ $this->registerJs('
       <?php } ?> 
           <select  id="executante-id" class="form-control executante" name="executante" >
             <option value="">Selecione um Executante</option>
-            <?php                  
-              foreach ($listExecutantes as $key => $list) {                   
-                ?> 
-                <option 
-                  value="<?=$key?>" ><?=$list ?>                      
-                </option>
-            <?php } ?>
-          </select>
-      </div>  
-      
-      <div  class="col-md-1">  
-        <img style="z-index: 999999999" src="resources/dist/img/loading.gif" type="hidden" name="loading" id="loading" value="" width="64px" hidden/>        
-      </div> 
-      <div class="col-md-3">  
-          <select id="projeto-id" class="form-control" name="projeto" >
-            <option value="">Selecione um Projeto</option>
             
           </select>
-      </div>
+      </div>  
       <div style="margin-bottom: 1em">
         <button type="submit" class="btn btn-primary filtrar">Filtrar</button>
       </div>
@@ -173,9 +250,9 @@ $this->registerJs('
 <?php $this->head() ?>
 
 <?php if($isPost){ ?>
-<div style="margin-bottom: 1em">
-  <button type="button" class="btn btn-primary save">Adicionar Horas</button>
-  <?= Html::a('Gerar BM', ['/tarefa/gerarbm', 'projetoid'=>$projeto_selected], ['class'=>'btn btn-primary']) ?>
+<div class="barra-btn" style="margin-bottom: 1em">
+  <button type="button" class="btn btn-warning save">Adicionar Horas</button>
+  <?= Html::a('Gerar BM', ['/tarefa/gerarbm', 'projetoid'=>$projeto_selected], ['class'=>'btn btn-success']) ?>
 </div>
   <?php Pjax::begin(['id' => 'pjax-grid-view']) ?>
     <?= GridView::widget([

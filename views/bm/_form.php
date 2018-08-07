@@ -589,7 +589,7 @@ td, th {
 
   $projetoNome = Yii::$app->db->createCommand('SELECT nome FROM projeto WHERE id='.$model->projeto_id)->queryScalar();
 
-  $descricaoProjeto = Yii::$app->db->createCommand('SELECT descricao FROM projeto WHERE id='.$model->projeto_id)->queryScalar();
+  $descricaoProjeto = Yii::$app->db->createCommand('SELECT desc_resumida FROM projeto WHERE id='.$model->projeto_id)->queryScalar();
 
   $emailContato = Yii::$app->db->createCommand('SELECT email FROM projeto WHERE id='.$model->projeto_id)->queryScalar();
   
@@ -642,7 +642,8 @@ td, th {
 <?= $emailContato ?> 
 Bom dia, <?= explode(" ", $solicitante)[0] ?>!
 
-Segue nosso <?= $numberBM ?>º Boletim de Medição para o <?= $projetoNome ?> - <?= $descricaoProjeto ?>.
+Segue nosso <?= $numberBM ?>º Boletim de Medição para:
+<?= $descricaoProjeto ?>.
 
 
 Solicitamos sua aprovação para a emissão da FRS, preferencialmente até <?= $dataEmail ?>.

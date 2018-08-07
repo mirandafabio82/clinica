@@ -78,7 +78,7 @@ class TarefaController extends Controller
         $executantes = Yii::$app->db->createCommand('SELECT usuario_id, nome FROM executante JOIN user ON executante.usuario_id = user.id')->queryAll();
         $listExecutantes = ArrayHelper::map($executantes,'usuario_id','nome');
 
-        $projetos = Yii::$app->db->createCommand('SELECT id, nome FROM projeto')->queryAll();
+        $projetos = Yii::$app->db->createCommand('SELECT id, nome FROM projeto ORDER BY id DESC')->queryAll();
         $listProjetos = ArrayHelper::map($projetos,'id','nome');
 
         $executante_id = '';
@@ -232,8 +232,10 @@ class TarefaController extends Controller
         $numeroBmAtual = count(Yii::$app->db->createCommand('SELECT COUNT(id) FROM bm WHERE projeto_id='.$projetoid)->queryAll()) + 1;
 
 
+
         $acu_saldo = Yii::$app->db->createCommand('SELECT SUM(horas_acumulada) horas_acu, SUM(horas_saldo) h_saldo FROM escopo WHERE projeto_id='.$projetoid)->queryOne();
 
+        
         //quantidade de bms do projeto
         $numbm = count(Yii::$app->db->createCommand('SELECT id FROM bm WHERE projeto_id='.$projetoModel->id)->queryAll()) + 1;
 
@@ -243,7 +245,7 @@ class TarefaController extends Controller
        
 
         
-        $percAcumulada = sprintf("%.2f",($acu_saldo['horas_acu'] * 100) / $totalHoras);
+        $percAcumulada = sprintf("%.2f",(($acu_saldo['horas_acu']+$executadas['ee_bm']+$executadas['es_bm']+$executadas['ep_bm']+$executadas['ej_bm']+$executadas['tp_bm']) * 100) / $totalHoras);
         
         $bmModel = new Bm();
         $bmModel->projeto_id = $projetoModel->id;
@@ -258,7 +260,7 @@ class TarefaController extends Controller
         $bmModel->executado_ep = $executadas['ep_bm']==0 ? null : $executadas['ep_bm'];
         $bmModel->executado_ej = $executadas['ej_bm']==0 ? null : $executadas['ej_bm'];
         $bmModel->executado_tp = $executadas['tp_bm']==0 ? null : $executadas['tp_bm'];
-        $bmModel->acumulado = $acu_saldo['horas_acu'];
+        $bmModel->acumulado = $acu_saldo['horas_acu']+$executadas['ee_bm']+$executadas['es_bm']+$executadas['ep_bm']+$executadas['ej_bm']+$executadas['tp_bm'];
         $bmModel->saldo = $acu_saldo['h_saldo'];
         // $bmModel->qtd_dias = $projetoModel->qtd_dias;
         // $bmModel->km = $projetoModel->qtd_km;
@@ -272,7 +274,7 @@ class TarefaController extends Controller
                         $bmModel->executado_ej * $tipo_exec[1]['valor_hora']+
                         $bmModel->executado_tp * $tipo_exec[0]['valor_hora']+
                         $bmModel['km'] * Yii::$app->db->createCommand('SELECT vl_km FROM executante WHERE usuario_id=61')->queryScalar(), 2, ',', '.');
-        $percBm = number_format(($valorTotalBm * 100) / $projetoModel->valor_proposta, 2, ',', '.');
+        $percBm = number_format((($executadas['ee_bm']+$executadas['es_bm']+$executadas['ep_bm']+$executadas['ej_bm']+$executadas['tp_bm']) * 100) / $totalHoras, 2, ',', '.');
 
         $bmModel->descricao = $projetoModel->desc_resumida.'.'.PHP_EOL.'Esse '.$numbm.'º Boletim de Medição corresponde a '.$percBm.'% das atividades citadas na '.$projetoModel->nome.''.PHP_EOL.'A medição total acumulada incluindo este BM corresponde a '.$percAcumulada.'% das atividades realizadas.';
 
@@ -332,6 +334,12 @@ class TarefaController extends Controller
         }        
     }
 
+    public function actionPreencheexecutante(){
+        if (Yii::$app->request->isAjax) {                 
+            echo json_encode(Yii::$app->db->createCommand('SELECT user.id as id, user.nome as nome FROM user JOIN projeto_executante ON user.id=projeto_executante.executante_id WHERE projeto_executante.projeto_id='.Yii::$app->request->post()['id'])->queryAll());  
+        }        
+    }
+
     public function actionAttatividade(){
         if (Yii::$app->request->isAjax) {                 
            // Yii::$app->db->createCommand('UPDATE escopo SET status='.Yii::$app->request->post()['status'].' WHERE id='.Yii::$app->request->post()['id'])->execute();  
@@ -375,7 +383,7 @@ class TarefaController extends Controller
             if($tipo_bm_value==null) $tipo_bm_value = 0;
 
             if(Yii::$app->request->post()['value']!='null'){
-                Yii::$app->db->createCommand('UPDATE escopo SET '.Yii::$app->request->post()['tipo'].'='.$tipo_value.'+'.Yii::$app->request->post()['value'].', horas_bm = '.$bm_value.' +'.Yii::$app->request->post()['value'].', '.$tipo_bm.' = '.$tipo_bm_value.'+ '.Yii::$app->request->post()['value'].' WHERE id='.Yii::$app->request->post()['id'])->execute(); 
+                Yii::$app->db->createCommand('UPDATE escopo SET '.Yii::$app->request->post()['tipo'].'='.$tipo_value.'+'.Yii::$app->request->post()['value'].', horas_bm = '.$bm_value.' +'.Yii::$app->request->post()['value'].', '.$tipo_bm.' = '.$tipo_bm_value.'+ '.Yii::$app->request->post()['value'].', horas_saldo=horas_saldo-'.Yii::$app->request->post()['value'].' WHERE id='.Yii::$app->request->post()['id'])->execute(); 
             }
 
             echo 'success';
