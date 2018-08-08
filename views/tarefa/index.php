@@ -279,6 +279,10 @@ $this->registerJs('
 
                 // $dataProvider->query->where('horas_tp IS NOT NULL OR horas_ej IS NOT NULL OR horas_ep IS NOT NULL OR horas_es IS NOT NULL OR horas_ee IS NOT NULL');
 
+                if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['executante'])){
+                  $executante_id = Yii::$app->user->getId();
+                }
+
                   return Yii::$app->controller->renderPartial('_grid_content', 
                     ['model' => $model, 'executante_id' => $executante_id]);
               },
