@@ -561,7 +561,7 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                 if(!empty($escopo)){                   
                     $escopo->setAttributes($_POST['Escopo'][$key]);
                     
-                    $escopo->horas_saldo = $escopo->horas_tp + $escopo->horas_ej + $escopo->horas_ep + $escopo->horas_es + $escopo->horas_ee;
+                    $escopo->horas_saldo = $escopo->horas_tp + $escopo->horas_ej + $escopo->horas_ep + $escopo->horas_es + $escopo->horas_ee - ($escopo->executado_tp + $escopo->executado_ej + $escopo->executado_ep + $escopo->executado_es + $escopo->executado_ee);
                     
                     if($key==$caId_1){
                         $escopo->horas_es = $tot_1;                        
@@ -1251,6 +1251,9 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
             $assunto = Yii::$app->request->post()['assunto'];
             $corpoEmail = Yii::$app->request->post()['corpoEmail'];
             $nomeArquivo =  Yii::$app->request->post()['nomeArquivo'];
+            $projeto_id = Yii::$app->request->post()['projeto_id'];
+
+            Yii::$app->db->createCommand('UPDATE projeto SET status=5 WHERE id = '.$projeto_id)->execute();
 
             $remetentesArr = explode(",", $remetentes);
             

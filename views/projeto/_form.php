@@ -101,15 +101,17 @@ $this->registerJs('
 
     $("#enviarEmail").click(function (e) {
       $("#loading").show(); // show the gif image when ajax starts
+      var projeto_id = window.location.href.split("id=")[1];
         $.ajax({ 
           url: "index.php?r=projeto/enviaremail",
-          data: {remetentes: $("#remetente").val(), assunto: $("#assunto").val(), corpoEmail: $("#corpoEmail").val(), nomeArquivo: "'.$fileName.'"},
+          data: {remetentes: $("#remetente").val(), assunto: $("#assunto").val(), corpoEmail: $("#corpoEmail").val(), nomeArquivo: "'.$fileName.'", projeto_id: projeto_id},
           type: "POST",
           success: function(response){
            $("#loading").hide();
            $("#close_modal").click(); 
            alert("Email enviado com sucesso!");
            console.log(response);
+           location.reload();
          },
          error: function(request, status, error){
           alert(request.responseText);
