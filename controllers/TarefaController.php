@@ -78,7 +78,7 @@ class TarefaController extends Controller
         $executantes = Yii::$app->db->createCommand('SELECT usuario_id, nome FROM executante JOIN user ON executante.usuario_id = user.id')->queryAll();
         $listExecutantes = ArrayHelper::map($executantes,'usuario_id','nome');
 
-        $projetos = Yii::$app->db->createCommand('SELECT id, nome FROM projeto ORDER BY id DESC')->queryAll();
+        $projetos = Yii::$app->db->createCommand('SELECT id, nome FROM projeto WHERE as_aprovada=1 ORDER BY id DESC')->queryAll();
         $listProjetos = ArrayHelper::map($projetos,'id','nome');
 
         $executante_id = '';
@@ -330,7 +330,7 @@ class TarefaController extends Controller
 
     public function actionPreencheprojeto(){
         if (Yii::$app->request->isAjax) {                 
-            echo json_encode(Yii::$app->db->createCommand('SELECT projeto.id as id, projeto.nome as nome FROM projeto JOIN projeto_executante ON projeto.id=projeto_executante.projeto_id WHERE projeto_executante.executante_id='.Yii::$app->request->post()['id'])->queryAll());  
+            echo json_encode(Yii::$app->db->createCommand('SELECT projeto.id as id, projeto.nome as nome FROM projeto JOIN projeto_executante ON projeto.id=projeto_executante.projeto_id WHERE as_aprovada=1 AND projeto_executante.executante_id='.Yii::$app->request->post()['id'])->queryAll());  
         }        
     }
 
