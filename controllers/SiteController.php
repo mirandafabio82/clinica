@@ -57,7 +57,18 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $emitirAS = Yii::$app->db->createCommand('SELECT count(id) FROM projeto WHERE status=6')->queryScalar();
+        $aguardando = Yii::$app->db->createCommand('SELECT count(id) FROM projeto WHERE status=5')->queryScalar();
+        $concluido = Yii::$app->db->createCommand('SELECT count(id) FROM projeto WHERE status=2')->queryScalar();
+        $numBm = Yii::$app->db->createCommand('SELECT ultimo_bm FROM config')->queryScalar();
+
+        return $this->render('index', [
+            'emitirAS' => $emitirAS,
+            'aguardando' => $aguardando,
+            'concluido' => $concluido,
+            'numBm' => $numBm,
+
+        ]);
     }
 
     /**

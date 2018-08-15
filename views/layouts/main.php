@@ -233,6 +233,7 @@ $usuario = Yii::$app->db->createCommand('SELECT * FROM user WHERE id='.Yii::$app
 <script src="resources/dist/js/adminlte.min.js"></script>
 <!-- AdminLTE for demo purposes -->
 <!-- <script src="resources/dist/js/demo.js"></script> -->
+<script src="resources/dist/js/chart.js/Chart.js"></script>
 <?php $this->endBody() ?>
 </body>
 </html>
