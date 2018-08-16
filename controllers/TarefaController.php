@@ -12,6 +12,7 @@ use app\models\Bmescopo;
 use app\models\search\BmSearch;
 use app\models\Projeto;
 use app\models\search\ProjetoSearch;
+use app\models\Log;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -302,6 +303,17 @@ class TarefaController extends Controller
             Yii::$app->db->createCommand('UPDATE escopo SET horas_acumulada = '.$acumulada.', horas_saldo = '.$saldo.', horas_bm=0, horas_tp_bm=0.00 , horas_ej_bm=0.00 , horas_ep_bm=0.00 , horas_es_bm=0.00 , horas_ee_bm=0.00 WHERE id='.$escopo["id"])->execute();
         }
         
+        if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['executante'])){
+            $user_nome = Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.Yii::$app->user->getId())->queryScalar();
+            $logModel = new Log();
+            $logModel->user_id = Yii::$app->user->getId();
+            $logModel->descricao = $user_nome.' gerou o BM Nº '.$bmModel->numero_bm.' para o Projeto '.$projetoModel->nome;
+            $logModel->data = Date('Y-m-d H:i:s');
+            if(!$logModel->save()){
+                print_r($logModel->getErrors());
+                die();
+            }
+        }
 
         return $this->redirect(['bm/update', 'id' => $bmModel->id]);
     }
@@ -346,6 +358,8 @@ class TarefaController extends Controller
 
             $projeto_id = Yii::$app->db->createCommand('SELECT projeto_id FROM escopo WHERE id='.Yii::$app->request->post()['id'])->queryScalar();
 
+            $projeto_nome = Yii::$app->db->createCommand('SELECT nome FROM projeto WHERE id='.$projeto_id)->queryScalar();
+
             //atualiza status geral
             Yii::$app->db->createCommand('UPDATE projeto SET status_geral=4 WHERE id='.$projeto_id)->execute(); 
 
@@ -384,6 +398,18 @@ class TarefaController extends Controller
 
             if(Yii::$app->request->post()['value']!='null'){
                 Yii::$app->db->createCommand('UPDATE escopo SET '.Yii::$app->request->post()['tipo'].'='.$tipo_value.'+'.Yii::$app->request->post()['value'].', horas_bm = '.$bm_value.' +'.Yii::$app->request->post()['value'].', '.$tipo_bm.' = '.$tipo_bm_value.'+ '.Yii::$app->request->post()['value'].', horas_saldo=horas_saldo-'.Yii::$app->request->post()['value'].' WHERE id='.Yii::$app->request->post()['id'])->execute(); 
+            }
+
+            if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['executante']) && Yii::$app->request->post()['ultimo'] == 1){
+                $user_nome = Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.Yii::$app->user->getId())->queryScalar();
+                $logModel = new Log();
+                $logModel->user_id = Yii::$app->user->getId();
+                $logModel->descricao = $user_nome.' cumpriu horas nas atividades do Projeto '.$projeto_nome;
+                $logModel->data = Date('Y-m-d H:i:s');
+                if(!$logModel->save()){
+                    print_r($logModel->getErrors());
+                    die();
+                }
             }
 
             echo 'success';

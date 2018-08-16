@@ -1,5 +1,12 @@
 <?php
-
+use yii\helpers\Html;
+use yii\widgets\ActiveForm;
+use yii\helpers\ArrayHelper;
+use yii\helpers\Url;
+use kartik\money\MaskMoney;
+use kartik\tabs\TabsX;
+use kartik\popover\PopoverX;
+use yii\bootstrap\Modal;
 /* @var $this yii\web\View */
 
 $this->title = 'HCN Automação';
@@ -75,11 +82,11 @@ $this->title = 'HCN Automação';
             <div class="box-header with-border">
               <h3 class="box-title">Receitas X Despesas (Ainda não implementado)</h3>
 
-              <div class="box-tools pull-right">
+              <!-- <div class="box-tools pull-right">
                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                 </button>
                 <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-              </div>
+              </div> -->
             </div>
             <div class="box-body">
               <div class="chart">
@@ -94,47 +101,32 @@ $this->title = 'HCN Automação';
       	 <!-- PRODUCT LIST -->
           <div class="box box-primary">
             <div class="box-header with-border">
-              <h3 class="box-title">Últimas Atividades (Ainda não implementado)</h3>
+              <h3 class="box-title">Últimas Atividades</h3>
 
-              <div class="box-tools pull-right">
+              <!-- <div class="box-tools pull-right">
                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                 </button>
                 <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-              </div>
+              </div> -->
             </div>
             <!-- /.box-header -->
             <div class="box-body">
               <ul class="products-list product-list-in-box">
-                <li class="item">
-                  <div class="product-img">
-                    <i class="fa fa-folder-o" aria-hidden="true"></i>
-                  </div>
-                  <div class="product-info">
-                    <a href="javascript:void(0)" class="product-title">Gabriel</a>                 
-                    <span class="product-description">
-                          Criou o Projeto PJ-020507
-                        </span>
-                  </div>
-                </li>
-                <!-- /.item -->
-                <li class="item">
-                  <div class="product-img">
-                    <i class="fa fa-folder-o" aria-hidden="true"></i>
-                  </div>
-                  <div class="product-info">
-                    <a href="javascript:void(0)" class="product-title">Danilo</a>
-                    <span class="product-description">
-                          Cadastrou horas em atividades do Projeto PJ-0215165.
-                        </span>
-                  </div>
-                </li>
-                
+              	<?php foreach ($logs as $key => $log) { ?> 
+	                <li class="item">	                  
+	                  <div class="product-info">
+	                    <a href="javascript:void(0)" class="product-description"><?= $log['descricao'] ?><span
+	                        class="label label-info pull-right"><?= date_format(DateTime::createFromFormat('Y-m-d H:i:s', $log['data']), 'd/m/Y H:i:s') ?></span></a>                 
+	                    
+	                  </div>
+	                </li>
+                <?php } ?>
                 <!-- /.item -->
               </ul>
             </div>
             <!-- /.box-body -->
             <div class="box-footer text-center">
-              <a href="javascript:void(0)" class="uppercase">Visualizar o Log Completo</a>
+              <a href="<?= Url::to(['log/index']) ?>" class="uppercase">Visualizar o Log Completo</a>
             </div>
             <!-- /.box-footer -->
           </div>
@@ -229,7 +221,7 @@ $this->title = 'HCN Automação';
       //Boolean - Whether to fill the dataset with a color
       datasetFill             : true,
       //String - A legend template
-      legendTemplate          : '<ul class="<%=name.toLowerCase()%>-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].lineColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>',
+      
       //Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
       maintainAspectRatio     : true,
       //Boolean - whether to make the chart responsive to window resizing

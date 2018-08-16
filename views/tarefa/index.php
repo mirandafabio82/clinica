@@ -91,6 +91,10 @@ $this->registerJs('
      $(".save").click(function(){
         
         $( ".executado" ).each(function( index ) {
+          var ultimo = 0;
+          if(index == $( ".executado" ).length - 1){
+            ultimo = 1;
+          }
           
           divisor = this.name.split("[")[1];
 
@@ -103,7 +107,7 @@ $this->registerJs('
 
           $.ajax({ 
               url: "index.php?r=tarefa/attatividade",
-              data: {id: id, value: valor, tipo: tipo},
+              data: {id: id, value: valor, tipo: tipo, ultimo: ultimo},
               type: "POST",
               success: function(response){
                console.log(response);
@@ -252,7 +256,9 @@ $this->registerJs('
 <?php if($isPost){ ?>
 <div class="barra-btn" style="margin-bottom: 1em">
   <button type="button" class="btn btn-warning save">Adicionar Horas</button>
-  <?= Html::a('Gerar BM', ['/tarefa/gerarbm', 'projetoid'=>$projeto_selected], ['class'=>'btn btn-success']) ?>
+  <?php if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])){ ?>
+    <?= Html::a('Gerar BM', ['/tarefa/gerarbm', 'projetoid'=>$projeto_selected], ['class'=>'btn btn-success']) ?>
+  <?php } ?>
 </div>
   <?php Pjax::begin(['id' => 'pjax-grid-view']) ?>
     <?= GridView::widget([

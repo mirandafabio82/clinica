@@ -62,12 +62,14 @@ class SiteController extends Controller
         $concluido = Yii::$app->db->createCommand('SELECT count(id) FROM projeto WHERE status=2')->queryScalar();
         $numBm = Yii::$app->db->createCommand('SELECT ultimo_bm FROM config')->queryScalar();
 
+        $logs = Yii::$app->db->createCommand('SELECT * FROM log ORDER BY id DESC LIMIT 5')->queryAll();
+
         return $this->render('index', [
             'emitirAS' => $emitirAS,
             'aguardando' => $aguardando,
             'concluido' => $concluido,
             'numBm' => $numBm,
-
+            'logs' => $logs,
         ]);
     }
 

@@ -13,6 +13,7 @@ use yii\helpers\ArrayHelper;
 use yii\web\UploadedFile;
 use \Datetime;
 use yii\helpers\FileHelper;
+use app\models\Log;
 
 /**
  * DocumentoController implements the CRUD actions for Documento model.
@@ -127,6 +128,20 @@ class DocumentoController extends Controller
                     print_r($model->getErrors());
                     die();
                 }
+
+                $projeto_nome = Yii::$app->db->createCommand('SELECT nome FROM projeto WHERE id='.$model->projeto_id)->queryScalar();
+                if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['executante'])){
+                    $user_nome = Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.Yii::$app->user->getId())->queryScalar();
+                    $logModel = new Log();
+                    $logModel->user_id = Yii::$app->user->getId();
+                    $logModel->descricao = $user_nome.' adicionou um novo arquivo para o Projeto '.$projeto_nome;
+                    $logModel->data = Date('Y-m-d H:i:s');
+                    if(!$logModel->save()){
+                        print_r($logModel->getErrors());
+                        die();
+                    }
+                }
+
                 $transaction->commit();
                 return $this->render('create', [
                 'model' => $model,

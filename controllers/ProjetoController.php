@@ -10,6 +10,7 @@ use app\models\Atividademodelo;
 use app\models\Contato;
 use app\models\ProjetoExecutante;
 use app\models\Escopo;
+use app\models\Log;
 use app\models\search\EscopoSearch;
 use app\models\search\ProjetoSearch;
 use yii\web\Controller;
@@ -335,6 +336,18 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
 
                        $proExeModel->save();
                    }
+                }
+
+                if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['executante'])){
+                    $user_nome = Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.Yii::$app->user->getId())->queryScalar();
+                    $logModel = new Log();
+                    $logModel->user_id = Yii::$app->user->getId();
+                    $logModel->descricao = $user_nome.' criou o projeto '.$model->nome;
+                    $logModel->data = Date('Y-m-d H:i:s');
+                    if(!$logModel->save()){
+                        print_r($logModel->getErrors());
+                        die();
+                    }
                 }
 
                 $transaction->commit();
@@ -848,6 +861,19 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
             Yii::$app->db->createCommand('UPDATE escopo SET horas_es='.$tot_1*$perc.', horas_saldo='.$tot_1*$perc.' WHERE id='.$caId_1)->execute();
             Yii::$app->db->createCommand('UPDATE escopo SET horas_es='.$tot_2*$perc.', horas_saldo='.$tot_2*$perc.' WHERE id='.$caId_2)->execute();
             Yii::$app->db->createCommand('UPDATE escopo SET horas_es='.$tot_3*$perc.', horas_saldo='.$tot_3*$perc.' WHERE id='.$caId_3)->execute();
+
+                if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['executante'])){
+                    $user_nome = Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.Yii::$app->user->getId())->queryScalar();
+                    $logModel = new Log();
+                    $logModel->user_id = Yii::$app->user->getId();
+                    $logModel->descricao = $user_nome.' atualizou o projeto '.$model->nome;
+                    $logModel->data = Date('Y-m-d H:i:s');
+                    if(!$logModel->save()){
+                        print_r($logModel->getErrors());
+                        die();
+                    }
+                }
+
                 $transaction->commit();
                 return $this->redirect(['update', 'id' => $model->id]);
             }
@@ -895,10 +921,22 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
     {
         Yii::$app->db->createCommand('DELETE FROM documento WHERE projeto_id='.$id)->execute();
         Yii::$app->db->createCommand('DELETE FROM escopo WHERE projeto_id='.$id)->execute();
-        $projeto = Yii::$app->db->createCommand('SELECT id FROM projeto WHERE id='.$id)->queryScalar();
-        if(empty($projeto)){
+        $projeto = Yii::$app->db->createCommand('SELECT id, nome FROM projeto WHERE id='.$id)->queryOne();
+        if(empty($projeto['id'])){
         }
         $this->findModel($id)->delete();
+
+        if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['executante'])){
+            $user_nome = Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.Yii::$app->user->getId())->queryScalar();
+            $logModel = new Log();
+            $logModel->user_id = Yii::$app->user->getId();
+            $logModel->descricao = $user_nome.' excluiu o projeto '.$projeto['nome'];
+            $logModel->data = Date('Y-m-d H:i:s');
+            if(!$logModel->save()){
+                print_r($logModel->getErrors());
+                die();
+            }
+        }
 
         return $this->redirect(['create']);
     }
