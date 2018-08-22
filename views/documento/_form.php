@@ -23,6 +23,10 @@ use yii\helpers\Url;
     margin: 0px;
 }
 
+.dropify-wrapper.touch-fallback .dropify-clear {
+  display:none;
+}
+
 /*.summary{
   display: none;
 }
@@ -41,6 +45,11 @@ $this->registerJs("
               location.href = '" . Url::to(['documento/update']) . "&id='+id;
         }
     });*/
+    $('.dropify').dropify({
+        tpl: {
+        message:         '<div class=\'dropify-message\'><span class=\'file-icon\' /> <p>Clique ou arraste um arquivo para adicioná-lo </p></div>',
+    }
+    });
 
 ");
 ?>
@@ -160,7 +169,7 @@ $this->registerJs("
         <div class="col-md-4">
     <?= $form->field($model, 'projeto_id')->dropDownList($listProjetos,['prompt'=>'Selecione um Projeto']) ?>
  
-    <?= $form->field($model, 'path')->fileInput(); ?>
+    <?= $form->field($model, 'path')->fileInput(['class'=>'dropify']); ?>
     </div>
     <div class="col-md-2">
     <?= $form->field($model, 'revisao')->textInput() ?>   

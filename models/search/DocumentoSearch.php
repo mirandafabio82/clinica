@@ -69,6 +69,10 @@ class DocumentoSearch extends Documento
             'pagination' => [
                 'pageSize' => 10,
             ],
+            'sort' => [
+            'defaultOrder' => [
+                'id' => SORT_DESC,
+            ]]
         ]);
 
         $this->load($params);
