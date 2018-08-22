@@ -76,7 +76,7 @@ input[type=number]::-webkit-outer-spin-button {
   left:0;
   background:#3c8dbc;
   text-align:center;
-  padding: 20px 0;
+  padding: 0px 0;
   z-index: 99;
 }
 </style>
@@ -1323,17 +1323,17 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
         </div>
 
         <div class="barra-btn" >
-          <?= Html::submitButton($model->isNewRecord ? 'Cadastrar' : 'Atualizar', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-info']) ?>
+          <?= Html::submitButton($model->isNewRecord ? 'Cadastrar' : 'Atualizar', ['class' => $model->isNewRecord ? 'btn btn-info' : 'btn btn-info', 'style' => 'background-color: #3c8dbc; border-color: #3c8dbc']) ?>
           <?php if(!$model->isNewRecord){ ?>
-            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#emailModal">Email</button>
+            <button type="button" class="btn btn-success" style="background-color: #3c8dbc; border-color: #3c8dbc" data-toggle="modal" data-target="#emailModal">Email</button>
             <?php if($model->tipo=="A"){ ?>
-                <?= Html::a('<span class="btn-label">Visualizar AS</span>', ['gerarrelatorio', 'id' => $model->id], ['class' => 'btn btn-danger', 'target'=>'_blank']) ?>
+                <?= Html::a('<span class="btn-label">Visualizar AS</span>', ['gerarrelatorio', 'id' => $model->id], ['class' => 'btn btn-danger', 'target'=>'_blank', 'style' => 'background-color: #3c8dbc; border-color: #3c8dbc']) ?>
             <?php } ?>
             <?php if($model->tipo=="P"){ ?>
-                <?= Html::a('<span class="btn-label">Visualizar Proposta</span>', ['gerarrelatorio', 'id' => $model->id], ['class' => 'btn btn-primary', 'target'=>'_blank']) ?>
+                <?= Html::a('<span class="btn-label">Visualizar Proposta</span>', ['gerarrelatorio', 'id' => $model->id], ['class' => 'btn btn-primary', 'target'=>'_blank', 'style' => 'background-color: #3c8dbc; border-color: #3c8dbc']) ?>
             <?php } ?>
           <?php } ?>
-          <?= Html::submitButton('Salvar Escopo', ['class' =>'btn btn-primary saveEscopo']) ?>
+          <?= Html::submitButton('Salvar Escopo', ['class' =>'btn btn-primary saveEscopo', 'style' => 'background-color: #3c8dbc; border-color: #3c8dbc']) ?>
         </div>
 
       

@@ -125,7 +125,17 @@ td, th {
     display: none;
 }
 
-
+.barra-btn{
+  display:block;
+  position:fixed;
+  width:100%;
+  bottom:0vh;
+  left:0;
+  background:#3c8dbc;
+  text-align:center;
+  padding: 0px 0;
+  z-index: 99;
+}
 
 </style>
 <!-- mask so funciona com isso -->
@@ -562,14 +572,14 @@ td, th {
 </table>
 	</div>
    <?php } ?>
-    <div class="form-group">
-        <?= Html::submitButton('Salvar', ['class' => 'btn btn-primary']) ?>
+    <div class="barra-btn">
+        <?= Html::submitButton('Salvar', ['class' => 'btn btn-primary', 'style' => 'background-color: #3c8dbc; border-color: #3c8dbc']) ?>
         <?php if(!$model->isNewRecord){ ?>
-        <?= Html::a('<span class="btn-label">Visualizar BM</span>', ['gerarbm', 'id' => $model->id], ['class' => 'btn btn-primary', 'target'=>'_blank', 'style'=> ' margin-right: 1em']) ?>
+        <?= Html::a('<span class="btn-label">Visualizar BM</span>', ['gerarbm', 'id' => $model->id], ['class' => 'btn btn-primary', 'target'=>'_blank', 'style'=> ' margin-right: 1em', 'style' => 'background-color: #3c8dbc; border-color: #3c8dbc']) ?>
 
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#horasModal">Editar Horas</button>
+        <button type="button" class="btn btn-primary" style="background-color: #3c8dbc; border-color: #3c8dbc" data-toggle="modal" data-target="#horasModal">Editar Horas</button>
         
-        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#emailModal">Email</button>
+        <button type="button" class="btn btn-info" style="background-color: #3c8dbc; border-color: #3c8dbc" data-toggle="modal" data-target="#emailModal">Email</button>
         <?php } ?>
 
 

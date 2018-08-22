@@ -200,7 +200,7 @@ $this->registerJs('
   left:0;
   background:#3c8dbc;
   text-align:center;
-  padding: 20px 0;
+  padding: 0px 0;
   z-index: 99;
 }
 </style>
@@ -254,10 +254,10 @@ $this->registerJs('
 <?php $this->head() ?>
 
 <?php if($isPost){ ?>
-<div class="barra-btn" style="margin-bottom: 1em">
-  <button type="button" class="btn btn-warning save">Adicionar Horas</button>
+<div class="barra-btn" >
+  <button type="button" class="btn btn-warning save" style="background-color: #3c8dbc; border-color: #3c8dbc">Adicionar Horas</button>
   <?php if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])){ ?>
-    <?= Html::a('Gerar BM', ['/tarefa/gerarbm', 'projetoid'=>$projeto_selected], ['class'=>'btn btn-success']) ?>
+    <?= Html::a('Gerar BM', ['/tarefa/gerarbm', 'projetoid'=>$projeto_selected], ['class'=>'btn btn-success', 'style' => 'background-color: #3c8dbc; border-color: #3c8dbc']) ?>
   <?php } ?>
 </div>
   <?php Pjax::begin(['id' => 'pjax-grid-view']) ?>
