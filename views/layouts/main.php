@@ -38,15 +38,14 @@ $usuario = Yii::$app->db->createCommand('SELECT * FROM user WHERE id='.Yii::$app
   <link rel="stylesheet" href="plugins/font-awesome/css/font-awesome.min.css">
   <!-- Ionicons -->
   <link rel="stylesheet" href="plugins/Ionicons/css/ionicons.min.css">
-  <!-- fullCalendar -->
-  <link rel="stylesheet" href="plugins/fullcalendar/dist/fullcalendar.min.css">
-  <link rel="stylesheet" href="plugins/fullcalendar/dist/fullcalendar.print.min.css" media="print">
   <!-- Theme style -->
   <link rel="stylesheet" href="resources/dist/css/AdminLTE.min.css">
   <!-- AdminLTE Skins. Choose a skin from the css/skins
   folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="resources/dist/css/skins/_all-skins.min.css">
-  
+  <!-- fullCalendar -->
+  <link rel="stylesheet" href="plugins/fullcalendar/dist/fullcalendar.min.css">
+  <link rel="stylesheet" href="plugins/fullcalendar/dist/fullcalendar.print.min.css" media="print">
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -240,7 +239,9 @@ $usuario = Yii::$app->db->createCommand('SELECT * FROM user WHERE id='.Yii::$app
 <!-- AdminLTE for demo purposes -->
 <!-- <script src="resources/dist/js/demo.js"></script> -->
 <script src="resources/dist/js/chart.js/Chart.js"></script>
-
+<!-- FullCalendar -->
+<script src="plugins/moment/moment.js"></script>
+<script src="plugins/fullcalendar/dist/fullcalendar.min.js"></script>
 
 <?php $this->endBody() ?>
 </body>

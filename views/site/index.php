@@ -142,7 +142,7 @@ $this->title = 'HCN Automação';
         <div class="col-md-3">
           <div class="box box-solid">
             <div class="box-header with-border">
-              <h4 class="box-title">Draggable Events</h4>
+              <h4 class="box-title">Eventos</h4>
             </div>
             <div class="box-body">
               <!-- the events -->
@@ -165,7 +165,7 @@ $this->title = 'HCN Automação';
           <!-- /. box -->
           <div class="box box-solid">
             <div class="box-header with-border">
-              <h3 class="box-title">Create Event</h3>
+              <h3 class="box-title">Criar Eventos</h3>
             </div>
             <div class="box-body">
               <div class="btn-group" style="width: 100%; margin-bottom: 10px;">
@@ -207,11 +207,13 @@ $this->title = 'HCN Automação';
                   <?= yii2fullcalendar\yii2fullcalendar::widget([
                         'options' => [
                           'lang' => 'pt',
+                          'hidden' => 'hidden',
                           //... more options to be defined here!
                         ],
                         'events' => Url::to(['/timetrack/default/jsoncalendar'])
                       ]);
                   ?>
+                  <div id="calendar"></div>
             </div>
             <!-- /.box-body -->
           </div>
@@ -363,10 +365,10 @@ $this->title = 'HCN Automação';
         right : 'month,agendaWeek,agendaDay'
       },
       buttonText: {
-        today: 'today',
-        month: 'month',
-        week : 'week',
-        day  : 'day'
+        today: 'hoje',
+        month: 'mês',
+        week : 'semana',
+        day  : 'dia'
       },
       //Random default events
       events    : [

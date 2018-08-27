@@ -48,7 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="box-header with-border">
 <div style="background-color: #337ab7;color:white;padding: 10px"><i class="fa fa-handshake-o"></i> Logs </div>
 <div style="margin-bottom:1em;margin-top: 1em">
-    <?= Html::a('Mostrar Todos', ['/cliente/create', 'pagination' => true], ['class'=>'btn btn-primary grid-button']) ?>
+    <?= Html::a('Mostrar Todos', ['/log/index', 'pagination' => true], ['class'=>'btn btn-primary grid-button']) ?>
 </div>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -58,7 +58,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
            // ['class' => 'yii\grid\ActionColumn'],
             'descricao',
-            'data',
+            [
+            'attribute' => 'data', 
+            'format' => 'raw',
+            'value' => function ($data) {
+                return Date('d/m/Y h:i:s', strtotime($data->data));
+            }, 
+            
+            ],
 
             
         ],
