@@ -62,7 +62,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'attribute' => 'data', 
             'format' => 'raw',
             'value' => function ($data) {
-                return Date('d/m/Y h:i:s', strtotime($data->data));
+                return Date('d/m/Y H:i:s', strtotime($data->data));
             }, 
             
             ],
