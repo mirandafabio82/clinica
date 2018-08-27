@@ -27,7 +27,8 @@
         "moonlandsoft/yii2-phpexcel": "*",
         "kartik-v/yii2-mpdf": "*",
         "mpdf/mpdf": "^7.0",
-        "smalot/pdfparser": "*"
+        "smalot/pdfparser": "*",
+        "philippfrenzel/yii2fullcalendar": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
