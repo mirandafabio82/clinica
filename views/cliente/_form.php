@@ -68,6 +68,12 @@ $this->registerJs("
         'filterModel' => $searchModel,
         // 'pjax' => true,        
         'options' => ['style' => 'font-size:12px;'],
+        'rowOptions' => function ($model, $key, $index, $grid) {
+                    return [
+                        'style' => "cursor: pointer",
+                        
+                    ];
+                },
         // 'hover' => true,
         /*'rowOptions' => function ($model, $key, $index, $grid) {
                 return ['id' => $model['id'], 'onclick' => 'window.location = "index.php?r=cliente/update&id="+this.id'];

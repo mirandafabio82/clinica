@@ -857,7 +857,13 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
             // 'pjax' => true,        
-            'options' => ['style' => 'font-size:12px;'],                
+            'options' => ['style' => 'font-size:12px;'], 
+            'rowOptions' => function ($model, $key, $index, $grid) {
+                    return [
+                        'style' => "cursor: pointer",
+                        
+                    ];
+                },               
             // 'hover' => true,            
             'columns' => [
             // ['class' => 'yii\grid\SerialColumn'],

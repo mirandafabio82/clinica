@@ -66,7 +66,12 @@ $this->registerJs("
         'filterModel' => $searchModel,
         // 'pjax' => true,
         'options' => ['style' => 'font-size:12px;'],
-        
+        'rowOptions' => function ($model, $key, $index, $grid) {
+                    return [
+                        'style' => "cursor: pointer",
+                        
+                    ];
+                },
         /*'hover' => true,
         'panel' => [
             'type' => GridView::TYPE_PRIMARY,

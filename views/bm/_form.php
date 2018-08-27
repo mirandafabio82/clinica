@@ -164,6 +164,12 @@ td, th {
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'options' => ['style' => 'font-size:12px;'],
+        'rowOptions' => function ($model, $key, $index, $grid) {
+                    return [
+                        'style' => "cursor: pointer",
+                        
+                    ];
+                },
         'columns' => [
             // ['class' => 'yii\grid\SerialColumn'],
 
