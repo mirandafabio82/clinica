@@ -48,6 +48,7 @@ class ProjetoSearch extends Projeto
         if(!isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])){      
             $query->joinWith('projeto_executante');              
             $query->where(['projeto_executante.executante_id' => Yii::$app->user->getId()]);
+            $query->orWhere(['projeto.criador_projeto_id' => Yii::$app->user->getId()]);
         }
 
         // add conditions that should always apply here

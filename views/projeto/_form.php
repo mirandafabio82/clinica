@@ -74,10 +74,22 @@ input[type=number]::-webkit-outer-spin-button {
   width:100%;
   bottom:0vh;
   left:0;
-  background:#3c8dbc;
+  background:#62727b;
   text-align:center;
   padding: 0px 0;
   z-index: 99;
+}
+
+.btn-barra {
+  background-color: #62727b; 
+  border-color: #62727b;
+  color:white;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+}
+.btn-barra:hover {
+    background-color: white; /* Green */
+    color: white;
 }
 </style>
 
@@ -112,6 +124,26 @@ $this->registerJs('
            alert("Email enviado com sucesso!");
            console.log(response);
            location.reload();
+         },
+         error: function(request, status, error){
+          alert(request.responseText);
+        }
+      });
+    });
+
+    $("#salvarNota").click(function (e) {
+      $("#loading_nota").show(); // show the gif image when ajax starts
+      var projeto_id = window.location.href.split("id=")[1];
+      var nota_geral = $("#projeto-nota_geral").val();
+        $.ajax({ 
+          url: "index.php?r=projeto/salvarnotasgerais",
+          data: {nota_geral: nota_geral, projeto_id: projeto_id},
+          type: "POST",
+          success: function(response){
+           $("#loading_nota").hide();
+           $("#close_modal").click(); 
+           alert("Nota salva com sucesso!");
+           console.log(response);           
          },
          error: function(request, status, error){
           alert(request.responseText);
@@ -852,6 +884,10 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
             'attribute' => 'nome', 
             'contentOptions' => ['style' => 'width:16em;  min-width:16em;'],
             ],
+            [
+            'attribute' => 'site', 
+            'contentOptions' => ['style' => 'width:8em;  min-width:8em;'],
+            ],
             'descricao'
             /*[
               'attribute' => 'status',      
@@ -1244,14 +1280,7 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
       </div>
          
 
-    <div class="row">
-      <div class="col-md-6">
-        <?= $form->field($model, 'nota_geral')->textarea(['maxlength' => true]) ?>
-
-      </div>
-      
-        </div>
-
+    
    <!-- <div class="row">
      <div class="col-md-12"> 
        <h4>Fatura</h4>
@@ -1323,17 +1352,23 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
         </div>
 
         <div class="barra-btn" >
-          <?= Html::submitButton($model->isNewRecord ? 'Cadastrar' : 'Atualizar', ['class' => $model->isNewRecord ? 'btn btn-info' : 'btn btn-info', 'style' => 'background-color: #3c8dbc; border-color: #3c8dbc']) ?>
+          <?php if($model->isNewRecord){ ?>
+            <?= Html::submitButton($model->isNewRecord ? 'Cadastrar' : 'Atualizar', ['class' => $model->isNewRecord ? 'btn btn-barra' : 'btn btn-barra']) ?>
+          <?php } ?>
           <?php if(!$model->isNewRecord){ ?>
-            <button type="button" class="btn btn-success" style="background-color: #3c8dbc; border-color: #3c8dbc" data-toggle="modal" data-target="#emailModal">Email</button>
+            <label> <?= $model->nome ?> </label>
+            <?= Html::submitButton('Salvar', ['class' =>'btn btn-barra saveEscopo']) ?>
+            <button type="button" class="btn btn-barra"  data-toggle="modal" data-target="#emailModal">Email</button>
+             <button type="button" class="btn btn-barra"  data-toggle="modal" data-target="#notaModal">Notas Gerais</button>
             <?php if($model->tipo=="A"){ ?>
-                <?= Html::a('<span class="btn-label">Visualizar AS</span>', ['gerarrelatorio', 'id' => $model->id], ['class' => 'btn btn-danger', 'target'=>'_blank', 'style' => 'background-color: #3c8dbc; border-color: #3c8dbc']) ?>
+                <?= Html::a('<span class="btn-label">Visualizar AS</span>', ['gerarrelatorio', 'id' => $model->id], ['class' => 'btn btn-barra', 'target'=>'_blank']) ?>
             <?php } ?>
             <?php if($model->tipo=="P"){ ?>
-                <?= Html::a('<span class="btn-label">Visualizar Proposta</span>', ['gerarrelatorio', 'id' => $model->id], ['class' => 'btn btn-primary', 'target'=>'_blank', 'style' => 'background-color: #3c8dbc; border-color: #3c8dbc']) ?>
+                <?= Html::a('<span class="btn-label">Visualizar Proposta</span>', ['gerarrelatorio', 'id' => $model->id], ['class' => 'btn btn-barra', 'target'=>'_blank']) ?>
             <?php } ?>
+
           <?php } ?>
-          <?= Html::submitButton('Salvar Escopo', ['class' =>'btn btn-primary saveEscopo', 'style' => 'background-color: #3c8dbc; border-color: #3c8dbc']) ?>
+          
         </div>
 
       
@@ -1962,7 +1997,29 @@ HCN Automação
   </div>
 </div>
   <?php } ?>
+<div id="notaModal" class="modal fade" role="dialog" style="z-index: 999999999">
+  <div class="modal-dialog">
 
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <div  class="col-md-12" align="center">  
+            <img style="z-index: 999999999" src="resources/dist/img/loading.gif" type="hidden" name="loading" id="loading_nota" value="" width="64px" hidden/>        
+          </div> 
+        <h4 class="modal-title">Notas Gerais</h4>
+      </div>
+      <div class="modal-body">             
+        <?= $form->field($model, 'nota_geral')->textarea(["rows"=>"15"])->label(false) ?>      
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" id="close_modal_nota">Fechar</button>
+        <button type="button" class="btn btn-success" id="salvarNota" >Salvar</button>
+      </div>
+    </div>
+
+  </div>
+</div>
 
 
 <?php 

@@ -131,12 +131,23 @@ td, th {
   width:100%;
   bottom:0vh;
   left:0;
-  background:#3c8dbc;
+  background:#62727b;
   text-align:center;
   padding: 0px 0;
   z-index: 99;
 }
 
+.btn-barra {
+  background-color: #62727b; 
+  border-color: #62727b;
+  color:white;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+}
+.btn-barra:hover {
+    background-color: white; /* Green */
+    color: white;
+}
 </style>
 <!-- mask so funciona com isso -->
 <?php $this->head() ?>
@@ -411,8 +422,11 @@ td, th {
       <?= $form->field($model, 'qtd_dias')->textInput(['maxlength' => true]) ?>
     </div>
       <div class="col-md-1"> 
-      <?= $form->field($model, 'km')->textInput(['maxlength' => true]) ?>
-    </div>
+        <?= $form->field($model, 'km')->textInput(['maxlength' => true]) ?>
+      </div>
+      <div class="col-md-1"> 
+        <?= $form->field($model, 'bpm')->textInput(['maxlength' => true]) ?>
+      </div>
     </div>
       EXECUTADO
     <div class="row" style="border:1px solid black;padding: 2px; margin-bottom: 1em">
@@ -487,7 +501,9 @@ td, th {
       <div class="col-md-1"> 
       <?= $form->field($model, 'km')->textInput(['maxlength' => true]) ?>
     </div>
-
+    <div class="col-md-1"> 
+        <?= $form->field($model, 'bpm')->textInput(['maxlength' => true]) ?>
+      </div>
     <div class="col-md-2"> 
       <label>Valor Total</label>
       <input type="text" name="total_bm" value="R$ <?= $valor_total ?>" class="form-control" disabled>
@@ -573,13 +589,13 @@ td, th {
 	</div>
    <?php } ?>
     <div class="barra-btn">
-        <?= Html::submitButton('Salvar', ['class' => 'btn btn-primary', 'style' => 'background-color: #3c8dbc; border-color: #3c8dbc']) ?>
+        <?= Html::submitButton('Salvar', ['class' => 'btn btn-barra']) ?>
         <?php if(!$model->isNewRecord){ ?>
-        <?= Html::a('<span class="btn-label">Visualizar BM</span>', ['gerarbm', 'id' => $model->id], ['class' => 'btn btn-primary', 'target'=>'_blank', 'style'=> ' margin-right: 1em', 'style' => 'background-color: #3c8dbc; border-color: #3c8dbc']) ?>
+        <?= Html::a('<span class="btn-label">Visualizar BM</span>', ['gerarbm', 'id' => $model->id], ['class' => 'btn btn-barra', 'target'=>'_blank', 'style'=> ' margin-right: 1em']) ?>
 
-        <button type="button" class="btn btn-primary" style="background-color: #3c8dbc; border-color: #3c8dbc" data-toggle="modal" data-target="#horasModal">Editar Horas</button>
+        <button type="button" class="btn btn-barra"  data-toggle="modal" data-target="#horasModal">Editar Horas</button>
         
-        <button type="button" class="btn btn-info" style="background-color: #3c8dbc; border-color: #3c8dbc" data-toggle="modal" data-target="#emailModal">Email</button>
+        <button type="button" class="btn btn-barra"  data-toggle="modal" data-target="#emailModal">Email</button>
         <?php } ?>
 
 

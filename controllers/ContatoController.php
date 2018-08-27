@@ -32,7 +32,7 @@ class ContatoController extends Controller
                     [
                         // 'actions' => ['index', 'view', 'create', 'update'],
                         'allow' => true,
-                        'roles' => ['admin'],
+                        'roles' => ['admin', 'executante'],
                     ],
                 ],
             ],

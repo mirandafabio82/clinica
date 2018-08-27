@@ -198,10 +198,22 @@ $this->registerJs('
   width:100%;
   bottom:0vh;
   left:0;
-  background:#3c8dbc;
+  background:#62727b;
   text-align:center;
   padding: 0px 0;
   z-index: 99;
+}
+
+.btn-barra {
+  background-color: #62727b; 
+  border-color: #62727b;
+  color:white;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+}
+.btn-barra:hover {
+    background-color: white; /* Green */
+    color: white;
 }
 </style>
 
@@ -255,9 +267,9 @@ $this->registerJs('
 
 <?php if($isPost){ ?>
 <div class="barra-btn" >
-  <button type="button" class="btn btn-warning save" style="background-color: #3c8dbc; border-color: #3c8dbc">Adicionar Horas</button>
+  <button type="button" class="btn btn-barra save" >Adicionar Horas</button>
   <?php if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])){ ?>
-    <?= Html::a('Gerar BM', ['/tarefa/gerarbm', 'projetoid'=>$projeto_selected], ['class'=>'btn btn-success', 'style' => 'background-color: #3c8dbc; border-color: #3c8dbc']) ?>
+    <?= Html::a('Gerar BM', ['/tarefa/gerarbm', 'projetoid'=>$projeto_selected], ['class'=>'btn btn-barra']) ?>
   <?php } ?>
 </div>
   <?php Pjax::begin(['id' => 'pjax-grid-view']) ?>

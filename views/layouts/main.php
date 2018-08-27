@@ -160,9 +160,9 @@ $usuario = Yii::$app->db->createCommand('SELECT * FROM user WHERE id='.Yii::$app
         <li><a href="<?= Url::to(['bm/create']) ?>"><i class="fa fa-list"></i> <span>BM</span></a></li>
         <li><a href="<?= Url::to(['faturamento/index']) ?>"><i class="fa fa-calculator"></i> <span>Faturamento</span></a></li>
         <li><a href="<?= Url::to(['cliente/create']) ?>"><i class="fa fa-handshake-o"></i> <span>Clientes</span></a></li>
-        <li><a href="<?= Url::to(['contato/create']) ?>"><i class="fa fa-address-book"></i> <span>Contatos</span></a></li>
-        <?php } ?>
+        <?php } ?>        
         <?php if(!isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['contato'])){ ?>
+        <li><a href="<?= Url::to(['contato/create']) ?>"><i class="fa fa-address-book"></i> <span>Contatos</span></a></li>        
         <li><a href="<?= Url::to(['tarefa/index']) ?>"><i class="fa fa-calendar"></i> <span>Gerenciamento das Atividades</span></a></li>
         <li><a href="<?= Url::to(['atividade/index']) ?>"><i class="fa fa-hourglass-half"></i> <span>Avanço das Atividades</span></a></li>  
         <li><a href="<?= Url::to(['atividademodelo/create']) ?>"><i class="fa fa-tablet"></i> <span>Atividades Modelo</span></a></li>

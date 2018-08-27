@@ -74,10 +74,10 @@ class Projeto extends \yii\db\ActiveRecord
     {
         return [
              [['cliente_id', 'contato_id'], 'required'],
-            [['id', 'cliente_id', 'contato_id', 'rev_proposta', 'qtd_hh', 'qtd_dias', 'qtd_km', 'status', 'status_geral', 'documentos' ,'executante_id', 'perc_coord_adm', 'as_aprovada'], 'integer'],
+            [['id', 'criador_projeto_id','cliente_id', 'contato_id', 'rev_proposta', 'qtd_hh', 'qtd_dias', 'qtd_km', 'status', 'status_geral', 'documentos' ,'executante_id', 'perc_coord_adm', 'as_aprovada'], 'integer'],
             [['data_proposta', 'data_entrega', 'criado', 'modificado'], 'safe'],
             [['vl_hh', 'total_horas', 'vl_km', 'total_km', 'valor_proposta', 'valor_consumido', 'valor_saldo'], 'number'],
-            [['descricao', 'obs_atividade'], 'string'],
+            [['descricao', 'obs_atividade', 'nota_geral'], 'string'],
             [['codigo', 'contato', 'cliente_fatura'], 'string', 'max' => 12],
             [['site', 'planta', 'site_fatura'], 'string', 'max' => 10],
             [['municipio', 'setor', 'municipio_fatura'], 'string', 'max' => 20],

@@ -102,6 +102,7 @@ class ProjetoController extends Controller
         $model->contrato='CT 4600015210';
         $searchModel = new ProjetoSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $model->criador_projeto_id = Yii::$app->user->getId();
 
         if(isset($_GET['pagination'])) $dataProvider->pagination = false;
 
@@ -169,7 +170,7 @@ class ProjetoController extends Controller
                     $model->proposta = 'PTC'.'-'.$model->codigo.'-'.$model->site.'-'.$model->rev_proposta;
                 }
                 else{
-                    $model->proposta = 'AS'.'-'.$model->codigo.'-'.$model->site.'-'.preg_replace('/[^0-9]/', '', $model->nome).'_'.$model->rev_proposta;
+                    $model->proposta = 'AS'.'-'.$model->codigo.'-'.$model->site.'-'.explode("-",$model->nome)[1].'_'.$model->rev_proposta;
                 }
                 
                 if(!empty($_POST['Projeto']['data_proposta'])){
@@ -206,7 +207,7 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
 
                 $model->resumo_documentos = 'PROJETO CONCEITUAL BK-BA07-00200-PC-03-00003 Rev. 1 Migração para PLC do intertravamento de alta temperatura na purificação de eteno.';*/
                 $model->resumo_observacoes ='1- O valor desta proposta refere-se ao número de horas previstas na tabela do ANEXO I;                                                     
-2 - As condições e valores dessa proposta estão de acordo com o contrato N° 4600015210/2015 firmado entre a BRASKEM e a HCN Automação;                                                      
+2 - As condições e valores dessa proposta estão de acordo com o contrato N° 4600015210 firmado entre a BRASKEM e a HCN Automação;                                                      
 3 - Esta AS é válida por 30 dias, contados da data da sua emissão;                                                      
 4 - Em caso de aprovação desta proposta, favor enviar e-mail para helder@hcnautomacao.com.br ou contato telefônico no número 71-98867-3010                                                      
      para esclarecimentos da emissão do pedido de compra, e posteriormente para andamento dos serviços.                                                     
@@ -575,6 +576,10 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                     $escopo->setAttributes($_POST['Escopo'][$key]);
                     
                     $escopo->horas_saldo = $escopo->horas_tp + $escopo->horas_ej + $escopo->horas_ep + $escopo->horas_es + $escopo->horas_ee - ($escopo->executado_tp + $escopo->executado_ej + $escopo->executado_ep + $escopo->executado_es + $escopo->executado_ee);
+
+                    if($escopo->nome=="Coordenação e Administração"){
+                        $escopo->horas_saldo = round($escopo->horas_saldo);
+                    }
                     
                     if($key==$caId_1){
                         $escopo->horas_es = $tot_1;                        
@@ -620,7 +625,7 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                     $model->data_proposta = date_format($dat, 'Y-m-d');
                 }
 
-                // $model->nota_geral = $_POST['Projeto']['nota_geral'];
+                 //$model->nota_geral = $_POST['Projeto']['nota_geral'];
                 if(isset($_POST['Projeto']['resumo_escopo']))
                     $model->resumo_escopo = $_POST['Projeto']['resumo_escopo'];
                 if(isset($_POST['Projeto']['resumo_exclusoes']))
@@ -858,9 +863,9 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                 $perc = $model->perc_coord_adm/100;
                 
                  //atualiza valor de coordenação e adminstração
-            Yii::$app->db->createCommand('UPDATE escopo SET horas_es='.$tot_1*$perc.', horas_saldo='.$tot_1*$perc.' WHERE id='.$caId_1)->execute();
-            Yii::$app->db->createCommand('UPDATE escopo SET horas_es='.$tot_2*$perc.', horas_saldo='.$tot_2*$perc.' WHERE id='.$caId_2)->execute();
-            Yii::$app->db->createCommand('UPDATE escopo SET horas_es='.$tot_3*$perc.', horas_saldo='.$tot_3*$perc.' WHERE id='.$caId_3)->execute();
+            Yii::$app->db->createCommand('UPDATE escopo SET horas_es='.$tot_1*$perc.', horas_saldo='.round($tot_1*$perc).' WHERE id='.$caId_1)->execute();
+            Yii::$app->db->createCommand('UPDATE escopo SET horas_es='.$tot_2*$perc.', horas_saldo='.round($tot_2*$perc).' WHERE id='.$caId_2)->execute();
+            Yii::$app->db->createCommand('UPDATE escopo SET horas_es='.$tot_3*$perc.', horas_saldo='.round($tot_3*$perc).' WHERE id='.$caId_3)->execute();
 
                 if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['executante'])){
                     $user_nome = Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.Yii::$app->user->getId())->queryScalar();
@@ -1312,5 +1317,20 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
             }
             return Yii::$app->basePath .''. $nomeArquivo.'.pdf';
         }
+    }
+
+    public function actionSalvarnotasgerais(){
+        if (Yii::$app->request->isAjax) {               
+            $projeto_id = Yii::$app->request->post()['projeto_id'];
+            $nota_geral = Yii::$app->request->post()['nota_geral'];
+
+            try{
+                Yii::$app->db->createCommand('UPDATE projeto SET nota_geral="'.$nota_geral.'" WHERE id = '.$projeto_id)->execute();
+                return 'success';
+            }
+            catch(Exception $e){
+                return $e;
+            } 
+        }       
     }
 }

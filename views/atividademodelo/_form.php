@@ -75,6 +75,7 @@ $this->registerJs("
             ],
             
             'nome',
+            'codigo',
             [
                 'attribute'=>'disciplina_id',
                 'value'=>function($data){
@@ -111,8 +112,11 @@ $this->registerJs("
      <div class="box box-primary">
     <div class="box-header with-border">
      <div class="row">
-         <div class="col-md-4">  
+         <div class="col-md-3">  
         <?= $form->field($model, 'nome')->textInput(['maxlength' => true]) ?>
+        </div>
+        <div class="col-md-1">  
+        <?= $form->field($model, 'codigo')->textInput(['maxlength' => true]) ?>
         </div>
         <div class="col-md-2"> 
         <?= $form->field($model, 'disciplina_id')->dropDownList($listDisciplina,['prompt'=>'Selecione uma Displina']) ?>

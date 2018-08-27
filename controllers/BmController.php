@@ -343,7 +343,7 @@ class BmController extends Controller
                 
                 $percBm = number_format(($valorTotalBm * 100) / number_format($projetoArr['valor_proposta'], 2, ',', '.'), 2, ',', '.');
 
-                $descricao = $projetoArr['desc_resumida'].'.'.PHP_EOL.'Esse '.$numbm.'º Boletim de Medição corresponde a '.$percBm.'% das atividades citadas na '.$projetoArr['nome'].''.PHP_EOL.'A medição total acumulada incluindo este BM corresponde a '.$percAcumulada.'% das atividades realizadas.';
+                $descricao = $projetoArr['desc_resumida'].'.'.PHP_EOL.'Esse '.$numbm.'º Boletim de Medição corresponde a '.$percBm.'% das atividades citadas na '.$projetoArr['proposta'].''.PHP_EOL.'A medição total acumulada incluindo este BM corresponde a '.$percAcumulada.'% das atividades realizadas.';
 
                 Yii::$app->db->createCommand('UPDATE bm SET executado_ee= '.$tot_ee.', executado_es= '.$tot_es.', executado_ep= '.$tot_ep.', executado_ej= '.$tot_ej.', executado_tp= '.$tot_tp.', descricao="'.$descricao.'", saldo ='.$saldo.', acumulado= '.$acumulada.' WHERE id='.$bm_id)->execute();
                 

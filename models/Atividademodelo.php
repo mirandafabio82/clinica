@@ -28,7 +28,7 @@ class Atividademodelo extends \yii\db\ActiveRecord
     {
         return [
             [['isPrioritaria', 'isEntregavel', 'escopopadrao_id', 'disciplina_id', 'ordem'], 'integer'],
-            [['nome'], 'string', 'max' => 255],
+            [['nome', 'codigo'], 'string', 'max' => 255],
         ];
     }
 
