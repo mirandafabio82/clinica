@@ -441,16 +441,16 @@ th, td {
 	</tbody>
       </table>
       
-      <table border="1" align="center" width="100%" style="margin-top: 0.2em">
+      <!-- <table border="1" align="center" width="100%" style="margin-top: 0.2em">
 	  <tbody>
 	<tr>
             <td style="font-family: arial;font-size: 8pt" >NOTAS GERAIS</td>            
      </tr>
      <tr>
-            <td style="font-family: arial;font-size: 8pt" ><?= nl2br($projeto->nota_geral)?></td>            
+            <td style="font-family: arial;font-size: 8pt" ></td>            
      </tr>
 	</tbody>
-      </table>
+      </table> -->
       
       <table  align="center" width="100%" style="margin-top: 0.2em">
 	  <tbody>

@@ -1042,19 +1042,23 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
             Yii::$app->db->createCommand('UPDATE projeto SET as_aprovada=0 WHERE id='.$projeto->id)->execute();  
             
             $processoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=2 AND projeto_id='.$projeto->id.' ORDER BY isEntregavel ASC, ordem ASC')->queryAll();
-            $processoBasicoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=2 AND escopopadrao_id=1 AND projeto_id='.$projeto->id.' ORDER BY isEntregavel ASC, ordem ASC')->queryAll();
-            $processoDetalhamentoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=2 AND escopopadrao_id=2 AND projeto_id='.$projeto->id.' ORDER BY isEntregavel ASC, ordem ASC')->queryAll();
-            $processoConfiguracaoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=2 AND escopopadrao_id=3 AND projeto_id='.$projeto->id.' ORDER BY isEntregavel ASC, ordem ASC')->queryAll();
+            $processoConceitualArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=2 AND escopopadrao_id=1 AND projeto_id='.$projeto->id.' ORDER BY isEntregavel ASC, ordem ASC')->queryAll();
+            $processoBasicoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=2 AND escopopadrao_id=2 AND projeto_id='.$projeto->id.' ORDER BY isEntregavel ASC, ordem ASC')->queryAll();
+            $processoDetalhamentoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=2 AND escopopadrao_id=3 AND projeto_id='.$projeto->id.' ORDER BY isEntregavel ASC, ordem ASC')->queryAll();
+            $processoConfiguracaoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=2 AND escopopadrao_id=4 AND projeto_id='.$projeto->id.' ORDER BY isEntregavel ASC, ordem ASC')->queryAll();
 
             $automacaoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=1 AND projeto_id='.$projeto->id.' ORDER BY isEntregavel ASC, ordem ASC')->queryAll();
-            $automacaoBasicoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=1 AND escopopadrao_id=1 AND projeto_id='.$projeto->id.' ORDER BY isEntregavel ASC, ordem ASC')->queryAll();
-            $automacaoDetalhamentoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=1 AND escopopadrao_id=2 AND projeto_id='.$projeto->id.' ORDER BY isEntregavel ASC, ordem ASC')->queryAll();
-            $automacaoConfiguracaoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=1 AND escopopadrao_id=3 AND projeto_id='.$projeto->id.' ORDER BY isEntregavel ASC, ordem ASC')->queryAll();
+            $automacaoConceitualArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=1 AND escopopadrao_id=1 AND projeto_id='.$projeto->id.' ORDER BY isEntregavel ASC, ordem ASC')->queryAll();
+            $automacaoBasicoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=1 AND escopopadrao_id=2 AND projeto_id='.$projeto->id.' ORDER BY isEntregavel ASC, ordem ASC')->queryAll();
+            $automacaoDetalhamentoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=1 AND escopopadrao_id=3 AND projeto_id='.$projeto->id.' ORDER BY isEntregavel ASC, ordem ASC')->queryAll();
+            $automacaoConfiguracaoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=1 AND escopopadrao_id=4 AND projeto_id='.$projeto->id.' ORDER BY isEntregavel ASC, ordem ASC')->queryAll();
+            $automacaoServicoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=1 AND escopopadrao_id=5 AND projeto_id='.$projeto->id.' ORDER BY isEntregavel ASC, ordem ASC')->queryAll();
 
             $instrumentacaoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=3 AND projeto_id='.$projeto->id.' ORDER BY isEntregavel ASC, ordem ASC')->queryAll();
-            $instrumentacaoBasicoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=3 AND escopopadrao_id=1 AND projeto_id='.$projeto->id.' ORDER BY isEntregavel ASC, ordem ASC')->queryAll();
-            $instrumentacaoDetalhamentoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=3 AND escopopadrao_id=2 AND projeto_id='.$projeto->id.' ORDER BY isEntregavel ASC, ordem ASC')->queryAll();
-            $instrumentacaoConfiguracaoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=3 AND escopopadrao_id=3 AND projeto_id='.$projeto->id.' ORDER BY isEntregavel ASC, ordem ASC')->queryAll();
+            $instrumentacaoConceitualArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=3 AND escopopadrao_id=1 AND projeto_id='.$projeto->id.' ORDER BY isEntregavel ASC, ordem ASC')->queryAll();
+            $instrumentacaoBasicoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=3 AND escopopadrao_id=2 AND projeto_id='.$projeto->id.' ORDER BY isEntregavel ASC, ordem ASC')->queryAll();
+            $instrumentacaoDetalhamentoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=3 AND escopopadrao_id=3 AND projeto_id='.$projeto->id.' ORDER BY isEntregavel ASC, ordem ASC')->queryAll();
+            $instrumentacaoConfiguracaoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=3 AND escopopadrao_id=4 AND projeto_id='.$projeto->id.' ORDER BY isEntregavel ASC, ordem ASC')->queryAll();
             
             if($projeto->tipo == "P"){            
                 $atividadeArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$projeto->id.' ORDER BY isEntregavel ASC, ordem ASC')->queryAll();
@@ -1064,20 +1068,27 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
 
             $ldpreliminarArray = Yii::$app->db->createCommand('SELECT * FROM ld_preliminar')->queryAll();
             
+            $conceitual = '';
             $basico = '';
             $detalhamento = '';
             $config = '';
+            $servico = '';
+
             $index = 1;
             $arrayIndex = [1=>'I',2=>'II',3=>'III',4=>'IV',5=>'V',6=>'VI',7=>'VII',8=>'VIII',9=>'IX'];
-
+ 
            
             foreach ($escopos as $key => $escopo) {
                 if($escopo['escopopadrao_id']==1)
-                    $basico = 'checked="checked"';
+                    $conceitual = 'checked="checked"';
                 if($escopo['escopopadrao_id']==2)
-                    $detalhamento = 'checked="checked"';
+                    $basico = 'checked="checked"';
                 if($escopo['escopopadrao_id']==3)
+                    $detalhamento = 'checked="checked"';
+                if($escopo['escopopadrao_id']==4)
                     $config = 'checked="checked"';
+                if($escopo['escopopadrao_id']==5)
+                    $servico = 'checked="checked"';
             }
 
             $tipoExecutanteArray = Yii::$app->db->createCommand('SELECT * FROM tipo_executante')->queryAll();
@@ -1092,11 +1103,19 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                 'automacao' => $automacaoArray,
                 'instrumentacao' => $instrumentacaoArray,
                 // 'diagrama' => $diagramaArray,
+                'conceitual' => $conceitual,
                 'basico' => $basico,
                 'detalhamento' => $detalhamento,
-                'config' => $config]);
+                'config' => $config,
+                'servico' => $servico
+            ]);
 
             if($projeto->tipo == "A"){
+                $processoConceitual = $this->renderPartial('relatorio/_processo_conceitual', [
+                    'projeto' => $projeto,
+                    'escopos' => $processoConceitualArray,
+                    'index' => $arrayIndex[$index]]);
+                if(!empty($processoConceitualArray)) $index++;
                 $processoBasico = $this->renderPartial('relatorio/_processo_basico', [
                     'projeto' => $projeto,
                     'escopos' => $processoBasicoArray,
@@ -1113,6 +1132,11 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                     'index' => $arrayIndex[$index]]);
                 if(!empty($processoConfiguracaoArray)) $index++;
 
+                $automacaoConceitual = $this->renderPartial('relatorio/_automacao_conceitual', [
+                    'projeto' => $projeto,
+                    'escopos' => $automacaoConceitualArray,
+                    'index' => $arrayIndex[$index]]);
+                if(!empty($automacaoConceitualArray)) $index++;
                 $automacaoBasico = $this->renderPartial('relatorio/_automacao_basico', [
                     'projeto' => $projeto,
                     'escopos' => $automacaoBasicoArray,
@@ -1128,7 +1152,17 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                     'escopos' => $automacaoConfiguracaoArray,
                     'index' => $arrayIndex[$index]]);
                 if(!empty($automacaoConfiguracaoArray)) $index++;
+                $automacaoServico = $this->renderPartial('relatorio/_automacao_servico', [
+                    'projeto' => $projeto,
+                    'escopos' => $automacaoServicoArray,
+                    'index' => $arrayIndex[$index]]);
+                if(!empty($automacaoServicoArray)) $index++;
 
+                $instrumentacaoConceitual = $this->renderPartial('relatorio/_instrumentacao_conceitual', [
+                    'projeto' => $projeto,
+                    'escopos' => $instrumentacaoConceitualArray,
+                    'index' => $arrayIndex[$index]]);
+                if(!empty($instrumentacaoConceitualArray)) $index++;
                 $instrumentacaoBasico = $this->renderPartial('relatorio/_instrumentacao_basico', [
                     'projeto' => $projeto,
                     'escopos' => $instrumentacaoBasicoArray,
@@ -1176,6 +1210,10 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                 $mpdf->WriteHTML($as);
             }
             if($projeto->tipo == "A"){
+                if(!empty($processoConceitualArray)){
+                    $mpdf->AddPage();
+                    $mpdf->WriteHTML($processoConceitual);
+                }
                 if(!empty($processoBasicoArray)){
                     $mpdf->AddPage();
                     $mpdf->WriteHTML($processoBasico);
@@ -1189,6 +1227,10 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                     $mpdf->WriteHTML($processoConfiguracao);
                 }
 
+                if(!empty($automacaoConceitualArray)){
+                    $mpdf->AddPage();
+                    $mpdf->WriteHTML($automacaoConceitual);
+                }
                 if(!empty($automacaoBasicoArray)){
                     $mpdf->AddPage();
                     $mpdf->WriteHTML($automacaoBasico);
@@ -1201,7 +1243,15 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                     $mpdf->AddPage();
                     $mpdf->WriteHTML($automacaoConfiguracao);
                 }
+                if(!empty($automacaoServicoArray)){
+                    $mpdf->AddPage();
+                    $mpdf->WriteHTML($automacaoServico);
+                }
 
+                if(!empty($instrumentacaoConceitualArray)){
+                    $mpdf->AddPage();
+                    $mpdf->WriteHTML($instrumentacaoConceitual);
+                }
                 if(!empty($instrumentacaoBasicoArray)){
                     $mpdf->AddPage();
                     $mpdf->WriteHTML($instrumentacaoBasico);
@@ -1325,7 +1375,9 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
             $nota_geral = Yii::$app->request->post()['nota_geral'];
 
             try{
-                Yii::$app->db->createCommand('UPDATE projeto SET nota_geral="'.$nota_geral.'" WHERE id = '.$projeto_id)->execute();
+                $model = $this->findModel($projeto_id);
+                $model->nota_geral = $nota_geral;
+                $model->save(); 
                 return 'success';
             }
             catch(Exception $e){

@@ -267,9 +267,9 @@ $this->registerJs('
 
 <?php if($isPost){ ?>
 <div class="barra-btn" >
-  <button type="button" class="btn btn-barra save" >Adicionar Horas</button>
+  <button type="button" class="btn btn-barra save" ><i class="fa fa-calendar" aria-hidden="true"></i> Adicionar Horas</button>
   <?php if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])){ ?>
-    <?= Html::a('Gerar BM', ['/tarefa/gerarbm', 'projetoid'=>$projeto_selected], ['class'=>'btn btn-barra']) ?>
+    <?= Html::a('<i class="fa fa-list" aria-hidden="true"></i> Gerar BM', ['/tarefa/gerarbm', 'projetoid'=>$projeto_selected], ['class'=>'btn btn-barra']) ?>
   <?php } ?>
 </div>
   <?php Pjax::begin(['id' => 'pjax-grid-view']) ?>

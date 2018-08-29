@@ -103,7 +103,7 @@ if(!$model->isNewRecord){
 
 $fileName = '';
 if(!$model->isNewRecord){ 
-  $fileName = '/web/uploaded-files/'.$model->id.'/AS'.'-'.$model->codigo.'-'.$model->site.'-'.preg_replace('/[^0-9]/', '', $model->nome).'_'.$model->rev_proposta;  
+  $fileName = '/web/uploaded-files/'.$model->id.'/'.$model->proposta;  
 }
 
 $this->registerJs('
@@ -1035,25 +1035,28 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
         <div class="col-md-2"> 
           <?= $form->field($model, 'nome')->textInput(['maxlength' => true]) ?>  
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
           <?= $form->field($model, 'descricao')->textarea(['maxlength' => true]) ?>
         </div>
 
-        <div class="col-md-3" id="disciplinas-div">
-        <b> Disciplinas </b>
+        <div class="col-md-4" id="disciplinas-div">
+        
         <br>
+        
+        <fieldset>
+           <legend>Disciplinas</legend>
           <?php 
-
-        foreach ($listDisciplina as $key => $disciplina) { 
-          if($disciplina=="Diagrama"){
-            continue;
-          }
+            foreach ($listDisciplina as $key => $disciplina) { 
+              if($disciplina=="Diagrama"){
+                continue;
+              }
 
 
           $existeDisciplina = '';
           if(!$model->isNewRecord)
             $existeDisciplina = Yii::$app->db->createCommand('SELECT escopopadrao_id FROM atividademodelo JOIN escopo ON escopo.atividademodelo_id=atividademodelo.id WHERE escopopadrao_id='.$key.' AND projeto_id='.$model->id)->queryScalar();
           ?>
+          
           
            <label id="<?=$disciplina?>_checkbox"> <?=$disciplina?> </label>  
            
@@ -1068,7 +1071,7 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
 
             foreach ($listEscopo as $key2 => $escopo) { 
               if($disciplina=="Processo" || $disciplina=="Instrumentação"){
-                if($key2==3){
+                if($key2==4 || $key2==5){
                   continue;
                 }
               }
@@ -1079,16 +1082,16 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
 
               ?>
               <?php if(!empty($existeEscopo)){ ?>
-                <input type="checkbox" name="Escopos[<?=$disciplina."][".$key2?>]" value="<?= $key2?>" checked="1"><?= $escopo ?>
+                <input type="checkbox" name="Escopos[<?=$disciplina."][".$key2?>]" value="<?= $key2?>" checked="1"><label><?= $escopo ?></label>
               <?php } else{ ?>
-                <input type="checkbox" name="Escopos[<?=$disciplina."][".$key2?>]" value="<?= $key2?>"><?= $escopo ?>
+                <input type="checkbox" name="Escopos[<?=$disciplina."][".$key2?>]" value="<?= $key2?>"><label for=""><?= $escopo ?></label>
               <?php } ?>
             <?php } ?>
             </div>
-          
         <?php } ?>
+          </fieldset>
         </div>
-        <div class="col-md-8" style="margin-top: -4em;width: 63em" id="desc_resumida_div">
+        <div class="col-md-7" style="margin-top: -4em;" id="desc_resumida_div">
         <?= $form->field($model, 'desc_resumida')->textarea(['maxlength' => true]) ?>
 
       </div>
@@ -1359,18 +1362,18 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
 
         <div class="barra-btn" >
           <?php if($model->isNewRecord){ ?>
-            <?= Html::submitButton($model->isNewRecord ? 'Cadastrar' : 'Atualizar', ['class' => $model->isNewRecord ? 'btn btn-barra' : 'btn btn-barra']) ?>
+            <?= Html::submitButton($model->isNewRecord ? '<i class="fa fa-floppy-o" aria-hidden="true"></i> Cadastrar' : 'Atualizar', ['class' => $model->isNewRecord ? 'btn btn-barra' : 'btn btn-barra']) ?>
           <?php } ?>
           <?php if(!$model->isNewRecord){ ?>
-            <label> <?= $model->nome ?> </label>
-            <?= Html::submitButton('Salvar', ['class' =>'btn btn-barra saveEscopo']) ?>
-            <button type="button" class="btn btn-barra"  data-toggle="modal" data-target="#emailModal">Email</button>
-             <button type="button" class="btn btn-barra"  data-toggle="modal" data-target="#notaModal">Notas Gerais</button>
+           <div> <label style="color: white"> <?= $model->nome ?> </label></div>
+            <?= Html::submitButton('<i class="fa fa-floppy-o" aria-hidden="true"></i> Salvar', ['class' =>'btn btn-barra saveEscopo']) ?>
+            <button type="button" class="btn btn-barra"  data-toggle="modal" data-target="#emailModal"><i class="fa fa-envelope-o" aria-hidden="true"></i> Email</button>
+             <button type="button" class="btn btn-barra"  data-toggle="modal" data-target="#notaModal"><i class="fa fa-sticky-note-o" aria-hidden="true"></i> Notas Gerais</button>
             <?php if($model->tipo=="A"){ ?>
-                <?= Html::a('<span class="btn-label">Visualizar AS</span>', ['gerarrelatorio', 'id' => $model->id], ['class' => 'btn btn-barra', 'target'=>'_blank']) ?>
+                <?= Html::a('<span class="btn-label"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Visualizar AS</span>', ['gerarrelatorio', 'id' => $model->id], ['class' => 'btn btn-barra', 'target'=>'_blank']) ?>
             <?php } ?>
             <?php if($model->tipo=="P"){ ?>
-                <?= Html::a('<span class="btn-label">Visualizar Proposta</span>', ['gerarrelatorio', 'id' => $model->id], ['class' => 'btn btn-barra', 'target'=>'_blank']) ?>
+                <?= Html::a('<span class="btn-label"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Visualizar Proposta</span>', ['gerarrelatorio', 'id' => $model->id], ['class' => 'btn btn-barra', 'target'=>'_blank']) ?>
             <?php } ?>
 
           <?php } ?>
@@ -1461,14 +1464,18 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
     $total_i_EJ = 0;
     $total_i_TP = 0;
 
+    $esc_conceitualA = '';
     $esc_basicoA = '';
     $esc_detalhamentoA = '';
     $esc_configuracaoA = '';
+    $esc_servicoA = '';
 
+    $esc_conceitualP = '';
     $esc_basicoP = '';
     $esc_detalhamentoP = '';
     $esc_configuracaoP = '';
 
+    $esc_conceitualI = '';
     $esc_basicoI = '';
     $esc_detalhamentoI = '';
     $esc_configuracaoI = '';
@@ -1626,13 +1633,19 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
           else{
               if($isEntregavel){
                 if($escopo_padrao_id==1){
-                  $esc_basicoA.= ' '.$descricao_entregavel.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
+                  $esc_conceitualA.= ' '.$descricao_entregavel.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
                 }
                 else if($escopo_padrao_id==2){
+                  $esc_basicoA.= ' '.$descricao_entregavel.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
+                }
+                else if($escopo_padrao_id==3){
                  $esc_detalhamentoA.= ' '.$descricao_entregavel.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
                 }
-                else{
+                else if($escopo_padrao_id==4){
                   $esc_configuracaoA.= ' '.$descricao_entregavel.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
+                }
+                else{
+                  $esc_servicoA.= ' '.$descricao_entregavel.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
                 }
               }
               else{
@@ -1654,10 +1667,13 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
           }
           else{
             if($isEntregavel){
-             if($escopo_padrao_id==1){
+              if($escopo_padrao_id==1){
+                $esc_conceitualP.= ' '.$descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
+              }
+             else if($escopo_padrao_id==2){
                 $esc_basicoP.= ' '.$descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
               }
-              else if($escopo_padrao_id==2){
+              else if($escopo_padrao_id==3){
                $esc_detalhamentoP.= ' '.$descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
               }
               else {
@@ -1683,10 +1699,13 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
           }
           else{
               if($isEntregavel){
-               if($escopo_padrao_id==1){
+                if($escopo_padrao_id==1){
+                  $esc_conceitualI.= ' '.$descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
+                }
+               else if($escopo_padrao_id==2){
                   $esc_basicoI.= ' '.$descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
                 }
-                else if($escopo_padrao_id==2){
+                else if($escopo_padrao_id==3){
                  $esc_detalhamentoI.= ' '.$descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
                 }
                 else{
@@ -1717,18 +1736,28 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
 
           
  } 
+    if(!empty($esc_conceitualA)) 
+      $bodyA .= '<tr style="background: aquamarine;"><td>CONCEITUAL</td><td></td><td></td><td>EE<td>ES</td><td>EP</td><td>EJ</td><td>TP</td><td></td><td></td><td></td><td></td><td>Total</td></tr>'.$esc_conceitualA;
     if(!empty($esc_basicoA)) 
-      $bodyA .= '<tr style="background: aquamarine;"><td>BÁSICO</td><td></td><td></td><td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'.$esc_basicoA;
+      $bodyA .= '<tr style="background: aquamarine;"><td>BÁSICO</td><td></td><td></td><td>EE<td>ES</td><td>EP</td><td>EJ</td><td>TP</td><td></td><td></td><td></td><td></td><td>Total</td></tr>'.$esc_basicoA;
     if(!empty($esc_detalhamentoA))
-    $bodyA .= '<tr style="background: aquamarine;"><td>DETALHAMENTO</td><td></td><td></td><td>EE<td>ES</td><td>EP</td><td>EJ</td><td>TP</td><td></td><td></td><td></td><td></td><td>Total</td></tr>'.$esc_detalhamentoA;
+      $bodyA .= '<tr style="background: aquamarine;"><td>DETALHAMENTO</td><td></td><td></td><td>EE<td>ES</td><td>EP</td><td>EJ</td><td>TP</td><td></td><td></td><td></td><td></td><td>Total</td></tr>'.$esc_detalhamentoA;
     if(!empty($esc_configuracaoA))
-    $bodyA .= '<tr style="background: aquamarine;"><td>CONFIGURAÇÃO</td><td></td><td></td><td>EE<td>ES</td><td>EP</td><td>EJ</td><td>TP</td><td></td><td></td><td></td><td></td><td>Total</td></tr>'.$esc_configuracaoA;
+      $bodyA .= '<tr style="background: aquamarine;"><td>CONFIGURAÇÃO</td><td></td><td></td><td>EE<td>ES</td><td>EP</td><td>EJ</td><td>TP</td><td></td><td></td><td></td><td></td><td>Total</td></tr>'.$esc_configuracaoA;
+    if(!empty($esc_servicoA))
+      $bodyA .= '<tr style="background: aquamarine;"><td>SERVIÇO</td><td></td><td></td><td>EE<td>ES</td><td>EP</td><td>EJ</td><td>TP</td><td></td><td></td><td></td><td></td><td>Total</td></tr>'.$esc_servicoA;
+
+    if(!empty($esc_conceitualP))
+      $bodyP .= '<tr style="background: aquamarine;"><td>CONCEITUAL</td><td></td><td></td><td>EE<td>ES</td><td>EP</td><td>EJ</td><td>TP</td><td></td><td></td><td></td><td></td><td>Total</td></tr>'.$esc_conceitualP;
     if(!empty($esc_basicoP))
       $bodyP .= '<tr style="background: aquamarine;"><td>BÁSICO</td><td></td><td></td><td>EE<td>ES</td><td>EP</td><td>EJ</td><td>TP</td><td></td><td></td><td></td><td></td><td>Total</td></tr>'.$esc_basicoP;
     if(!empty($esc_detalhamentoP))
       $bodyP .= '<tr style="background: aquamarine;"><td>DETALHAMENTO</td><td></td><td></td><td>EE<td>ES</td><td>EP</td><td>EJ</td><td>TP</td><td></td><td></td><td></td><td></td><td>Total</td></tr>'.$esc_detalhamentoP;
     if(!empty($esc_configuracaoP))
       $bodyP .= '<tr style="background: aquamarine;"><td>CONFIGURAÇÃO</td><td></td><td></td><td>EE<td>ES</td><td>EP</td><td>EJ</td><td>TP</td><td></td><td></td><td></td><td></td><td>Total</td></tr>'.$esc_configuracaoP;
+
+    if(!empty($esc_conceitualI))
+      $bodyI .= '<tr style="background: aquamarine;"><td>CONCEITUAL</td><td></td><td></td><td>EE<td>ES</td><td>EP</td><td>EJ</td><td>TP</td><td></td><td></td><td></td><td></td><td>Total</td></tr>'.$esc_conceitualI;
     if(!empty($esc_basicoI))
       $bodyI .= '<tr style="background: aquamarine;"><td>BÁSICO</td><td></td><td></td><td>EE<td>ES</td><td>EP</td><td>EJ</td><td>TP</td><td></td><td></td><td></td><td></td><td>Total</td></tr>'.$esc_basicoI;
     if(!empty($esc_detalhamentoI))
@@ -2004,7 +2033,7 @@ HCN Automação
 </div>
   <?php } ?>
 <div id="notaModal" class="modal fade" role="dialog" style="z-index: 999999999">
-  <div class="modal-dialog">
+  <div class="modal-dialog" style="width:80%">
 
     <!-- Modal content-->
     <div class="modal-content">
@@ -2016,7 +2045,7 @@ HCN Automação
         <h4 class="modal-title">Notas Gerais</h4>
       </div>
       <div class="modal-body">             
-        <?= $form->field($model, 'nota_geral')->textarea(["rows"=>"15"])->label(false) ?>      
+        <?= $form->field($model, 'nota_geral')->textarea(["rows"=>"25"])->label(false) ?>      
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal" id="close_modal_nota">Fechar</button>
