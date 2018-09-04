@@ -117,7 +117,7 @@ $this->title = 'HCN Automação';
                   </li>
                 <?php }} else{ ?>
                         <div class="product-info">
-                      <a href="javascript:void(0)" class="product-description">Não existe nenhum pagameto a ser realizado</a>                 
+                      <a href="javascript:void(0)" class="product-description">Não existe pagamento a ser realizado</a>                 
                       
                     </div>
                 <?php } ?>

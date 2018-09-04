@@ -20,6 +20,11 @@ if(!$model->isNewRecord){
   $scroll = 'window.scrollTo(0, 600);';
 }
 
+$bm_id='';
+if(!$model->isNewRecord){
+  $bm_id = 'id: '.$model->id;
+}
+
 $this->registerJs('
 
   $( document ).ready(function() {
@@ -39,7 +44,7 @@ $this->registerJs('
 
         $.ajax({ 
             url: "index.php?r=bm/editahoras",
-            data: {horas_escopo: horas_escopo, id: '.$model->id.'},
+            data: {horas_escopo: horas_escopo, '.$bm_id.'},
             type: "POST",
             success: function(response){
               alert("Atualizado com sucesso!");
@@ -103,7 +108,7 @@ $this->registerJs('
          error: function(request, status, error){
           alert(request.responseText);
         }
-  });
+      });
     });
 
     $("input[name=\"checkbox_extrato\"]").change(function (e) {
