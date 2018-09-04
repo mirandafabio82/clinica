@@ -32,7 +32,7 @@ $this->registerJs('
     '.$scroll.'
     var extratoValue = $("input[name=\"checkbox_extrato\"]:checked").val();
 
-    $("#gerarExtrato").attr("href", "/hcn/web/index.php?r=bm%2Fgerarextratos&id='.$bm_id_href.'&executante_id="+extratoValue);
+    $("#gerarExtrato").attr("href", "/web/index.php?r=bm%2Fgerarextratos&id='.$bm_id_href.'&executante_id="+extratoValue);
   });
 
     $("#salvarHoras").click(function(){

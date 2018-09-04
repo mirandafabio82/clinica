@@ -142,15 +142,15 @@ th, td {
 	<?php $item++; ?>
 	<tr>
 		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: center;"  >0<?= $item ?></td>
-		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  >Total desta medição</td>
+		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  >Total</td>
 		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  ></td>
 		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  ></td>
 		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  ></td>
-		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: right;"  ><?= number_format($bm['executado_ee'] * $prestador['vl_hh_ee']+
-																			$bm['executado_es'] * $prestador['vl_hh_es'] +
-																			$bm['executado_ep'] * $prestador['vl_hh_ep']+
-																			$bm['executado_ej'] * $prestador['vl_hh_ej']+
-																			$bm['executado_tp'] * $prestador['vl_hh_tp']/*+
+		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: right;"  ><?= number_format($horas_exe_ee * $prestador['vl_hh_ee']+
+																			$horas_exe_es * $prestador['vl_hh_es'] +
+																			$horas_exe_ep * $prestador['vl_hh_ep']+
+																			$horas_exe_ej * $prestador['vl_hh_ej']+
+																			$horas_exe_tp * $prestador['vl_hh_tp']/*+
 																			$bm['km'] * Yii::$app->db->createCommand('SELECT vl_km FROM executante WHERE usuario_id=61')->queryScalar()*/, 2, ',', '.')?>
 																				
 		</td>
