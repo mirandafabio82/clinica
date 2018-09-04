@@ -15,8 +15,19 @@ if(!$model->isNewRecord){
   $fileName = '/web/uploaded-files/'.$model->projeto_id.'/BM-'.Yii::$app->db->createCommand("SELECT proposta FROM projeto WHERE id=".$model->projeto_id)->queryScalar().'_'.$model->numero_bm; 
 }
 
+$scroll='';
+if(!$model->isNewRecord){
+  $scroll = 'window.scrollTo(0, 600);';
+}
 
 $this->registerJs('
+
+  $( document ).ready(function() {
+    '.$scroll.'
+    var extratoValue = $("input[name=\"checkbox_extrato\"]:checked").val();
+
+    $("#gerarExtrato").attr("href", "/hcn/web/index.php?r=bm%2Fgerarextratos&id=13&executante_id="+extratoValue);
+  });
 
     $("#salvarHoras").click(function(){
         var horas_escopo = "";
@@ -28,7 +39,7 @@ $this->registerJs('
 
         $.ajax({ 
             url: "index.php?r=bm/editahoras",
-            data: {horas_escopo: horas_escopo},
+            data: {horas_escopo: horas_escopo, id: '.$model->id.'},
             type: "POST",
             success: function(response){
               alert("Atualizado com sucesso!");
@@ -76,6 +87,7 @@ $this->registerJs('
         }
     });
 
+    
     $("#enviarEmail").click(function (e) {
       $("#loading").show(); // show the gif image when ajax starts
         $.ajax({ 
@@ -92,6 +104,12 @@ $this->registerJs('
           alert(request.responseText);
         }
   });
+    });
+
+    $("input[name=\"checkbox_extrato\"]").change(function (e) {
+      var extratoValue = $("input[name=\"checkbox_extrato\"]:checked").val();
+
+      $("#gerarExtrato").attr("href", "/hcn/web/index.php?r=bm%2Fgerarextratos&id=13&executante_id="+extratoValue);
     });
 
 ');
@@ -558,36 +576,76 @@ td, th {
 
     </div>
     </div>
-    <table>
+    <table style="width: 100%;">
   <tr>
-    <th>Executante</th>
-    <th>Horas TP</th>
-    <th>Horas EJ</th>
-    <th>Horas EP</th>
-    <th>Horas ES</th>
-    <th>Horas EE</th>
+    <th >Executante</th>
+    <th >Horas TP</th>
+    <th >Horas EJ</th>
+    <th >Horas EP</th>
+    <th >Horas ES</th>
+    <th >Horas EE</th>
+    <th >Valor Total (R$)</th>
+    <th >Previsão de Pagamento</th>
+    <th >Data de Pagamento</th>
+    <th >Pago</th>
   </tr>
   
  <?php 
   $executantes = Yii::$app->db->createCommand('SELECT user.id, nome FROM projeto_executante JOIN user ON projeto_executante.executante_id=user.id WHERE projeto_id='.$model->projeto_id)->queryAll();
- foreach ($executantes as $key => $exec) { ?>
+ foreach ($executantes as $key => $exec) { 
+
+      $horas_exe_ee = empty(Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_ee) h_ee FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$model->id.' AND exe_ee_id='.$exec['id'])->queryScalar()) ? '0.00' : Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_ee) h_ee FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$model->id.' AND exe_ee_id='.$exec['id'])->queryScalar();
+      $horas_exe_es =empty(Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_es) h_es FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$model->id.' AND exe_es_id='.$exec['id'])->queryScalar()) ? '0.00' : Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_es) h_es FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$model->id.' AND exe_es_id='.$exec['id'])->queryScalar();
+      $horas_exe_ep = empty(Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_ep) h_ep FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$model->id.' AND exe_ep_id='.$exec['id'])->queryScalar()) ? '0.00' : Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_ep) h_ep FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$model->id.' AND exe_ep_id='.$exec['id'])->queryScalar();
+      $horas_exe_ej = empty(Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_ej) h_ej FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$model->id.' AND exe_ej_id='.$exec['id'])->queryScalar()) ? '0.00' : Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_ej) h_ej FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$model->id.' AND exe_ej_id='.$exec['id'])->queryScalar();
+      $horas_exe_tp = empty(Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_tp) h_tp FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$model->id.' AND exe_tp_id='.$exec['id'])->queryScalar()) ? '0.00' : Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_tp) h_tp FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$model->id.' AND exe_tp_id='.$exec['id'])->queryScalar();
+
+      $executante = Yii::$app->db->createCommand('SELECT * FROM executante WHERE usuario_id='.$exec['id'])->queryOne();
+      $valor_ee = $executante['vl_hh_ee'] * $horas_exe_ee;
+      $valor_es = $executante['vl_hh_es'] * $horas_exe_es;
+      $valor_ep = $executante['vl_hh_ep'] * $horas_exe_ep;
+      $valor_ej = $executante['vl_hh_ej'] * $horas_exe_ej;
+      $valor_tp = $executante['vl_hh_tp'] * $horas_exe_tp;
+
+      $valor_exe_total = $valor_ee + $valor_es + $valor_ep + $valor_ej + $valor_tp;
+
+  ?>
   <tr>
    <td><?= $exec['nome']?></td> 
 
-   <td align="center"><?= empty(Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_tp) h_tp FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$model->id.' AND exe_tp_id='.$exec['id'])->queryScalar()) ? '0.00' : Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_tp) h_tp FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$model->id.' AND exe_tp_id='.$exec['id'])->queryScalar();
-   ?></td>
+   <td align="center"><?= $horas_exe_tp ?></td>
   
-  <td align="center"><?= empty(Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_ej) h_ej FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$model->id.' AND exe_ej_id='.$exec['id'])->queryScalar()) ? '0.00' : Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_ej) h_ej FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$model->id.' AND exe_ej_id='.$exec['id'])->queryScalar();
-   ?></td>
+  <td align="center"><?=  $horas_exe_ej  ?></td>
 
-   <td align="center"><?= empty(Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_ep) h_ep FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$model->id.' AND exe_ep_id='.$exec['id'])->queryScalar()) ? '0.00' : Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_ep) h_ep FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$model->id.' AND exe_ep_id='.$exec['id'])->queryScalar();
-   ?></td>
+   <td align="center"><?=  $horas_exe_ep ?></td>
 
-   <td align="center"><?= empty(Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_es) h_es FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$model->id.' AND exe_es_id='.$exec['id'])->queryScalar()) ? '0.00' : Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_es) h_es FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$model->id.' AND exe_es_id='.$exec['id'])->queryScalar();
-   ?></td>
+   <td align="center"><?=  $horas_exe_es ?></td>
 
-   <td align="center"><?= empty(Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_ee) h_ee FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$model->id.' AND exe_ee_id='.$exec['id'])->queryScalar()) ? '0.00' : Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_ee) h_ee FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$model->id.' AND exe_ee_id='.$exec['id'])->queryScalar();
-   ?></td>
+   <td align="center"><?= $horas_exe_ee ?></td>
+   
+   <td align="center"> <?= number_format($valor_exe_total, 2, ',', '.') ?> </td>
+   
+  <?php
+    $previsao_pgt = '';
+    $data_pgt = '';
+    $pago = '';
+    $exe = Yii::$app->db->createCommand('SELECT * FROM executante WHERE usuario_id='.$exec['id'])->queryOne(); 
+    foreach ($bm_executantes as $key => $b_e) {
+      if($b_e['executante_id']==$exec['id']){
+        $previsao_pgt = !empty($b_e['previsao_pgt']) ? $b_e['previsao_pgt'] : '';
+        $data_pgt = !empty($b_e['data_pgt']) ? $b_e['data_pgt'] : '';
+        $pago = !empty($b_e['pago']) ? 'checked="true"' : '';          
+      }    
+    }
+    
+    
+  ?>
+   <td align="center"> <?php if(!empty($exe['is_prestador'])){ ?> <input type="date" name="bm_executante[<?= $exec['id'] ?>][previsao_pgt]" value="<?= $previsao_pgt ?>"> <?php } ?> </td>
+
+   <td align="center"> <?php if(!empty($exe['is_prestador'])){ ?> <input type="date" name="bm_executante[<?= $exec['id'] ?>][data_pgt]" value="<?= $data_pgt ?>"> <?php } ?> </td>
+
+   <td align="center"> <?php if(!empty($exe['is_prestador'])){ ?> <input type="checkbox" name="bm_executante[<?= $exec['id'] ?>][pago]" <?= $pago ?>> <?php } ?> </td>
+
   </tr>
  <?php } ?>
 
@@ -598,6 +656,8 @@ td, th {
         <?= Html::submitButton('<i class="fa fa-floppy-o" aria-hidden="true"></i> Salvar', ['class' => 'btn btn-barra']) ?>
         <?php if(!$model->isNewRecord){ ?>
         <?= Html::a('<span class="btn-label"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Visualizar BM</span>', ['gerarbm', 'id' => $model->id], ['class' => 'btn btn-barra', 'target'=>'_blank', 'style'=> ' margin-right: 1em']) ?>
+        
+        <button type="button" class="btn btn-barra" data-toggle="modal" data-target="#extratoModal" ><i class="fa fa-money" aria-hidden="true"></i> Extrato PJ</button>
 
         <button type="button" class="btn btn-barra"  data-toggle="modal" data-target="#horasModal"><i class="fa fa-table" aria-hidden="true"></i> Editar Horas</button>
         
@@ -744,6 +804,52 @@ HCN Automação
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal" id="close_modal">Fechar</button>
         <button type="button" class="btn btn-success" id="salvarHoras" >Salvar</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- Modal -->
+<div id="extratoModal" class="modal fade" role="dialog">
+  <div class="modal-dialog" style="width: 64%;">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <div  class="col-md-12" align="center">  
+            <img style="z-index: 999999999" src="resources/dist/img/loading.gif" type="hidden" name="loading" id="loading" value="" width="64px" hidden/>        
+          </div> 
+        <h4 class="modal-title">Horas BM</h4>
+      </div>
+
+      <div class="modal-body">
+      <table style="width: 50%;" align="center">
+        <tr>
+          <th>Prestador</th>
+          <th>Selecionar</th>          
+        </tr>
+        <?php 
+        $prestadores = Yii::$app->db->createCommand('SELECT user.id, nome FROM projeto_executante JOIN user ON projeto_executante.executante_id=user.id JOIN executante ON executante.usuario_id=user.id WHERE is_prestador = 1 AND projeto_id='.$model->projeto_id)->queryAll();
+
+        foreach ($prestadores as $key => $prest) {    ?>
+          <tr>
+            <td><?= $prest['nome'] ?></td>
+            <td align="center"><input type="radio" name="checkbox_extrato" value="<?= $prest['id'] ?>" checked></td>
+          </tr>
+        <?php } ?>
+        
+      </table>
+     
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" id="close_modal">Fechar</button>
+        <!-- <a  class="btn btn-success" id="gerarExtratos" target="_blank" >Gerar</a> -->
+        <?= Html::a('<span class="btn-label">Gerar</span>', ['gerarextratos', 'id' => $model->id], ['class' => 'btn btn-success', 'target'=>'_blank', 'style'=> ' margin-right: 1em', 'id'=>'gerarExtrato']) ?>
+
       </div>
     </div>
 

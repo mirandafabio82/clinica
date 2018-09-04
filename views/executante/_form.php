@@ -273,6 +273,9 @@ $this->registerJs("
     <?= $form->field($model, 'uf')->textInput(['maxlength' => true]) ?>
     </div>
     <div class="col-md-2">
+    <?= $form->field($model, 'is_prestador')->checkbox() ?>        
+    </div>
+    <div class="col-md-2">
     <?= $form->field($model, 'cidade')->textInput(['maxlength' => true]) ?>
     </div>
     <div class="col-md-2">

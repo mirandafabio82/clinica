@@ -98,7 +98,7 @@ input[type=number]::-webkit-outer-spin-button {
 
 $scroll='';
 if(!$model->isNewRecord){
-  $scroll = 'window.scrollTo(0, 1200);';
+  $scroll = 'window.scrollTo(0, 600);';
 }
 
 $fileName = '';
@@ -988,6 +988,7 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
         <b> Executantes </b>
     </div>     -->
     <!-- <br> -->
+    
        <div class="row">    
     <?php 
 
@@ -1025,6 +1026,7 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
     
       </div>
       
+
 
       <!-- </div> -->
       <div class="row"> 

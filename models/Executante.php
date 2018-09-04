@@ -35,7 +35,7 @@ class Executante extends \yii\db\ActiveRecord
     {
         return [
             [['usuario_id'], 'required'],
-            [['usuario_id'], 'integer'],
+            [['usuario_id', 'is_prestador'], 'integer'],
             [['criado', 'modificado'], 'safe'],
             [['cpf','conta_tipo'], 'string', 'max' => 45],
             [['cnpj'], 'string', 'max' => 18],
@@ -80,7 +80,8 @@ class Executante extends \yii\db\ActiveRecord
             'banco_numero' => 'Num. Banco',
             'agencia' => 'Agência',
             'conta_corrente' => 'Conta Corrente',
-            'conta_tipo' => 'Tipo de Conta'
+            'conta_tipo' => 'Tipo de Conta',
+            'is_prestador' => 'Prestador de Serviço'
 
         ];
     }

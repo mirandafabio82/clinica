@@ -11,6 +11,7 @@ use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use \Datetime;
 use app\models\Projeto;
+use app\models\BmExecutante;
 use yii\filters\AccessControl;
 use app\models\Documento;
 /**
@@ -132,6 +133,9 @@ class BmController extends Controller
         $projetos = Yii::$app->db->createCommand('SELECT id, nome FROM projeto')->queryAll();
         $listProjetos = ArrayHelper::map($projetos,'id','nome');
 
+        $bm_executantes = Yii::$app->db->createCommand('SELECT * FROM bm_executante WHERE bm_id='.$model->id)->queryAll();
+        
+
         if(!empty($model->data))
             $model->data = date_format(DateTime::createFromFormat('Y-m-d', $model->data), 'd/m/Y');
         if(!empty($model->de))
@@ -139,8 +143,7 @@ class BmController extends Controller
         if(!empty($model->para))
             $model->para = date_format(DateTime::createFromFormat('Y-m-d', $model->para), 'd/m/Y');
 
-        if ($model->load(Yii::$app->request->post())) {
-            
+        if ($model->load(Yii::$app->request->post())) {            
             if(!empty($_POST['Bm']['data'])){
                 $dat = DateTime::createFromFormat('d/m/Y', $_POST['Bm']['data']);          
                 $model->data = date_format($dat, 'Y-m-d');
@@ -154,8 +157,30 @@ class BmController extends Controller
                 $model->para = date_format($dat, 'Y-m-d');
             }
 
+            foreach ($_POST['bm_executante'] as $key => $bm_exe) {
+                $bm_executante = Yii::$app->db->createCommand('SELECT * FROM bm_executante WHERE bm_id='.$model->id.' AND executante_id='.$key)->queryOne();
+               
+                if(!empty($bm_executante)){
+                    $bm_exe_model = BmExecutante::findOne($bm_executante['id']);
+                }
+                else{
+                    $bm_exe_model = new BmExecutante();
+                    $bm_exe_model->bm_id = $model->id;
+                    $bm_exe_model->executante_id = $key;
+                }   
+                
+                $bm_exe_model->previsao_pgt = !empty($bm_exe['previsao_pgt']) ? $bm_exe['previsao_pgt'] : NULL;
+                $bm_exe_model->data_pgt = !empty($bm_exe['data_pgt']) ? $bm_exe['data_pgt'] : NULL;
+                $bm_exe_model->pago = !empty($bm_exe['pago']) ? 1 : 0;
+                if(!$bm_exe_model->save()){
+                    print_r($bm_exe_model->getErrors());
+                    die();
+                }
+            }           
+
+
             $model->save();            
-            return $this->redirect(['update', 'id' => $model->id]);
+            return $this->redirect(['update', 'id' => $model->id, 'bm_executantes' => $bm_executantes]);
         }
 
         //horas de cada executante
@@ -169,6 +194,7 @@ class BmController extends Controller
                         $model->executado_tp * $tipo_exec[0]['valor_hora']+
                         $model['km'] * Yii::$app->db->createCommand('SELECT vl_km FROM executante WHERE usuario_id=61')->queryScalar(), 2, ',', '.');
        
+
         return $this->render('update', [
             'model' => $model,
             'dataProvider' => $dataProvider,
@@ -176,6 +202,7 @@ class BmController extends Controller
             'listProjetos' => $listProjetos,
             'bmescopos' => $bmescopos,
             'valor_total' => $valor_total,
+            'bm_executantes' => $bm_executantes,
         ]);
     }
 
@@ -275,6 +302,64 @@ class BmController extends Controller
         }
     }
 
+    public function actionGerarextratos()
+    {
+        if($_GET['id']){           
+            
+            $bm = Yii::$app->db->createCommand('SELECT * FROM bm WHERE id='.$_GET['id'])->queryOne();
+            $projeto = Projeto::findOne($bm['projeto_id']);
+
+            //executantes PJ
+            $exe_pre = Yii::$app->db->createCommand('SELECT * FROM executante JOIN user ON user.id=executante.usuario_id JOIN projeto_executante ON projeto_executante.executante_id = executante.usuario_id WHERE projeto_id='.$projeto->id.' AND is_prestador=1 AND user.id='.$_GET['executante_id'])->queryOne();
+
+            $tipo_exec = Yii::$app->db->createCommand('SELECT * FROM tipo_executante')->queryAll();
+
+
+            
+            $horas_exe_ee = empty(Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_ee) h_ee FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$_GET['id'].' AND exe_ee_id='.$exe_pre['usuario_id'])->queryScalar()) ? '0.00' : Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_ee) h_ee FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$_GET['id'].' AND exe_ee_id='.$exe_pre['usuario_id'])->queryScalar();
+
+            $horas_exe_es = empty(Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_es) h_es FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$_GET['id'].' AND exe_es_id='.$exe_pre['usuario_id'])->queryScalar()) ? '0.00' : Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_es) h_es FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$_GET['id'].' AND exe_es_id='.$exe_pre['usuario_id'])->queryScalar();
+
+            $horas_exe_ep = empty(Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_ep) h_ep FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$_GET['id'].' AND exe_ep_id='.$exe_pre['usuario_id'])->queryScalar()) ? '0.00' : Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_ep) h_ep FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$_GET['id'].' AND exe_ep_id='.$exe_pre['usuario_id'])->queryScalar();
+
+            $horas_exe_ej = empty(Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_ej) h_ej FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$_GET['id'].' AND exe_ej_id='.$exe_pre['usuario_id'])->queryScalar()) ? '0.00' : Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_ej) h_ej FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$_GET['id'].' AND exe_ej_id='.$exe_pre['usuario_id'])->queryScalar();
+
+            $horas_exe_tp = empty(Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_tp) h_tp FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$_GET['id'].' AND exe_tp_id='.$exe_pre['usuario_id'])->queryScalar()) ? '0.00' : Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_tp) h_tp FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$_GET['id'].' AND exe_tp_id='.$exe_pre['usuario_id'])->queryScalar();
+
+            $valor_ee = $exe_pre['vl_hh_ee'] * $horas_exe_ee;
+            $valor_es = $exe_pre['vl_hh_es'] * $horas_exe_es;
+            $valor_ep = $exe_pre['vl_hh_ep'] * $horas_exe_ep;
+            $valor_ej = $exe_pre['vl_hh_ej'] * $horas_exe_ej;
+            $valor_tp = $exe_pre['vl_hh_tp'] * $horas_exe_tp;               
+            $valor_total = $valor_ee + $valor_es + $valor_ep + $valor_ej + $valor_tp;
+            
+
+
+            $executante_extrato_page = $this->renderPartial('relatorio/_extrato_executante', [
+                'bm' => $bm,
+                'projeto' => $projeto,
+                'horas_exe_ee' => $horas_exe_ee,                    
+                'horas_exe_es' => $horas_exe_es,
+                'horas_exe_ep' => $horas_exe_ep,
+                'horas_exe_ej' => $horas_exe_ej,
+                'horas_exe_tp' => $horas_exe_tp,
+                'valor_ee' => $valor_ee, 
+                'valor_es' => $valor_es,
+                'valor_ep' => $valor_ep,
+                'valor_ej' => $valor_ej,
+                'valor_tp' => $valor_tp,   
+                'valor_total' => $valor_total, 
+                'prestador' =>  $exe_pre         
+            ]);
+
+            $mpdf = new \Mpdf\Mpdf();
+            $mpdf->WriteHTML($executante_extrato_page);   
+            $mpdf->Output('uploaded-files/'.$projeto['id'].'/BM-'.$projeto['proposta'].'_'.'/Extrato-'.$exe_pre['usuario_id'].'.pdf', 'I');
+                    
+
+        }
+    }
+
     public function actionEditahoras(){
         if (Yii::$app->request->isAjax) {
             try{   
@@ -296,7 +381,8 @@ class BmController extends Controller
                     $sql = 'UPDATE bm_escopo SET '.explode("-", $esc_h)[1].' = '.explode("-", $esc_h)[3].' WHERE escopo_id='.explode("-", $esc_h)[2];
                     Yii::$app->db->createCommand($sql)->execute();  
 
-                    $bm_id = Yii::$app->db->createCommand('SELECT bm_id FROM bm_escopo WHERE escopo_id='.explode("-", $esc_h)[2])->queryScalar();  
+
+                    $bm_id = Yii::$app->request->post()['id'];  
 
                     if(explode("_", explode("-", $esc_h)[1])[1]=='ee'){
                         $tot_ee= $tot_ee + explode("-", $esc_h)[3];

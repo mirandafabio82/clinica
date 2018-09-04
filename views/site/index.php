@@ -76,26 +76,58 @@ $this->title = 'HCN Automação';
       </div>
 
      <div class="row">
-      <div class="col-md-6">
-          <!-- LINE CHART -->
-          <div class="box box-info">
+      <!-- <div class="col-md-6">
+         <div class="box box-info">
             <div class="box-header with-border">
               <h3 class="box-title">Receitas X Despesas (Ainda não implementado)</h3>
 
-              <!-- <div class="box-tools pull-right">
+              <div class="box-tools pull-right">
                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                 </button>
                 <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-              </div> -->
+              </div>
             </div>
             <div class="box-body">
               <div class="chart">
                 <canvas id="lineChart" style="height:250px"></canvas>
               </div>
             </div>
-            <!-- /.box-body -->
           </div>
+      </div> -->
+      <div class="col-md-6">
+
+         <!-- PRODUCT LIST -->
+          <div class="box box-primary">
+            <div class="box-header with-border">
+              <h3 class="box-title">Pagamentos Previstos</h3>              
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <ul class="products-list product-list-in-box">
+                <?php 
+                  if(!empty($pagamentos_dia)){
+                  foreach ($pagamentos_dia as $key => $pgt) { ?> 
+
+                  <li class="item">                   
+                    <div class="product-info">
+                      <a href="<?= Url::to(['bm/update','id'=> $pgt['bm_id']]) ?>" class="product-description">Existe pagamento previsto para <?= Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.$pgt['executante_id'])->queryScalar()  ?> referente ao BM Nº <?= Yii::$app->db->createCommand('SELECT numero_bm FROM bm WHERE id='.$pgt['bm_id'])->queryScalar()  ?><span
+                          class="label label-info pull-right"><?= date_format(DateTime::createFromFormat('Y-m-d', $pgt['previsao_pgt']), 'd/m/Y') ?></span></a>                 
+                      
+                    </div>
+                  </li>
+                <?php }} else{ ?>
+                        <div class="product-info">
+                      <a href="javascript:void(0)" class="product-description">Não existe nenhum pagameto a ser realizado</a>                 
+                      
+                    </div>
+                <?php } ?>
+                <!-- /.item -->
+              </ul>
+            </div>
+            
+          </div>      
       </div>
+
       <div class="col-md-6">
 
       	 <!-- PRODUCT LIST -->
@@ -129,13 +161,11 @@ $this->title = 'HCN Automação';
               <a href="<?= Url::to(['log/index']) ?>" class="uppercase">Visualizar o Log Completo</a>
             </div>
             <!-- /.box-footer -->
-          </div>
-
-      
+          </div>      
       </div>
   </div>
   
-<script>
+<!-- <script>
   $(function () {
     /* ChartJS
      * -------
@@ -230,7 +260,7 @@ $this->title = 'HCN Automação';
 
     
   })
-</script>
+</script> -->
 <?php } ?>
 
 

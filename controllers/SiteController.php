@@ -62,6 +62,8 @@ class SiteController extends Controller
         $concluido = Yii::$app->db->createCommand('SELECT count(id) FROM projeto WHERE status=2')->queryScalar();
         $numBm = Yii::$app->db->createCommand('SELECT ultimo_bm FROM config')->queryScalar();
 
+        $pagamentos_dia = Yii::$app->db->createCommand('SELECT * FROM bm_executante WHERE previsao_pgt BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 5 DAY) AND pago = 0 LIMIT 5')->queryAll();
+
         $logs = Yii::$app->db->createCommand('SELECT * FROM log ORDER BY id DESC LIMIT 5')->queryAll();
 
         return $this->render('index', [
@@ -70,6 +72,7 @@ class SiteController extends Controller
             'concluido' => $concluido,
             'numBm' => $numBm,
             'logs' => $logs,
+            'pagamentos_dia' => $pagamentos_dia,
         ]);
     }
 
