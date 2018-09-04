@@ -23,6 +23,7 @@ if(!$model->isNewRecord){
 $bm_id='';
 if(!$model->isNewRecord){
   $bm_id = 'id: '.$model->id;
+  $bm_id_href = $model->id;
 }
 
 $this->registerJs('
@@ -31,7 +32,7 @@ $this->registerJs('
     '.$scroll.'
     var extratoValue = $("input[name=\"checkbox_extrato\"]:checked").val();
 
-    $("#gerarExtrato").attr("href", "/hcn/web/index.php?r=bm%2Fgerarextratos&id=13&executante_id="+extratoValue);
+    $("#gerarExtrato").attr("href", "/hcn/web/index.php?r=bm%2Fgerarextratos&id='.$bm_id_href.'&executante_id="+extratoValue);
   });
 
     $("#salvarHoras").click(function(){
@@ -114,7 +115,7 @@ $this->registerJs('
     $("input[name=\"checkbox_extrato\"]").change(function (e) {
       var extratoValue = $("input[name=\"checkbox_extrato\"]:checked").val();
 
-      $("#gerarExtrato").attr("href", "/hcn/web/index.php?r=bm%2Fgerarextratos&id=13&executante_id="+extratoValue);
+      $("#gerarExtrato").attr("href", "/hcn/web/index.php?r=bm%2Fgerarextratos&id='.$bm_id_href.'&executante_id="+extratoValue);
     });
 
 ');
