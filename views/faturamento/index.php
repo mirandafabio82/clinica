@@ -10,6 +10,11 @@ use kartik\tabs\TabsX;
 
 <?php
 $this->registerJs('
+
+	$( document ).ready(function() {
+    	document.title = "HCN - Faturamento";
+    });
+
 	$("#bm_btn").click(function(ev){
 		file_bm = "";
 		console.log("click");

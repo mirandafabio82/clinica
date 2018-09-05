@@ -13,6 +13,9 @@ use yii\helpers\Url;
 <?php $this->head() ?>
 <?php
 $this->registerJs("
+    $( document ).ready(function() {
+        document.title = 'HCN - Clientes';
+    });
 
     $('td').click(function (e) {
         var id = $(this).closest('tr').attr('data-key');

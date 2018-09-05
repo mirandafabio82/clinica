@@ -110,6 +110,7 @@ $this->registerJs('
 
   $( document ).ready(function() {
     '.$scroll.'
+    document.title = "HCN - Projetos";
 
     $("#enviarEmail").click(function (e) {
       $("#loading").show(); // show the gif image when ajax starts

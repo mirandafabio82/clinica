@@ -37,6 +37,9 @@ use yii\helpers\Url;
 </style>
 <?php
 $this->registerJs("
+    $( document ).ready(function() {
+        document.title = 'HCN - Documentos';
+    });
 
    /* $('td').click(function (e) {
         var id = $(this).closest('tr').attr('data-key');

@@ -13,6 +13,8 @@ $this->registerJs('
   $( document ).ready(function() {    
     console.log("aa");
     $("#dbuser-password").text("");
+
+    document.title = "HCN - Contatos";
   });
 ');
 ?>

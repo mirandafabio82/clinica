@@ -21,6 +21,7 @@ if(!$model->isNewRecord){
 }
 
 $bm_id='';
+$bm_id_href = '';
 if(!$model->isNewRecord){
   $bm_id = 'id: '.$model->id;
   $bm_id_href = $model->id;
@@ -30,6 +31,8 @@ $this->registerJs('
 
   $( document ).ready(function() {
     '.$scroll.'
+    document.title = "HCN - BM";
+
     var extratoValue = $("input[name=\"checkbox_extrato\"]:checked").val();
 
     $("#gerarExtrato").attr("href", "/web/index.php?r=bm%2Fgerarextratos&id='.$bm_id_href.'&executante_id="+extratoValue);
@@ -662,9 +665,9 @@ td, th {
         <?= Html::submitButton('<i class="fa fa-floppy-o" aria-hidden="true"></i> Salvar', ['class' => 'btn btn-barra']) ?>
         <?php if(!$model->isNewRecord){ ?>
         <?= Html::a('<span class="btn-label"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Visualizar BM</span>', ['gerarbm', 'id' => $model->id], ['class' => 'btn btn-barra', 'target'=>'_blank', 'style'=> ' margin-right: 1em']) ?>
-        
-        <button type="button" class="btn btn-barra" data-toggle="modal" data-target="#extratoModal" ><i class="fa fa-money" aria-hidden="true"></i> Extrato PJ</button>
-
+        <div hidden>
+          <button type="button" class="btn btn-barra" data-toggle="modal" data-target="#extratoModal"><i class="fa fa-money" aria-hidden="true"></i> Extrato PJ</button>
+        </div>
         <button type="button" class="btn btn-barra"  data-toggle="modal" data-target="#horasModal"><i class="fa fa-table" aria-hidden="true"></i> Editar Horas</button>
         
         <button type="button" class="btn btn-barra"  data-toggle="modal" data-target="#emailModal"><i class="fa fa-envelope-open-o" aria-hidden="true"></i> Email</button>
