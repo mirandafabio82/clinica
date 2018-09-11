@@ -1368,7 +1368,7 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
             <?= Html::submitButton($model->isNewRecord ? '<i class="fa fa-floppy-o" aria-hidden="true"></i> Cadastrar' : 'Atualizar', ['class' => $model->isNewRecord ? 'btn btn-barra' : 'btn btn-barra']) ?>
           <?php } ?>
           <?php if(!$model->isNewRecord){ ?>
-           <div> <label style="color: white"> <?= $model->nome ?> </label></div>
+           
             <?= Html::submitButton('<i class="fa fa-floppy-o" aria-hidden="true"></i> Salvar', ['class' =>'btn btn-barra saveEscopo']) ?>
             <button type="button" class="btn btn-barra"  data-toggle="modal" data-target="#emailModal"><i class="fa fa-envelope-o" aria-hidden="true"></i> Email</button>
              <button type="button" class="btn btn-barra"  data-toggle="modal" data-target="#notaModal"><i class="fa fa-sticky-note-o" aria-hidden="true"></i> Notas Gerais</button>
@@ -1378,7 +1378,7 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
             <?php if($model->tipo=="P"){ ?>
                 <?= Html::a('<span class="btn-label"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Visualizar Proposta</span>', ['gerarrelatorio', 'id' => $model->id], ['class' => 'btn btn-barra', 'target'=>'_blank']) ?>
             <?php } ?>
-
+              <label style="color: white; float:  right; margin-right: 1em"> <?= $model->nome ?> </label>
           <?php } ?>
           
         </div>
