@@ -172,7 +172,7 @@ $this->registerJs("
         <div class="col-md-4">
     <?= $form->field($model, 'projeto_id')->dropDownList($listProjetos,['prompt'=>'Selecione um Projeto']) ?>
  
-    <?= $form->field($model, 'path')->fileInput(['class'=>'dropify']); ?>
+    <?= $form->field($model, 'path[]')->fileInput(['class'=>'dropify', 'multiple' => true]); ?>
     </div>
     <div class="col-md-2">
     <?= $form->field($model, 'revisao')->textInput() ?>   

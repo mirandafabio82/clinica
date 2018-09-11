@@ -90,65 +90,70 @@ class DocumentoController extends Controller
 
         if (isset($_POST['Documento'])) {           
             try{
-                $connection = \Yii::$app->db;
-                $transaction = $connection->beginTransaction();
-                $model->setAttributes($_POST['Documento']);
+                
+                $files = UploadedFile::getInstances($model,'path');
 
+                foreach ($files as $key => $file) {
+                    $connection = \Yii::$app->db;
+                    $transaction = $connection->beginTransaction();
+                    $model->setAttributes($_POST['Documento']);
+                
+                    if($file != null){
 
-                if(UploadedFile::getInstance($model,'path') != null){
+                        $nomeOriginal = $file->name;
+                        $extensao = explode('.', $nomeOriginal)[1];
+                        
+                        if (!is_dir(Yii::$app->basePath . '/web/uploaded-files/' . $model->projeto_id)) {
+                            mkdir(Yii::$app->basePath . '/web/uploaded-files/' . $model->projeto_id);
+                            FileHelper::createDirectory(Yii::$app->basePath . '/web/uploaded-files/' . $model->projeto_id, $mode = 0775, $recursive = true);
+                        }
 
-                    $nomeOriginal = UploadedFile::getInstance($model,'path')->name;
-                    $extensao = explode('.', $nomeOriginal)[1];
-                    
-                    if (!is_dir(Yii::$app->basePath . '/web/uploaded-files/' . $model->projeto_id)) {
-                        mkdir(Yii::$app->basePath . '/web/uploaded-files/' . $model->projeto_id);
-                        FileHelper::createDirectory(Yii::$app->basePath . '/web/uploaded-files/' . $model->projeto_id, $mode = 0775, $recursive = true);
+                        $model->path = $file;                
+                        $model->path->name = $model->path->name;     
+
+                        $fileName = "{$nomeOriginal}";  
+                        $model->nome = $fileName;              
+
+                        $model->path->saveAs(Yii::$app->basePath.'/web/uploaded-files/'.$model->projeto_id.'/'.$fileName);                
+                        $model->path = $fileName;
+                    }
+                    if(!empty($_POST['Documento']['data'])){ 
+                        $dat = DateTime::createFromFormat('d/m/Y', $_POST['Documento']['data']);          
+                        $model->data = date_format($dat, 'Y-m-d');
                     }
 
-                    $model->path = UploadedFile::getInstance($model,'path');                
-                    $model->path->name = $model->path->name;     
-
-                    $fileName = "{$nomeOriginal}";  
-                    $model->nome = $fileName;              
-
-                    $model->path->saveAs(Yii::$app->basePath.'/web/uploaded-files/'.$model->projeto_id.'/'.$fileName);                
-                    $model->path = $fileName;
-                }
-                if(!empty($_POST['Documento']['data'])){ 
-                    $dat = DateTime::createFromFormat('d/m/Y', $_POST['Documento']['data']);          
-                    $model->data = date_format($dat, 'Y-m-d');
-                }
-
-                $qtdDocs = count(scandir(Yii::$app->basePath.'/web/uploaded-files/'.$model->projeto_id)) - 2;
-               
-                //atualiza qtd documentos no projeto
-                Yii::$app->db->createCommand('UPDATE projeto SET documentos='.$qtdDocs.' WHERE id='.$model->projeto_id)->execute();
-                
-                if(!$model->save()){
-                    print_r($model->getErrors());
-                    die();
-                }
-
-                $projeto_nome = Yii::$app->db->createCommand('SELECT nome FROM projeto WHERE id='.$model->projeto_id)->queryScalar();
-                if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['executante'])){
-                    $user_nome = Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.Yii::$app->user->getId())->queryScalar();
-                    $logModel = new Log();
-                    $logModel->user_id = Yii::$app->user->getId();
-                    $logModel->descricao = $user_nome.' adicionou um novo arquivo para o Projeto '.$projeto_nome;
-                    $logModel->data = Date('Y-m-d H:i:s');
-                    if(!$logModel->save()){
-                        print_r($logModel->getErrors());
+                    $qtdDocs = count(scandir(Yii::$app->basePath.'/web/uploaded-files/'.$model->projeto_id)) - 2;
+                   
+                    //atualiza qtd documentos no projeto
+                    Yii::$app->db->createCommand('UPDATE projeto SET documentos='.$qtdDocs.' WHERE id='.$model->projeto_id)->execute();
+                    
+                    if(!$model->save()){
+                        print_r($model->getErrors());
                         die();
                     }
-                }
 
-                $transaction->commit();
+                    $projeto_nome = Yii::$app->db->createCommand('SELECT nome FROM projeto WHERE id='.$model->projeto_id)->queryScalar();
+                    if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['executante'])){
+                        $user_nome = Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.Yii::$app->user->getId())->queryScalar();
+                        $logModel = new Log();
+                        $logModel->user_id = Yii::$app->user->getId();
+                        $logModel->descricao = $user_nome.' adicionou um novo arquivo para o Projeto '.$projeto_nome;
+                        $logModel->data = Date('Y-m-d H:i:s');
+                        if(!$logModel->save()){
+                            print_r($logModel->getErrors());
+                            die();
+                        }
+                    }
+
+                    $transaction->commit();
+                }
                 return $this->render('create', [
                 'model' => $model,
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
                 'listProjetos' => $listProjetos
             ]);
+
             }
             catch(Exception $e){
                 $transaction->rollBack();

@@ -137,7 +137,7 @@ class RelatorioController extends Controller
 
         $mpdf = new \Mpdf\Mpdf();
         $mpdf->WriteHTML($executante_extrato_page);   
-        $mpdf->Output('uploaded-files/'.'aa'.'/BM-aaaaaaa.pdf', 'I');  
+        $mpdf->Output('uploaded-files/extratos/Extrato-temp.pdf', 'I');  
     }
     
 }
