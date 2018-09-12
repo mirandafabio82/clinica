@@ -88,24 +88,33 @@ class DocumentoController extends Controller
         $projetos = Yii::$app->db->createCommand('SELECT id, nome FROM projeto')->queryAll();
         $listProjetos = ArrayHelper::map($projetos,'id','nome');
 
+
+
         if (isset($_POST['Documento'])) {           
             try{
                 
                 $files = UploadedFile::getInstances($model,'path');
 
                 foreach ($files as $key => $file) {
+                    $model = new Documento();
+                    $model->data = date('d/m/Y');
+                    $searchModel = new DocumentoSearch();
+                    $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
                     $connection = \Yii::$app->db;
                     $transaction = $connection->beginTransaction();
                     $model->setAttributes($_POST['Documento']);
+                    $projeto_id = $model->projeto_id;
+               
                 
                     if($file != null){
 
                         $nomeOriginal = $file->name;
                         $extensao = explode('.', $nomeOriginal)[1];
                         
-                        if (!is_dir(Yii::$app->basePath . '/web/uploaded-files/' . $model->projeto_id)) {
-                            mkdir(Yii::$app->basePath . '/web/uploaded-files/' . $model->projeto_id);
-                            FileHelper::createDirectory(Yii::$app->basePath . '/web/uploaded-files/' . $model->projeto_id, $mode = 0775, $recursive = true);
+                        if (!is_dir(Yii::$app->basePath . '/web/uploaded-files/' . $projeto_id)) {
+                            mkdir(Yii::$app->basePath . '/web/uploaded-files/' . $projeto_id);
+                            FileHelper::createDirectory(Yii::$app->basePath . '/web/uploaded-files/' . $projeto_id, $mode = 0775, $recursive = true);
                         }
 
                         $model->path = $file;                
@@ -114,7 +123,7 @@ class DocumentoController extends Controller
                         $fileName = "{$nomeOriginal}";  
                         $model->nome = $fileName;              
 
-                        $model->path->saveAs(Yii::$app->basePath.'/web/uploaded-files/'.$model->projeto_id.'/'.$fileName);                
+                        $model->path->saveAs(Yii::$app->basePath.'/web/uploaded-files/'.$projeto_id.'/'.$fileName);                
                         $model->path = $fileName;
                     }
                     if(!empty($_POST['Documento']['data'])){ 
@@ -122,17 +131,17 @@ class DocumentoController extends Controller
                         $model->data = date_format($dat, 'Y-m-d');
                     }
 
-                    $qtdDocs = count(scandir(Yii::$app->basePath.'/web/uploaded-files/'.$model->projeto_id)) - 2;
+                    $qtdDocs = count(scandir(Yii::$app->basePath.'/web/uploaded-files/'.$projeto_id)) - 2;
                    
                     //atualiza qtd documentos no projeto
-                    Yii::$app->db->createCommand('UPDATE projeto SET documentos='.$qtdDocs.' WHERE id='.$model->projeto_id)->execute();
+                    Yii::$app->db->createCommand('UPDATE projeto SET documentos='.$qtdDocs.' WHERE id='.$projeto_id)->execute();
                     
                     if(!$model->save()){
                         print_r($model->getErrors());
                         die();
                     }
 
-                    $projeto_nome = Yii::$app->db->createCommand('SELECT nome FROM projeto WHERE id='.$model->projeto_id)->queryScalar();
+                    $projeto_nome = Yii::$app->db->createCommand('SELECT nome FROM projeto WHERE id='.$projeto_id)->queryScalar();
                     if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['executante'])){
                         $user_nome = Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.Yii::$app->user->getId())->queryScalar();
                         $logModel = new Log();
