@@ -9,6 +9,7 @@ use app\models\Escopo;
 use app\models\search\EscopoSearch;
 use app\models\Bm;
 use app\models\Bmescopo;
+use app\models\BmExecutante;
 use app\models\search\BmSearch;
 use app\models\Projeto;
 use app\models\search\ProjetoSearch;
@@ -302,6 +303,20 @@ class TarefaController extends Controller
 
             Yii::$app->db->createCommand('UPDATE escopo SET horas_acumulada = '.$acumulada.', horas_saldo = '.$saldo.', horas_bm=0, horas_tp_bm=0.00 , horas_ej_bm=0.00 , horas_ep_bm=0.00 , horas_es_bm=0.00 , horas_ee_bm=0.00 WHERE id='.$escopo["id"])->execute();
         }
+
+        $executantes = Yii::$app->db->createCommand('SELECT executante_id FROM projeto_executante WHERE projeto_id='.$bmModel->projeto_id)->queryAll();
+
+        foreach ($executantes as $key => $exe) {
+                               
+            $bm_exe_model = new BmExecutante();
+            $bm_exe_model->bm_id = $bmModel->id;
+            $bm_exe_model->executante_id = $exe['executante_id'];
+            $bm_exe_model->pago = 0;
+            if(!$bm_exe_model->save()){
+                print_r($bm_exe_model->getErrors());
+                die();
+            }
+        }         
         
         if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['executante'])){
             $user_nome = Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.Yii::$app->user->getId())->queryScalar();
