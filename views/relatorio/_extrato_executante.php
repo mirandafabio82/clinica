@@ -112,13 +112,13 @@ th, td {
 				<td style="margin-top: 0.5em;font-size: 8pt;font-family: arial;text-align: center;"  ><?= $horas_exe_ep ?></td>
 				<td style="margin-top: 0.5em;font-size: 8pt;font-family: arial;text-align: center;"  ><?= $horas_exe_ej ?></td>
 				<td style="margin-top: 0.5em;font-size: 8pt;font-family: arial;text-align: center;"  ><?= $horas_exe_tp ?></td>
-				<td style="margin-top: 0.5em;font-size: 8pt;font-family: arial;text-align: center;"  ><?= number_format($prestador['vl_hh_ee'] * $horas_exe_ee + $prestador['vl_hh_es'] * $horas_exe_es + $prestador['vl_hh_ep'] * $horas_exe_ep + $prestador['vl_hh_tp'] * $horas_exe_tp, 2, ',', '.') ?></td>
+				<td style="margin-top: 0.5em;font-size: 8pt;font-family: arial;text-align: center;"  ><?= number_format($valor_pago[4]['valor_pago'] * $horas_exe_ee + $valor_pago[3]['valor_pago'] * $horas_exe_es + $valor_pago[2]['valor_pago'] * $horas_exe_ep + $valor_pago[1]['valor_pago'] * $horas_exe_ej + $valor_pago[0]['valor_pago'] * $horas_exe_tp, 2, ',', '.') ?></td>
 				<td style="margin-top: 0.5em;font-size: 8pt;font-family: arial;text-align: center;"  ><?= !empty($infos['previsao_pgt']) ? date_format(DateTime::createFromFormat('Y-m-d', $infos['previsao_pgt']), 'd/m/Y') : '-' ?></td>
 			</tr>	
 
 			
      <?php	
-     		$total = $total + $prestador['vl_hh_ee'] * $horas_exe_ee + $prestador['vl_hh_es'] * $horas_exe_es + $prestador['vl_hh_ep'] * $horas_exe_ep + $prestador['vl_hh_tp'] * $horas_exe_tp;
+     		$total = $total + $valor_pago[4]['valor_pago'] * $horas_exe_ee + $valor_pago[3]['valor_pago'] * $horas_exe_es + $valor_pago[2]['valor_pago'] * $horas_exe_ep + $valor_pago[1]['valor_pago'] * $horas_exe_ej + $valor_pago[0]['valor_pago'] * $horas_exe_tp;
  		}
  	 ?>
 

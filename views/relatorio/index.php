@@ -95,6 +95,12 @@ $this->registerJs('
 
           //remove as rows
           $("#tabela_extrato").find("tr:gt(1)").remove();
+           var vl_hh_ee = '.Yii::$app->db->createCommand('SELECT valor_pago FROM tipo_executante WHERE id=5')->queryScalar().';
+           var vl_hh_es = '.Yii::$app->db->createCommand('SELECT valor_pago FROM tipo_executante WHERE id=4')->queryScalar().';
+           var vl_hh_ep = '.Yii::$app->db->createCommand('SELECT valor_pago FROM tipo_executante WHERE id=3')->queryScalar().';
+           var vl_hh_ej = '.Yii::$app->db->createCommand('SELECT valor_pago FROM tipo_executante WHERE id=2')->queryScalar().';
+           var vl_hh_tp = '.Yii::$app->db->createCommand('SELECT valor_pago FROM tipo_executante WHERE id=1')->queryScalar().';
+
           
           for(i=0; i < (obj.length)/2; i++){
             var executado_ee =  obj[i+(obj.length)/2].executado_ee;
@@ -113,7 +119,7 @@ $this->registerJs('
             row.insertCell(6).innerHTML = executado_ep;
             row.insertCell(7).innerHTML = executado_ej;
             row.insertCell(8).innerHTML = executado_tp;
-            row.insertCell(9).innerHTML = formataDinheiro(executado_ee*obj[i].vl_hh_ee + executado_es*obj[i].vl_hh_es + executado_ep*obj[i].vl_hh_ep + executado_ej*obj[i].vl_hh_ej + executado_tp*obj[i].vl_hh_tp);
+            row.insertCell(9).innerHTML = formataDinheiro(executado_ee*vl_hh_ee + executado_es*vl_hh_es + executado_ep*vl_hh_ep + executado_ej*vl_hh_ej + executado_tp*vl_hh_tp);
             row.insertCell(10).innerHTML = "<input type=\"date\" value="+obj[i].data_pgt+" class=\"extrato_date\" id=date_bm_"+obj[i].id+"-exe_"+executante_id+" >";
             row.insertCell(11).innerHTML = "<input type=\"checkbox\" class=\"extrato_checkbox\" id=bm_"+obj[i].id+"-exe_"+executante_id+"-row_"+(i+2)+" >";
           }
@@ -127,62 +133,9 @@ $this->registerJs('
          console.log("failure");
         }
     });
-  });
+  }); 
   
-  
-  $("#frs_btn").click(function(ev){
-    
-    var fileInput = document.getElementById("frs_file");
-    var file = fileInput.files[0];
-    var formData = new FormData();
-    formData.append("file", file);
-    formData.append("frs_num_bm", $("#frs_num_bm").val());
-    
-    $.ajax({ 
-          url: "index.php?r=faturamento/readfrs",
-          data: formData,
-          type: "POST",
-          cache: false,
-            //dataType: "json",
-            processData: false, // Dont process the files
-            contentType: false,
-          success: function(response){
-
-            //se não tem numero de BM na FRS
-            if(response=="sem_num_bm"){
-              $("#frs_num_bm_div").removeAttr("hidden");
-              $("#frs_content").val("Essa FRS não possui número do BM. Favor informar o número do BM no campo acima e tentar novamente clicando em Extrair Informações!");
-            }
-            else{
-              console.log(response);
-              $("#frs_content").val(response.split("##")[0]);
-              $("#label_download").attr("href",response.split("##")[1]);
-              $("#label_download").removeAttr("hidden");              
-            }
-
-            
-          },
-          error: function(){
-           console.log("failure");
-          }
-    });
-  });
-
-  $("#nfse_btn").click(function(ev){
-    file_nfse = "";
-    console.log("click");
-    $.ajax({ 
-        url: "index.php?r=faturamento/readnfse",
-        data: {file: file_nfse},
-        type: "POST",
-        success: function(response){
-        
-        },
-        error: function(){
-         console.log("failure");
-        }
-    });
-  });
+ 
 
   function formataDinheiro(n) {
     return n.toFixed(2).replace(".", ",").replace(/(\d)(?=(\d{3})+\,)/g, "$1.");

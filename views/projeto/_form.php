@@ -2006,8 +2006,15 @@ echo TabsX::widget([
        
         <label>Corpo do Email</label>
         <br>
-        <textarea rows="15" cols="100" id="corpoEmail" name="corpoEmail" class="form-control">        
-<?= Yii::$app->db->createCommand('SELECT email FROM user WHERE id='.$model->contato_id)->queryScalar() ?>  
+        <textarea rows="15" cols="100" id="corpoEmail" name="corpoEmail" class="form-control">     
+<?php 
+  $contato_id_email = !empty($model->contato_id) ? $model->contato_id : "" ;
+  $email_do_contato = "";
+  if(!empty($contato_id_email)){
+    $email_do_contato = Yii::$app->db->createCommand('SELECT email FROM user WHERE id='.$contato_id_email)->queryScalar();
+  }
+?>   
+<?= $email_do_contato ?>
 Bom dia, <?= $model->contato ?>!
 
 Segue nossa AS para:

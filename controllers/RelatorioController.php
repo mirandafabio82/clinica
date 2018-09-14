@@ -129,10 +129,13 @@ class RelatorioController extends Controller
 
         $executante = Yii::$app->db->createCommand('SELECT * FROM executante JOIN user ON executante.usuario_id=user.id WHERE executante.usuario_id='.$executante_id)->queryOne();
 
+        $valor_pago = Yii::$app->db->createCommand('SELECT valor_pago FROM tipo_executante')->queryAll();
+
         $executante_extrato_page = $this->renderPartial('_extrato_executante', [
             'bms' => $bms,    
             'prestador' => $executante,       
-            'date' => date('d/m/Y'),      
+            'date' => date('d/m/Y'),
+            'valor_pago' => $valor_pago      
         ]);
 
         $mpdf = new \Mpdf\Mpdf();
