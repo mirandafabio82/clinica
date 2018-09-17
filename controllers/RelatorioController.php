@@ -9,6 +9,7 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
+use app\models\Documento;
 use \Datetime;
 
 /**
@@ -138,9 +139,30 @@ class RelatorioController extends Controller
             'valor_pago' => $valor_pago      
         ]);
 
+        if (!file_exists('uploaded-files/outros')) {
+            mkdir('uploaded-files/outros', 0777, true);
+        }
+
         $mpdf = new \Mpdf\Mpdf();
         $mpdf->WriteHTML($executante_extrato_page);   
-        $mpdf->Output('uploaded-files/extratos/Extrato-temp.pdf', 'I');  
+        $mpdf->Output('uploaded-files/outros/Fatura_'.$executante['nome_empresa'].'_'.date('Y-m-d').'.pdf', 'F'); 
+        $mpdf->Output('uploaded-files/outros/Extrato-temp.pdf', 'I');  
+
+        $existsFile = Yii::$app->db->createCommand('SELECT id FROM documento WHERE nome="Fatura_'.$executante['nome_empresa'].'_'.date('Y-m-d').'.pdf"')->queryScalar();
+
+            if(empty($existsFile)){                          
+                //cria o registro do arquivo
+                $doc = new Documento();
+                $doc->nome = 'Fatura_'.$executante['nome_empresa'].'_'.date('Y-m-d').'.pdf';
+                $doc->revisao = 0;
+                $doc->path = 'Fatura_'.$executante['nome_empresa'].'_'.date('Y-m-d').'.pdf';
+                $doc->is_global = 0;
+                $doc->data = date('Y-m-d');
+                if(!$doc->save()){
+                    print_r($doc->getErrors());
+                    die();
+                }
+            }
     }
     
 }

@@ -89,39 +89,55 @@ $this->registerJs("
                 'contentOptions' => ['style' => 'width:20em;  min-width:4em;'],
                 'value' => function($data){
                     $nome = Yii::$app->db->createCommand('SELECT path FROM documento WHERE id ='.$data->id)->queryScalar(); 
-                    return Html::a(
-                        $nome, 
-                        Yii::$app->basePath.'/web/uploaded-files/'.$data->projeto_id.'/'.$data->path,
-                         [                                 // link options
-                         'title'=>'Download!',
-                         'target'=>'_blank',
-                         'class' => 'linksWithTarget',
-                         'data-pjax'=>"0"
-                       ]
+                    if(!empty($data->projeto_id)){
+                        return Html::a(
+                            $nome, 
+                            Yii::$app->basePath.'/web/uploaded-files/'.$data->projeto_id.'/'.$data->path,
+                             [                                 // link options
+                             'title'=>'Download!',
+                             'target'=>'_blank',
+                             'class' => 'linksWithTarget',
+                             'data-pjax'=>"0"
+                           ]
                         );
+                    }
+                    else{
+                        return Html::a(
+                            $nome, 
+                            Yii::$app->basePath.'/web/uploaded-files/outros/'.$data->path,
+                             [                                 // link options
+                             'title'=>'Download!',
+                             'target'=>'_blank',
+                             'class' => 'linksWithTarget',
+                             'data-pjax'=>"0"
+                           ]
+                        );
+                    }
                 }
             ],
             [
                 'attribute' => 'projeto',
                 'format' => 'raw',
                 'value' => function($data){
-                    return Yii::$app->db->createCommand('SELECT nome FROM projeto WHERE id ='.$data->projeto_id)->queryScalar();
+                    if(!empty($data->projeto_id))
+                        return Yii::$app->db->createCommand('SELECT nome FROM projeto WHERE id ='.$data->projeto_id)->queryScalar();
                 },
             ],
             [
                 'header' => '<span style="color:#337ab7">Área</span>',
                 'format' => 'raw',
                 'value' => function($data){
-                    $area = Yii::$app->db->createCommand('SELECT planta FROM projeto WHERE id ='.$data->projeto_id)->queryScalar(); 
-                    return $area;
-
+                    if(!empty($data->projeto_id))
+                        return Yii::$app->db->createCommand('SELECT planta FROM projeto WHERE id ='.$data->projeto_id)->queryScalar(); 
+                    
                 }
             ],
             [
                 'header' => '<span style="color:#337ab7">Descrição do Projeto</span>',
                 'format' => 'raw',
                 'value' => function($data){
-                    return Yii::$app->db->createCommand('SELECT descricao FROM projeto WHERE id ='.$data->projeto_id)->queryScalar();
+                    if(!empty($data->projeto_id))
+                        return Yii::$app->db->createCommand('SELECT descricao FROM projeto WHERE id ='.$data->projeto_id)->queryScalar();
                 },
             ],
 

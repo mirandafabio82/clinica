@@ -27,6 +27,14 @@ if(!$model->isNewRecord){
   $bm_id_href = $model->id;
 }
 
+$km_total = Yii::$app->db->createCommand('SELECT qtd_km FROM projeto WHERE id='.$model->projeto_id)->queryScalar();
+$km_gasto = Yii::$app->db->createCommand('SELECT SUM(km) FROM bm WHERE projeto_id='.$model->projeto_id)->queryScalar();
+
+if($km_gasto=="") $km_gasto = 0;
+$km_gasto = number_format($km_gasto);
+
+$km_saldo = $km_total - $km_gasto;
+
 $this->registerJs('
 
   $( document ).ready(function() {
@@ -457,7 +465,7 @@ td, th {
       <div class="col-md-1"> 
         <?= $form->field($model, 'km')->textInput(['maxlength' => true]) ?>
       </div>
-      <div class="col-md-1"> 
+      <div class="col-md-2"> 
         <?= $form->field($model, 'bpm')->textInput(['maxlength' => true]) ?>
       </div>
     </div>
@@ -532,9 +540,9 @@ td, th {
       <?= $form->field($model, 'qtd_dias')->textInput(['maxlength' => true]) ?>
     </div>
       <div class="col-md-1"> 
-      <?= $form->field($model, 'km')->textInput(['maxlength' => true]) ?>
+      <?= $form->field($model, 'km')->textInput(['maxlength' => true])->label("Km (".$km_gasto."/".$km_total.")") ?>
     </div>
-    <div class="col-md-1"> 
+    <div class="col-md-2"> 
         <?= $form->field($model, 'bpm')->textInput(['maxlength' => true]) ?>
       </div>
     <div class="col-md-2"> 

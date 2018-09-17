@@ -1,25 +1,25 @@
 
 <style>
-table, th, td {
-    border: 1px solid black;
-    border-collapse: collapse;
-}
+
 th, td {
     
     text-align: left;    
 }
 </style>
 
-<img src="resources/dist/img/logo_hcn.png" alt="User Image" style="width: 8em">
 
-<div style="margin-bottom:1em;margin-top:-3em;font-size: 15pt;font-family: arial; font-weight: bold" line-height= "2em" align="center">Extrato </div>
+<div style="margin-bottom:1em;margin-top:-3em;font-size: 15pt;font-family: arial; font-weight: bold" line-height= "2em" align="center">Autorização de Faturamento </div>
 
-<div style="margin-bottom:1em;font-size: 15pt;font-family: arial; font-weight: bold" line-height= "2em" align="center"><?= $prestador['nome'] ?> </div>
+<div style="margin-bottom:1em;font-size: 12pt;font-family: arial; font-weight: bold" line-height= "2em" align="center"><?= $prestador['nome'] ?> </div>
 
-
-<table border="1" align="center" width="100%">
-<tbody>	
-	<tr rowspa>
+<div style="margin-bottom:1em;font-size: 10pt;font-family: arial;" line-height= "2em" align="right">Data: <?= $date ?> </div>
+    
+<table style="border: 1px solid black;" align="center" width="100%">
+<tbody>
+  <tr >
+    <td style="padding-left:5px;margin-top: 0.5em;font-size: 10pt;font-family: arial;" line-height= "2em" rowspan="6"><img src="resources/dist/img/logo_hcn.png" alt="User Image" style="width: 8em"></td>
+  </tr>	
+	<tr >    
 		<td style="padding-left:5px;margin-top: 0.5em;font-size: 10pt;font-family: arial;" line-height= "2em" colspan="4">Nome/Razão Social: HCN AUTOMAÇÃO LTDA </td>
 		
 	</tr>
@@ -29,21 +29,52 @@ th, td {
 		
 	</tr>
 	<tr>
-		<td style="padding-left:5px;margin-top: 0.5em;font-size: 10pt;font-family: arial;" line-height= "2em" colspan="3">Logradouro.: RUA FRANCISCO DRUMOND </td>
-		<td style="padding-left:5px;margin-top: 0.5em;font-size: 10pt;font-family: arial;" line-height= "2em" colspan="1">Nº: 41 </td>
-		
+		<td style="padding-left:5px;margin-top: 0.5em;font-size: 10pt;font-family: arial;" line-height= "2em" colspan="3">Logradouro.: RUA FRANCISCO DRUMOND Nº: 41 </td>
+		<td style="padding-left:5px;margin-top: 0.5em;font-size: 10pt;font-family: arial;" line-height= "2em" colspan="2">Compl.: EDIF. MACEDO </td>
+    
     </tr>
 	<tr>
-		<td style="padding-left:5px;margin-top: 0.5em;font-size: 10pt;font-family: arial;" line-height= "2em" colspan="2">Compl.: EDIF. MACEDO </td>
-		<td style="padding-left:5px;margin-top: 0.5em;font-size: 10pt;font-family: arial;" line-height= "2em" colspan="2">Bairro: CENTRO </td>
+		
 		
     </tr>
     <tr>
-    	<td style="padding-left:5px;margin-top: 0.5em;font-size: 10pt;font-family: arial;" line-height= "2em" >CEP: 42800500 </td>
-    	<td style="padding-left:5px;margin-top: 0.5em;font-size: 10pt;font-family: arial;" line-height= "2em" >Município: CAMAÇARI </td>
-    	<td style="padding-left:5px;margin-top: 0.5em;font-size: 10pt;font-family: arial;" line-height= "2em" >UF: BA </td>
-		<td style="padding-left:5px;margin-top: 0.5em;font-size: 10pt;font-family: arial;" line-height= "2em" >Data: <?= $date ?> </td>
-		
+      <td style="padding-left:5px;margin-top: 0.5em;font-size: 10pt;font-family: arial;" line-height= "2em" colspan="2">Bairro: CENTRO </td>
+    	<td style="padding-left:5px;margin-top: 0.5em;font-size: 10pt;font-family: arial;" line-height= "2em" >CEP: 42800500 </td>    	
+    </tr>
+    <tr>
+      <td style="padding-left:5px;margin-top: 0.5em;font-size: 10pt;font-family: arial;" line-height= "2em" >Município: CAMAÇARI </td>
+      <td style="padding-left:5px;margin-top: 0.5em;font-size: 10pt;font-family: arial;" line-height= "2em" >UF: BA </td>
+    </tr>
+
+</tbody>
+</table>
+
+<div style="text-align:center; margin: 0.5em"> <label  > FORNECEDOR </label> </div>
+
+<table style="border: 1px solid black;" align="center" width="100%">
+<tbody> 
+  <tr >
+    <td style="padding-left:5px;margin-top: 0.5em;font-size: 10pt;font-family: arial;" line-height= "2em" colspan="4">Nome/Razão Social: <?= $prestador['nome_empresa'] ?> </td>
+    
+  </tr>
+  <tr>
+    <td style="padding-left:5px;margin-top: 0.5em;font-size: 10pt;font-family: arial;" line-height= "2em" colspan="2">CNPJ:  <?= $prestador['cnpj'] ?> </td>
+    <td style="padding-left:5px;margin-top: 0.5em;font-size: 10pt;font-family: arial;" line-height= "2em" colspan="2">Insc. Municipal:  <?= $prestador['insc_municipal'] ?> </td>
+    
+  </tr>
+  <tr>
+    <td style="padding-left:5px;margin-top: 0.5em;font-size: 10pt;font-family: arial;" line-height= "2em" colspan="3">Logradouro.: <?= $prestador['endereco_empresa'] ?> </td>
+    
+    </tr>
+  <tr>
+    
+    
+    </tr>
+    <tr>
+      <td style="padding-left:5px;margin-top: 0.5em;font-size: 10pt;font-family: arial;" line-height= "2em" colspan="2">Bairro: <?= $prestador['bairro'] ?> </td>
+      <td style="padding-left:5px;margin-top: 0.5em;font-size: 10pt;font-family: arial;" line-height= "2em" >CEP: <?= $prestador['cep'] ?> </td>
+      <td style="padding-left:5px;margin-top: 0.5em;font-size: 10pt;font-family: arial;" line-height= "2em" >Município: <?= $prestador['cidade'] ?> </td>
+      <td style="padding-left:5px;margin-top: 0.5em;font-size: 10pt;font-family: arial;" line-height= "2em" >UF: BA </td>
     </tr>
 
 </tbody>
@@ -51,7 +82,7 @@ th, td {
 
 
 
-<table border="1" align="center" width="100%" style="margin-top: 1em">
+<table  border="1" align="center" width="100%" style="margin-top: 1em; border: 1px solid black; border-collapse: collapse;">
 	<tr>
 		<td style="padding-left:5px;margin-top: 0.5em;font-size: 8pt;font-family: arial;height: 4em"><input type="checkbox" checked="checked">Nas unidades do(a) BRASKEM
   		</td>
@@ -66,7 +97,7 @@ th, td {
     </tr>
 </table>
 
-<table id="tabela_extrato" border="1" align="center" width="100%" style="margin-top: 1em">
+<table id="tabela_extrato" border="1" align="center" width="100%" style="margin-top: 1em; border: 1px solid black; border-collapse: collapse;">
     <tr>
       <th style="background-color: #d3d3d3;margin-top: 0.5em;font-size: 8pt;font-family: arial;text-align: center;font-weight: bold" rowspan="2">Item</th>
       <th style="background-color: #d3d3d3;margin-top: 0.5em;font-size: 8pt;font-family: arial;text-align: center;font-weight: bold" rowspan="2">Projeto</th>
@@ -129,12 +160,12 @@ th, td {
 			</tr>
 			<tr>
 				<td style="padding-left:5px;margin-top: 0.5em;font-size: 8pt;font-family: arial;text-align: left;" colspan="9">Adiantamento</td>
-				<td style="margin-top: 0.5em;font-size: 8pt;font-family: arial;text-align: center;" colspan="1">-</td>
+				<td style="margin-top: 0.5em;font-size: 8pt;font-family: arial;text-align: center;" colspan="1">0.00</td>
 				<td style="margin-top: 0.5em;font-size: 8pt;font-family: arial;text-align: center;" colspan="1"></td>
 			</tr>
 			<tr>
 				<td style="padding-left:5px;margin-top: 0.5em;font-size: 8pt;font-family: arial;text-align: left;" colspan="9">Total a Receber</td>
-				<td style="margin-top: 0.5em;font-size: 8pt;font-family: arial;text-align: center;" colspan="1">-</td>
+				<td style="margin-top: 0.5em;font-size: 8pt;font-family: arial;text-align: center;" colspan="1"><?= number_format($total, 2, ',', '.') ?></td>
 				<td style="margin-top: 0.5em;font-size: 8pt;font-family: arial;text-align: center;" colspan="1"></td>
 			</tr>
               

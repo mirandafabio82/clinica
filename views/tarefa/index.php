@@ -257,6 +257,25 @@ $this->registerJs('
       </div>
      <?php ActiveForm::end(); ?>
     </div>
+
+<?php if(isset($_POST['projeto'])){ 
+  $executantes = Yii::$app->db->createCommand('SELECT user.nome FROM user JOIN projeto_executante ON user.id=projeto_executante.executante_id WHERE projeto_executante.projeto_id='.$_POST['projeto'])->queryAll();
+
+  
+?>
+<div>
+    <table>
+      <tr>
+        <th>Executantes</th>        
+      </tr>
+      <tr>
+        <?php foreach ($executantes as $key => $exe) { ?>
+          <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;"> <?= $exe['nome'] ?> </td>
+        <?php } ?>
+      </tr>
+    </table>
+</div>
+<?php } ?>
     
 </div>
 

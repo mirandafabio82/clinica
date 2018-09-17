@@ -589,7 +589,7 @@ $("#add-np").click(function(ev){
   clone.attr("id","autocomplete_div_"+count_np);
   $(clone.children()[0]).attr("id","autocomplete_"+count_np);
   $(clone.children()[0]).attr("name","np["+count_np+"]");
-  $(clone.children()[0]).attr("value","");
+  $(clone.children()[0]).val("");
   $(clone.children()[1]).attr("id","remove-np["+count_np+"]");
 
   autocomplete(document.getElementById("autocomplete_"+(count_np)), nprioritarios);
@@ -894,6 +894,43 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
             [
             'attribute' => 'site', 
             'contentOptions' => ['style' => 'width:8em;  min-width:8em;'],
+            ],
+            [
+              'header' => 'Escopo', 
+              'format' => 'raw',
+              'contentOptions' => ['style' => 'width:11em;  min-width:8em;'],
+              'value' => function ($data) {
+
+
+                $escopos = Yii::$app->db->createCommand('SELECT escopopadrao_id FROM hcn.escopo JOIN atividademodelo ON atividademodelo.id=escopo.atividademodelo_id WHERE projeto_id = '.$data->id.' GROUP BY escopopadrao_id;')->queryAll();
+                
+                $esc_padrao_id = array();
+
+                foreach ($escopos as $key => $escopopadrao) {
+                  array_push($esc_padrao_id, $escopopadrao['escopopadrao_id']);
+                }
+
+                if (in_array(1, $esc_padrao_id)) { 
+                    return "PCO";
+                }
+                else if (in_array(2, $esc_padrao_id)) { 
+                    return "PBA";
+                }
+                else if (in_array(3, $esc_padrao_id) && in_array(4, $esc_padrao_id)) { 
+                    return "PDC";
+                }
+                else if (in_array(3, $esc_padrao_id)) { 
+                    return "PDE";
+                }
+                else if (in_array(4, $esc_padrao_id)) { 
+                    return "CFG";
+                }
+                else{
+                  return " - ";
+                }
+                //return $escopos;
+
+              }, 
             ],
             'descricao'
             /*[
@@ -1378,7 +1415,7 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
             <?php if($model->tipo=="P"){ ?>
                 <?= Html::a('<span class="btn-label"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Visualizar Proposta</span>', ['gerarrelatorio', 'id' => $model->id], ['class' => 'btn btn-barra', 'target'=>'_blank']) ?>
             <?php } ?>
-              <label style="color: white; float:  right; margin-right: 1em"> <?= $model->nome ?> </label>
+              <label style="color: #08adff; margin-left: 2em;"><i class="fa fa-folder-open" aria-hidden="true"></i> <?= $model->nome ?> </label>
           <?php } ?>
           
         </div>
