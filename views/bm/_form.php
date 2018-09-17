@@ -27,13 +27,15 @@ if(!$model->isNewRecord){
   $bm_id_href = $model->id;
 }
 
-$km_total = Yii::$app->db->createCommand('SELECT qtd_km FROM projeto WHERE id='.$model->projeto_id)->queryScalar();
-$km_gasto = Yii::$app->db->createCommand('SELECT SUM(km) FROM bm WHERE projeto_id='.$model->projeto_id)->queryScalar();
+if(!$model->isNewRecord){
+  $km_total = Yii::$app->db->createCommand('SELECT qtd_km FROM projeto WHERE id='.$model->projeto_id)->queryScalar();
+  $km_gasto = Yii::$app->db->createCommand('SELECT SUM(km) FROM bm WHERE projeto_id='.$model->projeto_id)->queryScalar();
 
-if($km_gasto=="") $km_gasto = 0;
-$km_gasto = number_format($km_gasto);
+  if($km_gasto=="") $km_gasto = 0;
+  $km_gasto = number_format($km_gasto);
 
-$km_saldo = $km_total - $km_gasto;
+  $km_saldo = $km_total - $km_gasto;
+}
 
 $this->registerJs('
 
