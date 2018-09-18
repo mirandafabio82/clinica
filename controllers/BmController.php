@@ -378,27 +378,49 @@ class BmController extends Controller
                     if(!isset(explode("-", $esc_h)[1])){
                         continue;
                     }
+                    $horas_antes = Yii::$app->db->createCommand('SELECT horas_ee, horas_es, horas_ep, horas_ej, horas_tp FROM bm_escopo WHERE escopo_id='.explode("-", $esc_h)[2])->queryOne(); 
+
                     $sql = 'UPDATE bm_escopo SET '.explode("-", $esc_h)[1].' = '.explode("-", $esc_h)[3].' WHERE escopo_id='.explode("-", $esc_h)[2];
                     Yii::$app->db->createCommand($sql)->execute();  
 
 
                     $bm_id = Yii::$app->request->post()['id'];  
 
+                    $executado_ee = 0;
+                    $executado_es = 0;
+                    $executado_ep = 0;
+                    $executado_ej = 0;
+                    $executado_tp = 0;
+
                     if(explode("_", explode("-", $esc_h)[1])[1]=='ee'){
                         $tot_ee= $tot_ee + explode("-", $esc_h)[3];
+                        $executado_ee = explode("-", $esc_h)[3];
                     }
                     if(explode("_", explode("-", $esc_h)[1])[1]=='es'){
                         $tot_es= $tot_es + explode("-", $esc_h)[3];
+                        $executado_es = explode("-", $esc_h)[3];
                     }
                     if(explode("_", explode("-", $esc_h)[1])[1]=='ep'){
                         $tot_ep= $tot_ep + explode("-", $esc_h)[3];
+                        $executado_ep = explode("-", $esc_h)[3];
                     }
                     if(explode("_", explode("-", $esc_h)[1])[1]=='ej'){
                         $tot_ej= $tot_ej + explode("-", $esc_h)[3];
+                        $executado_ej = explode("-", $esc_h)[3];
                     }
                     if(explode("_", explode("-", $esc_h)[1])[1]=='tp'){
                         $tot_tp= $tot_tp + explode("-", $esc_h)[3];
+                        $executado_tp = explode("-", $esc_h)[3];
                     }
+
+                    //Yii::$app->db->createCommand('UPDATE escopo SET executado_ee=executado_ee+'.$executado_ee.'-'.$horas_antes['horas_ee'].',executado_es=executado_es+'.$executado_es.'-'.$horas_antes['horas_es'].',executado_ep=executado_ep+'.$executado_ep.'-'.$horas_antes['horas_ep'].',executado_ej=executado_ej+'.$executado_ej.'-'.$horas_antes['horas_ej'].',executado_tp=executado_tp+'.$executado_tp.'-'.$horas_antes['horas_tp'].' WHERE id='.explode("-", $esc_h)[2])->execute();
+
+                   // Yii::$app->db->createCommand('UPDATE escopo SET horas_saldo=(horas_ee+horas_es+horas_ep+horas_ej+horas_tp) - (executado_ee+executado_es+executado_ep+executado_ej+executado_tp) WHERE id='.explode("-", $esc_h)[2])->execute();
+
+                   // Yii::$app->db->createCommand('UPDATE escopo SET horas_acumulada=(executado_ee+executado_es+executado_ep+executado_ej+executado_tp) WHERE id='.explode("-", $esc_h)[2])->execute();
+
+
+                    //falta recalcular o saldo e acumulado da tabela escopo
        
                 }
 
@@ -432,6 +454,8 @@ class BmController extends Controller
                 $descricao = $projetoArr['desc_resumida'].'.'.PHP_EOL.'Esse '.$numbm.'º Boletim de Medição corresponde a '.$percBm.'% das atividades citadas na '.$projetoArr['proposta'].''.PHP_EOL.'A medição total acumulada incluindo este BM corresponde a '.$percAcumulada.'% das atividades realizadas.';
 
                 Yii::$app->db->createCommand('UPDATE bm SET executado_ee= '.$tot_ee.', executado_es= '.$tot_es.', executado_ep= '.$tot_ep.', executado_ej= '.$tot_ej.', executado_tp= '.$tot_tp.', descricao="'.$descricao.'", saldo ='.$saldo.', acumulado= '.$acumulada.' WHERE id='.$bm_id)->execute();
+
+
                 
 
                 $transaction->commit();

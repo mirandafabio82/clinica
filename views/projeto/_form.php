@@ -1408,7 +1408,7 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
            
             <?= Html::submitButton('<i class="fa fa-floppy-o" aria-hidden="true"></i> Salvar', ['class' =>'btn btn-barra saveEscopo']) ?>
             <button type="button" class="btn btn-barra"  data-toggle="modal" data-target="#emailModal"><i class="fa fa-envelope-o" aria-hidden="true"></i> Email</button>
-             <button type="button" class="btn btn-barra"  data-toggle="modal" data-target="#notaModal"><i class="fa fa-sticky-note-o" aria-hidden="true"></i> Notas Gerais</button>
+             <button type="button" class="btn btn-barra"  data-toggle="modal" data-target="#notaModal"><i class="fa fa-sticky-note-o" aria-hidden="true"></i> Notas Gerais <?php if(!empty($model->nota_geral)){ ?><span class="badge" style="background-color: yellow; color: black">!</span><?php } ?></button>
             <?php if($model->tipo=="A"){ ?>
                 <?= Html::a('<span class="btn-label"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Visualizar AS</span>', ['gerarrelatorio', 'id' => $model->id], ['class' => 'btn btn-barra', 'target'=>'_blank']) ?>
             <?php } ?>

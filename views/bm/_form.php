@@ -708,7 +708,8 @@ td, th {
 
   $dataEmail = date('d') < 15 ? '14/'.date('m/Y') : '25/'.date('m/Y'); 
 
-  $numberBM = $model->num_bm_proj;
+
+  $numberBM = count(Yii::$app->db->createCommand('SELECT id FROM bm WHERE projeto_id='.$model->projeto_id)->queryAll());
 
   $escopos_bm = Yii::$app->db->createCommand('SELECT escopo_id, bm_id, nome, bm_escopo.horas_ee, bm_escopo.horas_es, bm_escopo.horas_ep, bm_escopo.horas_ej, bm_escopo.horas_tp FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id='.$model->id)->queryAll();
 //transforma o numero de decimal para romano
