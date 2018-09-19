@@ -91,9 +91,11 @@ class ExecutanteController extends Controller
 
         $tipos_executantes = Yii::$app->db->createCommand('SELECT id, cargo FROM tipo_executante')->queryAll();
         $diciplinas = Yii::$app->db->createCommand('SELECT id, nome FROM disciplina')->queryAll();
+        $cargos = Yii::$app->db->createCommand('SELECT id, nome FROM executante_cargo')->queryAll();
         
         $listTipos = ArrayHelper::map($tipos_executantes,'id','cargo');
         $listDisc = ArrayHelper::map($diciplinas,'id','nome');
+        $listCargo = ArrayHelper::map($cargos,'id','nome');
 
         if ($_POST) {
             $connection = \Yii::$app->db;
@@ -140,6 +142,7 @@ class ExecutanteController extends Controller
                 'user' => $user,
                 'listTipos' => $listTipos,
                 'listDisc' => $listDisc,
+                'listCargo' => $listCargo,
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
             ]);
@@ -163,9 +166,11 @@ class ExecutanteController extends Controller
 
         $tipos_executantes = Yii::$app->db->createCommand('SELECT id, cargo FROM tipo_executante')->queryAll();
         $diciplinas = Yii::$app->db->createCommand('SELECT id, nome FROM disciplina')->queryAll();
+        $cargos = Yii::$app->db->createCommand('SELECT id, nome FROM executante_cargo')->queryAll();
 
         $listTipos = ArrayHelper::map($tipos_executantes,'id','cargo');
         $listDisc = ArrayHelper::map($diciplinas,'id','nome');
+        $listCargo = ArrayHelper::map($cargos,'id','nome');
 
         if ($_POST) {
             $connection = \Yii::$app->db;
@@ -223,6 +228,7 @@ class ExecutanteController extends Controller
                 'user' => $user,
                 'listTipos' => $listTipos,
                 'listDisc' => $listDisc,
+                'listCargo' => $listCargo,
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
             ]);

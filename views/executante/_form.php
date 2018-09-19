@@ -478,9 +478,14 @@ $this->registerJs("
           ]
       ]); ?>
     </div>
+
     <div class="col-md-2">
     <?= $form->field($model, 'qtd_km_dia')->textInput(['maxlength' => true]) ?>
     </div>
+    <div class="col-md-2">
+      <?= $form->field($model, 'cargo')->dropDownList($listCargo,['prompt'=>'Nenhum']) ?>
+    </div>
+
     </div>
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Cadastrar' : 'Salvar', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

@@ -18,6 +18,7 @@ $this->params['breadcrumbs'][] = 'Update';
         'user' => $user,
         'listTipos' => $listTipos,
         'listDisc' => $listDisc,
+        'listCargo' => $listCargo,
         'searchModel' => $searchModel,
         'dataProvider' => $dataProvider,
     ]) ?>
