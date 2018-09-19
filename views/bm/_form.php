@@ -62,6 +62,7 @@ $this->registerJs('
             type: "POST",
             success: function(response){
               alert("Atualizado com sucesso!");
+              console.log(response);
               location.reload();
            },
            error: function(request, status, error){

@@ -14,6 +14,7 @@ use app\models\Projeto;
 use app\models\BmExecutante;
 use yii\filters\AccessControl;
 use app\models\Documento;
+use app\models\Escopo;
 /**
  * BmController implements the CRUD actions for Bm model.
  */
@@ -392,32 +393,41 @@ class BmController extends Controller
                     $executado_ej = 0;
                     $executado_tp = 0;
 
+                    $escopo_model = Escopo::findOne(explode("-", $esc_h)[2]);
+                    
                     if(explode("_", explode("-", $esc_h)[1])[1]=='ee'){
                         $tot_ee= $tot_ee + explode("-", $esc_h)[3];
                         $executado_ee = explode("-", $esc_h)[3];
+                        $escopo_model->executado_ee = isset($escopo_model->executado_ee) ? abs($escopo_model->executado_ee+$executado_ee-$horas_antes['horas_ee']) : $executado_ee;
                     }
                     if(explode("_", explode("-", $esc_h)[1])[1]=='es'){
                         $tot_es= $tot_es + explode("-", $esc_h)[3];
                         $executado_es = explode("-", $esc_h)[3];
+                        $escopo_model->executado_es = isset($escopo_model->executado_es) ? abs($escopo_model->executado_es+$executado_es-$horas_antes['horas_es']) : $executado_es;
                     }
                     if(explode("_", explode("-", $esc_h)[1])[1]=='ep'){
                         $tot_ep= $tot_ep + explode("-", $esc_h)[3];
                         $executado_ep = explode("-", $esc_h)[3];
+                        $escopo_model->executado_ep = isset($escopo_model->executado_ep) ? abs($escopo_model->executado_ep+$executado_ep-$horas_antes['horas_ep']) : $executado_ep;
                     }
                     if(explode("_", explode("-", $esc_h)[1])[1]=='ej'){
                         $tot_ej= $tot_ej + explode("-", $esc_h)[3];
                         $executado_ej = explode("-", $esc_h)[3];
+                        $escopo_model->executado_ej = isset($escopo_model->executado_ej) ? abs($escopo_model->executado_ej+$executado_ej-$horas_antes['horas_ej']) : $executado_ej;
                     }
                     if(explode("_", explode("-", $esc_h)[1])[1]=='tp'){
                         $tot_tp= $tot_tp + explode("-", $esc_h)[3];
                         $executado_tp = explode("-", $esc_h)[3];
+                        $escopo_model->executado_tp = isset($escopo_model->executado_tp) ? abs($escopo_model->executado_tp+$executado_tp-$horas_antes['horas_tp']) : $executado_tp;
                     }
+                    $escopo_model->horas_saldo = abs($escopo_model->horas_saldo - (($horas_antes['horas_ee']+$horas_antes['horas_es']+$horas_antes['horas_ep']+$horas_antes['horas_ej']+$horas_antes['horas_tp']) - ($executado_ee+$executado_es+$executado_ep+$executado_ej+$executado_tp)));
 
-                    //Yii::$app->db->createCommand('UPDATE escopo SET executado_ee=executado_ee+'.$executado_ee.'-'.$horas_antes['horas_ee'].',executado_es=executado_es+'.$executado_es.'-'.$horas_antes['horas_es'].',executado_ep=executado_ep+'.$executado_ep.'-'.$horas_antes['horas_ep'].',executado_ej=executado_ej+'.$executado_ej.'-'.$horas_antes['horas_ej'].',executado_tp=executado_tp+'.$executado_tp.'-'.$horas_antes['horas_tp'].' WHERE id='.explode("-", $esc_h)[2])->execute();
+                    $escopo_model->horas_acumulada = $escopo_model->horas_acumulada + (($horas_antes['horas_ee']+$horas_antes['horas_es']+$horas_antes['horas_ep']+$horas_antes['horas_ej']+$horas_antes['horas_tp']) - ($executado_ee+$executado_es+$executado_ep+$executado_ej+$executado_tp));
+                    $escopo_model->save();
+                    
+                    
 
-                   // Yii::$app->db->createCommand('UPDATE escopo SET horas_saldo=(horas_ee+horas_es+horas_ep+horas_ej+horas_tp) - (executado_ee+executado_es+executado_ep+executado_ej+executado_tp) WHERE id='.explode("-", $esc_h)[2])->execute();
-
-                   // Yii::$app->db->createCommand('UPDATE escopo SET horas_acumulada=(executado_ee+executado_es+executado_ep+executado_ej+executado_tp) WHERE id='.explode("-", $esc_h)[2])->execute();
+                    Yii::$app->db->createCommand('UPDATE escopo SET horas_acumulada=(executado_ee+executado_es+executado_ep+executado_ej+executado_tp) WHERE id='.explode("-", $esc_h)[2])->execute();
 
 
                     //falta recalcular o saldo e acumulado da tabela escopo
