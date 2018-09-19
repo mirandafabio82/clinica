@@ -159,8 +159,10 @@ $usuario = Yii::$app->db->createCommand('SELECT * FROM user WHERE id='.Yii::$app
         <li><a href="<?= Url::to(['projeto/create']) ?>"><i class="fa fa-folder-open"></i> <span>Projetos</span></a></li>      
         
         <?php } ?>
-        <?php if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])){ ?>
+        <?php if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin']) || (isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['executante']) && (Yii::$app->db->createCommand('SELECT cargo FROM executante WHERE usuario_id='.Yii::$app->user->id)->queryScalar() == 2))){ ?>
         <li><a href="<?= Url::to(['bm/create']) ?>"><i class="fa fa-list"></i> <span>BM</span></a></li>
+        <?php } ?> 
+        <?php if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])){ ?>
         <li><a href="<?= Url::to(['faturamento/index']) ?>"><i class="fa fa-calculator"></i> <span>Faturamento</span></a></li>
         <li><a href="<?= Url::to(['cliente/create']) ?>"><i class="fa fa-handshake-o"></i> <span>Clientes</span></a></li>
         <?php } ?>        
