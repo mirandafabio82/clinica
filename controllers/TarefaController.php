@@ -217,9 +217,11 @@ class TarefaController extends Controller
         return $this->redirect(['index']);
     }
 
-    public function actionGerarbm($projetoid)
+    public function actionGerarbm($projetoid, $km_consumida)
     {
         $projetoModel = Projeto::findIdentity($projetoid);
+
+       
 
         //atualiza status geral
         Yii::$app->db->createCommand('UPDATE projeto SET status_geral=5 WHERE id='.$projetoid)->execute(); 
@@ -247,7 +249,9 @@ class TarefaController extends Controller
        
 
         
-        $percAcumulada = sprintf("%.2f",(($acu_saldo['horas_acu']+$executadas['ee_bm']+$executadas['es_bm']+$executadas['ep_bm']+$executadas['ej_bm']+$executadas['tp_bm']) * 100) / $totalHoras);
+        //$percAcumulada = sprintf("%.2f",(($acu_saldo['horas_acu']+$executadas['ee_bm']+$executadas['es_bm']+$executadas['ep_bm']+$executadas['ej_bm']+$executadas['tp_bm']) * 100) / $totalHoras);
+
+        $vl_km = Yii::$app->db->createCommand('SELECT vl_km FROM executante WHERE usuario_id=61')->queryScalar();
         
         $bmModel = new Bm();
         $bmModel->projeto_id = $projetoModel->id;
@@ -262,6 +266,7 @@ class TarefaController extends Controller
         $bmModel->executado_ep = $executadas['ep_bm']==0 ? null : $executadas['ep_bm'];
         $bmModel->executado_ej = $executadas['ej_bm']==0 ? null : $executadas['ej_bm'];
         $bmModel->executado_tp = $executadas['tp_bm']==0 ? null : $executadas['tp_bm'];
+        $bmModel->km = $km_consumida;
         $bmModel->acumulado = $acu_saldo['horas_acu']+$executadas['ee_bm']+$executadas['es_bm']+$executadas['ep_bm']+$executadas['ej_bm']+$executadas['tp_bm'];
         $bmModel->saldo = $acu_saldo['h_saldo'];
         // $bmModel->qtd_dias = $projetoModel->qtd_dias;
@@ -275,8 +280,23 @@ class TarefaController extends Controller
                         $bmModel->executado_ep * $tipo_exec[2]['valor_hora']+
                         $bmModel->executado_ej * $tipo_exec[1]['valor_hora']+
                         $bmModel->executado_tp * $tipo_exec[0]['valor_hora']+
-                        $bmModel['km'] * Yii::$app->db->createCommand('SELECT vl_km FROM executante WHERE usuario_id=61')->queryScalar(), 2, ',', '.');
-        $percBm = number_format((($executadas['ee_bm']+$executadas['es_bm']+$executadas['ep_bm']+$executadas['ej_bm']+$executadas['tp_bm']) * 100) / $totalHoras, 2, ',', '.');
+                        $bmModel->km * $vl_km, 2, ',', '.');
+
+        $percBm = number_format((($valorTotalBm) * 100) / $projetoModel->valor_proposta, 2, ',', '.');
+
+        $bms = Yii::$app->db->createCommand('SELECT * FROM bm WHERE projeto_id='.$projetoid)->queryAll();
+        $valor_todos_bms = 0;
+
+        foreach ($bms as $key => $bm) {
+            $valor_todos_bms = $valor_todos_bms + $bm['executado_ee'] * $tipo_exec[4]['valor_hora']+
+                        $bm['executado_es'] * $tipo_exec[3]['valor_hora'] +
+                        $bm['executado_ep'] * $tipo_exec[2]['valor_hora']+
+                        $bm['executado_ej'] * $tipo_exec[1]['valor_hora']+
+                        $bm['executado_tp'] * $tipo_exec[0]['valor_hora']+
+                        $bm['km'] * $vl_km;
+        }
+
+        $percAcumulada = number_format((($valor_todos_bms) * 100) / $projetoModel->valor_proposta, 2, ',', '.');
 
         $bmModel->descricao = $projetoModel->desc_resumida.'.'.PHP_EOL.'Esse '.$numbm.'º Boletim de Medição corresponde a '.$percBm.'% das atividades citadas na '.$projetoModel->proposta.''.PHP_EOL.'A medição total acumulada incluindo este BM corresponde a '.$percAcumulada.'% das atividades realizadas.';
 
