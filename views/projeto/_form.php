@@ -1415,7 +1415,7 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
             <?php if($model->tipo=="P"){ ?>
                 <?= Html::a('<span class="btn-label"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Visualizar Proposta</span>', ['gerarrelatorio', 'id' => $model->id], ['class' => 'btn btn-barra', 'target'=>'_blank']) ?>
             <?php } ?>
-              <label style="color: #08adff; margin-left: 2em;"><i class="fa fa-folder-open" aria-hidden="true"></i> <?= $model->nome ?> </label>
+              <label style="color: #08adff; margin-right: 5em; float: right; margin-top: 5px"><i class="fa fa-folder-open" aria-hidden="true"></i> <?= $model->nome ?> </label>
           <?php } ?>
           
         </div>

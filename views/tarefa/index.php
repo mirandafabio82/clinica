@@ -300,8 +300,8 @@ $this->registerJs('
 <div class="barra-btn" >
   <button type="button" class="btn btn-barra save" ><i class="fa fa-calendar" aria-hidden="true"></i> Adicionar Horas</button>
   <?php if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])){ ?>
-    <?= Html::a('<i class="fa fa-list" aria-hidden="true"></i> Gerar BM', ['/tarefa/gerarbm', 'projetoid'=>$projeto_selected,'km_consumida' => '$("#km_consumida").val()'], ['class'=>'btn btn-barra']) ?>
-    <button type="button" class="btn btn-barra" id="bm_teste"><i class="fa fa-calendar" aria-hidden="true"></i> Gerar BM</button>
+    
+    <button type="button" class="btn btn-barra" id="bm_teste"><i class="fa fa-list" aria-hidden="true"></i> Gerar BM</button>
   <?php } ?>
 </div>
   <?php Pjax::begin(['id' => 'pjax-grid-view']) ?>
