@@ -328,7 +328,7 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                     }*/
                 }
                      
-
+                $helder_exists = 0;
                 if(isset($_POST['ProjetoExecutante'])){
                    foreach ($_POST['ProjetoExecutante'] as $key => $proExe) {
                        $proExeModel = new ProjetoExecutante();
@@ -336,7 +336,22 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                        $proExeModel->executante_id = $proExe;
 
                        $proExeModel->save();
+                       if($proExe==61){
+                            $helder_exists = 1;
+                            Yii::$app->db->createCommand('UPDATE escopo SET exe_es_id=61 WHERE projeto_id='.$model->id.' AND nome="Coordenação e Administração"')->execute();
+                       }
                    }
+                }
+
+                //se Helder nao está no projeto, colocar o HCN e setar Coord e Admin para ele
+                if($helder_exists==0){
+                    $proExeModel = new ProjetoExecutante();
+                    $proExeModel->projeto_id = $model->id;
+                    $proExeModel->executante_id = Yii::$app->db->createCommand('SELECT id FROM user WHERE nome="HCN"')->queryScalar();
+
+                    $proExeModel->save();
+
+                    Yii::$app->db->createCommand('UPDATE escopo SET exe_es_id='.$proExeModel->executante_id.' WHERE projeto_id='.$model->id.' AND nome="Coordenação e Administração"')->execute();
                 }
 
                 if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['executante'])){

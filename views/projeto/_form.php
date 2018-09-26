@@ -1049,13 +1049,16 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
           <a class="remove-exec" id="remove-executante[0]"> <i class="fa fa-ban" id="remove-executante[0]"></i></a>
         </div>
       <?php } else{ 
-          $myExecutantes = Yii::$app->db->createCommand('SELECT executante_id FROM projeto_executante WHERE projeto_id='.$model->id)->queryAll();
+          $myExecutantes = Yii::$app->db->createCommand('SELECT executante_id, nome FROM projeto_executante JOIN user ON user.id=projeto_executante.executante_id WHERE projeto_id='.$model->id)->queryAll();
 
           foreach ($myExecutantes as $key => $myExec){
         ?>
         <div class="col-md-3" id="exec_div-<?=$key?>">       
           <?= $form->field($model, 'executante_id')->dropDownList($listData, ['prompt'=>'Selecione um executante' , 'class' => 'executante_dropdown form-control', 'name'=>'ProjetoExecutante['.$key.']', 'options'=>array($myExec['executante_id']=>array('selected'=>'selected'))]); ?>
-          <a class="remove-exec" id="remove-executante[<?=$key?>]"> <i class="fa fa-ban" id="remove-executante[<?=$key?>]"></i></a>
+
+          <?php if($myExec['nome'] != 'HCN'){ ?>
+              <a class="remove-exec" id="remove-executante[<?=$key?>]"> <i class="fa fa-ban" id="remove-executante[<?=$key?>]"></i></a>
+          <?php } ?>
         </div>
 
       <?php }} ?>
