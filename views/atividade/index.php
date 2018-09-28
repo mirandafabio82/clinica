@@ -150,11 +150,11 @@ $this->registerJs('
             'width' => '40em',
             'value' => function ($data) {
 
-              $horas_ee = Yii::$app->db->createCommand('SELECT SUM(horas_ee) as horas, SUM(executado) as exe FROM escopo WHERE projeto_id='.$data->id)->queryOne();
-              $horas_es = Yii::$app->db->createCommand('SELECT SUM(horas_es) as horas FROM escopo WHERE projeto_id='.$data->id)->queryOne();
-              $horas_ep = Yii::$app->db->createCommand('SELECT SUM(horas_ep) as horas FROM escopo WHERE projeto_id='.$data->id)->queryOne();
-              $horas_ej = Yii::$app->db->createCommand('SELECT SUM(horas_ej) as horas FROM escopo WHERE projeto_id='.$data->id)->queryOne();
-              $horas_tp = Yii::$app->db->createCommand('SELECT SUM(horas_tp) as horas FROM escopo WHERE projeto_id='.$data->id)->queryOne();
+              $horas_ee = Yii::$app->db->createCommand('SELECT SUM(horas_ee) as horas, SUM(executado_ee) as exe FROM escopo WHERE projeto_id='.$data->id)->queryOne();
+              $horas_es = Yii::$app->db->createCommand('SELECT SUM(horas_es) as horas, SUM(executado_es) as exe FROM escopo WHERE projeto_id='.$data->id)->queryOne();
+              $horas_ep = Yii::$app->db->createCommand('SELECT SUM(horas_ep) as horas, SUM(executado_ep) as exe FROM escopo WHERE projeto_id='.$data->id)->queryOne();
+              $horas_ej = Yii::$app->db->createCommand('SELECT SUM(horas_ej) as horas, SUM(executado_ej) as exe FROM escopo WHERE projeto_id='.$data->id)->queryOne();
+              $horas_tp = Yii::$app->db->createCommand('SELECT SUM(horas_tp) as horas, SUM(executado_tp) as exe FROM escopo WHERE projeto_id='.$data->id)->queryOne();
              
 
               if(empty($horas_ee['horas'])) $horas_ee['horas']=0;
@@ -167,12 +167,13 @@ $this->registerJs('
               $horas = $horas_ee['horas']+$horas_es['horas']+$horas_ep['horas']+$horas_ej['horas']+$horas_tp['horas'];
               
               if($horas!=0){
-                $progress = $horas_ee['exe'] / ($horas) * 100;
+                $progress = $horas_ee['exe']+$horas_es['exe']+$horas_ep['exe']+$horas_ej['exe']+$horas_tp['exe'] / ($horas) * 100;
+                $progressColor = "";
                
                 if($progress <= 30) $progressColor = 'danger'; 
                 if($progress <= 99.9 && $progress > 30) $progressColor = 'warning';
-                if($progress == 100) $progressColor = 'success';
-                
+                if($progress >= 100) $progressColor = 'success';
+
                 return '<div class="progress progress-xs">
                         <div class="progress-bar progress-bar-'.$progressColor.' progress-bar-striped" style="width:  '.$progress.'%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
                           </div>

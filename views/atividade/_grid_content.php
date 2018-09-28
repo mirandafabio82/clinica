@@ -119,14 +119,19 @@ $this->registerJs("
         </tr>
       </thead>
       <?php foreach ($escopos as $key => $escopo) { 
-            $cor = Yii::$app->db->createCommand('SELECT cor FROM escopo_status WHERE id='.$escopo['status'])->queryScalar();
             $escopoModel = Escopo::findIdentity($escopo['id']);
+            $escopo_executado_total = $escopoModel['executado_ee'] + $escopoModel['executado_es'] + $escopoModel['executado_ep'] + $escopoModel['executado_ej'] + $escopoModel['executado_tp'];
+
+            $cor = Yii::$app->db->createCommand('SELECT cor FROM escopo_status WHERE id='.$escopo['status'])->queryScalar();
+            
             if($escopoModel['horas_ee']+$escopoModel['horas_es']+$escopoModel['horas_ep']+$escopoModel['horas_ej']+$escopoModel['horas_tp'] > 0){
-              $progress = $escopoModel->executado / ($escopoModel['horas_ee']+$escopoModel['horas_es']+$escopoModel['horas_ep']+$escopoModel['horas_ej']+$escopoModel['horas_tp']) * 100;
+              $progress = $escopo_executado_total / ($escopoModel['horas_ee']+$escopoModel['horas_es']+$escopoModel['horas_ep']+$escopoModel['horas_ej']+$escopoModel['horas_tp']) * 100;
             }
             else{
               $progress = 0;
             }
+
+
             
             if($escopo['status'] == 1) $progressColor = 'warning'; 
             if($escopo['status'] == 2) $progressColor = 'success';
@@ -136,10 +141,10 @@ $this->registerJs("
       <tr style="background-color: <?=$cor?> !important">
         <td style="font-size: 15px; padding: 1px;padding-left: 1em;color: white"><?=$escopo['nome'] ?></td>
                 
-        <?php if(isset(explode('.',$escopo['executado'])[1]) && explode('.',$escopo['executado'])[1]=='00'){ ?>
-        <td style="font-size: 15px; padding-right: 1em;"><?= $form->field($escopoModel, 'executado')->textInput(['maxlength' => true, 'readonly'=>$editable, 'name'=>'Escopo['.$escopo['id'].'][executado]', 'class' =>'form-control executado', 'value'=> explode('.',$escopo['executado'])[0] ])->label(false) ?>  </td>
+        <?php if(isset(explode('.',$escopo_executado_total)[1]) && explode('.',$escopo_executado_total)[1]=='00'){ ?>
+        <td style="text-align: center;color: white;font-size: 15px; padding-right: 1em;"><?= $escopo_executado_total ?>  </td>
         <?php } else{ ?>
-        <td style="font-size: 15px; padding-right: 1em;"><?= $form->field($escopoModel, 'executado')->textInput(['maxlength' => true, 'readonly'=>$editable, 'name'=>'Escopo['.$escopo['id'].'][executado]', 'class' =>'form-control executado' ])->label(false) ?>  </td>
+        <td style="text-align: center;color: white;font-size: 15px; padding-right: 1em;"><?= $escopo_executado_total ?>  </td>
         <?php } ?>
       
         <td style=" text-align: center;font-size: 15px; padding-right: 0.5em;color: white"><?= $escopoModel['horas_ee']+$escopoModel['horas_es']+$escopoModel['horas_ep']+$escopoModel['horas_ej']+$escopoModel['horas_tp'] ?>  </td>

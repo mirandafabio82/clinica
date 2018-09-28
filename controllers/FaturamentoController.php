@@ -82,7 +82,8 @@ class FaturamentoController extends \yii\web\Controller
                                 $ano = trim(explode(' ',trim(explode('/', explode('PGT BM ', $text)[1])[1]))[0]);
                               }
 
-                              $projeto_id = Yii::$app->db->createCommand('SELECT projeto_id FROM bm WHERE de="'.$periodo_de.'" AND para ="'.$periodo_para.'"')->queryScalar();
+                              // $projeto_id = Yii::$app->db->createCommand('SELECT projeto_id FROM bm WHERE de="'.$periodo_de.'" AND para ="'.$periodo_para.'"')->queryScalar();
+                              $projeto_id = Yii::$app->db->createCommand('SELECT projeto_id FROM bm WHERE numero_bm='.$num_bm)->queryScalar();
 
                               $projeto_arr = Yii::$app->db->createCommand('SELECT * FROM projeto WHERE id='.$projeto_id)->queryOne();
 
