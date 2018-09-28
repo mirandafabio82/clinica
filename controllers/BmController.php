@@ -170,7 +170,8 @@ class BmController extends Controller
                 $model->para = date_format($dat, 'Y-m-d');
             }
 
-            foreach ($_POST['bm_executante'] as $key => $bm_exe) {
+            if(isset($_POST['bm_executante'])){
+                foreach ($_POST['bm_executante'] as $key => $bm_exe) {
                 $bm_executante = Yii::$app->db->createCommand('SELECT * FROM bm_executante WHERE bm_id='.$model->id.' AND executante_id='.$key)->queryOne();
                
                 if(!empty($bm_executante)){
@@ -189,7 +190,9 @@ class BmController extends Controller
                     print_r($bm_exe_model->getErrors());
                     die();
                 }
-            }           
+            }    
+            }
+                   
 
 
             $model->save();            

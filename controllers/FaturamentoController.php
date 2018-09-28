@@ -7,6 +7,7 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 use app\models\Documento;
 use yii\helpers\FileHelper;
+use \Datetime;
 
 class FaturamentoController extends \yii\web\Controller
 {
@@ -61,7 +62,12 @@ class FaturamentoController extends \yii\web\Controller
                             $cliente = Yii::$app->db->createCommand('SELECT * FROM cliente WHERE cnpj="'.$cnpj.'"')->queryOne();
 
                             $valor_total = trim(explode(' ', trim(explode(',00', $text)[1]))[0]);
-                          
+
+                            $periodo_de = trim(explode('a', explode('Período:', $text)[1])[0]);
+                            $periodo_de = date_format(DateTime::createFromFormat('d.m.Y', $periodo_de), 'Y-m-d'); 
+
+                            $periodo_para = trim(explode(' ',ltrim(explode('a', explode('Período:', $text)[1])[1]))[0]);
+                            $periodo_para = date_format(DateTime::createFromFormat('d.m.Y', $periodo_para), 'Y-m-d'); 
                             
                             if(!strpos($text, 'PGT BM') && empty($_POST['frs_num_bm'])){ //nao possui BM na FRS
                               return 'sem_num_bm';
@@ -76,7 +82,7 @@ class FaturamentoController extends \yii\web\Controller
                                 $ano = trim(explode(' ',trim(explode('/', explode('PGT BM ', $text)[1])[1]))[0]);
                               }
 
-                              $projeto_id = Yii::$app->db->createCommand('SELECT projeto_id FROM bm WHERE numero_bm='.$num_bm)->queryScalar();
+                              $projeto_id = Yii::$app->db->createCommand('SELECT projeto_id FROM bm WHERE de="'.$periodo_de.'" AND para ="'.$periodo_para.'"')->queryScalar();
 
                               $projeto_arr = Yii::$app->db->createCommand('SELECT * FROM projeto WHERE id='.$projeto_id)->queryOne();
 

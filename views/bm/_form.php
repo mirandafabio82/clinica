@@ -11,7 +11,7 @@ use kartik\money\MaskMoney;
 /* @var $form yii\widgets\ActiveForm */
 
 $fileName = '';
-if(!$model->isNewRecord){ 
+if(!$model->isNewRecord && isset($model->projeto_id)){ 
   $fileName = '/web/uploaded-files/'.$model->projeto_id.'/BM-'.Yii::$app->db->createCommand("SELECT proposta FROM projeto WHERE id=".$model->projeto_id)->queryScalar().'_'.$model->numero_bm; 
 }
 
@@ -27,7 +27,7 @@ if(!$model->isNewRecord){
   $bm_id_href = $model->id;
 }
 
-if(!$model->isNewRecord){
+if(!$model->isNewRecord && isset($model->projeto_id)){
   $km_total = Yii::$app->db->createCommand('SELECT qtd_km FROM projeto WHERE id='.$model->projeto_id)->queryScalar();
   $km_gasto = Yii::$app->db->createCommand('SELECT SUM(km) FROM bm WHERE projeto_id='.$model->projeto_id)->queryScalar();
 
