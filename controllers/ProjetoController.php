@@ -21,6 +21,7 @@ use yii\helpers\Json;
 use \Datetime;
 use yii\helpers\Url;
 use app\models\Documento;
+use app\models\RevisaoProjeto;
 // use kartik\mpdf\Pdf;
 
 //require_once  'C:\xampp\htdocs\hcn\vendor\autoload.php';
@@ -166,11 +167,31 @@ class ProjetoController extends Controller
                 $transaction = $connection->beginTransaction();
 
                 $model->setAttributes($_POST['Projeto']); 
+                
+                $identificador = "";
+                if(isset($_POST['Escopos']['Automação'][1])){ $identificador = "PCO"; }
+                if(isset($_POST['Escopos']['Automação'][2])){ $identificador = "PBA"; }
+                if(isset($_POST['Escopos']['Automação'][3])){ $identificador = "PDE"; }
+                if(isset($_POST['Escopos']['Automação'][4])){ $identificador = "CFG"; }
+                if(isset($_POST['Escopos']['Automação'][3]) && isset($_POST['Escopos']['Automação'][4])){$identificador = "PDC"; }
+
+                if(isset($_POST['Escopos']['Processo'][1])){ $identificador = "PCO"; }
+                if(isset($_POST['Escopos']['Processo'][2])){ $identificador = "PBA"; }
+                if(isset($_POST['Escopos']['Processo'][3])){ $identificador = "PDE"; }
+                if(isset($_POST['Escopos']['Processo'][4])){ $identificador = "CFG"; }
+                if(isset($_POST['Escopos']['Processo'][3]) && isset($_POST['Escopos']['Processo'][4])){$identificador = "PDC"; }
+
+                if(isset($_POST['Escopos']['Instrumentação'][1])){ $identificador = "PCO"; }
+                if(isset($_POST['Escopos']['Instrumentação'][2])){ $identificador = "PBA"; }
+                if(isset($_POST['Escopos']['Instrumentação'][3])){ $identificador = "PDE"; }
+                if(isset($_POST['Escopos']['Instrumentação'][4])){ $identificador = "CFG"; }
+                if(isset($_POST['Escopos']['Instrumentação'][3]) && isset($_POST['Escopos']['Instrumentação'][4])){$identificador = "PDC"; }
+
                 if($model->tipo == "P"){
-                    $model->proposta = 'PTC'.'-'.$model->codigo.'-'.$model->site.'-'.$model->rev_proposta;
+                    $model->proposta = 'PTC'.'-'.$model->codigo.'-'.$identificador.'-'.$model->site.'-'.$model->rev_proposta;
                 }
                 else{
-                    $model->proposta = 'AS'.'-'.$model->codigo.'-'.$model->site.'-'.explode("-",$model->nome)[1].'_'.$model->rev_proposta;
+                    $model->proposta = 'AS'.'-'.$model->codigo.'-'.$identificador.'-'.$model->site.'-'.explode("-",$model->nome)[1].'_'.$model->rev_proposta;
                 }
                 
                 if(!empty($_POST['Projeto']['data_proposta'])){
@@ -1399,5 +1420,41 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                 return $e;
             } 
         }       
+    }
+
+    public function actionSalvarrevisao(){
+        if (Yii::$app->request->isAjax) {               
+            $projeto_id = Yii::$app->request->post()['projeto_id'];
+            $data = Yii::$app->request->post()['data'];
+            $descricao = Yii::$app->request->post()['descricao'];
+            $por = Yii::$app->request->post()['por'];
+
+            try{
+                $model = new RevisaoProjeto;
+                $model->projeto_id = $projeto_id;
+                $model->data = $data;
+                $model->descricao = $descricao;
+                $model->por = $por;
+                $model->save(); 
+                return 'success';
+            }
+            catch(Exception $e){
+                return $e;
+            } 
+        }       
+    }
+
+    public function actionDeleterevisao(){
+        if (Yii::$app->request->isAjax) {   
+            $id = Yii::$app->request->post()['id'];
+
+            try{
+                Yii::$app->db->createCommand('DELETE FROM revisao_projeto WHERE id='.$id)->execute();
+            }
+            catch(Exception $e){
+                return 'failed';
+            }
+            return 'success';
+        }
     }
 }

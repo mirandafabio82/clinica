@@ -152,6 +152,28 @@ $this->registerJs('
       });
     });
 
+    $("#salvarRevisao").click(function (e) {
+      var projeto_id = window.location.href.split("id=")[1];
+      var data = $("#revisao_data").val();
+      var descricao = $("#revisao_descricao").val();
+      var por = $("#revisao_por").val();
+
+        $.ajax({ 
+          url: "index.php?r=projeto/salvarrevisao",
+          data: {data: data, projeto_id: projeto_id, descricao: descricao, por: por},
+          type: "POST",
+          success: function(response){
+           $("#close_modal").click(); 
+           alert("Revisão salva com sucesso!");
+           console.log(response);     
+           location.reload();      
+         },
+         error: function(request, status, error){
+          alert(request.responseText);
+        }
+      });
+    });
+
     $("input").removeClass("form-control");
     
     $("input[id^=\'projeto\']").addClass("form-control");
@@ -159,6 +181,7 @@ $this->registerJs('
     $("#assunto").addClass("form-control");
     $("#projeto-as_aprovada").removeClass("form-control");
     $(".np_autocomplete").addClass("form-control");
+    $(".revisao").addClass("form-control");
 
     $(".messages-inline").text("");
 
@@ -658,6 +681,31 @@ $(".remove-exec").click(function(ev){
            if(response=="success"){
               console.log(response);
               $("#tabela-escopo")[0].deleteRow($("#delete_atividade_"+id).parent().parent()[0].rowIndex);
+           }
+           else{
+              alert("algum erro ocorreu");
+           }
+           
+         },
+         error: function(){
+          console.log("failure");
+        }
+      });
+      
+  });
+
+  $(".icon-delete-revisao").click(function(e){
+      id = this.id.split("_")[2];
+
+      $.ajax({ 
+          url: "index.php?r=projeto/deleterevisao",
+          data: {id: id},
+          type: "POST",
+          success: function(response){
+           if(response=="success"){
+              console.log(response);
+              alert("Revisão excluída com sucesso!");
+              location.reload();
            }
            else{
               alert("algum erro ocorreu");
@@ -1415,6 +1463,7 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
             <?php if($model->tipo=="A"){ ?>
                 <?= Html::a('<span class="btn-label"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Visualizar AS</span>', ['gerarrelatorio', 'id' => $model->id], ['class' => 'btn btn-barra', 'target'=>'_blank']) ?>
             <?php } ?>
+            <button type="button" class="btn btn-barra"  data-toggle="modal" data-target="#revisoesModal"><i class="fa fa-sticky-note-o" aria-hidden="true"></i> Revisões </button>
             <?php if($model->tipo=="P"){ ?>
                 <?= Html::a('<span class="btn-label"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Visualizar Proposta</span>', ['gerarrelatorio', 'id' => $model->id], ['class' => 'btn btn-barra', 'target'=>'_blank']) ?>
             <?php } ?>
@@ -2106,6 +2155,71 @@ HCN Automação
   </div>
 </div>
 
+<?php if(!$model->isNewRecord){ ?>
+<div id="revisoesModal" class="modal fade" role="dialog" style="z-index: 999999999">
+  <div class="modal-dialog" style="width:80%">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <div  class="col-md-12" align="center">  
+            <img style="z-index: 999999999" src="resources/dist/img/loading.gif" type="hidden" name="loading" id="loading_nota" value="" width="64px" hidden/>        
+          </div> 
+        <h4 class="modal-title">Notas Gerais</h4>
+      </div>
+      <div class="modal-body">             
+        <table border="1" align="center">
+          <tbody>
+                <tr>  <td width="64" align="center">AÇÃO</td>
+                      <td width="64" align="center">REV.</td>
+                      <td width="73" align="center">DATA</td>
+                      <td colspan="7" width="404">DESCRIÇÃO</td>
+                      <td width="64" align="center">POR</td>
+                </tr>     
+                <?php 
+                  $revisoes = Yii::$app->db->createCommand('SELECT * FROM revisao_projeto WHERE projeto_id = '.$model->id)->queryAll();
+                  foreach ($revisoes as $key => $revisao) { ?>
+                    <tr>
+                      <td align="center" padding="10px" ><a class="icon-delete-revisao" id="delete_revisao_<?=$revisao['id']?>" style="margin-right: 1em;cursor: pointer;"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+                      <td align="center" padding="10px" style="padding: 2px"><?= $key + 1?></td>
+                      <td align="center" padding="10px" style="padding: 2px"><?= date_format(DateTime::createFromFormat('Y-m-d', $revisao['data']), 'd/m/Y'); ?></td>
+                      <td padding="10px" colspan="7" style="padding: 2px"><?= $revisao['descricao'] ?></td>
+                      <td align="center" padding="10px" style="padding: 2px"><?= $revisao['por'] ?></td>
+                  </tr>
+
+                <?php  } ?>
+                <tr>  <td>&nbsp;</td> 
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
+                      <td colspan="7">&nbsp;</td>
+                      <td>&nbsp;</td>
+                </tr>
+                
+          </tbody>
+          </table>
+          <div class="row" style="margin-top: 1em">
+            <div class="col-md-2">
+              Data: <input type="date" name="revisao['data']" class="revisao form-control" value="<?= date('Y-m-d') ?>" id="revisao_data">
+            </div>
+            <div class="col-md-6">
+              Descrição: <input type="text" name="revisao['descricao']" class="revisao form-control" id="revisao_descricao">
+            </div>
+            <div class="col-md-2">
+              Por: <input type="text" name="revisao['por']" value="HCN" class="revisao form-control" id="revisao_por">
+            </div>
+          </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" id="close_modal_nota">Fechar</button>
+        <button type="button" class="btn btn-success" id="salvarRevisao" >Salvar</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+<?php } ?>
 
 <?php 
   

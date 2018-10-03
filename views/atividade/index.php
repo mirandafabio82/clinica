@@ -167,7 +167,7 @@ $this->registerJs('
               $horas = $horas_ee['horas']+$horas_es['horas']+$horas_ep['horas']+$horas_ej['horas']+$horas_tp['horas'];
               
               if($horas!=0){
-                $progress = $horas_ee['exe']+$horas_es['exe']+$horas_ep['exe']+$horas_ej['exe']+$horas_tp['exe'] / ($horas) * 100;
+                $progress = ($horas_ee['exe']+$horas_es['exe']+$horas_ep['exe']+$horas_ej['exe']+$horas_tp['exe']) / ($horas) * 100;
                 $progressColor = "";
                
                 if($progress <= 30) $progressColor = 'danger'; 

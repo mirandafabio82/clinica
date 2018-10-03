@@ -34,29 +34,23 @@ th, td {
             <td colspan="7" width="404">DESCRIÇÃO</td>
             <td width="64" align="center">POR</td>
       </tr>
-      <tr>
-            <td align="center"><?=$projeto->rev_proposta?></td>
-            <td><?=isset($projeto->data_proposta) ? date_format(DateTime::createFromFormat('Y-m-d', $projeto->data_proposta), 'd/m/Y') : '';?></td>
-            <td colspan="7">Emiss&atilde;o Inicial</td>
-            <td align="center">HCN</td>
-      </tr>
-      <tr>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td colspan="7">&nbsp;</td>
-            <td>&nbsp;</td>
-      </tr>
-      <tr>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td colspan="7">&nbsp;</td>
-            <td>&nbsp;</td>
-      </tr>
+      
+      <?php 
+            $revisoes = Yii::$app->db->createCommand('SELECT * FROM revisao_projeto WHERE projeto_id = '.$projeto->id)->queryAll();
+            foreach ($revisoes as $key => $revisao) { ?>                        
+                  <tr>
+                      <td align="center" padding="10px" style="padding: 2px"><?= $key + 1?></td>
+                      <td align="center" padding="10px" style="padding: 2px"><?= date_format(DateTime::createFromFormat('Y-m-d', $revisao['data']), 'd/m/Y'); ?></td>
+                      <td padding="10px" colspan="7" style="padding: 2px"><?= $revisao['descricao'] ?></td>
+                      <td align="center" padding="10px" style="padding: 2px"><?= $revisao['por'] ?></td>
+                  </tr>
+      <?php } ?>
       <tr>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
             <td colspan="7">&nbsp;</td>
             <td>&nbsp;</td>
       </tr>
+      
 </tbody>
 </table>
