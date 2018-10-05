@@ -299,8 +299,8 @@ class BmController extends Controller
 
             $mpdf = new \Mpdf\Mpdf();
             $mpdf->WriteHTML($bm_page);   
-            $mpdf->Output('uploaded-files/'.$projeto['id'].'/BM-'.$projeto['proposta'].'_'.$bm['numero_bm'].'.pdf', 'F');     
-            $mpdf->Output('uploaded-files/'.$projeto['id'].'/BM-'.$projeto['proposta'].'_'.$bm['numero_bm'].'.pdf', 'I');         
+            $mpdf->Output('uploaded-files/'.$projeto['id'].'/BM-'.explode('AS-', explode('_', $projeto['proposta'])[0])[1].'_'.$bm['numero_bm'].'.pdf', 'F');     
+            $mpdf->Output('uploaded-files/'.$projeto['id'].'/BM-'.explode('AS-', explode('_', $projeto['proposta'])[0])[1].'_'.$bm['numero_bm'].'.pdf', 'I');         
 
             $existsFile = Yii::$app->db->createCommand('SELECT id FROM documento WHERE nome="BM-'.$projeto['proposta'].'_'.$bm['numero_bm'].'.pdf"')->queryScalar();
 

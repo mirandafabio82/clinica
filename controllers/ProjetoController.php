@@ -387,6 +387,13 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                     }
                 }
 
+                $revisaoModel = new RevisaoProjeto;
+                $revisaoModel->projeto_id = $model->id;
+                $revisaoModel->data = date('Y-m-d');
+                $revisaoModel->descricao = 'Emissão Inicial';
+                $revisaoModel->por = 'HCN';
+                $revisaoModel->save(); 
+
                 $transaction->commit();
                 return $this->redirect(['update', 'id' => $model->id]);
             }

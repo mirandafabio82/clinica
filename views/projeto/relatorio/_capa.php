@@ -39,7 +39,7 @@ th, td {
             $revisoes = Yii::$app->db->createCommand('SELECT * FROM revisao_projeto WHERE projeto_id = '.$projeto->id)->queryAll();
             foreach ($revisoes as $key => $revisao) { ?>                        
                   <tr>
-                      <td align="center" padding="10px" style="padding: 2px"><?= $key + 1?></td>
+                      <td align="center" padding="10px" style="padding: 2px"><?= $key?></td>
                       <td align="center" padding="10px" style="padding: 2px"><?= date_format(DateTime::createFromFormat('Y-m-d', $revisao['data']), 'd/m/Y'); ?></td>
                       <td padding="10px" colspan="7" style="padding: 2px"><?= $revisao['descricao'] ?></td>
                       <td align="center" padding="10px" style="padding: 2px"><?= $revisao['por'] ?></td>

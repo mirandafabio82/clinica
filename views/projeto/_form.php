@@ -2182,7 +2182,7 @@ HCN Automação
                   foreach ($revisoes as $key => $revisao) { ?>
                     <tr>
                       <td align="center" padding="10px" ><a class="icon-delete-revisao" id="delete_revisao_<?=$revisao['id']?>" style="margin-right: 1em;cursor: pointer;"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
-                      <td align="center" padding="10px" style="padding: 2px"><?= $key + 1?></td>
+                      <td align="center" padding="10px" style="padding: 2px"><?= $key?></td>
                       <td align="center" padding="10px" style="padding: 2px"><?= date_format(DateTime::createFromFormat('Y-m-d', $revisao['data']), 'd/m/Y'); ?></td>
                       <td padding="10px" colspan="7" style="padding: 2px"><?= $revisao['descricao'] ?></td>
                       <td align="center" padding="10px" style="padding: 2px"><?= $revisao['por'] ?></td>
