@@ -1463,7 +1463,7 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
             <?php if($model->tipo=="A"){ ?>
                 <?= Html::a('<span class="btn-label"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Visualizar AS</span>', ['gerarrelatorio', 'id' => $model->id], ['class' => 'btn btn-barra', 'target'=>'_blank']) ?>
             <?php } ?>
-            <button type="button" class="btn btn-barra"  data-toggle="modal" data-target="#revisoesModal"><i class="fa fa-sticky-note-o" aria-hidden="true"></i> Revisões </button>
+            <button type="button" class="btn btn-barra"  data-toggle="modal" data-target="#revisoesModal"><i class="fa fa-search" aria-hidden="true"></i> Revisões </button>
             <?php if($model->tipo=="P"){ ?>
                 <?= Html::a('<span class="btn-label"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Visualizar Proposta</span>', ['gerarrelatorio', 'id' => $model->id], ['class' => 'btn btn-barra', 'target'=>'_blank']) ?>
             <?php } ?>
