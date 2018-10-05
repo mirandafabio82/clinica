@@ -308,9 +308,9 @@ class BmController extends Controller
                 //cria o registro do arquivo
                 $doc = new Documento();
                 $doc->projeto_id = $bm['projeto_id'];
-                $doc->nome = 'BM-'.$projeto->proposta.'_'.$bm['numero_bm'].'.pdf';
+                $doc->nome = 'BM-'.explode('AS-', explode('_', $projeto['proposta'])[0])[1].'_'.$bm['numero_bm'].'.pdf';
                 $doc->revisao = 0;
-                $doc->path = 'BM-'.$projeto->proposta.'_'.$bm['numero_bm'].'.pdf';
+                $doc->path = 'BM-'.explode('AS-', explode('_', $projeto['proposta'])[0])[1].'_'.$bm['numero_bm'].'.pdf';
                 $doc->is_global = 0;
                 $doc->save();
             }
