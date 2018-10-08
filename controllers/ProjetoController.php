@@ -1464,4 +1464,35 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
             return 'success';
         }
     }
+
+    public function actionExtrairinformacoes(){
+        if (Yii::$app->request->isAjax) {
+            if($_FILES['file']['name'] != '')  
+             { 
+                $temp = explode(".", $_FILES['file']['name']);
+                $extension = end($temp);  
+                  $allowed_type = array("pdf", "PDF");  
+                  if(in_array($extension, $allowed_type))  
+                   {                           
+                        if (!is_dir(Yii::$app->basePath . '/web/uploaded-files/temp_files')) {
+                            mkdir(Yii::$app->basePath . '/web/uploaded-files/temp_files');
+                            FileHelper::createDirectory(Yii::$app->basePath . '/web/uploaded-files/temp_files', $mode = 0775, $recursive = true);
+                        }
+
+                       $path = Yii::$app->basePath . '/web/uploaded-files/temp_files/temp_frs.pdf'; 
+                       if(move_uploaded_file($_FILES['file']['tmp_name'], $path))  
+                       {  
+                            //ler PDF
+                            chmod($path, 0775);
+                            $parser = new \Smalot\PdfParser\Parser();
+                            $pdf = $parser->parseFile($path);
+                             
+                            $text = $pdf->getText();
+                            return $text;
+                        }
+                    }
+            }
+            
+        }
+    }
 }

@@ -91,6 +91,11 @@ input[type=number]::-webkit-outer-spin-button {
     background-color: white; /* Green */
     color: white;
 }
+
+.dropify-wrapper.touch-fallback .dropify-clear {
+  display:none;
+}
+
 </style>
 
 
@@ -762,6 +767,39 @@ $(".remove-exec").click(function(ev){
 
   });
 
+  $(".dropify").dropify({
+        tpl: {
+        message:         "<div class=\"dropify-message\"><span class=\"file-icon\" /> <p>Clique ou arraste um arquivo para adicioná-lo </p></div>",
+    }
+    });
+
+    $("#extrair_informacoes_btn").click(function(ev){
+    
+    var fileInput = document.getElementById("projeto_pdf");
+    var file = fileInput.files[0];
+    var formData = new FormData();
+    formData.append("file", file);
+    //formData.append("frs_num_bm", $("#frs_num_bm").val());
+    
+    $.ajax({ 
+          url: "index.php?r=projeto/extrairinformacoes",
+          data: formData,
+          type: "POST",
+          cache: false,
+            //dataType: "json",
+            processData: false, // Dont process the files
+            contentType: false,
+          success: function(response){
+            console.log(response); 
+            $("#pdf_content").val(response);
+         
+          },
+          error: function(){
+           console.log("failure");
+          }
+    });
+  });
+
 ');
 ?>
 <?php
@@ -1052,7 +1090,19 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
             ],
             ]); ?>
             
-          
+            <?php if($model->isNewRecord){ ?>
+              <div class="row">
+                <div class="col-md-6"> 
+                  <input type="file" id="projeto_pdf" accept="application/pdf" name="projeto_pdf" class="dropify">
+                </div>
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-primary" id="extrair_informacoes_btn">Extrair Informações</button>
+                </div>
+                <div class="col-md-2">
+                    <textarea rows="10" cols="50" id="pdf_content"></textarea>
+                  </div>
+              </div>
+            <?php } ?>
             </div>
             </div>
 
