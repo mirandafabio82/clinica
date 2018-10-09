@@ -155,6 +155,11 @@ $this->registerJs('
      foreach ($listPrestadores as $key => $prest) {                   
         $prestadores .= '<option value="'.$key.'">'.$prest.' </option>';        
      }
+
+     $rel_geral_content = '<div style="margin-top:1em">
+                              '.Html::a('<span class="btn-label"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Gerar Relatório</span>', ['relatoriogeral'], ['class' => 'btn btn-primary', 'target'=>'_blank']).                            
+                          '</div>
+     ';
   
    $extrato_content = '<div style="margin-top:1em">
             <form id="form_extrato" method="post" enctype="multipart/form-data">
@@ -204,6 +209,11 @@ $this->registerJs('
         'label'=>'Extrato de Prestadores de Serviço',
         'content'=>$extrato_content,
         'active'=>true,       
+    ],
+    [
+        'label'=>'Relatório Geral',
+        'content'=>$rel_geral_content,
+        'active'=>false,       
     ],
       
 

@@ -164,5 +164,14 @@ class RelatorioController extends Controller
                 }
             }
     }
+
+    public function actionRelatoriogeral(){  
+
+        $projetos = Yii::$app->db->createCommand('SELECT * FROM projeto ORDER BY id DESC')->queryAll();
+
+        return $this->render('_relatoriogeral', [
+            'projetos' => $projetos,
+        ]);
+    }
     
 }
