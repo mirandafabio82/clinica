@@ -789,9 +789,93 @@ $(".remove-exec").click(function(ev){
             //dataType: "json",
             processData: false, // Dont process the files
             contentType: false,
-          success: function(response){
+          success: function(response){    
+            //checa se o texto contem a substring
+            var pj = "";            
+            pj = response.split("PJ-")[1].replace(/\s\s+/g, " ").split(" ")[0];
+            if(pj==""){
+              pj = response.split("PJ- ")[1].replace(/\s\s+/g, " ").split(" ")[0];
+            }
+            pjnum = pj;
+            pj = "PJ-"+pj;
+            
+            var descricao = "";
+            var planta = "";
+            var cliente_id = "";
+
+            if(response.indexOf("PROJETO CONCEITUAL") !== -1){              
+              descricao = response.split("PROJETO CONCEITUAL")[1].split("PJ")[0];
+              planta = response.split(pjnum)[1].split("-")[0].trim();
+              $("#Automação_2").attr("checked", "checked");
+            }
+            else if(response.indexOf("-ME-") !== -1){//Projeto Básico 
+               descricao = response.split("TÍTULO DO PROJETO ")[1].split("Rev Data")[0];
+               planta = response.split("PLANTA ÁREA ")[1].split("-")[0].trim();
+               $("#Automação_3").attr("checked", "checked");
+            }
+            else { //Memorial Descritivo
+              descricao = response.split("TÍTULO DO PROJETO ")[1].split("Rev Data")[0];
+              planta = response.split(pjnum)[1].split("-")[0].trim();
+              $("#Automação_4").attr("checked", "checked");
+            }
+  
+              console.log(planta);
+            $.ajax({ 
+              url: "index.php?r=projeto/getidfromextrairinformacoes",
+              data: {planta: planta},
+              type: "POST",
+              success: function(response){
+                cliente_id = response;
+                $("#projeto-cliente_id").val(cliente_id);
+                 $.ajax({ 
+                  url: "index.php?r=projeto/preencheformcliente",
+                  data: {id: cliente_id},
+                  type: "POST",
+                  success: function(response){
+                   console.log(response);
+                   var resposta = $.parseJSON(response);
+                   $("#projeto-uf").val(resposta["uf"]);
+                   $("#projeto-municipio").val(resposta["cidade"]);
+                   $("#projeto-cnpj").val(resposta["cnpj"]);
+                   $("#projeto-codigo").val(resposta["codigo"]);
+                   $("#projeto-site").val(resposta["site"]);
+                 },
+                   error: function(){
+                    console.log("failure");
+                  }
+                });
+
+                $.ajax({ 
+                  url: "index.php?r=projeto/preenchepreenchecontatos",
+                  data: {id: cliente_id},
+                  type: "POST",
+                  success: function(response){
+                   var resposta = $.parseJSON(response);
+                   console.log(resposta);
+                   var myOptions = resposta;
+
+                   $("#projeto-contato_id").children("option:not(:first)").remove();
+                   var mySelect = $("#projeto-contato_id");
+                   $.each(myOptions, function(val, text) {
+                    mySelect.append(
+                    $("<option></option>").val(text["id"]).html(text["nome"])
+                    );
+                  });
+                },
+                error: function(){
+                  console.log("failure");
+                }
+              });
+             },
+               error: function(){
+                console.log("failure");
+              }
+            });
+
+             $("#projeto-descricao").val(descricao);
+             $("#projeto-nome").val(pj);
             console.log(response); 
-            $("#pdf_content").val(response);
+            // $("#pdf_content").val(response);
          
           },
           error: function(){
@@ -1098,9 +1182,9 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
                 <div class="col-md-2">
                     <button type="button" class="btn btn-primary" id="extrair_informacoes_btn">Extrair Informações</button>
                 </div>
-                <div class="col-md-2">
+                <!-- <div class="col-md-2">
                     <textarea rows="10" cols="50" id="pdf_content"></textarea>
-                  </div>
+                  </div> -->
               </div>
             <?php } ?>
             </div>
@@ -1223,9 +1307,9 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
 
               ?>
               <?php if(!empty($existeEscopo)){ ?>
-                <input type="checkbox" name="Escopos[<?=$disciplina."][".$key2?>]" value="<?= $key2?>" checked="1"><label><?= $escopo ?></label>
+                <input type="checkbox" id="<?=$disciplina.'_'.$key2?>" name="Escopos[<?=$disciplina."][".$key2?>]" value="<?= $key2?>" checked="1"><label><?= $escopo ?></label>
               <?php } else{ ?>
-                <input type="checkbox" name="Escopos[<?=$disciplina."][".$key2?>]" value="<?= $key2?>"><label for=""><?= $escopo ?></label>
+                <input type="checkbox" id="<?=$disciplina.'_'.$key2?>" name="Escopos[<?=$disciplina."][".$key2?>]" value="<?= $key2?>"><label for=""><?= $escopo ?></label>
               <?php } ?>
             <?php } ?>
             </div>

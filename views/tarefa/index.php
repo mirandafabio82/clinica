@@ -12,7 +12,7 @@ use yii\widgets\Pjax;
 /* @var $model app\models\Agenda */
 /* @var $form yii\widgets\ActiveForm */
 
-if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['executante'])){
+if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['executante']) && Yii::$app->db->createCommand('SELECT cargo FROM executante WHERE usuario_id='.Yii::$app->user->id)->queryScalar() == null){
   $this->registerJs('   
     $( document ).ready(function() {
         var id = '.Yii::$app->user->getId().';    
@@ -247,7 +247,7 @@ $this->registerJs('
         <img style="z-index: 999999999" src="resources/dist/img/loading.gif" type="hidden" name="loading" id="loading" value="" width="64px" hidden/>        
       </div> 
 
-      <?php if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])){ ?>
+      <?php if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin']) || (isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['executante']) && (Yii::$app->db->createCommand('SELECT cargo FROM executante WHERE usuario_id='.Yii::$app->user->id)->queryScalar() == 2 || Yii::$app->db->createCommand('SELECT cargo FROM executante WHERE usuario_id='.Yii::$app->user->id)->queryScalar() == 1))){ ?>
         <div class="col-md-3"> 
       <?php } else{?>
       <div class="col-md-3" hidden>
@@ -328,11 +328,11 @@ $this->registerJs('
                 // $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
                 // $dataProvider->query->where('horas_tp IS NOT NULL OR horas_ej IS NOT NULL OR horas_ep IS NOT NULL OR horas_es IS NOT NULL OR horas_ee IS NOT NULL');
-
-                if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['executante'])){
+                
+                if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['executante'])  && Yii::$app->db->createCommand('SELECT cargo FROM executante WHERE usuario_id='.Yii::$app->user->id)->queryScalar() == null){
                   $executante_id = Yii::$app->user->getId();
                 }
-
+                
                   return Yii::$app->controller->renderPartial('_grid_content', 
                     ['model' => $model, 'executante_id' => $executante_id]);
               },

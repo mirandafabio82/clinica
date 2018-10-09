@@ -1488,10 +1488,21 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                             $pdf = $parser->parseFile($path);
                              
                             $text = $pdf->getText();
+                            $text = preg_replace('/\t+/', '', preg_replace('/\s\s+/', ' ', $text));
                             return $text;
                         }
                     }
             }
+            
+        }
+    }
+
+    public function actionGetidfromextrairinformacoes(){
+        if (Yii::$app->request->isAjax) {
+            $planta = Yii::$app->request->post()['planta'];
+
+            return Yii::$app->db->createCommand('SELECT id FROM cliente WHERE site LIKE "%'.$planta.'%" ')->queryScalar();
+
             
         }
     }
