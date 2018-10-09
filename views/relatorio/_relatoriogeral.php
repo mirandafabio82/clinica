@@ -113,6 +113,8 @@ th {
 
         $valor_bm = number_format($valor_bm, 2, ',', '.');
 
+        $saldo_km = $projeto['qtd_km'] - $executado['km'];
+
       ?>
       <?php if($key==0){ ?>
         <td ><?= 'BM-'.explode('AS-', explode('_', $projeto['proposta'])[0])[1].'_'.$bm['numero_bm'] ?></td>
@@ -123,10 +125,10 @@ th {
         <td ><?= $valor_bm?></td>
         <td ><?= date('d/m/Y', strtotime($bm['data']))?></td>
         <td <?= $rowspan ?> ><?= number_format($faturado, 2, ',', '.') ?></td>
-        <td <?= $rowspan ?> ><?= $executado['executado_es'] ?></td>
-        <td <?= $rowspan ?> ><?= $executado['executado_ep'] ?></td>
-        <td <?= $rowspan ?> ><?= $executado['executado_tp'] ?></td>
-        <td <?= $rowspan ?> ><?= $executado['km'] ?></td>
+        <td <?= $rowspan ?> ><?= $escopos['horas_ee']-$executado['executado_es'] ?></td>
+        <td <?= $rowspan ?> ><?= $escopos['horas_ep']-$executado['executado_ep'] ?></td>
+        <td <?= $rowspan ?> ><?= $escopos['horas_tp']-$executado['executado_tp'] ?></td>
+        <td <?= $rowspan ?> ><?= $saldo_km ?></td>
         <td <?= $rowspan ?> ><?= $saldo ?></td>
         <td <?= $rowspan ?> ><?= 'nota geral' ?></td>
       <?php } else{?>
