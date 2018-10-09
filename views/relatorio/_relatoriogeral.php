@@ -37,32 +37,34 @@ th {
 </style>
 </head>
 
+<input type="button" class="btn btn-success" id="btnExport" value=" Exportar Excel " />
+
 <div class="box box-primary">
-    <div class="box-header with-border scrollmenu">
+    <div class="box-header with-border scrollmenu" id="div-table">
    
-<table>
+<table id="table">
   <tr>
-    <th rowspan="2">Projeto</th>
-    <th rowspan="2">Descrição</th>
-    <th rowspan="2">Planta</th>
-    <th rowspan="2">Solicitante</th>
-    <th rowspan="2">AS</th>
-    <th rowspan="2">Valor</th>
-    <th rowspan="2">ES-AUT</th>
-    <th rowspan="2">EP-AUT</th>
-    <th rowspan="2">TEC-AUT</th>
-    <th rowspan="2">KM</th>
-    <th rowspan="2">BM</th>
-    <th rowspan="2">ES-AUT</th>
-    <th rowspan="2">EP-AUT</th>
-    <th rowspan="2">TEC-AUT</th>
-    <th rowspan="2">KM</th>
-    <th rowspan="2">VALOR</th>
-    <th rowspan="2">Data</th>
-    <th rowspan="2">Faturado</th>
-    <th colspan="4">Saldo</th>
-    <th rowspan="2">Saldo</th>
-    <th rowspan="2">Status</th>
+    <th rowspan="2" align="center">Projeto</th>
+    <th rowspan="2" align="center">Descrição</th>
+    <th rowspan="2" align="center">Planta</th>
+    <th rowspan="2" align="center">Solicitante</th>
+    <th rowspan="2" align="center">AS</th>
+    <th rowspan="2" align="center">Valor</th>
+    <th rowspan="2" align="center">ES-AUT</th>
+    <th rowspan="2" align="center">EP-AUT</th>
+    <th rowspan="2" align="center">TEC-AUT</th>
+    <th rowspan="2" align="center">KM</th>
+    <th rowspan="2" align="center">BM</th>
+    <th rowspan="2" align="center">ES-AUT</th>
+    <th rowspan="2" align="center">EP-AUT</th>
+    <th rowspan="2" align="center">TEC-AUT</th>
+    <th rowspan="2" align="center">KM</th>
+    <th rowspan="2" align="center">VALOR</th>
+    <th rowspan="2" align="center">Data</th>
+    <th rowspan="2" align="center">Faturado</th>
+    <th colspan="4" align="center">Saldo</th>
+    <th rowspan="2" align="center">Saldo</th>
+    <th rowspan="2" align="center">Status</th>
   </tr>
   <tr>
     <th>ES-AUT</th>
@@ -142,7 +144,7 @@ th {
         <td ><?= date('d/m/Y', strtotime($bm['data'])) ?></td>
        
       </tr>
-
+    
 
     <?php }} ?>
 
@@ -152,3 +154,40 @@ th {
 </table>
 </div>
 </div>
+
+<iframe id="txtArea1" style="display:none"></iframe>
+
+<script>
+    $("#btnExport").click(function (e) {
+        var tab_text="<table border='2px'><tr bgcolor='#87AFC6'>";
+        var textRange; var j=0;
+        tab = document.getElementById('table'); // id of table
+
+        for(j = 0 ; j < tab.rows.length ; j++) 
+        {     
+            tab_text=tab_text+tab.rows[j].innerHTML+"</tr>";
+            //tab_text=tab_text+"</tr>";
+        }
+
+        tab_text=tab_text+"</table>";
+        tab_text= tab_text.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
+        tab_text= tab_text.replace(/<img[^>]*>/gi,""); // remove if u want images in your table
+        tab_text= tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
+
+        var ua = window.navigator.userAgent;
+        var msie = ua.indexOf("MSIE "); 
+
+        if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
+        {
+            txtArea1.document.open("txt/html","replace");
+            txtArea1.document.write(tab_text);
+            txtArea1.document.close();
+            txtArea1.focus(); 
+            sa=txtArea1.document.execCommand("SaveAs",true,"Say Thanks to Sumit.xls");
+        }  
+        else                 //other browser not tested on IE 11
+            sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));  
+
+        return (sa);
+    });
+</script>
