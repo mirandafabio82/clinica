@@ -20,7 +20,7 @@ class ProjetoSearch extends Projeto
     {
         return [
             [['id', 'cliente_id', 'contato_id', 'documentos', 'rev_proposta', 'qtd_hh', 'qtd_dias', 'qtd_km'], 'integer'],
-            [['descricao', 'codigo', 'site', 'planta', 'municipio', 'uf', 'cnpj', 'tratamento', 'contato', 'setor', 'fone_contato', 'celular', 'email', 'proposta', 'data_proposta', /*'status',*/ 'pendencia', 'comentarios', 'data_entrega', 'cliente_fatura', 'site_fatura', 'municipio_fatura', 'uf_fatura', 'cnpj_fatura', 'criado', 'modificado', 'nome', 'projeto_executante'], 'safe'],
+            [['descricao', 'codigo', 'site', 'planta', 'municipio', 'uf', 'cnpj', 'tratamento', 'contato', 'setor', 'fone_contato', 'celular', 'email', 'proposta', 'data_proposta', 'status', 'pendencia', 'comentarios', 'data_entrega', 'cliente_fatura', 'site_fatura', 'municipio_fatura', 'uf_fatura', 'cnpj_fatura', 'criado', 'modificado', 'nome', 'projeto_executante'], 'safe'],
             [['vl_hh', 'total_horas', 'vl_km', 'total_km', 'valor_proposta', 'valor_consumido', 'valor_saldo'], 'number'],
         ];
     }

@@ -1049,6 +1049,7 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
               'attribute' => 'status', 
               'format' => 'raw',
               'contentOptions' => ['style' => 'width:11em;  min-width:8em;'],
+              'filter'=>$listStatus,
               'value' => function ($data) {
 
                 $status = Yii::$app->db->createCommand('SELECT status, cor FROM projeto_status WHERE id='.$data->status)->queryOne();
