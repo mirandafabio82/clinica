@@ -459,4 +459,16 @@ class TarefaController extends Controller
            return $this->redirect(['tarefa/index', 'projeto_id' => $projeto_id, 'executante_id' => $executante]);
         }
     }
+
+    public function actionEditahoras(){
+        if (Yii::$app->request->isAjax) { 
+            $escopo_id = Yii::$app->request->post()['id'];
+            $executada = Yii::$app->request->post()['executada'];
+            $bm = Yii::$app->request->post()['bm'];
+            $acumulada = Yii::$app->request->post()['acumulada'];
+            $saldo = Yii::$app->request->post()['saldo'];
+
+            return "success";
+        }
+    }
 }

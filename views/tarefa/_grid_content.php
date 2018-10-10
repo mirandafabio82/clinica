@@ -162,7 +162,7 @@ $this->registerJs("
       ?> 
       <?php if($escopo['exe_tp_id']==Yii::$app->user->getId() || $escopo['exe_ej_id']==Yii::$app->user->getId() || $escopo['exe_ep_id']==Yii::$app->user->getId() || $escopo['exe_es_id']==Yii::$app->user->getId() || $escopo['exe_ee_id']==Yii::$app->user->getId() || isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin']) || Yii::$app->db->createCommand('SELECT cargo FROM executante WHERE usuario_id='.Yii::$app->user->id)->queryScalar() == 1 || Yii::$app->db->createCommand('SELECT cargo FROM executante WHERE usuario_id='.Yii::$app->user->id)->queryScalar() == 2){ ?>
       <tr style="background-color: #fff !important">
-        <td style="font-size: 15px; padding: 1px;padding-left: 1em;color: #000"><?=$escopo['nome'] ?></td>
+        <td style="font-size: 15px; padding: 1px;padding-left: 1em;color: #000"><?=$escopo['nome'] ?> <a href="#"  id="edit_<?= $escopo['id'] ?>" class="edit-horas"><i class="fa fa-pencil" aria-hidden="true"></i></a></td>
           
         
         <td style="font-size: 15px; padding-right: 1em;text-align: center; ">
@@ -240,3 +240,47 @@ $this->registerJs("
 </div>
 </div>
 <?php  ?>
+
+
+<!-- Modal -->
+<div id="editModal" class="modal fade" role="dialog">
+  <div class="modal-dialog" style="width: 64%;">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <div  class="col-md-12" align="center">  
+            <img style="z-index: 999999999" src="resources/dist/img/loading.gif" type="hidden" name="loading" id="loading" value="" width="64px" hidden/>        
+          </div> 
+        <h4 class="modal-title">Horas BM</h4>
+      </div>
+
+      <div class="modal-body">
+      <table style="width: 100%;">
+        <tr>
+          <th>Executada</th>
+          <th>BM</th>
+          <th>Acumulada</th>
+          <th>Saldo</th>
+        </tr>
+        <tr>
+          <th> <input class="modal_executada" type="text" > </th>
+          <th> <input class="modal_bm" type="text" > </th>
+          <th> <input class="modal_acumulada" type="text" > </th>
+          <th> <input class="modal_saldo" type="text" > </th>
+        </tr>
+        
+        
+      </table>
+     
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" id="close_modal">Fechar</button>
+        <button type="button" class="btn btn-success" id="salvar_editadas" >Salvar</button>
+      </div>
+    </div>
+
+  </div>
+</div>
