@@ -12,6 +12,9 @@ use yii\widgets\Pjax;
 /* @var $model app\models\Agenda */
 /* @var $form yii\widgets\ActiveForm */
 
+$cargo = Yii::$app->db->createCommand('SELECT cargo FROM executante WHERE usuario_id='.Yii::$app->user->id)->queryScalar(); 
+
+
 if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['executante']) && Yii::$app->db->createCommand('SELECT cargo FROM executante WHERE usuario_id='.Yii::$app->user->id)->queryScalar() == null){
   $this->registerJs('   
     $( document ).ready(function() {
@@ -73,7 +76,7 @@ else{
         });
     });
     
-    escopo_modal_id = ;
+    escopo_modal_id = "";
     $(".edit-horas").click(function(){
       escopo_modal_id = this.id.split("_")[1];
 
@@ -106,8 +109,13 @@ else{
                  var mySelect = $("#executante-id");
                  $.each(myOptions, function(val, text) {
                   mySelect.append(
-                  $("<option></option>").val(text["id"]).html(text["nome"])
-                  );
+                    $("<option></option>").val(text["id"]).html(text["nome"])
+                  ); });
+
+                 },
+                 error: function(){
+                  console.log("failure");
+                }
               });
     });
 
@@ -336,7 +344,7 @@ $this->registerJs('
 <?php if($isPost){ ?>
 <div class="barra-btn" >
   <button type="button" class="btn btn-barra save" ><i class="fa fa-calendar" aria-hidden="true"></i> Adicionar Horas</button>
-  <?php if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])){ ?>
+  <?php if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin']) || (isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['executante']) && $cargo==2)){ ?>
     
     <button type="button" class="btn btn-barra" id="bm_teste"><i class="fa fa-list" aria-hidden="true"></i> Gerar BM</button>
   <?php } ?>

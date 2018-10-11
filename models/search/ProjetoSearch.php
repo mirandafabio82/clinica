@@ -44,8 +44,10 @@ class ProjetoSearch extends Projeto
     public function search($params)
     {
         $query = Projeto::find();
+
+        $cargo = Yii::$app->db->createCommand('SELECT cargo FROM executante WHERE usuario_id='.Yii::$app->user->id)->queryScalar();
         
-        if(!isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])){      
+        if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['executante']) && $cargo!=2){
             $query->joinWith('projeto_executante');              
             $query->where(['projeto_executante.executante_id' => Yii::$app->user->getId()]);
             $query->orWhere(['projeto.criador_projeto_id' => Yii::$app->user->getId()]);

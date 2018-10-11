@@ -1247,8 +1247,10 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
             $mpdf = new \Mpdf\Mpdf();
 
             $mpdf->WriteHTML($capa);
+
+            $cargo = Yii::$app->db->createCommand('SELECT cargo FROM executante WHERE usuario_id='.Yii::$app->user->id)->queryScalar();
             
-            if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])){
+            if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin']) || (isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['executante']) && $cargo==2)){
                 $mpdf->AddPage();
                 $mpdf->WriteHTML($as);
             }
@@ -1314,7 +1316,7 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                     $mpdf->WriteHTML($atividade);
                 }
             }
-            if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])){
+            if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin']) || (isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['executante']) && $cargo==2)){
                 $mpdf->AddPage();
                 $mpdf->WriteHTML($resumo);
             }
@@ -1323,7 +1325,7 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                 $mpdf->WriteHTML($ld_preliminar);
             }
             
-            if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])){
+            if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin']) || (isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['executante']) && $cargo==2)){
                 $mpdf->Output('uploaded-files/'.$projeto['id'].'/'.$projeto['proposta'].'.pdf', 'F');   
             }  
             $mpdf->Output('uploaded-files/'.$projeto['id'].'/'.$projeto['proposta'].'.pdf', 'I');    

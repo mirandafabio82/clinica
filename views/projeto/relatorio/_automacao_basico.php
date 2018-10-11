@@ -1,3 +1,7 @@
+<?php 
+	$cargo = Yii::$app->db->createCommand('SELECT cargo FROM executante WHERE usuario_id='.Yii::$app->user->id)->queryScalar(); 
+?>
+
 <style>
 table, th, td {
     border: 1px solid black;
@@ -44,7 +48,7 @@ th, td {
         </tr>
         </thead>
         <?php 
-        if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])){
+        if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin']) || (isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['executante']) && $cargo==2)){
 	        $item1 = '1.'; 
 	        $count = 0; $total_horas_ee=0;$total_horas_es=0;$total_horas_ep=0;$total_horas_ej=0;$total_horas_tp=0;$total=0;
 	        foreach ($escopos as $key => $escopo) { 
@@ -160,7 +164,7 @@ th, td {
 		</tr>
 
 		<?php 
-		if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])){
+		if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin']) || (isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['executante']) && $cargo==2)){
 			$item2 = '2.'; 
 	        $count = 0; $total_horas_ee_2=0;$total_horas_es_2=0;$total_horas_ep_2=0;$total_horas_ej_2=0;$total_horas_tp_2=0;$total_2=0;
 			foreach ($escopos as $key => $escopo_2) { 
