@@ -80,10 +80,10 @@ else{
     $(".edit-horas").click(function(){
       escopo_modal_id = this.id.split("_")[1];
 
-      $(".modal_executada").attr("id", "modal_executada_"+id);
-      $(".modal_bm").attr("id", "modal_bm_"+id);
-      $(".modal_acumulada").attr("id", "modal_acumulada_"+id);
-      $(".modal_saldo").attr("id", "modal_saldo_"+id);
+      $(".modal_executada").attr("id", "modal_executada_"+escopo_modal_id);
+      $(".modal_bm").attr("id", "modal_bm_"+escopo_modal_id);
+      $(".modal_acumulada").attr("id", "modal_acumulada_"+escopo_modal_id);
+      $(".modal_saldo").attr("id", "modal_saldo_"+escopo_modal_id);
 
       $("#editModal").modal();
       
