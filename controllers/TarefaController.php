@@ -463,13 +463,21 @@ class TarefaController extends Controller
     public function actionEditahoras(){
         if (Yii::$app->request->isAjax) { 
             $escopo_id = Yii::$app->request->post()['id'];
-            $bm = isset(Yii::$app->request->post()['bm']) ? Yii::$app->request->post()['bm'] : 0;
-            $acumulada = isset(Yii::$app->request->post()['acumulada']) ? Yii::$app->request->post()['acumulada'] : 0;
-            $saldo = isset(Yii::$app->request->post()['saldo']) ? Yii::$app->request->post()['saldo'] : 0;
 
             try{
-                Yii::$app->db->createCommand('UPDATE escopo SET horas_bm = '.$bm.', horas_acumulada='.$acumulada.', horas_saldo='.$saldo.' WHERE id='.$escopo_id)->execute(); 
-
+                if(isset(Yii::$app->request->post()['bm'])){
+                    $bm = Yii::$app->request->post()['bm'];
+                    Yii::$app->db->createCommand('UPDATE escopo SET horas_bm = '.$bm.' WHERE id='.$escopo_id)->execute(); 
+                }
+                if(Yii::$app->request->post()['acumulada']){
+                    $acumulada = Yii::$app->request->post()['acumulada'];
+                    Yii::$app->db->createCommand('UPDATE escopo SET horas_acumulada='.$acumulada.' WHERE id='.$escopo_id)->execute(); 
+                }
+                if(Yii::$app->request->post()['saldo']){
+                    $saldo = Yii::$app->request->post()['saldo'];
+                    Yii::$app->db->createCommand('UPDATE escopo SET horas_saldo='.$saldo.' WHERE id='.$escopo_id)->execute(); 
+                }
+                
                 return "success";
             }
             catch(Exception $e){
