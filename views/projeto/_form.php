@@ -780,6 +780,8 @@ $(".remove-exec").click(function(ev){
     var formData = new FormData();
     formData.append("file", file);
     //formData.append("frs_num_bm", $("#frs_num_bm").val());
+    $("#loading_upload").removeAttr("hidden"); 
+
     
     $.ajax({ 
           url: "index.php?r=projeto/extrairinformacoes",
@@ -866,6 +868,9 @@ $(".remove-exec").click(function(ev){
                   console.log("failure");
                 }
               });
+
+              $("#label_upload").removeAttr("hidden");
+              $("#loading_upload").attr("hidden","hidden");
              },
                error: function(){
                 console.log("failure");
@@ -1182,6 +1187,8 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
                 </div>
                 <div class="col-md-2">
                     <button type="button" class="btn btn-primary" id="extrair_informacoes_btn">Extrair Informações</button>
+                    <img style="z-index: 999999999" src="resources/dist/img/loading.gif" name="loading" id="loading_upload" value="" width="64px" hidden/>  
+                    <label style="color: green; font-size: 9pt" id="label_upload" hidden>Informações carregadas com sucesso!</label>
                 </div>
                 <!-- <div class="col-md-2">
                     <textarea rows="10" cols="50" id="pdf_content"></textarea>
