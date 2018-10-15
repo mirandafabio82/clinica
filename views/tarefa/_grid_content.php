@@ -253,19 +253,17 @@ $this->registerJs("
           <div  class="col-md-12" align="center">  
             <img style="z-index: 999999999" src="resources/dist/img/loading.gif" type="hidden" name="loading" id="loading" value="" width="64px" hidden/>        
           </div> 
-        <h4 class="modal-title">Horas BM</h4>
+        <h4 class="modal-title" id="nome_escopo"></h4>
       </div>
 
       <div class="modal-body">
       <table style="width: 100%;">
         <tr>
-          <th>Executada</th>
           <th>BM</th>
           <th>Acumulada</th>
           <th>Saldo</th>
         </tr>
         <tr>
-          <th> <input class="modal_executada" type="text" > </th>
           <th> <input class="modal_bm" type="text" > </th>
           <th> <input class="modal_acumulada" type="text" > </th>
           <th> <input class="modal_saldo" type="text" > </th>

@@ -87,36 +87,33 @@ else{
 
       $("#editModal").modal();
       
+      $("#nome_escopo")[0].innerHTML = $(this).parent()[0].innerText;
+      
     });  
 
     $("#salvar_editadas").click(function(){
         var escopo_id = escopo_modal_id;
-        var executada = $(".modal_executada").val();
         var bm = $(".modal_bm").val();
         var acumulada = $(".modal_acumulada").val();
         var saldo = $(".modal_saldo").val();
 
         $.ajax({ 
-                url: "index.php?r=tarefa/editahoras",
-                data: {id: escopo_id, executada: executada, bm: bm, acumulada: acumulada, saldo: saldo},
-                type: "POST",
-                success: function(response){
-                 var resposta = $.parseJSON(response);
-                 console.log(resposta);
-                 var myOptions = resposta;
-
-                 $("#executante-id").children("option:not(:first)").remove();
-                 var mySelect = $("#executante-id");
-                 $.each(myOptions, function(val, text) {
-                  mySelect.append(
-                    $("<option></option>").val(text["id"]).html(text["nome"])
-                  ); });
-
-                 },
-                 error: function(){
-                  console.log("failure");
-                }
-              });
+            url: "index.php?r=tarefa/editahoras",
+            data: {id: escopo_id, bm: bm, acumulada: acumulada, saldo: saldo},
+            type: "POST",
+            success: function(response){
+             if(response=="success"){
+                alert("Modificação realizada com sucesso!");
+                location.reload();
+             }
+             else{
+              alert(response);
+             }
+           },
+           error: function(){
+             console.log("failure");
+          }
+        });
     });
 
 ');
