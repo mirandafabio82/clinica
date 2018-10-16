@@ -650,6 +650,26 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                 //atualiza status geral
                 if($model->as_aprovada==0 && $_POST['Projeto']['as_aprovada']==1){                  
                     Yii::$app->db->createCommand('UPDATE projeto SET status_geral=3 WHERE id='.$model->id)->execute();
+
+                    $emails_executantes = Yii::$app->db->createCommand('SELECT email FROM user JOIN projeto_executante ON user.id=projeto_executante.executante_id WHERE projeto_executante.projeto_id='.$model->id)->queryAll(); 
+
+                    $assunto = $model->nome.": AS Aprovada";
+                    $corpoEmail = "A AS referente ao ".$model->nome." foi aprovada.";
+
+                    foreach ($emails_executantes as $key => $email_exe) {
+                        try{
+                            Yii::$app->mailer->compose()
+                            ->setFrom('hcnautomacaoweb@gmail.com')
+                            ->setTo(trim($email_exe['email']))
+                            ->setSubject($assunto)
+                            ->setTextBody($corpoEmail)
+                            ->send();
+                        }
+                        catch(Exception $e){
+                            return $e;
+                        }
+                    }
+
                 }
                                                  
 
