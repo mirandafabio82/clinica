@@ -25,7 +25,19 @@ class ClienteController extends Controller
                 'class' => AccessControl::className(),
                 'only' => ['*'],
                 'rules' => [
-                    ['allow' => true,'roles' => ['admin']],                    
+                    ['allow' => true,'roles' => ['admin']],  
+                    [
+                        'allow' => true,'roles' => ['executante'],
+                        'matchCallback' => function ($rule, $action) {
+                            $cargo = Yii::$app->db->createCommand('SELECT cargo FROM executante WHERE usuario_id='.Yii::$app->user->id)->queryScalar();
+                            if($cargo==2){
+                                return true;
+                            }
+                            else{
+                                return false;
+                            }
+                        }
+                    ],                  
                 ],
             ],
             'verbs' => [
