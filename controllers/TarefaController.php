@@ -465,16 +465,16 @@ class TarefaController extends Controller
             $escopo_id = Yii::$app->request->post()['id'];
 
             try{
-                if(isset(Yii::$app->request->post()['bm'])){
-                    $bm = Yii::$app->request->post()['bm'];
+                if(!empty(Yii::$app->request->post()['bm'])){
+                    $bm = Yii::$app->request->post()['bm'] == "zero" ? 0 : Yii::$app->request->post()['bm'];
                     Yii::$app->db->createCommand('UPDATE escopo SET horas_bm = '.$bm.' WHERE id='.$escopo_id)->execute(); 
                 }
-                if(Yii::$app->request->post()['acumulada']){
-                    $acumulada = Yii::$app->request->post()['acumulada'];
+                if(!empty(Yii::$app->request->post()['acumulada'])){
+                    $acumulada = Yii::$app->request->post()['acumulada'] == "zero" ? 0 : Yii::$app->request->post()['acumulada'];
                     Yii::$app->db->createCommand('UPDATE escopo SET horas_acumulada='.$acumulada.' WHERE id='.$escopo_id)->execute(); 
                 }
-                if(Yii::$app->request->post()['saldo']){
-                    $saldo = Yii::$app->request->post()['saldo'];
+                if(!empty(Yii::$app->request->post()['saldo'])){
+                    $saldo = Yii::$app->request->post()['saldo'] == "zero" ? 0 : Yii::$app->request->post()['saldo'];
                     Yii::$app->db->createCommand('UPDATE escopo SET horas_saldo='.$saldo.' WHERE id='.$escopo_id)->execute(); 
                 }
                 

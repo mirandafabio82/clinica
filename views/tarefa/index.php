@@ -96,6 +96,10 @@ else{
         var bm = $(".modal_bm").val();
         var acumulada = $(".modal_acumulada").val();
         var saldo = $(".modal_saldo").val();
+        
+        if($(".modal_bm").val() === "0") bm = "zero";
+        if($(".modal_acumulada").val() === "0") acumulada = "zero";
+        if($(".modal_saldo").val() === "0") saldo = "zero";
 
         $.ajax({ 
             url: "index.php?r=tarefa/editahoras",
