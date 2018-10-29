@@ -710,7 +710,7 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                 $model->save();
 
 
-                if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['executante'])){
+                if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['executante']) && Yii::$app->db->createCommand('SELECT cargo FROM executante WHERE usuario_id='.Yii::$app->user->id)->queryScalar() == NULL){
                     //coloca o status do projeto como Emitir AS
                     Yii::$app->db->createCommand('UPDATE projeto SET status=6 WHERE id='.$model->id)->execute();
                 }

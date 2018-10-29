@@ -53,6 +53,19 @@ th, td {
       $money_inst = $i_horas_ee*$tipo_executante[4]['valor_hora']+$i_horas_es*$tipo_executante[3]['valor_hora']+$i_horas_ep*$tipo_executante[2]['valor_hora']+$i_horas_ej*$tipo_executante[1]['valor_hora']+$i_horas_tp*$tipo_executante[0]['valor_hora'];
 
       $money_aut = $a_horas_ee*$tipo_executante[4]['valor_hora']+$a_horas_es*$tipo_executante[3]['valor_hora']+$a_horas_ep*$tipo_executante[2]['valor_hora']+$a_horas_ej*$tipo_executante[1]['valor_hora']+$a_horas_tp*$tipo_executante[0]['valor_hora'];
+
+      $vl_total_conceitual = Yii::$app->db->createCommand('SELECT SUM(horas_ee) AS horas_ee, SUM(horas_es) AS horas_es, SUM(horas_ep) AS horas_ep, SUM(horas_ej)AS horas_ej, SUM(horas_tp) AS horas_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$projeto->id.' AND escopopadrao_id=1')->queryOne();
+
+      $vl_total_basico = Yii::$app->db->createCommand('SELECT SUM(horas_ee) AS horas_ee, SUM(horas_es) AS horas_es, SUM(horas_ep) AS horas_ep, SUM(horas_ej)AS horas_ej, SUM(horas_tp) AS horas_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$projeto->id.' AND escopopadrao_id=2')->queryOne();
+
+      $vl_total_detalhamento = Yii::$app->db->createCommand('SELECT SUM(horas_ee) AS horas_ee, SUM(horas_es) AS horas_es, SUM(horas_ep) AS horas_ep, SUM(horas_ej)AS horas_ej, SUM(horas_tp) AS horas_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$projeto->id.' AND escopopadrao_id=3')->queryOne();
+
+      $vl_total_configuracao = Yii::$app->db->createCommand('SELECT SUM(horas_ee) AS horas_ee, SUM(horas_es) AS horas_es, SUM(horas_ep) AS horas_ep, SUM(horas_ej)AS horas_ej, SUM(horas_tp) AS horas_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$projeto->id.' AND escopopadrao_id=4')->queryOne();
+
+      $vl_total_servico = Yii::$app->db->createCommand('SELECT SUM(horas_ee) AS horas_ee, SUM(horas_es) AS horas_es, SUM(horas_ep) AS horas_ep, SUM(horas_ej)AS horas_ej, SUM(horas_tp) AS horas_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$projeto->id.' AND escopopadrao_id=5')->queryOne();
+
+     
+
       ?>
 
 <table border="1" align="center" width="100%">
@@ -159,125 +172,86 @@ th, td {
             <td style="font-family: arial;font-size: 8pt" align="center" >R$</td>
       </tr>
       <tr>
-            <td style="font-family: arial;font-size: 8pt" >PROCESSO</td>  
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$p_horas_ee==0 ? '': str_replace('.',',',sprintf("%.1f", $p_horas_ee)) ?></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$p_horas_es==0 ? '': str_replace('.',',',sprintf("%.1f",$p_horas_es)) ?></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$p_horas_ep==0 ? '': str_replace('.',',',sprintf("%.1f",$p_horas_ep)) ?></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$p_horas_ej==0 ? '': str_replace('.',',',sprintf("%.1f",$p_horas_ej)) ?></td> 
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$p_horas_tp==0 ? '': str_replace('.',',',sprintf("%.1f",$p_horas_tp)) ?></td>    
+            <td style="font-family: arial;font-size: 8pt" >CONCEITUAL</td>              
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$vl_total_basico['horas_ee']==0 ? '': str_replace('.',',',sprintf("%.1f",$vl_total_basico['horas_ee'])) ?></td>
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$vl_total_basico['horas_es']==0 ? '': str_replace('.',',',sprintf("%.1f",$vl_total_basico['horas_es'])) ?></td>
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$vl_total_basico['horas_ep']==0 ? '': str_replace('.',',',sprintf("%.1f",$vl_total_basico['horas_ep'])) ?></td>
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$vl_total_basico['horas_ej']==0 ? '': str_replace('.',',',sprintf("%.1f",$vl_total_basico['horas_ej'])) ?></td> 
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$vl_total_basico['horas_tp']==0 ? '': str_replace('.',',',sprintf("%.1f",$vl_total_basico['horas_tp'])) ?></td>    
             <td></td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>                 
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$p_tot==0 ? '': str_replace('.',',',number_format($p_tot, 2, ',', '.')) ?></td> 
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$money_proc==0 ? '': number_format($money_proc, 2, ',', '.') ?></td> 
-      </tr>
-      <!-- <tr>
-            <td style="font-family: arial;font-size: 8pt" >TUBULAÇÃO</td>  
-            <td style="font-family: arial;font-size: 8pt" align="center" ></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ></td> 
-            <td style="font-family: arial;font-size: 8pt" align="center" ></td>    
-            <td style="font-family: arial;font-size: 8pt" align="center" ></td> 
-            <td style="font-family: arial;font-size: 8pt" align="center" ></td>   
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>               
-      </tr> -->
-      <!-- <tr>
-            <td style="font-family: arial;font-size: 8pt" >CIVIL/METÁLICA</td>  
-            <td style="font-family: arial;font-size: 8pt" align="center" ></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ></td> 
-            <td style="font-family: arial;font-size: 8pt" align="center" ></td>    
-            <td style="font-family: arial;font-size: 8pt" align="center" ></td> 
-            <td style="font-family: arial;font-size: 8pt" align="center" ></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>                     
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$vl_total_basico['horas_ee']+$vl_total_basico['horas_es']+$vl_total_basico['horas_ep']+$vl_total_basico['horas_ej']+$vl_total_basico['horas_tp']==0 ? '':str_replace('.',',',sprintf("%.1f",$vl_total_basico['horas_ee']+$vl_total_basico['horas_es']+$vl_total_basico['horas_ep']+$vl_total_basico['horas_ej']+$vl_total_basico['horas_tp'])) ?></td> 
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$vl_total_basico['horas_ee']*$tipo_executante[4]['valor_hora']+$vl_total_basico['horas_es']*$tipo_executante[3]['valor_hora']+$vl_total_basico['horas_ep']*$tipo_executante[2]['valor_hora']+$vl_total_basico['horas_ej']*$tipo_executante[1]['valor_hora']+$vl_total_basico['horas_tp']*$tipo_executante[0]['valor_hora']==0 ? '':number_format($vl_total_basico['horas_ee']*$tipo_executante[4]['valor_hora']+$vl_total_basico['horas_es']*$tipo_executante[3]['valor_hora']+$vl_total_basico['horas_ep']*$tipo_executante[2]['valor_hora']+$vl_total_basico['horas_ej']*$tipo_executante[1]['valor_hora']+$vl_total_basico['horas_tp']*$tipo_executante[0]['valor_hora'], 2, ',', '.') ?></td> 
+
       </tr>
       <tr>
-            <td style="font-family: arial;font-size: 8pt" >ELÉTRICA</td>  
-            <td style="font-family: arial;font-size: 8pt" align="center" ></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ></td> 
-            <td style="font-family: arial;font-size: 8pt" align="center" ></td>    
-            <td style="font-family: arial;font-size: 8pt" align="center" ></td> 
-            <td style="font-family: arial;font-size: 8pt" align="center" ></td> 
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>             
-      </tr> -->
-      <tr>
-            <td style="font-family: arial;font-size: 8pt" >INSTRUMENTAÇÃO</td>  
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$i_horas_ee==0 ? '': str_replace('.',',',sprintf("%.1f",$i_horas_ee)) ?></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$i_horas_es==0 ? '': str_replace('.',',',sprintf("%.1f",$i_horas_es)) ?></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$i_horas_ep==0 ? '': str_replace('.',',',sprintf("%.1f",$i_horas_ep)) ?></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$i_horas_ej==0 ? '': str_replace('.',',',sprintf("%.1f",$i_horas_ej)) ?></td> 
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$i_horas_tp==0 ? '': str_replace('.',',',sprintf("%.1f",$i_horas_tp)) ?></td>    
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>                  
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$i_tot==0 ? '': str_replace('.',',',sprintf("%.1f",$i_tot)) ?></td> 
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$money_inst==0 ? '': number_format($money_inst, 2, ',', '.') ?></td>
-      </tr>
-      <tr>
-            <td style="font-family: arial;font-size: 8pt" >AUTOMAÇÃO</td>  
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$a_horas_ee==0 ? '': str_replace('.',',',sprintf("%.1f",$a_horas_ee)) ?></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$a_horas_es==0 ? '': str_replace('.',',',sprintf("%.1f",$a_horas_es)) ?></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$a_horas_ep==0 ? '': str_replace('.',',',sprintf("%.1f",$a_horas_ep)) ?></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$a_horas_ej==0 ? '': str_replace('.',',',sprintf("%.1f",$a_horas_ej)) ?></td> 
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$a_horas_tp==0 ? '': str_replace('.',',',sprintf("%.1f",$a_horas_tp)) ?></td>    
+            <td style="font-family: arial;font-size: 8pt" >BÁSICO</td>              
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$vl_total_basico['horas_ee']==0 ? '': str_replace('.',',',sprintf("%.1f",$vl_total_basico['horas_ee'])) ?></td>
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$vl_total_basico['horas_es']==0 ? '': str_replace('.',',',sprintf("%.1f",$vl_total_basico['horas_es'])) ?></td>
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$vl_total_basico['horas_ep']==0 ? '': str_replace('.',',',sprintf("%.1f",$vl_total_basico['horas_ep'])) ?></td>
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$vl_total_basico['horas_ej']==0 ? '': str_replace('.',',',sprintf("%.1f",$vl_total_basico['horas_ej'])) ?></td> 
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$vl_total_basico['horas_tp']==0 ? '': str_replace('.',',',sprintf("%.1f",$vl_total_basico['horas_tp'])) ?></td>    
             <td></td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>                 
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$a_tot==0 ? '':str_replace('.',',',sprintf("%.1f",$a_tot)) ?></td> 
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$money_aut==0 ? '':number_format($money_aut, 2, ',', '.') ?></td> 
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$vl_total_basico['horas_ee']+$vl_total_basico['horas_es']+$vl_total_basico['horas_ep']+$vl_total_basico['horas_ej']+$vl_total_basico['horas_tp']==0 ? '':str_replace('.',',',sprintf("%.1f",$vl_total_basico['horas_ee']+$vl_total_basico['horas_es']+$vl_total_basico['horas_ep']+$vl_total_basico['horas_ej']+$vl_total_basico['horas_tp'])) ?></td> 
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$vl_total_basico['horas_ee']*$tipo_executante[4]['valor_hora']+$vl_total_basico['horas_es']*$tipo_executante[3]['valor_hora']+$vl_total_basico['horas_ep']*$tipo_executante[2]['valor_hora']+$vl_total_basico['horas_ej']*$tipo_executante[1]['valor_hora']+$vl_total_basico['horas_tp']*$tipo_executante[0]['valor_hora']==0 ? '':number_format($vl_total_basico['horas_ee']*$tipo_executante[4]['valor_hora']+$vl_total_basico['horas_es']*$tipo_executante[3]['valor_hora']+$vl_total_basico['horas_ep']*$tipo_executante[2]['valor_hora']+$vl_total_basico['horas_ej']*$tipo_executante[1]['valor_hora']+$vl_total_basico['horas_tp']*$tipo_executante[0]['valor_hora'], 2, ',', '.') ?></td> 
+
       </tr>
-      <!-- <tr>
-            <td style="font-family: arial;font-size: 8pt" >CALDEIRARIA</td>  
-            <td style="font-family: arial;font-size: 8pt" align="center" ></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ></td> 
-            <td style="font-family: arial;font-size: 8pt" align="center" ></td>    
-            <td style="font-family: arial;font-size: 8pt" align="center" ></td> 
-            <td style="font-family: arial;font-size: 8pt" align="center" ></td>
+
+      <tr>
+            <td style="font-family: arial;font-size: 8pt" >DETALHAMENTO</td>              
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$vl_total_detalhamento['horas_ee']==0 ? '': str_replace('.',',',sprintf("%.1f",$vl_total_detalhamento['horas_ee'])) ?></td>
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$vl_total_detalhamento['horas_es']==0 ? '': str_replace('.',',',sprintf("%.1f",$vl_total_detalhamento['horas_es'])) ?></td>
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$vl_total_detalhamento['horas_ep']==0 ? '': str_replace('.',',',sprintf("%.1f",$vl_total_detalhamento['horas_ep'])) ?></td>
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$vl_total_detalhamento['horas_ej']==0 ? '': str_replace('.',',',sprintf("%.1f",$vl_total_detalhamento['horas_ej'])) ?></td> 
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$vl_total_detalhamento['horas_tp']==0 ? '': str_replace('.',',',sprintf("%.1f",$vl_total_detalhamento['horas_tp'])) ?></td>    
             <td></td>
             <td></td>
             <td></td>
             <td></td>
-            <td></td>              
+            <td></td>                 
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$vl_total_detalhamento['horas_ee']+$vl_total_detalhamento['horas_es']+$vl_total_detalhamento['horas_ep']+$vl_total_detalhamento['horas_ej']+$vl_total_detalhamento['horas_tp']==0 ? '':str_replace('.',',',sprintf("%.1f",$vl_total_detalhamento['horas_ee']+$vl_total_detalhamento['horas_es']+$vl_total_detalhamento['horas_ep']+$vl_total_detalhamento['horas_ej']+$vl_total_detalhamento['horas_tp'])) ?></td> 
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$vl_total_detalhamento['horas_ee']*$tipo_executante[4]['valor_hora']+$vl_total_detalhamento['horas_es']*$tipo_executante[3]['valor_hora']+$vl_total_detalhamento['horas_ep']*$tipo_executante[2]['valor_hora']+$vl_total_detalhamento['horas_ej']*$tipo_executante[1]['valor_hora']+$vl_total_detalhamento['horas_tp']*$tipo_executante[0]['valor_hora']==0 ? '':number_format($vl_total_detalhamento['horas_ee']*$tipo_executante[4]['valor_hora']+$vl_total_detalhamento['horas_es']*$tipo_executante[3]['valor_hora']+$vl_total_detalhamento['horas_ep']*$tipo_executante[2]['valor_hora']+$vl_total_detalhamento['horas_ej']*$tipo_executante[1]['valor_hora']+$vl_total_detalhamento['horas_tp']*$tipo_executante[0]['valor_hora'], 2, ',', '.') ?></td> 
+
       </tr>
       <tr>
-            <td style="font-family: arial;font-size: 8pt" >ROTATIVOS</td>  
-            <td style="font-family: arial;font-size: 8pt" align="center" ></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ></td> 
-            <td style="font-family: arial;font-size: 8pt" align="center" ></td>    
-            <td style="font-family: arial;font-size: 8pt" align="center" ></td> 
-            <td style="font-family: arial;font-size: 8pt" align="center" ></td>
+            <td style="font-family: arial;font-size: 8pt" >CONFIGURAÇÃO</td>              
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$vl_total_configuracao['horas_ee']==0 ? '': str_replace('.',',',sprintf("%.1f",$vl_total_configuracao['horas_ee'])) ?></td>
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$vl_total_configuracao['horas_es']==0 ? '': str_replace('.',',',sprintf("%.1f",$vl_total_configuracao['horas_es'])) ?></td>
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$vl_total_configuracao['horas_ep']==0 ? '': str_replace('.',',',sprintf("%.1f",$vl_total_configuracao['horas_ep'])) ?></td>
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$vl_total_configuracao['horas_ej']==0 ? '': str_replace('.',',',sprintf("%.1f",$vl_total_configuracao['horas_ej'])) ?></td> 
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$vl_total_configuracao['horas_tp']==0 ? '': str_replace('.',',',sprintf("%.1f",$vl_total_configuracao['horas_tp'])) ?></td>    
             <td></td>
             <td></td>
             <td></td>
             <td></td>
-            <td></td>              
-      </tr> -->
+            <td></td>                 
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$vl_total_configuracao['horas_ee']+$vl_total_configuracao['horas_es']+$vl_total_configuracao['horas_ep']+$vl_total_configuracao['horas_ej']+$vl_total_configuracao['horas_tp']==0 ? '':str_replace('.',',',sprintf("%.1f",$vl_total_configuracao['horas_ee']+$vl_total_configuracao['horas_es']+$vl_total_configuracao['horas_ep']+$vl_total_configuracao['horas_ej']+$vl_total_configuracao['horas_tp'])) ?></td> 
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$vl_total_configuracao['horas_ee']*$tipo_executante[4]['valor_hora']+$vl_total_configuracao['horas_es']*$tipo_executante[3]['valor_hora']+$vl_total_configuracao['horas_ep']*$tipo_executante[2]['valor_hora']+$vl_total_configuracao['horas_ej']*$tipo_executante[1]['valor_hora']+$vl_total_configuracao['horas_tp']*$tipo_executante[0]['valor_hora']==0 ? '':number_format($vl_total_configuracao['horas_ee']*$tipo_executante[4]['valor_hora']+$vl_total_configuracao['horas_es']*$tipo_executante[3]['valor_hora']+$vl_total_configuracao['horas_ep']*$tipo_executante[2]['valor_hora']+$vl_total_configuracao['horas_ej']*$tipo_executante[1]['valor_hora']+$vl_total_configuracao['horas_tp']*$tipo_executante[0]['valor_hora'], 2, ',', '.') ?></td> 
+      </tr>
+      <tr>
+            <td style="font-family: arial;font-size: 8pt" >SERVIÇO</td>              
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$vl_total_servico['horas_ee']==0 ? '': str_replace('.',',',sprintf("%.1f",$vl_total_servico['horas_ee'])) ?></td>
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$vl_total_servico['horas_es']==0 ? '': str_replace('.',',',sprintf("%.1f",$vl_total_servico['horas_es'])) ?></td>
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$vl_total_servico['horas_ep']==0 ? '': str_replace('.',',',sprintf("%.1f",$vl_total_servico['horas_ep'])) ?></td>
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$vl_total_servico['horas_ej']==0 ? '': str_replace('.',',',sprintf("%.1f",$vl_total_servico['horas_ej'])) ?></td> 
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$vl_total_servico['horas_tp']==0 ? '': str_replace('.',',',sprintf("%.1f",$vl_total_servico['horas_tp'])) ?></td>    
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>                 
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$vl_total_servico['horas_ee']+$vl_total_servico['horas_es']+$vl_total_servico['horas_ep']+$vl_total_servico['horas_ej']+$vl_total_servico['horas_tp']==0 ? '':str_replace('.',',',sprintf("%.1f",$vl_total_servico['horas_ee']+$vl_total_servico['horas_es']+$vl_total_servico['horas_ep']+$vl_total_servico['horas_ej']+$vl_total_servico['horas_tp'])) ?></td> 
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$vl_total_servico['horas_ee']*$tipo_executante[4]['valor_hora']+$vl_total_servico['horas_es']*$tipo_executante[3]['valor_hora']+$vl_total_servico['horas_ep']*$tipo_executante[2]['valor_hora']+$vl_total_servico['horas_ej']*$tipo_executante[1]['valor_hora']+$vl_total_servico['horas_tp']*$tipo_executante[0]['valor_hora']==0 ? '':number_format($vl_total_servico['horas_ee']*$tipo_executante[4]['valor_hora']+$vl_total_servico['horas_es']*$tipo_executante[3]['valor_hora']+$vl_total_servico['horas_ep']*$tipo_executante[2]['valor_hora']+$vl_total_servico['horas_ej']*$tipo_executante[1]['valor_hora']+$vl_total_servico['horas_tp']*$tipo_executante[0]['valor_hora'], 2, ',', '.') ?></td> 
+
+      </tr>
+
       <tr style="background-color: #d3d3d3;"> 
             <td style="font-family: arial;font-size: 8pt" >TOTAL DISCIPLINAS</td>  
             <td style="font-family: arial;font-size: 8pt" align="center" ><?=$p_horas_ee+$i_horas_ee+$a_horas_ee==0 ? '':str_replace('.',',',sprintf("%.1f",$p_horas_ee+$i_horas_ee+$a_horas_ee)) ?></td>
