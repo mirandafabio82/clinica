@@ -1205,7 +1205,7 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
 <div class="projeto-form">
 
   <?php $form = ActiveForm::begin(); ?>
-  <div class="form-group">
+  <div class="form-group" hidden>
     <!-- <?//= Html::a('<i class="glyphicon glyphicon-plus"></i> Novo Projeto', ['create'], ['class' => 'btn btn-success']); ?> -->
     <?= Html::submitButton($model->isNewRecord ? 'Cadastrar' : 'Atualizar', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
   </div>
@@ -1261,18 +1261,18 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
 
       <!-- </div> -->
       <div class="row"> 
-        <div class="col-md-2" style="width: 18em"> 
+        <div class="col-md-2" style="width: 18em" hidden> 
           <?= $form->field($model, 'tipo')->radioList(array('A'=>'AS Autorização de Serviço','P'=>'Proposta')); ?>        
         </div>
       
         <div class="col-md-2"> 
           <?= $form->field($model, 'nome')->textInput(['maxlength' => true]) ?>  
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
           <?= $form->field($model, 'descricao')->textarea(['maxlength' => true]) ?>
         </div>
 
-        <div class="col-md-4" id="disciplinas-div">
+        <div class="col-md-6" id="disciplinas-div">
         
         <br>
         
@@ -1324,7 +1324,7 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
         <?php } ?>
           </fieldset>
         </div>
-        <div class="col-md-7" style="margin-top: -4em;" id="desc_resumida_div">
+        <div class="col-md-5" style="margin-top: -4em;" id="desc_resumida_div">
         <?= $form->field($model, 'desc_resumida')->textarea(['maxlength' => true]) ?>
 
       </div>

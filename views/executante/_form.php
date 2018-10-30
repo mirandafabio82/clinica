@@ -29,6 +29,30 @@ use kartik\money\MaskMoney;
 #w2{
     display: none;
 }
+
+.barra-btn{
+  display:block;
+  position:fixed;
+  width:100%;
+  bottom:0vh;
+  left:0;
+  background:#62727b;
+  text-align:center;
+  padding: 0px 0;
+  z-index: 99;
+}
+
+.btn-barra {
+  background-color: #62727b; 
+  border-color: #62727b;
+  color:white;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+}
+.btn-barra:hover {
+    background-color: white; /* Green */
+    color: white;
+}
 </style>
 <?php
 $this->registerJs("
@@ -131,6 +155,9 @@ $this->registerJs("
 ?>
 <!-- mask so funciona com isso -->
 <?php $this->head() ?>
+
+
+
 <div class="box box-primary">
     <div class="box-header with-border">
 
@@ -487,8 +514,9 @@ $this->registerJs("
     </div>
 
     </div>
-    <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Cadastrar' : 'Salvar', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+    <div class="barra-btn" >
+        <?= Html::submitButton($model->isNewRecord ? '<i class="fa fa-floppy-o" aria-hidden="true"></i> Cadastrar' : '<i class="fa fa-floppy-o" aria-hidden="true"></i> Salvar', ['class' => $model->isNewRecord ? 'btn btn-barra' : 'btn btn-barra']) ?>
+  
     </div>
     </div>
     <?php ActiveForm::end(); ?>

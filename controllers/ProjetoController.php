@@ -188,10 +188,10 @@ class ProjetoController extends Controller
                 if(isset($_POST['Escopos']['Instrumentação'][3]) && isset($_POST['Escopos']['Instrumentação'][4])){$identificador = "PDC"; }
 
                 if($model->tipo == "P"){
-                    $model->proposta = 'PTC'.'-'.$model->codigo.'-'.$identificador.'-'.$model->site.'-'.$model->rev_proposta;
+                    $model->proposta = 'PTC'.'-'.$model->codigo.'-SRV-'.$identificador.'-'.$model->site.'-'.$model->rev_proposta;
                 }
                 else{
-                    $model->proposta = 'AS'.'-'.$model->codigo.'-'.$identificador.'-'.$model->site.'-'.explode("-",$model->nome)[1].'_'.$model->rev_proposta;
+                    $model->proposta = 'AS'.'-'.$model->codigo.'-SRV-'.$identificador.'-'.$model->site.'-'.explode("-",$model->nome)[1].'_'.$model->rev_proposta;
                 }
                 
                 if(!empty($_POST['Projeto']['data_proposta'])){
