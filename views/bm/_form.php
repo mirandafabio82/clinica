@@ -607,7 +607,6 @@ td, th {
     <th >Valor Total (R$)</th>
     <th >Previsão de Pagamento</th>
     <th >Data de Pagamento</th>
-    <th >Pago</th>
   </tr>
   
  <?php 
@@ -664,7 +663,7 @@ td, th {
 
    <td align="center"> <?php if(!empty($exe['is_prestador'])){ ?> <input type="date" name="bm_executante[<?= $exec['id'] ?>][data_pgt]" value="<?= $data_pgt ?>"> <?php } ?> </td>
 
-   <td align="center"> <?php if(!empty($exe['is_prestador'])){ ?> <input type="checkbox" name="bm_executante[<?= $exec['id'] ?>][pago]" <?= $pago ?>> <?php } ?> </td>
+   
 
   </tr>
  <?php } ?>

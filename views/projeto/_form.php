@@ -1784,35 +1784,35 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
       $popTP = PopoverX::widget([
         'placement' => PopoverX::ALIGN_TOP,
         'content' => $contentTP,
-        'toggleButton' => ['label'=>'<i class="fa fa-caret-up" aria-hidden="true"></i>', 'class'=>'btn btn-default', 'style'=>'padding:1px'],
+        'toggleButton' => ['label'=> !isset($esc['exe_tp_id']) || empty(Yii::$app->db->createCommand('SELECT horas_tp FROM escopo WHERE id='.$esc["id"])->queryScalar()) ? '<i class="fa fa-caret-up" aria-hidden="true"></i>' : substr(Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.$esc['exe_tp_id'])->queryScalar(), 0, 1), 'class'=>'btn btn-default', 'style'=>'padding:1px'],
       ]);
 
       $contentEJ = '<p class="text-justify">' .$form2->field($escopoModel, 'exe_ej_id')->dropDownList($listExecutantes_ej,['name' => 'Escopo['.$esc["id"].'][exe_ej_id]', 'value'=>$esc['exe_ej_id'], 'class'=> 'form-control popej'])->label(false) .'</p>';
       $popEJ = PopoverX::widget([
         'placement' => PopoverX::ALIGN_TOP,
         'content' => $contentEJ,
-        'toggleButton' => ['label'=>'<i class="fa fa-caret-up" aria-hidden="true"></i>', 'class'=>'btn btn-default', 'style'=>'padding:1px'],
+        'toggleButton' => ['label'=>!isset($esc['exe_ej_id']) || empty(Yii::$app->db->createCommand('SELECT horas_ej FROM escopo WHERE id='.$esc["id"])->queryScalar()) ? '<i class="fa fa-caret-up" aria-hidden="true"></i>' : substr(Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.$esc['exe_ej_id'])->queryScalar(), 0, 1), 'class'=>'btn btn-default', 'style'=>'padding:1px'],
       ]);
 
       $contentEP = '<p class="text-justify">' .$form2->field($escopoModel, 'exe_ep_id')->dropDownList($listExecutantes_ep,['name' => 'Escopo['.$esc["id"].'][exe_ep_id]', 'value'=>$esc['exe_ep_id'], 'class'=> 'form-control popep'])->label(false) .'</p>';
       $popEP = PopoverX::widget([
         'placement' => PopoverX::ALIGN_TOP,
         'content' => $contentEP,
-        'toggleButton' => ['label'=>'<i class="fa fa-caret-up" aria-hidden="true"></i>', 'class'=>'btn btn-default', 'style'=>'padding:1px'],
+        'toggleButton' => ['label'=> !isset($esc['exe_ep_id']) || empty(Yii::$app->db->createCommand('SELECT horas_ep FROM escopo WHERE id='.$esc["id"])->queryScalar()) ? '<i class="fa fa-caret-up" aria-hidden="true"></i>' : substr(Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.$esc['exe_ep_id'])->queryScalar(), 0, 1), 'class'=>'btn btn-default', 'style'=>'padding:1px'],
       ]);
 
       $contentES = '<p class="text-justify">' .$form2->field($escopoModel, 'exe_es_id')->dropDownList($listExecutantes_es,['name' => 'Escopo['.$esc["id"].'][exe_es_id]', 'value'=>$esc['exe_es_id'], 'class'=> 'form-control popes'])->label(false) .'</p>';
       $popES = PopoverX::widget([
         'placement' => PopoverX::ALIGN_TOP,
         'content' => $contentES,
-        'toggleButton' => ['label'=>'<i class="fa fa-caret-up" aria-hidden="true"></i>', 'class'=>'btn btn-default', 'style'=>'padding:1px'],
+        'toggleButton' => ['label'=> !isset($esc['exe_es_id']) || empty(Yii::$app->db->createCommand('SELECT horas_es FROM escopo WHERE id='.$esc["id"])->queryScalar()) ? '<i class="fa fa-caret-up" aria-hidden="true"></i>' : substr(Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.$esc['exe_es_id'])->queryScalar(), 0, 1), 'class'=>'btn btn-default', 'style'=>'padding:1px'],
       ]);
 
       $contentEE = '<p class="text-justify">' .$form2->field($escopoModel, 'exe_ee_id')->dropDownList($listExecutantes_ee,['name' => 'Escopo['.$esc["id"].'][exe_ee_id]', 'value'=>$esc['exe_ee_id'], 'class'=> 'form-control popee'])->label(false) .'</p>';
       $popEE = PopoverX::widget([
         'placement' => PopoverX::ALIGN_TOP,
         'content' => $contentEE,
-        'toggleButton' => ['label'=>'<i class="fa fa-caret-up" aria-hidden="true"></i>', 'class'=>'btn btn-default', 'style'=>'padding:1px'],
+        'toggleButton' => ['label'=> !isset($esc['exe_ee_id']) || empty(Yii::$app->db->createCommand('SELECT horas_ee FROM escopo WHERE id='.$esc["id"])->queryScalar()) ? '<i class="fa fa-caret-up" aria-hidden="true"></i>' : substr(Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.$esc['exe_ee_id'])->queryScalar(), 0, 1), 'class'=>'btn btn-default', 'style'=>'padding:1px'],
       ]);
 
        $disciplina_id = Yii::$app->db->createCommand('SELECT disciplina_id FROM atividademodelo WHERE id='.$esc['atividademodelo_id'])->queryScalar();

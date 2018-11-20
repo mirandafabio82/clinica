@@ -120,7 +120,7 @@ $this->registerJs('
             row.insertCell(7).innerHTML = executado_ej;
             row.insertCell(8).innerHTML = executado_tp;
             row.insertCell(9).innerHTML = formataDinheiro(executado_ee*vl_hh_ee + executado_es*vl_hh_es + executado_ep*vl_hh_ep + executado_ej*vl_hh_ej + executado_tp*vl_hh_tp);
-            row.insertCell(10).innerHTML = "<input type=\"date\" value="+obj[i].data_pgt+" class=\"extrato_date\" id=date_bm_"+obj[i].id+"-exe_"+executante_id+" >";
+            row.insertCell(10).innerHTML = "<input type=\"date\" value="+obj[i].data_pgt+" class=\"extrato_date\" id=date_bm_"+obj[i].id+"-exe_"+executante_id+" disabled>";
             row.insertCell(11).innerHTML = "<input type=\"checkbox\" class=\"extrato_checkbox\" id=bm_"+obj[i].id+"-exe_"+executante_id+"-row_"+(i+2)+" >";
           }
 
@@ -183,7 +183,7 @@ $this->registerJs('
               <table id="tabela_extrato">
                 <tr>
                   <th rowspan="2">Item</th>
-                  <th rowspan="2">Projeto</th>
+                  <th rowspan="2" style="width: 11em;" >Projeto</th>
                   <th rowspan="2">BM</th>
                   <th rowspan="2">Descrição</th>
                   <th colspan="5">Horas Executadas</th>

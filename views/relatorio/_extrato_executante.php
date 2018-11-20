@@ -105,7 +105,7 @@ th, td {
       <th style="background-color: #d3d3d3;margin-top: 0.5em;font-size: 8pt;font-family: arial;text-align: center;font-weight: bold" rowspan="2">Descrição</th>
       <th style="background-color: #d3d3d3;margin-top: 0.5em;font-size: 8pt;font-family: arial;text-align: center;font-weight: bold" colspan="5">Horas Executadas</th>
       <th style="background-color: #d3d3d3;margin-top: 0.5em;font-size: 8pt;font-family: arial;text-align: center;font-weight: bold" rowspan="2">Valor Total (R$)</th>
-      <th style="background-color: #d3d3d3;margin-top: 0.5em;font-size: 8pt;font-family: arial;text-align: center;font-weight: bold" rowspan="2">Data Pagamento</th>
+      <th style="background-color: #d3d3d3;margin-top: 0.5em;font-size: 8pt;font-family: arial;text-align: center;font-weight: bold" rowspan="2">Previsão Pagamento</th>
       
     </tr>
     <tr>
@@ -122,15 +122,21 @@ th, td {
 
     		$infos = Yii::$app->db->createCommand('SELECT numero_bm, projeto.nome, projeto.descricao, previsao_pgt FROM bm JOIN projeto ON projeto.id=bm.projeto_id JOIN bm_executante ON bm.id=bm_executante.bm_id WHERE bm.id='.$bm.' AND bm_executante.bm_id='.$bm)->queryOne(); 
 
-    		$horas_exe_ee = empty(Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_ee) h_ee FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$bm.' AND exe_ee_id='.$prestador['usuario_id'])->queryScalar()) ? '0.00' : Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_ee) h_ee FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$bm.' AND exe_ee_id='.$prestador['usuario_id'])->queryScalar();
+    		$horas_exe_ee = empty(Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_ee) h_ee FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$bm.' AND exe_ee_id='.$prestador['usuario_id'])->queryScalar()) ? '' :  number_format(Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_ee) h_ee FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$bm.' AND exe_ee_id='.$prestador['usuario_id'])->queryScalar(), 1, '.', '.');
 
-            $horas_exe_es = empty(Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_es) h_es FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$bm.' AND exe_es_id='.$prestador['usuario_id'])->queryScalar()) ? '0.00' : Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_es) h_es FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$bm.' AND exe_es_id='.$prestador['usuario_id'])->queryScalar();
+            $horas_exe_es = empty(Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_es) h_es FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$bm.' AND exe_es_id='.$prestador['usuario_id'])->queryScalar()) ? '' :  number_format(Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_es) h_es FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$bm.' AND exe_es_id='.$prestador['usuario_id'])->queryScalar(), 1, '.', '.');
 
-            $horas_exe_ep = empty(Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_ep) h_ep FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$bm.' AND exe_ep_id='.$prestador['usuario_id'])->queryScalar()) ? '0.00' : Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_ep) h_ep FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$bm.' AND exe_ep_id='.$prestador['usuario_id'])->queryScalar();
+            $horas_exe_ep = empty(Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_ep) h_ep FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$bm.' AND exe_ep_id='.$prestador['usuario_id'])->queryScalar()) ? '' :  number_format(Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_ep) h_ep FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$bm.' AND exe_ep_id='.$prestador['usuario_id'])->queryScalar(), 1, '.', '.');
 
-            $horas_exe_ej = empty(Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_ej) h_ej FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$bm.' AND exe_ej_id='.$prestador['usuario_id'])->queryScalar()) ? '0.00' : Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_ej) h_ej FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$bm.' AND exe_ej_id='.$prestador['usuario_id'])->queryScalar();
+            $horas_exe_ej = empty(Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_ej) h_ej FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$bm.' AND exe_ej_id='.$prestador['usuario_id'])->queryScalar()) ? '' :  number_format(Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_ej) h_ej FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$bm.' AND exe_ej_id='.$prestador['usuario_id'])->queryScalar(), 1, '.', '.');
 
-            $horas_exe_tp = empty(Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_tp) h_tp FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$bm.' AND exe_tp_id='.$prestador['usuario_id'])->queryScalar()) ? '0.00' : Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_tp) h_tp FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$bm.' AND exe_tp_id='.$prestador['usuario_id'])->queryScalar();
+            $horas_exe_tp = empty(Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_tp) h_tp FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$bm.' AND exe_tp_id='.$prestador['usuario_id'])->queryScalar()) ? '' :  number_format(Yii::$app->db->createCommand('SELECT SUM(bm_escopo.horas_tp) h_tp FROM bm_escopo JOIN escopo ON bm_escopo.escopo_id=escopo.id WHERE bm_id = '.$bm.' AND exe_tp_id='.$prestador['usuario_id'])->queryScalar(), 1, '.', '.');
+
+              if($horas_exe_tp == 0.00) $horas_exe_tp = '';
+              if($horas_exe_ej == 0.00) $horas_exe_ej = '';
+              if($horas_exe_ep == 0.00) $horas_exe_ep = '';
+              if($horas_exe_es == 0.00) $horas_exe_es = '';
+              if($horas_exe_ee == 0.00) $horas_exe_ee = '';
 
             ?>
             <tr>
