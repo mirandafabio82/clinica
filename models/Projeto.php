@@ -76,7 +76,7 @@ class Projeto extends \yii\db\ActiveRecord
              [['cliente_id', 'contato_id'], 'required'],
             [['id', 'criador_projeto_id','cliente_id', 'contato_id', 'rev_proposta', 'qtd_hh', 'qtd_dias', 'qtd_km', 'status', 'status_geral', 'documentos' ,'executante_id', 'perc_coord_adm', 'as_aprovada'], 'integer'],
             [['data_proposta', 'data_entrega', 'criado', 'modificado'], 'safe'],
-            [['vl_hh', 'total_horas', 'vl_km', 'total_km', 'valor_proposta', 'valor_consumido', 'valor_saldo'], 'number'],
+            [['vl_hh', 'total_horas', 'vl_km', 'total_km', 'valor_proposta', 'valor_consumido', 'valor_saldo', 'vl_taxi', 'vl_passagem_aerea', 'vl_hospedagem'], 'number'],
             [['descricao', 'obs_atividade', 'nota_geral'], 'string'],
             [['codigo', 'contato', 'cliente_fatura'], 'string', 'max' => 12],
             [['site', 'planta', 'site_fatura'], 'string', 'max' => 10],
@@ -161,7 +161,9 @@ class Projeto extends \yii\db\ActiveRecord
             'desc_resumida' => 'Descrição Resumida dos Serviços',
             'executante_id' => '',
             'perc_coord_adm' => '% Coord Admin',
-            'as_aprovada' => 'AS Aprovada',
+            'vl_taxi' => 'Taxi',
+            'vl_passagem_aerea' => 'Passagem Aérea',
+            'vl_hospedagem' => 'Hospedagem',
         ];
     }
 

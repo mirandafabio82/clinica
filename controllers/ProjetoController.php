@@ -606,7 +606,7 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                 
             }            
                     
-            $valorProposta = $valorProposta + $model->vl_km;
+            $valorProposta = $valorProposta + $model->vl_km + $model->vl_taxi + $model->vl_passagem_aerea + $model->vl_hospedagem;
 
             
            $model->total_horas = $totalHoras;

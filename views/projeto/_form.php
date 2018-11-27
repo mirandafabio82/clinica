@@ -1574,6 +1574,19 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
 
         <?php  if(!$model->isNewRecord){ ?>
           <div ><p><a class="btn btn-success nao-prioritarios"><i class="fa fa-plus"></i> Atividades Avulsas</a></p></div>
+           
+           Custos Diversos
+          <div class="row" style="border:1px solid black;padding: 2px; margin-bottom: 1em">
+            <div class="col-md-2">
+                <?= $form->field($model, 'vl_taxi')->textInput(['maxlength' => true]) ?>
+            </div>
+            <div class="col-md-2">
+                <?= $form->field($model, 'vl_passagem_aerea')->textInput(['maxlength' => true]) ?>
+            </div>
+            <div class="col-md-2">
+                <?= $form->field($model, 'vl_hospedagem')->textInput(['maxlength' => true]) ?>
+            </div>
+          </div>
 
           <div id="nao-prioritarios_div" style="margin-bottom: 1em" hidden>   
            <input type="radio" name="disc_radio" value="auto" checked="checked" id="aut_radio"> Automação
@@ -1733,6 +1746,7 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
         $executantes_ee = Yii::$app->db->createCommand('SELECT executante.usuario_id as exec_id, nome FROM executante JOIN executante_tipo ON executante_tipo.executante_id=executante.usuario_id JOIN tipo_executante ON executante_tipo.tipo_id=tipo_executante.id JOIN user ON user.id=executante.usuario_id JOIN projeto_executante ON projeto_executante.executante_id=executante.usuario_id JOIN executante_disciplina ON executante.usuario_id=executante_disciplina.executante_id WHERE disciplina_id = '.$atividadeModel->disciplina_id.' AND tipo_executante.id =5 AND projeto_executante.projeto_id='.$model->id)->queryAll();
         $listExecutantes_ee = ArrayHelper::map($executantes_ee,'exec_id','nome');
 
+       
         
         if(!empty($exe_tp))
           $exe_tp = Yii::$app->db->createCommand('SELECT nome FROM executante WHERE id='.$esc['exe_tp_id'])->queryScalar();
@@ -1774,8 +1788,8 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
             
           }
           
-        $qtd = '<td style="font-size: 10px; padding: 1px;">'.$form2->field($escopoModel, 'qtd')->textInput(['style'=>' width:4em', 'name' => 'Escopo['.$esc["id"].'][qtd]', 'type' => 'number', 'min' => '0'])->label(false).'</td>'; 
-        $for = '<td style="font-size: 10px; padding: 1px;">'.$form2->field($escopoModel, 'for')->textInput(['style'=>' width:4em', 'name' => 'Escopo['.$esc["id"].'][for]', 'min' => '0'])->label(false).'</td>';
+        $qtd = '<td style="font-size: 10px; padding: 1px;">'.$form2->field($escopoModel, 'qtd')->textInput(['style'=>' width:4em; text-align: center;', 'name' => 'Escopo['.$esc["id"].'][qtd]', 'type' => 'number', 'min' => '0'])->label(false).'</td>'; 
+        $for = '<td style="font-size: 10px; padding: 1px;">'.$form2->field($escopoModel, 'for')->textInput(['style'=>' width:4em; text-align: center;', 'name' => 'Escopo['.$esc["id"].'][for]', 'min' => '0'])->label(false).'</td>';
 
         $separaEntregavel++;
       }
@@ -1791,28 +1805,28 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
       $popEJ = PopoverX::widget([
         'placement' => PopoverX::ALIGN_TOP,
         'content' => $contentEJ,
-        'toggleButton' => ['label'=>!isset($esc['exe_ej_id']) || empty(Yii::$app->db->createCommand('SELECT horas_ej FROM escopo WHERE id='.$esc["id"])->queryScalar()) ? '<i class="fa fa-caret-up" aria-hidden="true"></i>' : substr(Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.$esc['exe_ej_id'])->queryScalar(), 0, 1), 'class'=>'btn btn-default', 'style'=>'padding:1px'],
+        'toggleButton' => ['label'=>!isset($esc['exe_ej_id']) || empty(Yii::$app->db->createCommand('SELECT horas_ej FROM escopo WHERE id='.$esc["id"])->queryScalar()) ? '<i class="fa fa-caret-up" aria-hidden="true"></i>' : substr(Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.$esc['exe_ej_id'])->queryScalar(), 0, 1), 'class'=>'btn btn-default', 'style'=>'padding:1px; font-size: 1.1em;'],
       ]);
 
       $contentEP = '<p class="text-justify">' .$form2->field($escopoModel, 'exe_ep_id')->dropDownList($listExecutantes_ep,['name' => 'Escopo['.$esc["id"].'][exe_ep_id]', 'value'=>$esc['exe_ep_id'], 'class'=> 'form-control popep'])->label(false) .'</p>';
       $popEP = PopoverX::widget([
         'placement' => PopoverX::ALIGN_TOP,
         'content' => $contentEP,
-        'toggleButton' => ['label'=> !isset($esc['exe_ep_id']) || empty(Yii::$app->db->createCommand('SELECT horas_ep FROM escopo WHERE id='.$esc["id"])->queryScalar()) ? '<i class="fa fa-caret-up" aria-hidden="true"></i>' : substr(Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.$esc['exe_ep_id'])->queryScalar(), 0, 1), 'class'=>'btn btn-default', 'style'=>'padding:1px'],
+        'toggleButton' => ['label'=> !isset($esc['exe_ep_id']) || empty(Yii::$app->db->createCommand('SELECT horas_ep FROM escopo WHERE id='.$esc["id"])->queryScalar()) ? '<i class="fa fa-caret-up" aria-hidden="true"></i>' : substr(Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.$esc['exe_ep_id'])->queryScalar(), 0, 1), 'class'=>'btn btn-default', 'style'=>'padding:1px; font-size: 1.1em;'],
       ]);
 
       $contentES = '<p class="text-justify">' .$form2->field($escopoModel, 'exe_es_id')->dropDownList($listExecutantes_es,['name' => 'Escopo['.$esc["id"].'][exe_es_id]', 'value'=>$esc['exe_es_id'], 'class'=> 'form-control popes'])->label(false) .'</p>';
       $popES = PopoverX::widget([
         'placement' => PopoverX::ALIGN_TOP,
         'content' => $contentES,
-        'toggleButton' => ['label'=> !isset($esc['exe_es_id']) || empty(Yii::$app->db->createCommand('SELECT horas_es FROM escopo WHERE id='.$esc["id"])->queryScalar()) ? '<i class="fa fa-caret-up" aria-hidden="true"></i>' : substr(Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.$esc['exe_es_id'])->queryScalar(), 0, 1), 'class'=>'btn btn-default', 'style'=>'padding:1px'],
+        'toggleButton' => ['label'=> !isset($esc['exe_es_id']) || empty(Yii::$app->db->createCommand('SELECT horas_es FROM escopo WHERE id='.$esc["id"])->queryScalar()) ? '<i class="fa fa-caret-up" aria-hidden="true"></i>' : substr(Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.$esc['exe_es_id'])->queryScalar(), 0, 1), 'class'=>'btn btn-default', 'style'=>'padding:1px; font-size: 1.1em;'],
       ]);
 
       $contentEE = '<p class="text-justify">' .$form2->field($escopoModel, 'exe_ee_id')->dropDownList($listExecutantes_ee,['name' => 'Escopo['.$esc["id"].'][exe_ee_id]', 'value'=>$esc['exe_ee_id'], 'class'=> 'form-control popee'])->label(false) .'</p>';
       $popEE = PopoverX::widget([
         'placement' => PopoverX::ALIGN_TOP,
         'content' => $contentEE,
-        'toggleButton' => ['label'=> !isset($esc['exe_ee_id']) || empty(Yii::$app->db->createCommand('SELECT horas_ee FROM escopo WHERE id='.$esc["id"])->queryScalar()) ? '<i class="fa fa-caret-up" aria-hidden="true"></i>' : substr(Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.$esc['exe_ee_id'])->queryScalar(), 0, 1), 'class'=>'btn btn-default', 'style'=>'padding:1px'],
+        'toggleButton' => ['label'=> !isset($esc['exe_ee_id']) || empty(Yii::$app->db->createCommand('SELECT horas_ee FROM escopo WHERE id='.$esc["id"])->queryScalar()) ? '<i class="fa fa-caret-up" aria-hidden="true"></i>' : substr(Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.$esc['exe_ee_id'])->queryScalar(), 0, 1), 'class'=>'btn btn-default', 'style'=>'padding:1px; font-size: 1.1em;'],
       ]);
 
        $disciplina_id = Yii::$app->db->createCommand('SELECT disciplina_id FROM atividademodelo WHERE id='.$esc['atividademodelo_id'])->queryScalar();
@@ -1821,19 +1835,19 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
 
       echo $form2->field($escopoModel, 'exe_tp_id')->textInput(['style'=>'width:4em;', 'name' => 'Escopo['.$esc["id"].'][exe_tp_id]','id' => 'escopotp-'.$esc["id"], 'type' => 'number','hidden'=>'hidden'])->label(false);
 
-      $horas_ej = '<td style="font-size: 10px; padding: 1px;"><div class="row"><div class="col-md-8">'.$form2->field($escopoModel, 'horas_ej')->textInput(['style'=>'width:4em', 'name' =>'Escopo['.$esc["id"].'][horas_ej]', 'type' => 'number', 'class' => 'Escopo['.$esc["id"].'][horas_ej] horas', 'id' => 'horas_ej-'.$disciplina_id.'-'.$esc["id"], 'min' => '0'])->label(false).'</div><div class="col-md-4" style="padding-left:1px;margin-left:-1em">'.$popEJ.'</div></td>'; 
+      $horas_ej = '<td style="font-size: 10px; padding: 1px;"><div class="row"><div class="col-md-8">'.$form2->field($escopoModel, 'horas_ej')->textInput(['style'=>'width:4em; text-align: center;', 'name' =>'Escopo['.$esc["id"].'][horas_ej]', 'type' => 'number', 'class' => 'Escopo['.$esc["id"].'][horas_ej] horas', 'id' => 'horas_ej-'.$disciplina_id.'-'.$esc["id"], 'min' => '0'])->label(false).'</div><div class="col-md-4" style="padding-left:1px;margin-left:-1em">'.$popEJ.'</div></td>'; 
 
       echo $form2->field($escopoModel, 'exe_ej_id')->textInput(['style'=>'width:4em;', 'name' => 'Escopo['.$esc["id"].'][exe_ej_id]','id' => 'escopoej-'.$esc["id"], 'type' => 'number', 'hidden'=>'hidden'])->label(false);
 
-      $horas_ep = '<td style="font-size: 10px; padding: 1px;"><div class="row"><div class="col-md-8">'.$form2->field($escopoModel, 'horas_ep')->textInput(['style'=>'width:4em', 'name' =>'Escopo['.$esc["id"].'][horas_ep]', 'type' => 'number', 'class' => 'Escopo['.$esc["id"].'][horas_ep] horas', 'id' => 'horas_ep-'.$disciplina_id.'-'.$esc["id"], 'min' => '0'])->label(false).'</div><div class="col-md-4" style="padding-left:1px;margin-left:-1em">'.$popEP.'</div></td>';
+      $horas_ep = '<td style="font-size: 10px; padding: 1px;"><div class="row"><div class="col-md-8">'.$form2->field($escopoModel, 'horas_ep')->textInput(['style'=>'width:4em; text-align: center;', 'name' =>'Escopo['.$esc["id"].'][horas_ep]', 'type' => 'number', 'class' => 'Escopo['.$esc["id"].'][horas_ep] horas', 'id' => 'horas_ep-'.$disciplina_id.'-'.$esc["id"], 'min' => '0'])->label(false).'</div><div class="col-md-4" style="padding-left:1px;margin-left:-1em">'.$popEP.'</div></td>';
 
       echo $form2->field($escopoModel, 'exe_ep_id')->textInput(['style'=>'width:4em;', 'name' => 'Escopo['.$esc["id"].'][exe_ep_id]','id' => 'escopoep-'.$esc["id"], 'type' => 'number', 'hidden'=>'hidden'])->label(false);
 
-      $horas_es = '<td style="font-size: 10px; padding: 1px;"><div class="row"><div class="col-md-8">'.$form2->field($escopoModel, 'horas_es')->textInput(['style'=>'width:4em', 'name' =>'Escopo['.$esc["id"].'][horas_es]', 'type' => 'number', 'class' => 'Escopo['.$esc["id"].'][horas_es] horas', 'id' => 'horas_es-'.$disciplina_id.'-'.$esc["id"], 'min' => '0'])->label(false).'</div><div class="col-md-4" style="padding-left:1px;margin-left:-1em">'.$popES.'</div></td>';
+      $horas_es = '<td style="font-size: 10px; padding: 1px;"><div class="row"><div class="col-md-8">'.$form2->field($escopoModel, 'horas_es')->textInput(['style'=>'width:4em; text-align: center;', 'name' =>'Escopo['.$esc["id"].'][horas_es]', 'type' => 'number', 'class' => 'Escopo['.$esc["id"].'][horas_es] horas', 'id' => 'horas_es-'.$disciplina_id.'-'.$esc["id"], 'min' => '0'])->label(false).'</div><div class="col-md-4" style="padding-left:1px;margin-left:-1em">'.$popES.'</div></td>';
 
       echo $form2->field($escopoModel, 'exe_es_id')->textInput(['style'=>'width:4em;', 'name' => 'Escopo['.$esc["id"].'][exe_es_id]','id' => 'escopoes-'.$esc["id"], 'type' => 'number', 'hidden'=>'hidden'])->label(false);
 
-      $horas_ee = '<td style="font-size: 10px; padding: 1px;"><div class="row"><div class="col-md-8">'.$form2->field($escopoModel, 'horas_ee')->textInput(['style'=>'width:4em', 'name' =>'Escopo['.$esc["id"].'][horas_ee]', 'type' => 'number', 'class' => 'Escopo['.$esc["id"].'][horas_ee] horas', 'id' => 'horas_ee-'.$disciplina_id.'-'.$esc["id"], 'min' => '0'])->label(false).'</div><div class="col-md-4" style="padding-left:1px;margin-left:-1em">'.$popEE.'</div></td>';
+      $horas_ee = '<td style="font-size: 10px; padding: 1px;"><div class="row"><div class="col-md-8">'.$form2->field($escopoModel, 'horas_ee')->textInput(['style'=>'width:4em; text-align: center;', 'name' =>'Escopo['.$esc["id"].'][horas_ee]', 'type' => 'number', 'class' => 'Escopo['.$esc["id"].'][horas_ee] horas', 'id' => 'horas_ee-'.$disciplina_id.'-'.$esc["id"], 'min' => '0'])->label(false).'</div><div class="col-md-4" style="padding-left:1px;margin-left:-1em">'.$popEE.'</div></td>';
 
       echo $form2->field($escopoModel, 'exe_ee_id')->textInput(['style'=>'width:4em;', 'name' => 'Escopo['.$esc["id"].'][exe_ee_id]','id' => 'escopoee-'.$esc["id"], 'type' => 'number', 'hidden'=>'hidden'])->label(false);
       

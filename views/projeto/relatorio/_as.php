@@ -289,7 +289,22 @@ th, td {
      <tr style="background-color: #d3d3d3" >
             <td style="font-family: arial;font-size: 8pt; width:10px">Viagens</td> 
             <td style="font-family: arial;font-size: 8pt" ></td>
-            <td style="font-family: arial;font-size: 8pt"  align="center"></td>           
+            <td style="font-family: arial;font-size: 8pt" ></td>           
+     </tr>
+     <tr style="background-color: #d3d3d3" >
+            <td style="font-family: arial;font-size: 8pt; width:10px">Passagens aéreas</td> 
+            <td style="font-family: arial;font-size: 8pt" ></td>
+            <td style="font-family: arial;font-size: 8pt" align="right"><?= number_format($projeto->vl_passagem_aerea, 2, ',', '.') ?></td>           
+     </tr>
+     <tr style="background-color: #d3d3d3" >
+            <td style="font-family: arial;font-size: 8pt; width:10px">Hospedagem</td> 
+            <td style="font-family: arial;font-size: 8pt" ></td>
+            <td style="font-family: arial;font-size: 8pt" align="right"><?= number_format($projeto->vl_hospedagem, 2, ',', '.') ?></td>           
+     </tr>
+     <tr style="background-color: #d3d3d3" >
+            <td style="font-family: arial;font-size: 8pt; width:10px">Taxi</td> 
+            <td style="font-family: arial;font-size: 8pt" ></td>
+            <td style="font-family: arial;font-size: 8pt" align="right"><?= number_format($projeto->vl_taxi, 2, ',', '.') ?></td>           
      </tr>
     <!--  <tr style="background-color: #d3d3d3;">
             <td style="font-family: arial;font-size: 8pt"   rowspan="2">Translados <br>(140 Km por viagem)</td> 
@@ -306,7 +321,7 @@ th, td {
      <tr style="background-color: #d3d3d3;">
             <td style="font-family: arial;font-size: 8pt; width:20em">Translados</td> 
            <td style="font-family: arial;font-size: 8pt; width:20em" align="center">Deslocamento para <?= $projeto->qtd_km ?> Km</td> 
-           <td style="font-family: arial;font-size: 8pt; width:2em" align="right"><?= $projeto->vl_km ?></td> 
+           <td style="font-family: arial;font-size: 8pt; width:2em" align="right"><?= number_format($projeto->vl_km, 2, ',', '.') ?></td> 
       </tr>
 
      <tr style="background-color: #d3d3d3;">
@@ -321,11 +336,11 @@ th, td {
      </tr>
      <tr style="background-color: #605f5f;">
             <td style="font-family: arial;font-size: 8pt; width:20em;color:white"  colspan="2">SUBTOTAL</td>             
-            <td style="font-family: arial;font-size: 8pt; width:2em;color:white"  align="right"><?= number_format($projeto->vl_km, 2, ',', '.') ?></td>           
+            <td style="font-family: arial;font-size: 8pt; width:2em;color:white"  align="right"><?= number_format($projeto->vl_passagem_aerea+$projeto->vl_hospedagem+$projeto->vl_taxi+$projeto->vl_km, 2, ',', '.') ?></td>           
      </tr>
       <tr style="background-color: #605f5f;">
             <td style="font-family: arial;font-size: 8pt; width:20em;color:white" colspan="2">TOTAL GERAL</td> 
-            <td style="font-family: arial;font-size: 8pt; width:2em;color:white"  align="right"><?= number_format($money_proc+$money_inst+$money_aut+$projeto->vl_km, 2, ',', '.') ?></td>           
+            <td style="font-family: arial;font-size: 8pt; width:2em;color:white"  align="right"><?= number_format($money_proc+$money_inst+$money_aut+$projeto->vl_passagem_aerea+$projeto->vl_hospedagem+$projeto->vl_taxi+$projeto->vl_km, 2, ',', '.') ?></td>           
      </tr>
 	</tbody>
       </table>

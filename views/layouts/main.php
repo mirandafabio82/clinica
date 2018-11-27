@@ -156,6 +156,7 @@ $usuario = Yii::$app->db->createCommand('SELECT * FROM user WHERE id='.Yii::$app
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">MENU PRINCIPAL</li>
          <?php if(!isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['contato'])){ ?>
+        <li><a href="<?= Url::to(['agenda/create']) ?>"><i class="fa fa-calendar"></i> <span>Agenda</span></a></li>
         <li><a href="<?= Url::to(['projeto/create']) ?>"><i class="fa fa-folder-open"></i> <span>Projetos</span></a></li>      
         
         <?php } ?>
