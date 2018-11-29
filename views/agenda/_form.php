@@ -4,12 +4,26 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\grid\GridView;
 use yii\helpers\Url;
+use yii\bootstrap\Modal;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Agenda */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 <?php
+  $eventos = '';
+  foreach ($arrayEventos as $key => $evt) {
+          $eventos .= "{
+                        id             : ".$evt['id'].",
+                        title          : '".$evt['assunto']."',
+                        start          : '".$evt['hr_inicio']."',
+                        end            : '".$evt['hr_final']."',
+                        backgroundColor: '".$evt['cor']."', //red
+                        borderColor    : '".$evt['cor']."' //red
+                      },";
+        }     
+
+      
 $this->registerJs("
 
     $('td').click(function (e) {
@@ -67,52 +81,46 @@ $this->registerJs("
         week : 'semana',
         day  : 'dia'
       },
-      //Random default events
-      events    : [
-        {
-          title          : 'All Day Event',
-          start          : new Date(y, m, 1),
-          backgroundColor: '#f56954', //red
-          borderColor    : '#f56954' //red
-        },
-        {
-          title          : 'Long Event',
-          start          : new Date(y, m, d - 5),
-          end            : new Date(y, m, d - 2),
-          backgroundColor: '#f39c12', //yellow
-          borderColor    : '#f39c12' //yellow
-        },
-        {
-          title          : 'Meeting',
-          start          : new Date(y, m, d, 10, 30),
-          allDay         : false,
-          backgroundColor: '#0073b7', //Blue
-          borderColor    : '#0073b7' //Blue
-        },
-        {
-          title          : 'Lunch',
-          start          : new Date(y, m, d, 12, 0),
-          end            : new Date(y, m, d, 14, 0),
-          allDay         : false,
-          backgroundColor: '#00c0ef', //Info (aqua)
-          borderColor    : '#00c0ef' //Info (aqua)
-        },
-        {
-          title          : 'Birthday Party',
-          start          : new Date(y, m, d + 1, 19, 0),
-          end            : new Date(y, m, d + 1, 22, 30),
-          allDay         : false,
-          backgroundColor: '#00a65a', //Success (green)
-          borderColor    : '#00a65a' //Success (green)
-        },
-        {
-          title          : 'Click for Google',
-          start          : new Date(y, m, 28),
-          end            : new Date(y, m, 29),
-          url            : 'http://google.com/',
-          backgroundColor: '#3c8dbc', //Primary (light-blue)
-          borderColor    : '#3c8dbc' //Primary (light-blue)
+
+      eventClick: function(calEvent, jsEvent, view) {
+        document.getElementById('update-form').action = '/web/index.php?r=agenda%2Fupdate%2F&id='+calEvent.id;
+
+        $.ajax({ 
+          url: 'index.php?r=agenda/getevent',
+          data: {id: calEvent.id},
+          type: 'POST',
+          success: function(response){
+            var resposta = $.parseJSON(response);
+            console.log(resposta);
+            $('#up_projeto_id').val(resposta['projeto_id']);
+            $('#up_responsavel').val(resposta['responsavel']);
+            $('#up_contato').val(resposta['contato']);
+            $('#up_assunto').val(resposta['assunto']);
+            $('#up_hr_inicio').val(resposta['hr_inicio']);
+            $('#up_hr_final').val(resposta['hr_final']);
+            $('#up_local').val(resposta['local']);
+            $('#up_status').val(resposta['status']);
+            $('#up_descricao').val(resposta['descricao']);
+
+            $('#atualizar').modal('show');
+         },
+         error: function(request, status, error){
+          alert(request.responseText);
         }
+      });
+        
+      },
+
+      selectable: true,
+      selectHelper: true,
+      select: function(start, end){
+        $('#cadastrar #start').val(moment(start).format('DD/MM/YYYY HH:mm:ss'));
+        $('#cadastrar #end').val(moment(end).format('DD/MM/YYYY HH:mm:ss'));
+        $('#cadastrar').modal('show');
+      },
+      //Random default events
+      events    : [        
+        ". $eventos ."
       ],
       editable  : true,
       droppable : true, // this allows things to be dropped onto the calendar !!!
@@ -182,6 +190,11 @@ $this->registerJs("
 
 ");
 ?>
+<?php 
+Modal::begin(['header' => '<h4>LD-Preliminar</h4>', 'id' => 'modal', 'size' => 'modal-lg',]);
+  echo '<div id="modalContent"></div>';
+  Modal::end();
+  ?>
 <style>
 .table-bordered > tbody > tr > td{
   padding-top: 0px !important;
@@ -207,133 +220,76 @@ $this->registerJs("
 <div style="margin-bottom:1em;margin-top: 1em">
     <?= Html::a('Mostrar Todos', ['/agenda/create', 'pagination' => true], ['class'=>'btn btn-primary grid-button']) ?>
 </div>
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        // 'filterModel' => $searchModel,
-        'options' => ['style' => 'font-size:12px;'],
-        // 'pjax' => true,
-        
-        // 'hover' => true,
-        /*'panel' => [
-            'type' => GridView::TYPE_PRIMARY,
-            'heading' => '<i class="fa fa-calendar"></i> Agenda'
-        ],*/
-        'columns' => [
-            // ['class' => 'yii\grid\SerialColumn'],
-            [
-              'class' => 'yii\grid\ActionColumn',
-              'template' => '{delete}',    
-              'contentOptions' => ['style' => 'width:5em;  min-width:5em;'],
-            ],
-            
-            [
-                'attribute' => 'projeto_id',
-                'value' => function($data){
-                    if(isset($data->projeto_id))
-                    return Yii::$app->db->createCommand('SELECT nome FROM projeto WHERE id='.$data->projeto_id)->queryScalar();
-                }
-            ],     
-            [
-              'attribute' => 'status',
-              'format' => 'raw',
-              'value' => function ($data) {
 
-                $status = Yii::$app->db->createCommand('SELECT status, cor FROM agenda_status WHERE id='.$data->status)->queryOne();
-                
-               return '<span style="color:'.$status['cor'].' "><i class="fa fa-circle" aria-hidden="true"></i> '.$status['status'].'</span>';
-
-               },
-            ],       
-            /*[
-              'attribute' => 'status',      
-              'class' => 'kartik\grid\EditableColumn',        
-              'format' => 'raw',
-              'contentOptions' => ['style' => 'width:8em;  min-width:8em;'],
-               'value' => function ($data) {
-
-                $status = Yii::$app->db->createCommand('SELECT status, cor FROM agenda_status WHERE id='.$data->status)->queryOne();
-                
-               return '<span style="color:'.$status['cor'].' "><i class="fa fa-circle" aria-hidden="true"></i> '.$status['status'].'</span>';
-
-               },
-                'editableOptions' => [
-              'inputType' => \kartik\editable\Editable::INPUT_DROPDOWN_LIST,
-              'data' => $listStatus                
-              ]
-            ],*/
-            [
-                'attribute' => 'data',
-                'value' => function($data){
-                    if(!empty($data->data))
-                    return date_format(DateTime::createFromFormat('Y-m-d', $data->data), 'd/m/Y');
-                }
-            ], 
-            [
-                'attribute' => 'site',
-                'value' => function($data){
-                    if(isset($data->local) && !empty($data->local))
-                    return Yii::$app->db->createCommand('SELECT nome FROM site WHERE id='.$data->local)->queryScalar();
-                }
-            ],         
-            'quem',
-            'assunto',
-            'hr_inicio',
-            'hr_final',
-
-            // ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
-
+<?php
+  if(isset($_SESSION['msg'])){
+    echo $_SESSION['msg'];
+    unset($_SESSION['msg']);
+  }
+?>
+   
 <div class="row">
-<div class="agenda-form col-md-6">
-
-    <?php $form = ActiveForm::begin(); ?>
-    <div class="box box-primary">
-    <div class="box-header with-border">
-    <div class="row">
-    <div class="col-md-3">    
-        <?= $form->field($model, 'projeto_id')->dropDownList($listProjetos,['prompt'=>'Selecione um Projeto']) ?>
-    
-        
-    
-        </div>
-        <div class="col-md-4"> 
-        <!-- <//?= $form->field($model, 'local')->dropDownList($listSites,['prompt'=>'Selecione um Site']) ?> -->
-    
-        <?= $form->field($model, 'quem')->textInput(['maxlength' => true]) ?>
-        </div>
-        <div class="col-md-3"> 
-        <?= $form->field($model, 'assunto')->textInput(['maxlength' => true]) ?>   
-        
-        </div>
-        
         <div class="col-md-3">
-            <?= $form->field($model, 'data')->widget(\yii\widgets\MaskedInput::className(), [
-                            'mask' => '99/99/9999',
-                        ]) ?>
-        </div>
-        <div class="col-md-3">
-            <?= $form->field($model, 'hr_inicio')->widget(\yii\widgets\MaskedInput::className(), [
-                            'mask' => '99:99:99',
-                        ]) ?>
-        </div>
-        <div class="col-md-4">
-            <?= $form->field($model, 'hr_final')->widget(\yii\widgets\MaskedInput::className(), [
-                            'mask' => '99:99:99',
-                        ]) ?>
-        </div>
+          <div class="box box-solid">
+            <div class="box-header with-border">
+              <h4 class="box-title">Eventos</h4>
+            </div>
+            <div class="box-body">
+              <!-- the events -->
+              <div id="external-events">
+                <div class="external-event bg-green">Lunch</div>
+                <div class="external-event bg-yellow">Go home</div>
+                <div class="external-event bg-aqua">Do homework</div>
+                <div class="external-event bg-light-blue">Work on UI design</div>
+                <div class="external-event bg-red">Sleep tight</div>
+                <div class="checkbox">
+                  <label for="drop-remove">
+                    <input type="checkbox" id="drop-remove">
+                    remove after drop
+                  </label>
+                </div>
+              </div>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /. box -->
+          <div class="box box-solid">
+            <div class="box-header with-border">
+              <h3 class="box-title">Criar Eventos</h3>
+            </div>
+            <div class="box-body">
+              <div class="btn-group" style="width: 100%; margin-bottom: 10px;">
+                <!--<button type="button" id="color-chooser-btn" class="btn btn-info btn-block dropdown-toggle" data-toggle="dropdown">Color <span class="caret"></span></button>-->
+                <ul class="fc-color-picker" id="color-chooser">
+                  <li><a class="text-aqua" href="#"><i class="fa fa-square"></i></a></li>
+                  <li><a class="text-blue" href="#"><i class="fa fa-square"></i></a></li>
+                  <li><a class="text-light-blue" href="#"><i class="fa fa-square"></i></a></li>
+                  <li><a class="text-teal" href="#"><i class="fa fa-square"></i></a></li>
+                  <li><a class="text-yellow" href="#"><i class="fa fa-square"></i></a></li>
+                  <li><a class="text-orange" href="#"><i class="fa fa-square"></i></a></li>
+                  <li><a class="text-green" href="#"><i class="fa fa-square"></i></a></li>
+                  <li><a class="text-lime" href="#"><i class="fa fa-square"></i></a></li>
+                  <li><a class="text-red" href="#"><i class="fa fa-square"></i></a></li>
+                  <li><a class="text-purple" href="#"><i class="fa fa-square"></i></a></li>
+                  <li><a class="text-fuchsia" href="#"><i class="fa fa-square"></i></a></li>
+                  <li><a class="text-muted" href="#"><i class="fa fa-square"></i></a></li>
+                  <li><a class="text-navy" href="#"><i class="fa fa-square"></i></a></li>
+                </ul>
+              </div>
+              <!-- /btn-group -->
+              <div class="input-group">
+                <input id="new-event" type="text" class="form-control" placeholder="Event Title">
 
+                <div class="input-group-btn">
+                  <button id="add-new-event" type="button" class="btn btn-primary btn-flat">Add</button>
+                </div>
+                <!-- /btn-group -->
+              </div>
+              <!-- /input-group -->
+            </div>
+          </div>
         </div>
-    <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Cadastrar' : 'Salvar', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-    </div>
-    </div>
-    </div>
-</div>
-    <?php ActiveForm::end(); ?>
-
-    <!-- /.col -->
-        <div class="col-md-6">
+        <div class="col-md-7">
           <div class="box box-primary">
             <div class="box-body no-padding">
               <!-- THE CALENDAR -->
@@ -355,3 +311,111 @@ $this->registerJs("
         <!-- /.col -->
     </div>
 </div>
+ </div>
+
+<div id="cadastrar" class="modal fade" role="dialog" style="z-index: 999999999">
+  <div class="modal-dialog" style="width:50%">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+          
+        <h4 class="modal-title">Evento</h4>
+      </div>
+      <div class="modal-body">             
+        <?php $form = ActiveForm::begin(); ?>
+    
+    <div class="row">
+      <div class="col-md-12">   
+        <div class="col-md-6">    
+            <?= $form->field($model, 'projeto_id')->dropDownList($listProjetos,['prompt'=>'Selecione um Projeto']) ?>
+            <?= $form->field($model, 'contato')->dropDownList($listContatos, ['prompt'=>'Selecione um contato']); ?> 
+            <?= $form->field($model, 'hr_inicio')->widget(\yii\widgets\MaskedInput::className(), [
+                            'mask' => '99/99/9999 99:99:99',
+                        ])->textInput(['id' => 'start']) ?>
+            <?= $form->field($model, 'local')->textInput(['maxlength' => true]) ?>  
+            
+        </div>
+        <div class="col-md-6">         
+            <?= $form->field($model, 'responsavel')->dropDownList($listExecutantes, ['prompt'=>'Selecione um responsável']); ?>
+            <?= $form->field($model, 'assunto')->textInput(['maxlength' => true]) ?> 
+            <?= $form->field($model, 'hr_final')->widget(\yii\widgets\MaskedInput::className(), [
+                            'mask' => '99/99/9999 99:99:99',
+                        ])->textInput(['id' => 'end']) ?>  
+            <?= $form->field($model, 'status')->dropDownList($listStatus); ?>
+        </div>
+        <div class="col-md-12"> 
+            <?= $form->field($model, 'descricao')->textArea(['maxlength' => true]) ?> 
+        </div>   
+      </div>
+             
+        
+         </div>
+        <div class="form-group">
+            <?= Html::submitButton($model->isNewRecord ? 'Cadastrar' : 'Salvar', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        </div>
+        <?php ActiveForm::end(); ?>
+       
+    
+    </div>
+    </div>
+    
+      </div>
+     
+    </div>
+
+
+    <div id="atualizar" class="modal fade" role="dialog" style="z-index: 999999999">
+  <div class="modal-dialog" style="width:50%">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+          
+        <h4 class="modal-title">Evento</h4>
+      </div>
+      <div class="modal-body">             
+        
+    <?php $form = ActiveForm::begin();  $form->options['id'] = 'update-form'; ?>
+    <div class="row">
+      <div class="col-md-12">   
+        <div class="col-md-6">    
+          
+            <?= $form->field($model, 'projeto_id')->dropDownList($listProjetos,['prompt'=>'Selecione um Projeto', 'id' => 'up_projeto_id']) ?>
+            <?= $form->field($model, 'contato')->dropDownList($listContatos, ['prompt'=>'Selecione um contato', 'id' => 'up_contato']); ?> 
+            <?= $form->field($model, 'hr_inicio')->widget(\yii\widgets\MaskedInput::className(), [
+                            'mask' => '99/99/9999 99:99:99',
+                        ])->textInput(['id' => 'up_hr_inicio']) ?>
+            <?= $form->field($model, 'local')->textInput(['maxlength' => true, 'id' => 'up_local']) ?>  
+            
+        </div>
+        <div class="col-md-6">         
+            <?= $form->field($model, 'responsavel')->dropDownList($listExecutantes, ['prompt'=>'Selecione um responsável', 'id' => 'up_responsavel']); ?>
+            <?= $form->field($model, 'assunto')->textInput(['maxlength' => true, 'id' => 'up_assunto']) ?> 
+            <?= $form->field($model, 'hr_final')->widget(\yii\widgets\MaskedInput::className(), [
+                            'mask' => '99/99/9999 99:99:99',
+                        ])->textInput(['id' => 'up_hr_final']) ?>  
+            <?= $form->field($model, 'status')->dropDownList($listStatus, ['id' => 'up_status']); ?>
+        </div>
+        <div class="col-md-12"> 
+            <?= $form->field($model, 'descricao')->textArea(['maxlength' => true, 'id' => 'up_descricao']) ?> 
+        </div>   
+      </div>
+             
+        
+         </div>
+        <div class="form-group">
+            <?= Html::submitButton('Salvar', ['class' => $model->isNewRecord ? 'btn btn-info' : 'btn btn-primary']) ?>
+        </div>
+        
+        <?php ActiveForm::end(); ?>
+    
+    </div>
+    </div>
+    
+      </div>
+     
+    </div>
+

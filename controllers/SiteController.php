@@ -66,6 +66,8 @@ class SiteController extends Controller
 
         $logs = Yii::$app->db->createCommand('SELECT * FROM log ORDER BY id DESC LIMIT 5')->queryAll();
 
+        $arrayEventos = Yii::$app->db->createCommand('SELECT * FROM agenda')->queryAll();
+
         return $this->render('index', [
             'emitirAS' => $emitirAS,
             'aguardando' => $aguardando,
@@ -73,6 +75,7 @@ class SiteController extends Controller
             'numBm' => $numBm,
             'logs' => $logs,
             'pagamentos_dia' => $pagamentos_dia,
+            'arrayEventos' => $arrayEventos
         ]);
     }
 

@@ -18,8 +18,13 @@ class AgendaSearch extends Agenda
     public function rules()
     {
         return [
-            [['id', 'projeto_id'], 'integer'],
-            [['data', 'local', 'quem', 'assunto', 'hr_inicio', 'hr_final', 'status'], 'safe'],
+            [['projeto_id', 'responsavel', 'contato', 'status'], 'integer'],
+            [['hr_inicio', 'hr_final', 'status'], 'required'],
+            [['hr_inicio', 'hr_final', 'prazo'], 'safe'],
+            [['descricao', 'pendente'], 'string'],
+            [['local'], 'string', 'max' => 15],
+            [['assunto'], 'string', 'max' => 80],
+            //[['status'], 'exist', 'skipOnError' => true, 'targetClass' => AgendaStatus::className(), 'targetAttribute' => ['status' => 'id']],
         ];
     }
 
@@ -61,18 +66,18 @@ class AgendaSearch extends Agenda
         }
 
         // grid filtering conditions
-        $query->andFilterWhere([
+      /*  $query->andFilterWhere([
             'id' => $this->id,
             'projeto_id' => $this->projeto_id,
             'data' => $this->data,
             'hr_inicio' => $this->hr_inicio,
             'hr_final' => $this->hr_final,
-        ]);
+        ]);*/
 
-        $query->andFilterWhere(['like', 'local', $this->local])
+        /*$query->andFilterWhere(['like', 'local', $this->local])
             ->andFilterWhere(['like', 'quem', $this->quem])
             ->andFilterWhere(['like', 'assunto', $this->assunto])
-            ->andFilterWhere(['like', 'status', $this->status]);
+            ->andFilterWhere(['like', 'status', $this->status]);*/
 
         return $dataProvider;
     }

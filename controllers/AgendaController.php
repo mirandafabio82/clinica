@@ -82,7 +82,6 @@ class AgendaController extends Controller
         if(isset($_GET['pagination'])) $dataProvider->pagination = false;
 
         $model = new Agenda();
-        $model->data =  date('d/m/Y');
         $projetos = Yii::$app->db->createCommand('SELECT id, nome FROM projeto')->queryAll();
         $listProjetos = ArrayHelper::map($projetos,'id','nome');
 
@@ -92,31 +91,30 @@ class AgendaController extends Controller
         $status = Yii::$app->db->createCommand('SELECT id, status FROM agenda_status')->queryAll();
         $listStatus = ArrayHelper::map($status,'id','status');
 
+        $executantes = Yii::$app->db->createCommand('SELECT usuario_id, nome FROM executante JOIN user ON executante.usuario_id = user.id')->queryAll();
+        $listExecutantes = ArrayHelper::map($executantes,'usuario_id','nome');
 
-        if(Yii::$app->request->post('editableKey')){
-            $agenda_id = Yii::$app->request->post('editableKey');
-            $agenda = Agenda::findOne($agenda_id);
+        $contatos = Yii::$app->db->createCommand('SELECT id, nome FROM contato JOIN user ON contato.usuario_id = user.id')->queryAll();
+        $listContatos = ArrayHelper::map($contatos,'id','nome');
 
-            $out = Json::encode(['output'=>'', 'message'=>'']);
-            $post =[];
-            $posted = current($_POST['Agenda']);
-            $post['Agenda'] = $posted;
-
-            if($agenda->load($post)){
-                $agenda->save();
-                // $output = 'teste';
-                $out = Json::encode(['output'=>'', 'message'=>'']);
-            }
-            echo $out;
-            return $this->redirect(['create']);
-        }
+        $arrayEventos = Yii::$app->db->createCommand('SELECT * FROM agenda')->queryAll();
+ 
         if($_POST){            
             $model->setAttributes($_POST['Agenda']);
-            if(!empty($_POST['Agenda']['data'])){
-                $dat = DateTime::createFromFormat('d/m/Y', $_POST['Agenda']['data']);          
-                $model->data = date_format($dat, 'Y-m-d');
+
+            
+            $dat = DateTime::createFromFormat('d/m/Y H:i:s', $_POST['Agenda']['hr_inicio']); 
+            $model->hr_inicio = date_format($dat, 'Y-m-d H:i:s');
+            
+            $dat = DateTime::createFromFormat('d/m/Y H:i:s', $_POST['Agenda']['hr_final']);          
+            $model->hr_final = date_format($dat, 'Y-m-d H:i:s');
+
+            if(!$model->save()){
+                print_r($model->getErrors());
+                die();
             }
-            $model->save();
+
+            $_SESSION['msg'] = '<div class="alert alert-success" role="alert">Cadastrado com sucesso</div';
 
             return $this->redirect(['create']);
         } else {
@@ -127,6 +125,9 @@ class AgendaController extends Controller
                 'listStatus' => $listStatus,
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
+                'arrayEventos' => $arrayEventos,
+                'listContatos' => $listContatos,
+                'listExecutantes' => $listExecutantes
             ]);
         }
     }
@@ -139,56 +140,31 @@ class AgendaController extends Controller
      */
     public function actionUpdate($id)
     {
-         $searchModel = new AgendaSearch();
+        $searchModel = new AgendaSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         $model = $this->findModel($id);
-        if(isset($model->data))
-        $model->data = date_format(DateTime::createFromFormat('Y-m-d', $model->data), 'd/m/Y');
-        $projetos = Yii::$app->db->createCommand('SELECT projeto.id, nome FROM projeto')->queryAll();
-        $listProjetos = ArrayHelper::map($projetos,'id','nome');
-
-        $sites = Yii::$app->db->createCommand('SELECT id, nome FROM site')->queryAll();
-        $listSites = ArrayHelper::map($sites,'id','nome');
-
-        $status = Yii::$app->db->createCommand('SELECT id, status FROM agenda_status')->queryAll();
-        $listStatus = ArrayHelper::map($status,'id','status');
-
-        if(Yii::$app->request->post('editableKey')){
-            $agenda_id = Yii::$app->request->post('editableKey');
-            $agenda = Agenda::findOne($agenda_id);
-
-            $out = Json::encode(['output'=>'', 'message'=>'']);
-            $post =[];
-            $posted = current($_POST['Agenda']);
-            $post['Agenda'] = $posted;
-
-            if($agenda->load($post)){
-                $agenda->save();
-                // $output = 'teste';
-                $out = Json::encode(['output'=>'', 'message'=>'']);
-            }
-            echo $out;
-            return $this->redirect(['create']);
-        }
+               
         if($_POST){
             $model->setAttributes($_POST['Agenda']);
-            if(isset($_POST['Agenda']['data'])){
-                $dat = DateTime::createFromFormat('d/m/Y', $_POST['Agenda']['data']);
-                $model->data = date_format($dat, 'Y-m-d');
+
+            
+            $dat = DateTime::createFromFormat('d/m/Y H:i:s', $_POST['Agenda']['hr_inicio']); 
+            $model->hr_inicio = date_format($dat, 'Y-m-d H:i:s');
+            
+            $dat = DateTime::createFromFormat('d/m/Y H:i:s', $_POST['Agenda']['hr_final']);          
+            $model->hr_final = date_format($dat, 'Y-m-d H:i:s');
+
+            if(!$model->save()){
+                print_r($model->getErrors());
+                die();
             }
-            $model->save();
+
+            $_SESSION['msg'] = '<div class="alert alert-success" role="alert">Atualizado com sucesso</div';
 
             return $this->redirect(['create']);
         }else {
-            return $this->render('update', [
-                'model' => $model,
-                'listProjetos' => $listProjetos,
-                'listSites' => $listSites,
-                'listStatus' => $listStatus,
-                'searchModel' => $searchModel,
-                'dataProvider' => $dataProvider,
-            ]);
+            return $this->render('update');
         }
     }
 
@@ -225,5 +201,13 @@ class AgendaController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+
+    public function actionGetevent(){
+        if (Yii::$app->request->isAjax) {                 
+            return json_encode(Yii::$app->db->createCommand('SELECT projeto_id, DATE_FORMAT(hr_inicio, "%d/%m/%Y %H:%i:%s") AS hr_inicio, DATE_FORMAT(hr_final, "%d/%m/%Y %H:%i:%s") AS hr_final, local, responsavel, contato, assunto, status, descricao, prazo, pendente, cor FROM agenda WHERE id ='.Yii::$app->request->post()['id'])->queryOne());  
+        }
+        
     }
 }

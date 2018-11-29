@@ -7,17 +7,20 @@ use Yii;
 /**
  * This is the model class for table "agenda".
  *
- * @property integer $id
- * @property integer $projeto_id
- * @property string $data
- * @property string $local
- * @property string $quem
- * @property string $assunto
+ * @property int $id
+ * @property int $projeto_id
  * @property string $hr_inicio
  * @property string $hr_final
- * @property string $status
+ * @property string $local
+ * @property int $responsavel
+ * @property int $contato
+ * @property string $assunto
+ * @property int $status
+ * @property string $descricao
+ * @property string $prazo
+ * @property string $pendente
  *
- * @property Projeto $projeto
+ * @property AgendaStatus $status0
  */
 class Agenda extends \yii\db\ActiveRecord
 {
@@ -34,13 +37,15 @@ class Agenda extends \yii\db\ActiveRecord
      */
     public function rules()
     {
-        return [       
-            // [['projeto_id'], 'required'],     
-            [['projeto_id', 'status'], 'integer'],
-            [['data', 'hr_inicio', 'hr_final'], 'safe'],
-            [['local', 'quem'], 'string', 'max' => 15],
+        return [
+            [['projeto_id', 'responsavel', 'contato', 'status'], 'integer'],
+            [['hr_inicio', 'hr_final', 'status'], 'required'],
+            [['hr_inicio', 'hr_final', 'prazo'], 'safe'],
+            [['descricao', 'pendente'], 'string'],
+            [['local'], 'string', 'max' => 80],
             [['assunto'], 'string', 'max' => 80],
-            [['projeto_id'], 'exist', 'skipOnError' => true, 'targetClass' => Projeto::className(), 'targetAttribute' => ['projeto_id' => 'id']],
+            [['status'], 'exist', 'skipOnError' => true, 'targetClass' => AgendaStatus::className(), 'targetAttribute' => ['status' => 'id']],
+            [['cor'], 'string', 'max' => 45],
         ];
     }
 
@@ -51,22 +56,26 @@ class Agenda extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'projeto_id' => 'Nome do Projeto',
-            'data' => 'Data',
-            'local' => 'Local',
-            'quem' => 'Quem',
-            'assunto' => 'Assunto',
+            'projeto_id' => 'Projeto',
             'hr_inicio' => 'Hr Inicio',
             'hr_final' => 'Hr Final',
+            'local' => 'Local',
+            'responsavel' => 'Responsável',
+            'contato' => 'Contato',
+            'assunto' => 'Assunto',
             'status' => 'Status',
+            'descricao' => 'Descrição',
+            'prazo' => 'Prazo',
+            'pendente' => 'Pendente',
+            'cor' => 'Cor'
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getProjeto()
+    public function getStatus0()
     {
-        return $this->hasOne(Projeto::className(), ['id' => 'projeto_id']);
+        return $this->hasOne(AgendaStatus::className(), ['id' => 'status']);
     }
 }
