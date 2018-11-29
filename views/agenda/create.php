@@ -21,7 +21,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'arrayEventos' => $arrayEventos,
         'listContatos' => $listContatos,
-        'listExecutantes' => $listExecutantes
+        'listExecutantes' => $listExecutantes,
+        'arrayExecutantes' => $arrayExecutantes
     ]) ?>
 
 </div>

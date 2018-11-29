@@ -37,7 +37,7 @@ class Executante extends \yii\db\ActiveRecord
             [['usuario_id'], 'required'],
             [['usuario_id', 'is_prestador', 'cargo'], 'integer'],
             [['criado', 'modificado'], 'safe'],
-            [['cpf','conta_tipo'], 'string', 'max' => 45],
+            [['cpf','conta_tipo', 'cor'], 'string', 'max' => 45],
             [['cnpj'], 'string', 'max' => 18],
             [['cidade', 'endereco', 'cnpj', 'nome_empresa', 'endereco_empresa', 'insc_municipal', 'bairro_empresa', 'cep_empresa', 'uf_empresa', 'cidade_empresa', 'bairro', 'cep', 'endereco_empresa','banco','banco_numero','agencia','conta_corrente'], 'string', 'max' => 255],
             [['uf'], 'string', 'max' => 2],

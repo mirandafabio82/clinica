@@ -12,6 +12,7 @@ use yii\helpers\ArrayHelper;
 use yii\filters\AccessControl;
 use \Datetime;
 use yii\helpers\Json;
+use app\models\Log;
 /**
  * AgendaController implements the CRUD actions for Agenda model.
  */
@@ -91,7 +92,7 @@ class AgendaController extends Controller
         $status = Yii::$app->db->createCommand('SELECT id, status FROM agenda_status')->queryAll();
         $listStatus = ArrayHelper::map($status,'id','status');
 
-        $executantes = Yii::$app->db->createCommand('SELECT usuario_id, nome FROM executante JOIN user ON executante.usuario_id = user.id')->queryAll();
+        $executantes = Yii::$app->db->createCommand('SELECT usuario_id, nome, cor FROM executante JOIN user ON executante.usuario_id = user.id')->queryAll();
         $listExecutantes = ArrayHelper::map($executantes,'usuario_id','nome');
 
         $contatos = Yii::$app->db->createCommand('SELECT id, nome FROM contato JOIN user ON contato.usuario_id = user.id')->queryAll();
@@ -116,6 +117,16 @@ class AgendaController extends Controller
 
             $_SESSION['msg'] = '<div class="alert alert-success" role="alert">Cadastrado com sucesso</div';
 
+            $user_nome = Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.Yii::$app->user->getId())->queryScalar();
+            $logModel = new Log();
+            $logModel->user_id = Yii::$app->user->getId();
+            $logModel->descricao = $user_nome.' criou o evento '.$model->assunto.'. Inicio:'.$model->hr_inicio.' Fim: '.$model->hr_final;
+            $logModel->data = Date('Y-m-d H:i:s');
+            if(!$logModel->save()){
+                print_r($logModel->getErrors());
+                die();
+            }
+              
             return $this->redirect(['create']);
         } else {
             return $this->render('create', [
@@ -127,7 +138,8 @@ class AgendaController extends Controller
                 'dataProvider' => $dataProvider,
                 'arrayEventos' => $arrayEventos,
                 'listContatos' => $listContatos,
-                'listExecutantes' => $listExecutantes
+                'listExecutantes' => $listExecutantes,
+                'arrayExecutantes' => $executantes
             ]);
         }
     }
@@ -161,6 +173,16 @@ class AgendaController extends Controller
             }
 
             $_SESSION['msg'] = '<div class="alert alert-success" role="alert">Atualizado com sucesso</div';
+
+            $user_nome = Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.Yii::$app->user->getId())->queryScalar();
+            $logModel = new Log();
+            $logModel->user_id = Yii::$app->user->getId();
+            $logModel->descricao = $user_nome.' editou o evento '.$model->assunto.'. Inicio:'.$model->hr_inicio.' Fim: '.$model->hr_final;
+            $logModel->data = Date('Y-m-d H:i:s');
+            if(!$logModel->save()){
+                print_r($logModel->getErrors());
+                die();
+            }
 
             return $this->redirect(['create']);
         }else {

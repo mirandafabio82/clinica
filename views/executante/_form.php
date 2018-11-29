@@ -512,7 +512,10 @@ $this->registerJs("
     <div class="col-md-2">
       <?= $form->field($model, 'cargo')->dropDownList($listCargo,['prompt'=>'Nenhum']) ?>
     </div>
-
+    <div class="col-md-2">
+      Cor
+      <?= $form->field($model, 'cor', ['template' => "{input}"])->input('color',['class'=>"input_class"]) ?>
+    </div>
     </div>
     <div class="barra-btn" >
         <?= Html::submitButton($model->isNewRecord ? '<i class="fa fa-floppy-o" aria-hidden="true"></i> Cadastrar' : '<i class="fa fa-floppy-o" aria-hidden="true"></i> Salvar', ['class' => $model->isNewRecord ? 'btn btn-barra' : 'btn btn-barra']) ?>

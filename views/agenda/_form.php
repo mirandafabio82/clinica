@@ -13,13 +13,14 @@ use yii\bootstrap\Modal;
 <?php
   $eventos = '';
   foreach ($arrayEventos as $key => $evt) {
+          $cor = Yii::$app->db->createCommand('SELECT cor FROM executante WHERE usuario_id='.$evt['responsavel'])->queryScalar();
           $eventos .= "{
                         id             : ".$evt['id'].",
                         title          : '".$evt['assunto']."',
                         start          : '".$evt['hr_inicio']."',
                         end            : '".$evt['hr_final']."',
-                        backgroundColor: '".$evt['cor']."', //red
-                        borderColor    : '".$evt['cor']."' //red
+                        backgroundColor: '".$cor."', 
+                        borderColor    : '".$cor."'
                       },";
         }     
 
@@ -217,9 +218,7 @@ Modal::begin(['header' => '<h4>LD-Preliminar</h4>', 'id' => 'modal', 'size' => '
 <div class="box box-primary">
     <div class="box-header with-border">
 <div style="background-color: #337ab7;color:white;padding: 10px"><i class="fa fa-calendar"></i> Agenda </div>
-<div style="margin-bottom:1em;margin-top: 1em">
-    <?= Html::a('Mostrar Todos', ['/agenda/create', 'pagination' => true], ['class'=>'btn btn-primary grid-button']) ?>
-</div>
+
 
 <?php
   if(isset($_SESSION['msg'])){
@@ -232,22 +231,14 @@ Modal::begin(['header' => '<h4>LD-Preliminar</h4>', 'id' => 'modal', 'size' => '
         <div class="col-md-3">
           <div class="box box-solid">
             <div class="box-header with-border">
-              <h4 class="box-title">Eventos</h4>
+              <h4 class="box-title">Executantes</h4>
             </div>
             <div class="box-body">
               <!-- the events -->
               <div id="external-events">
-                <div class="external-event bg-green">Lunch</div>
-                <div class="external-event bg-yellow">Go home</div>
-                <div class="external-event bg-aqua">Do homework</div>
-                <div class="external-event bg-light-blue">Work on UI design</div>
-                <div class="external-event bg-red">Sleep tight</div>
-                <div class="checkbox">
-                  <label for="drop-remove">
-                    <input type="checkbox" id="drop-remove">
-                    remove after drop
-                  </label>
-                </div>
+                <?php foreach ($arrayExecutantes as $key => $exe) { ?>
+                    <div class="external-event bg-green" style="background-color: <?= $exe['cor'] ?> !important"><?= $exe['nome'] ?></div>                
+                <?php } ?>
               </div>
             </div>
             <!-- /.box-body -->
