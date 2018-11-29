@@ -52,11 +52,11 @@ $this->registerJs("
         $(this).data('eventObject', eventObject)
 
         // make the event draggable using jQuery UI
-        $(this).draggable({
+       /* $(this).draggable({
           zIndex        : 1070,
           revert        : true, // will cause the event to go back to its
           revertDuration: 0  //  original position after the drag
-        })
+        })*/
 
       })
     }
@@ -245,13 +245,13 @@ Modal::begin(['header' => '<h4>LD-Preliminar</h4>', 'id' => 'modal', 'size' => '
           </div>
           <!-- /. box -->
           <div class="box box-solid">
-            <div class="box-header with-border">
+            <!-- <div class="box-header with-border">
               <h3 class="box-title">Criar Eventos</h3>
-            </div>
+            </div> -->
             <div class="box-body">
               <div class="btn-group" style="width: 100%; margin-bottom: 10px;">
                 <!--<button type="button" id="color-chooser-btn" class="btn btn-info btn-block dropdown-toggle" data-toggle="dropdown">Color <span class="caret"></span></button>-->
-                <ul class="fc-color-picker" id="color-chooser">
+                <!-- <ul class="fc-color-picker" id="color-chooser">
                   <li><a class="text-aqua" href="#"><i class="fa fa-square"></i></a></li>
                   <li><a class="text-blue" href="#"><i class="fa fa-square"></i></a></li>
                   <li><a class="text-light-blue" href="#"><i class="fa fa-square"></i></a></li>
@@ -265,15 +265,15 @@ Modal::begin(['header' => '<h4>LD-Preliminar</h4>', 'id' => 'modal', 'size' => '
                   <li><a class="text-fuchsia" href="#"><i class="fa fa-square"></i></a></li>
                   <li><a class="text-muted" href="#"><i class="fa fa-square"></i></a></li>
                   <li><a class="text-navy" href="#"><i class="fa fa-square"></i></a></li>
-                </ul>
+                </ul> -->
               </div>
               <!-- /btn-group -->
               <div class="input-group">
-                <input id="new-event" type="text" class="form-control" placeholder="Event Title">
+                <!-- <input id="new-event" type="text" class="form-control" placeholder="Event Title">
 
                 <div class="input-group-btn">
                   <button id="add-new-event" type="button" class="btn btn-primary btn-flat">Add</button>
-                </div>
+                </div> -->
                 <!-- /btn-group -->
               </div>
               <!-- /input-group -->
