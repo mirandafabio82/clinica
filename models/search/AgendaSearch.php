@@ -18,12 +18,13 @@ class AgendaSearch extends Agenda
     public function rules()
     {
         return [
-            [['projeto_id', 'responsavel', 'contato', 'status'], 'integer'],
+            [['status'], 'integer'],
             [['hr_inicio', 'hr_final', 'status'], 'required'],
             [['hr_inicio', 'hr_final', 'prazo'], 'safe'],
             [['descricao', 'pendente'], 'string'],
             [['local'], 'string', 'max' => 15],
             [['assunto'], 'string', 'max' => 80],
+            [['projeto', 'responsavel', 'contato'], 'string', 'max' => 255],
             //[['status'], 'exist', 'skipOnError' => true, 'targetClass' => AgendaStatus::className(), 'targetAttribute' => ['status' => 'id']],
         ];
     }
@@ -68,7 +69,7 @@ class AgendaSearch extends Agenda
         // grid filtering conditions
       /*  $query->andFilterWhere([
             'id' => $this->id,
-            'projeto_id' => $this->projeto_id,
+            'projeto' => $this->projeto,
             'data' => $this->data,
             'hr_inicio' => $this->hr_inicio,
             'hr_final' => $this->hr_final,

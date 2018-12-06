@@ -1101,6 +1101,9 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
                 else if (in_array(4, $esc_padrao_id)) { 
                     return "CFG";
                 }
+                else if (in_array(5, $esc_padrao_id)) { 
+                    return "SRV";
+                }
                 else{
                   return " - ";
                 }

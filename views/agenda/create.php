@@ -22,7 +22,10 @@ $this->params['breadcrumbs'][] = $this->title;
         'arrayEventos' => $arrayEventos,
         'listContatos' => $listContatos,
         'listExecutantes' => $listExecutantes,
-        'arrayExecutantes' => $arrayExecutantes
+        'arrayExecutantes' => $arrayExecutantes,
+        'proj_autocomplete' => $proj_autocomplete,
+        'cont_autocomplete' => $cont_autocomplete,
+        'resp_autocomplete' => $resp_autocomplete,
     ]) ?>
 
 </div>

@@ -99,16 +99,27 @@ class AgendaController extends Controller
         $listContatos = ArrayHelper::map($contatos,'id','nome');
 
         $arrayEventos = Yii::$app->db->createCommand('SELECT * FROM agenda')->queryAll();
+
+        $proj_autocomplete = '';
+            foreach ($projetos as $key => $pr) {  
+                $proj_autocomplete .= '"'.$pr['nome'].'", ';
+        } 
+
+        $cont_autocomplete = '';
+            foreach ($contatos as $key => $ct) {  
+                $cont_autocomplete .= '"'.$ct['nome'].'", ';
+        } 
+
+        $resp_autocomplete = '';
+            foreach ($executantes as $key => $res) {  
+                $resp_autocomplete .= '"'.$res['nome'].'", ';
+        } 
  
         if($_POST){            
-            $model->setAttributes($_POST['Agenda']);
+            $model->setAttributes($_POST['Agenda']); 
 
-            
-            $dat = DateTime::createFromFormat('d/m/Y H:i:s', $_POST['Agenda']['hr_inicio']); 
-            $model->hr_inicio = date_format($dat, 'Y-m-d H:i:s');
-            
-            $dat = DateTime::createFromFormat('d/m/Y H:i:s', $_POST['Agenda']['hr_final']);          
-            $model->hr_final = date_format($dat, 'Y-m-d H:i:s');
+            $model->hr_inicio = str_replace('T', ' ', $_POST['Agenda']['hr_inicio']);
+            $model->hr_final = str_replace('T', ' ', $_POST['Agenda']['hr_final']);
 
             if(!$model->save()){
                 print_r($model->getErrors());
@@ -139,7 +150,10 @@ class AgendaController extends Controller
                 'arrayEventos' => $arrayEventos,
                 'listContatos' => $listContatos,
                 'listExecutantes' => $listExecutantes,
-                'arrayExecutantes' => $executantes
+                'arrayExecutantes' => $executantes,
+                'proj_autocomplete' => $proj_autocomplete,
+                'cont_autocomplete' => $cont_autocomplete,
+                'resp_autocomplete' => $resp_autocomplete,
             ]);
         }
     }
@@ -158,14 +172,9 @@ class AgendaController extends Controller
         $model = $this->findModel($id);
                
         if($_POST){
-            $model->setAttributes($_POST['Agenda']);
-
-            
-            $dat = DateTime::createFromFormat('d/m/Y H:i:s', $_POST['Agenda']['hr_inicio']); 
-            $model->hr_inicio = date_format($dat, 'Y-m-d H:i:s');
-            
-            $dat = DateTime::createFromFormat('d/m/Y H:i:s', $_POST['Agenda']['hr_final']);          
-            $model->hr_final = date_format($dat, 'Y-m-d H:i:s');
+            $model->setAttributes($_POST['Agenda']);            
+            $model->hr_inicio = str_replace('T', ' ', $_POST['Agenda']['hr_inicio']);
+            $model->hr_final = str_replace('T', ' ', $_POST['Agenda']['hr_final']);
 
             if(!$model->save()){
                 print_r($model->getErrors());
@@ -201,12 +210,12 @@ class AgendaController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id)
+    public function actionDelete()
     {
-
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['create']);
+        if (Yii::$app->request->isAjax) {
+            $this->findModel(Yii::$app->request->post()['id'])->delete();
+            return $this->redirect(['create']);
+        }
     }
 
     /**
@@ -228,7 +237,18 @@ class AgendaController extends Controller
 
     public function actionGetevent(){
         if (Yii::$app->request->isAjax) {                 
-            return json_encode(Yii::$app->db->createCommand('SELECT projeto_id, DATE_FORMAT(hr_inicio, "%d/%m/%Y %H:%i:%s") AS hr_inicio, DATE_FORMAT(hr_final, "%d/%m/%Y %H:%i:%s") AS hr_final, local, responsavel, contato, assunto, status, descricao, prazo, pendente, cor FROM agenda WHERE id ='.Yii::$app->request->post()['id'])->queryOne());  
+            return json_encode(Yii::$app->db->createCommand('SELECT projeto, DATE_FORMAT(hr_inicio, "%Y-%m-%dT%H:%i:%s") AS hr_inicio, DATE_FORMAT(hr_final, "%Y-%m-%dT%H:%i:%s") AS hr_final, local, responsavel, contato, assunto, status, descricao, prazo, pendente, cor FROM agenda WHERE id ='.Yii::$app->request->post()['id'])->queryOne());  
+        }
+        
+    }
+
+    public function actionUpdateevent(){
+        if (Yii::$app->request->isAjax) {               
+            if(empty(Yii::$app->request->post()['hr_final'])){
+                return json_encode(Yii::$app->db->createCommand('UPDATE agenda SET hr_inicio="'.Yii::$app->request->post()['hr_inicio'].'" WHERE id='.Yii::$app->request->post()['id'])->execute());  
+            }else{
+                return json_encode(Yii::$app->db->createCommand('UPDATE agenda SET hr_inicio="'.Yii::$app->request->post()['hr_inicio'].'", hr_final="'.Yii::$app->request->post()['hr_final'].'" WHERE id='.Yii::$app->request->post()['id'])->execute());  
+            }  
         }
         
     }

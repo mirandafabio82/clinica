@@ -14,13 +14,14 @@ $this->title = 'HCN Automação';
 <?php
   $eventos = '';
   foreach ($arrayEventos as $key => $evt) {
+          $cor = Yii::$app->db->createCommand('SELECT cor FROM executante JOIN user ON user.id = executante.usuario_id WHERE nome="'.$evt['responsavel'].'"')->queryScalar();
           $eventos .= "{
                         id             : ".$evt['id'].",
                         title          : '".$evt['assunto']."',
                         start          : '".$evt['hr_inicio']."',
                         end            : '".$evt['hr_final']."',
-                        backgroundColor: '".$evt['cor']."', //red
-                        borderColor    : '".$evt['cor']."' //red
+                        backgroundColor: '".$cor."', 
+                        borderColor    : '".$cor."'
                       },";
         }     
 

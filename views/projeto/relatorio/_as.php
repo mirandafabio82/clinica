@@ -129,7 +129,7 @@ th, td {
       </tr>
       <tr>
             <td style="font-family: arial;font-size: 8pt" align="center" colspan="2"><input type="checkbox"  >ADMINISTRAÇÃO <input type="checkbox"  checked="checked">PREÇO GLOBAL</td> 
-            <td style="font-family: arial;font-size: 8pt" align="center" colspan="2"><input type="checkbox"  <?=$basico ?>>BÁSICO <input type="checkbox"  <?=$detalhamento ?>>DETALHAMENTO  <input type="checkbox"  <?=$config ?>>CONFIGURAÇÃO</td>                       
+            <td style="font-family: arial;font-size: 8pt" align="center" colspan="2"><input type="checkbox"  <?=$basico ?>>BÁSICO <input type="checkbox"  <?=$detalhamento ?>>DETALHAMENTO  <input type="checkbox"  <?=$config ?>>CONFIGURAÇÃO <input type="checkbox"  <?=$servico ?>>SERVIÇO</td>                       
             <td style="font-family: arial;font-size: 8pt" align="center" colspan="3"><?=number_format($money_proc+$money_inst+$money_aut+$projeto->vl_km, 2, ',', '.') ?> (<?= escreverValorMoeda(number_format($money_proc+$money_inst+$money_aut+$projeto->vl_km, 2, ',', '.'))?>)</td>
       </tr>
       </tbody>
@@ -326,11 +326,6 @@ th, td {
 
      <tr style="background-color: #d3d3d3;">
             <td style="font-family: arial;font-size: 8pt; width:20em"  >Softwares Especiais</td> 
-            <td style="font-family: arial;font-size: 8pt; width:20em" ></td>
-            <td style="font-family: arial;font-size: 8pt; width:2em"  align="center"></td>           
-     </tr>
-     <tr style="background-color: #d3d3d3;">
-            <td style="font-family: arial;font-size: 8pt; width:20em"  >Aut. Sub-Contratações</td> 
             <td style="font-family: arial;font-size: 8pt; width:20em" ></td>
             <td style="font-family: arial;font-size: 8pt; width:2em"  align="center"></td>           
      </tr>
