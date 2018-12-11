@@ -128,7 +128,7 @@ class AgendaController extends Controller
 
             $_SESSION['msg'] = '<div class="alert alert-success" role="alert">Cadastrado com sucesso</div';
 
-            $destinatario = 'felipe.ecomp@gmail.com';//Yii::$app->db->createCommand('SELECT email FROM user WHERE nome = '.$model->responsavel)->queryScalar();
+            $destinatario = Yii::$app->db->createCommand('SELECT email FROM user WHERE nome = "'.$model->responsavel.'"')->queryScalar();
             $assunto = 'Evento Adicionado à sua Agenda';
             $corpoEmail = Yii::$app->db->createCommand('SELECT nome FROM user WHERE id = '.Yii::$app->user->getId())->queryScalar().' lhe adicionou ao evento '.$model->assunto.' de '.date_format(DateTime::createFromFormat('Y-m-d h:i:s', $model->hr_inicio), 'd/m/Y H:i:s').' até '. date_format(DateTime::createFromFormat('Y-m-d h:i:s', $model->hr_final), 'd/m/Y H:i:s').'.';
             
