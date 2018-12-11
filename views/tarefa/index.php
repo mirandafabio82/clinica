@@ -11,6 +11,12 @@ use yii\widgets\Pjax;
 /* @var $this yii\web\View */
 /* @var $model app\models\Agenda */
 /* @var $form yii\widgets\ActiveForm */
+$this->registerJs('   
+    $( document ).ready(function() {
+       document.title = "HCN - Gerenciamento das Atividades";
+       });
+');
+
 
 $cargo = Yii::$app->db->createCommand('SELECT cargo FROM executante WHERE usuario_id='.Yii::$app->user->id)->queryScalar(); 
 

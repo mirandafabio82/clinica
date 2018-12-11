@@ -893,12 +893,19 @@ $(".remove-exec").click(function(ev){
 ?>
 <?php
 $this->registerJs("
+    var idescopo = '';
+    
+    $('.btn-exe').click(function(){
+        idescopo = this.id;
+    });
+
     $('.poptp').change(function(){
       var linha = this.name.split(']')[0];
       linha = linha.split('[')[1];
       console.log(linha);
      $(\"#escopotp-\"+linha).val($(this).val());
-      console.log(this.name);
+      console.log($(this).parent());
+      $('#'+idescopo).html(this.options[this.selectedIndex].text.charAt(0));
     });
 
     $('.popej').change(function(){
@@ -906,7 +913,8 @@ $this->registerJs("
       linha = linha.split('[')[1];
       console.log(linha);
      $(\"#escopoej-\"+linha).val($(this).val());
-      console.log(this.name);
+      console.log($(this).parent());
+      $('#'+idescopo).html(this.options[this.selectedIndex].text.charAt(0));
     });
 
     $('.popep').change(function(){
@@ -914,7 +922,8 @@ $this->registerJs("
       linha = linha.split('[')[1];
       console.log(linha);
      $(\"#escopoep-\"+linha).val($(this).val());
-      console.log(this.name);
+      console.log($(this).parent());
+      $('#'+idescopo).html(this.options[this.selectedIndex].text.charAt(0));
     });
 
     $('.popes').change(function(){
@@ -922,7 +931,8 @@ $this->registerJs("
       linha = linha.split('[')[1];
       console.log(linha);
      $(\"#escopoes-\"+linha).val($(this).val());
-      console.log(this.name);
+      console.log($(this).parent());
+      $('#'+idescopo).html(this.options[this.selectedIndex].text.charAt(0));
     });
 
     $('.popee').change(function(){
@@ -930,7 +940,8 @@ $this->registerJs("
       linha = linha.split('[')[1];
       console.log(linha);
      $(\"#escopoee-\"+linha).val($(this).val());
-      console.log(this.name);
+      console.log($(this).parent());
+      $('#'+idescopo).html(this.options[this.selectedIndex].text.charAt(0));
     });
 
     $('#w0 td').click(function (e) {
@@ -951,6 +962,7 @@ $this->registerJs("
         }
         
     });
+
 
 ");
 ?>
@@ -1801,35 +1813,35 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
       $popTP = PopoverX::widget([
         'placement' => PopoverX::ALIGN_TOP,
         'content' => $contentTP,
-        'toggleButton' => ['label'=> !isset($esc['exe_tp_id']) || empty(Yii::$app->db->createCommand('SELECT horas_tp FROM escopo WHERE id='.$esc["id"])->queryScalar()) ? '<i class="fa fa-caret-up" aria-hidden="true"></i>' : substr(Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.$esc['exe_tp_id'])->queryScalar(), 0, 1), 'class'=>'btn btn-default', 'style'=>'padding:1px'],
+        'toggleButton' => ['label'=> !isset($esc['exe_tp_id']) || empty(Yii::$app->db->createCommand('SELECT horas_tp FROM escopo WHERE id='.$esc["id"])->queryScalar()) ? '<i class="fa fa-caret-up" aria-hidden="true"></i>' : substr(Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.$esc['exe_tp_id'])->queryScalar(), 0, 1), 'class'=>'btn btn-default btn-exe', 'style'=>'padding:1px', 'id' => 'btn-tp-'.$esc["id"]],
       ]);
 
       $contentEJ = '<p class="text-justify">' .$form2->field($escopoModel, 'exe_ej_id')->dropDownList($listExecutantes_ej,['name' => 'Escopo['.$esc["id"].'][exe_ej_id]', 'value'=>$esc['exe_ej_id'], 'class'=> 'form-control popej'])->label(false) .'</p>';
       $popEJ = PopoverX::widget([
         'placement' => PopoverX::ALIGN_TOP,
         'content' => $contentEJ,
-        'toggleButton' => ['label'=>!isset($esc['exe_ej_id']) || empty(Yii::$app->db->createCommand('SELECT horas_ej FROM escopo WHERE id='.$esc["id"])->queryScalar()) ? '<i class="fa fa-caret-up" aria-hidden="true"></i>' : substr(Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.$esc['exe_ej_id'])->queryScalar(), 0, 1), 'class'=>'btn btn-default', 'style'=>'padding:1px; font-size: 1.1em;'],
+        'toggleButton' => ['label'=>!isset($esc['exe_ej_id']) || empty(Yii::$app->db->createCommand('SELECT horas_ej FROM escopo WHERE id='.$esc["id"])->queryScalar()) ? '<i class="fa fa-caret-up" aria-hidden="true"></i>' : substr(Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.$esc['exe_ej_id'])->queryScalar(), 0, 1), 'class'=>'btn btn-default btn-exe', 'style'=>'padding:1px; font-size: 1.1em;', 'id' => 'btn-ej-'.$esc["id"]],
       ]);
 
       $contentEP = '<p class="text-justify">' .$form2->field($escopoModel, 'exe_ep_id')->dropDownList($listExecutantes_ep,['name' => 'Escopo['.$esc["id"].'][exe_ep_id]', 'value'=>$esc['exe_ep_id'], 'class'=> 'form-control popep'])->label(false) .'</p>';
       $popEP = PopoverX::widget([
         'placement' => PopoverX::ALIGN_TOP,
         'content' => $contentEP,
-        'toggleButton' => ['label'=> !isset($esc['exe_ep_id']) || empty(Yii::$app->db->createCommand('SELECT horas_ep FROM escopo WHERE id='.$esc["id"])->queryScalar()) ? '<i class="fa fa-caret-up" aria-hidden="true"></i>' : substr(Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.$esc['exe_ep_id'])->queryScalar(), 0, 1), 'class'=>'btn btn-default', 'style'=>'padding:1px; font-size: 1.1em;'],
+        'toggleButton' => ['label'=> !isset($esc['exe_ep_id']) || empty(Yii::$app->db->createCommand('SELECT horas_ep FROM escopo WHERE id='.$esc["id"])->queryScalar()) ? '<i class="fa fa-caret-up" aria-hidden="true"></i>' : substr(Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.$esc['exe_ep_id'])->queryScalar(), 0, 1), 'class'=>'btn btn-default btn-exe', 'style'=>'padding:1px; font-size: 1.1em;', 'id' => 'btn-ep-'.$esc["id"]],
       ]);
 
       $contentES = '<p class="text-justify">' .$form2->field($escopoModel, 'exe_es_id')->dropDownList($listExecutantes_es,['name' => 'Escopo['.$esc["id"].'][exe_es_id]', 'value'=>$esc['exe_es_id'], 'class'=> 'form-control popes'])->label(false) .'</p>';
       $popES = PopoverX::widget([
         'placement' => PopoverX::ALIGN_TOP,
         'content' => $contentES,
-        'toggleButton' => ['label'=> !isset($esc['exe_es_id']) || empty(Yii::$app->db->createCommand('SELECT horas_es FROM escopo WHERE id='.$esc["id"])->queryScalar()) ? '<i class="fa fa-caret-up" aria-hidden="true"></i>' : substr(Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.$esc['exe_es_id'])->queryScalar(), 0, 1), 'class'=>'btn btn-default', 'style'=>'padding:1px; font-size: 1.1em;'],
+        'toggleButton' => ['label'=> !isset($esc['exe_es_id']) || empty(Yii::$app->db->createCommand('SELECT horas_es FROM escopo WHERE id='.$esc["id"])->queryScalar()) ? '<i class="fa fa-caret-up" aria-hidden="true"></i>' : substr(Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.$esc['exe_es_id'])->queryScalar(), 0, 1), 'class'=>'btn btn-default btn-exe', 'style'=>'padding:1px; font-size: 1.1em;', 'id' => 'btn-es-'.$esc["id"]],
       ]);
 
       $contentEE = '<p class="text-justify">' .$form2->field($escopoModel, 'exe_ee_id')->dropDownList($listExecutantes_ee,['name' => 'Escopo['.$esc["id"].'][exe_ee_id]', 'value'=>$esc['exe_ee_id'], 'class'=> 'form-control popee'])->label(false) .'</p>';
       $popEE = PopoverX::widget([
         'placement' => PopoverX::ALIGN_TOP,
         'content' => $contentEE,
-        'toggleButton' => ['label'=> !isset($esc['exe_ee_id']) || empty(Yii::$app->db->createCommand('SELECT horas_ee FROM escopo WHERE id='.$esc["id"])->queryScalar()) ? '<i class="fa fa-caret-up" aria-hidden="true"></i>' : substr(Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.$esc['exe_ee_id'])->queryScalar(), 0, 1), 'class'=>'btn btn-default', 'style'=>'padding:1px; font-size: 1.1em;'],
+        'toggleButton' => ['label'=> !isset($esc['exe_ee_id']) || empty(Yii::$app->db->createCommand('SELECT horas_ee FROM escopo WHERE id='.$esc["id"])->queryScalar()) ? '<i class="fa fa-caret-up" aria-hidden="true"></i>' : substr(Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.$esc['exe_ee_id'])->queryScalar(), 0, 1), 'class'=>'btn btn-default btn-exe', 'style'=>'padding:1px; font-size: 1.1em;', 'id' => 'btn-ee-'.$esc["id"]],
       ]);
 
        $disciplina_id = Yii::$app->db->createCommand('SELECT disciplina_id FROM atividademodelo WHERE id='.$esc['atividademodelo_id'])->queryScalar();
