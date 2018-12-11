@@ -118,6 +118,7 @@ class AgendaController extends Controller
         if($_POST){            
             $model->setAttributes($_POST['Agenda']); 
 
+            
             $model->hr_inicio = str_replace('T', ' ', $_POST['Agenda']['hr_inicio']);
             $model->hr_final = str_replace('T', ' ', $_POST['Agenda']['hr_final']);
 
@@ -126,11 +127,12 @@ class AgendaController extends Controller
                 die();
             }
 
+           
             $_SESSION['msg'] = '<div class="alert alert-success" role="alert">Cadastrado com sucesso</div';
 
             $destinatario = Yii::$app->db->createCommand('SELECT email FROM user WHERE nome = "'.$model->responsavel.'"')->queryScalar();
             $assunto = 'Evento Adicionado à sua Agenda';
-            $corpoEmail = Yii::$app->db->createCommand('SELECT nome FROM user WHERE id = '.Yii::$app->user->getId())->queryScalar().' lhe adicionou ao evento '.$model->assunto.' de '.date_format(DateTime::createFromFormat('Y-m-d h:i:s', $model->hr_inicio), 'd/m/Y H:i:s').' até '. date_format(DateTime::createFromFormat('Y-m-d h:i:s', $model->hr_final), 'd/m/Y H:i:s').'.';
+            $corpoEmail = Yii::$app->db->createCommand('SELECT nome FROM user WHERE id = '.Yii::$app->user->getId())->queryScalar().' lhe adicionou ao evento '.$model->assunto.' de '.date('d/m/Y H:i', strtotime($model->hr_inicio)).' até '. date('d/m/Y H:i', strtotime($model->hr_final)).'.';
             
                 try{
                     Yii::$app->mailer->compose()
