@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ebe8f654fe85829cac90b0518938dc68",
+    "content-hash": "8af652fd6c526a0035e1e0591a2d9ea2",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -4313,7 +4313,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "kartik-v/yii2-widget-select2": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

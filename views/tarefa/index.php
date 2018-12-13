@@ -7,6 +7,7 @@ use yii\helpers\Url;
 use app\models\Escopo;
 use yii\helpers\ArrayHelper;
 use yii\widgets\Pjax;
+use kartik\select2\Select2;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Agenda */
@@ -279,20 +280,19 @@ $this->registerJs('
     <div class="box-header with-border">
     <?php $form = ActiveForm::begin(); ?>
       <div class="row"> 
-            
-      
+        
       <div class="col-md-3">  
-          <select id="projeto-id" class="form-control" name="projeto" >
-            <option value="">Selecione um Projeto</option>
-            <?php                  
-              foreach ($listProjetos as $key => $list) {                   
-                ?> 
-                <option 
-                  value="<?=$key?>" <?= isset($_POST['projeto']) && $key == $_POST['projeto'] ? "selected" :"" ?>><?=$list ?>                      
-                </option>
-            <?php } ?>
-            
-          </select>
+          <?= // Normal select with ActiveForm & model
+           Select2::widget([
+            'name' => 'projeto',
+            'id' => 'projeto-id',
+            'data' => $listProjetos,
+            'options' => [
+                'placeholder' => 'Select provinces ...',
+                'multiple' => false
+              ],
+          ]);
+        ?>
       </div>
 
       <div  class="col-md-1">  
