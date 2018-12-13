@@ -288,7 +288,7 @@ $this->registerJs('
             'id' => 'projeto-id',
             'data' => $listProjetos,
             'options' => [
-                'placeholder' => 'Select provinces ...',
+                'placeholder' => 'Projetos',
                 'multiple' => false
               ],
           ]);
