@@ -12,7 +12,6 @@ use kartik\money\MaskMoney;
 use kartik\tabs\TabsX;
 use kartik\popover\PopoverX;
 use yii\bootstrap\Modal;
-use kartik\select2\Select2;
 /* @var $this yii\web\View */
 /* @var $model app\models\Projeto */
 /* @var $form yii\widgets\ActiveForm */
@@ -1349,17 +1348,7 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
         <div class="col-md-3">
           <?= $form->field($model, 'cliente_id')->dropDownList($listClientes,['prompt'=>'Selecione um Cliente']) ?>
         </div>
-<?= // Normal select with ActiveForm & model
-           Select2::widget([
-            'name' => 'projeto',
-            'id' => 'projeto-id',
-            'data' => $listProjetos,
-            'options' => [
-                'placeholder' => 'Projetos',
-                'multiple' => false
-              ],
-          ]);
-        ?>
+
         <div class="col-md-1">
           <?= $form->field($model, 'codigo')->textInput(['maxlength' => true]) ?>   
         </div>
