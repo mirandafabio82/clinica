@@ -1,3 +1,19 @@
+<?php
+use yii\helpers\Html;
+use yii\widgets\ActiveForm;
+use kartik\grid\GridView;
+use yii\helpers\Url;
+use app\models\Escopo;
+use yii\helpers\ArrayHelper;
+use yii\widgets\Pjax;
+use kartik\select2\Select2;
+
+$this->registerJs('   
+    $( document ).ready(function() {
+       document.title = "HCN - Relatório Geral";
+       });
+');
+?>
 
 <style>
 table {
@@ -34,14 +50,30 @@ th {
     background-color: #3c8dbc;
     color: white;
 }
+td { white-space:pre }
 </style>
 </head>
 
 <input type="button" class="btn btn-success" id="btnExport" value=" Exportar Excel " />
 
 <div class="box box-primary">
-    <div class="box-header with-border scrollmenu" id="div-table">
-   
+    <div class="box-header with-border scrollmenu" id="div-table" style='width: 88em; height: 40em'>
+        <div style="background-color: #337ab7;color:white;padding: 10px; margin-bottom: 1em"><i class="fa fa-calculator"></i> Relatório Geral </div>
+
+<div class="col-md-3">
+<?= // Normal select with ActiveForm & model
+           Select2::widget([
+            'name' => 'projeto',
+            'id' => 'projeto-id',
+            'data' => $listProjetos,
+            'options' => [
+                'placeholder' => 'Projetos',
+                'multiple' => false
+              ],
+          ]);
+        ?>
+</div>
+
 <table id="table">
   <tr>
     <th rowspan="2" align="center">Projeto</th>
@@ -132,7 +164,7 @@ th {
         <td <?= $rowspan ?> ><?= $escopos['horas_tp']-$executado['executado_tp'] ?></td>
         <td <?= $rowspan ?> ><?= $saldo_km ?></td>
         <td <?= $rowspan ?> ><?= $saldo ?></td>
-        <td <?= $rowspan ?> ><?= 'nota geral' ?></td>
+        <td <?= $rowspan ?> ><?= $projeto['nota_geral'] ?></td>
       <?php } else{?>
       <tr>        
         <td ><?= 'BM-'.explode('AS-', explode('_', $projeto['proposta'])[0])[1].'_'.$bm['numero_bm'] ?></td>

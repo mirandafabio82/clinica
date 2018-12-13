@@ -6,6 +6,7 @@ use yii\widgets\Pjax;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use kartik\tabs\TabsX;
+use kartik\select2\Select2;
 ?>
 
 <style>
@@ -133,9 +134,7 @@ $this->registerJs('
          console.log("failure");
         }
     });
-  }); 
-  
- 
+  });   
 
   function formataDinheiro(n) {
     return n.toFixed(2).replace(".", ",").replace(/(\d)(?=(\d{3})+\,)/g, "$1.");
