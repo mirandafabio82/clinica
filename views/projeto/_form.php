@@ -1080,10 +1080,6 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
             'contentOptions' => ['style' => 'width:16em;  min-width:16em;'],
             ],
             [
-            'attribute' => 'site', 
-            'contentOptions' => ['style' => 'width:8em;  min-width:8em;'],
-            ],
-            [
               'header' => 'Escopo', 
               'format' => 'raw',
               'contentOptions' => ['style' => 'width:11em;  min-width:8em;'],
@@ -1123,6 +1119,11 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
 
               }, 
             ],
+            [
+            'attribute' => 'site', 
+            'contentOptions' => ['style' => 'width:8em;  min-width:8em;'],
+            ],
+            
             'descricao'
             /*[
               'attribute' => 'status',      
