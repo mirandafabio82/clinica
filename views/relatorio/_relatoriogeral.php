@@ -60,19 +60,6 @@ td { white-space:pre }
     <div class="box-header with-border scrollmenu" id="div-table" style='width: 88em; height: 40em'>
         <div style="background-color: #337ab7;color:white;padding: 10px; margin-bottom: 1em"><i class="fa fa-calculator"></i> Relatório Geral </div>
 
-<div class="col-md-3">
-<?= // Normal select with ActiveForm & model
-           Select2::widget([
-            'name' => 'projeto',
-            'id' => 'projeto-id',
-            'data' => $listProjetos,
-            'options' => [
-                'placeholder' => 'Projetos',
-                'multiple' => false
-              ],
-          ]);
-        ?>
-</div>
 
 <table id="table">
   <tr>
@@ -81,37 +68,46 @@ td { white-space:pre }
     <th rowspan="2" align="center">Planta</th>
     <th rowspan="2" align="center">Solicitante</th>
     <th rowspan="2" align="center">AS</th>
-    <th rowspan="2" align="center">Valor</th>
-    <th rowspan="2" align="center">ES-AUT</th>
-    <th rowspan="2" align="center">EP-AUT</th>
-    <th rowspan="2" align="center">TEC-AUT</th>
-    <th rowspan="2" align="center">KM</th>
+    <?php if(!empty($mostrar_valor)){ ?>
+        <th rowspan="2" align="center">Valor</th>
+        <th rowspan="2" align="center">ES-AUT</th>
+        <th rowspan="2" align="center">EP-AUT</th>
+        <th rowspan="2" align="center">TEC-AUT</th>
+        <th rowspan="2" align="center">KM</th>
+    <?php } ?>    
     <th rowspan="2" align="center">BM</th>
-    <th rowspan="2" align="center">ES-AUT</th>
-    <th rowspan="2" align="center">EP-AUT</th>
-    <th rowspan="2" align="center">TEC-AUT</th>
-    <th rowspan="2" align="center">KM</th>
-    <th rowspan="2" align="center">VALOR</th>
-    <th rowspan="2" align="center">Data</th>
-    <th rowspan="2" align="center">Faturado</th>
-    <th colspan="4" align="center">Saldo</th>
-    <th rowspan="2" align="center">Saldo</th>
+    <?php if(!empty($mostrar_valor)){ ?>
+        <th rowspan="2" align="center">ES-AUT</th>
+        <th rowspan="2" align="center">EP-AUT</th>
+        <th rowspan="2" align="center">TEC-AUT</th>
+        <th rowspan="2" align="center">KM</th>
+        <th rowspan="2" align="center">VALOR</th>
+    <?php } ?>
+        <th rowspan="2" align="center">Data</th>
+    <?php if(!empty($mostrar_valor)){ ?>
+        <th rowspan="2" align="center">Faturado</th>
+        <th colspan="4" align="center">Saldo</th>
+        <th rowspan="2" align="center">Saldo</th>
+    <?php } ?>
     <th rowspan="2" align="center">Status</th>
-  </tr>
-  <tr>
-    <th>ES-AUT</th>
-    <th>EP-AUT</th>
-    <th>TEC-AUT</th>
-    <th>KM</th>
-  </tr>
   
+  </tr>
+      <tr>
+  <?php if(!empty($mostrar_valor)){ ?>
+        <th>ES-AUT</th>
+        <th>EP-AUT</th>
+        <th>TEC-AUT</th>
+        <th>KM</th>
+      </tr>
+  <?php } ?>
   <?php foreach ($projetos as $key => $projeto) { 
     //$solicitante = Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.$projeto['cliente_id'])->queryScalar();
-    $bms = Yii::$app->db->createCommand('SELECT * FROM bm WHERE projeto_id='.$projeto['id'])->queryAll();
+
+    $bms = Yii::$app->db->createCommand('SELECT * FROM bm WHERE projeto_id='.$projeto['projetoID'])->queryAll();
     $qtd_bms = count($bms);
     $rowspan = 'rowspan="'.$qtd_bms.'"';
 
-    $escopos = Yii::$app->db->createCommand('SELECT SUM(horas_ee) horas_ee, SUM(horas_es) horas_es, SUM(horas_ep) horas_ep, SUM(horas_ej) horas_ej, SUM(horas_tp) horas_tp FROM escopo WHERE projeto_id='.$projeto['id'])->queryOne();
+    $escopos = Yii::$app->db->createCommand('SELECT SUM(horas_ee) horas_ee, SUM(horas_es) horas_es, SUM(horas_ep) horas_ep, SUM(horas_ej) horas_ej, SUM(horas_tp) horas_tp FROM escopo WHERE projeto_id='.$projeto['projetoID'])->queryOne();
 
     if($qtd_bms==0){
       $rowspan = '';
@@ -125,11 +121,13 @@ td { white-space:pre }
     <td <?= $rowspan ?> ><?= $projeto['site'] ?></td>
     <td <?= $rowspan ?> ><?= $projeto['contato'] ?></td>
     <td <?= $rowspan ?> ><?= $projeto['proposta'] ?></td>
-    <td <?= $rowspan ?> ><?= number_format($projeto['valor_proposta'], 2, ',', '.') ?></td>
-    <td <?= $rowspan ?> ><?= $escopos['horas_es']?></td>
-    <td <?= $rowspan ?> ><?= $escopos['horas_ep'] ?></td>
-    <td <?= $rowspan ?> ><?= $escopos['horas_tp'] ?></td>
-    <td <?= $rowspan ?> ><?= $projeto['qtd_km'] ?> </td>
+    <?php if(!empty($mostrar_valor)){ ?>
+        <td <?= $rowspan ?> ><?= number_format($projeto['valor_proposta'], 2, ',', '.') ?></td>
+        <td <?= $rowspan ?> ><?= $escopos['horas_es']?></td>
+        <td <?= $rowspan ?> ><?= $escopos['horas_ep'] ?></td>
+        <td <?= $rowspan ?> ><?= $escopos['horas_tp'] ?></td>
+        <td <?= $rowspan ?> ><?= $projeto['qtd_km'] ?> </td>
+    <?php } ?>
 
     <?php 
       $faturado = 0;
@@ -139,7 +137,7 @@ td { white-space:pre }
                     
         $valor_bm = $bm['executado_tp']*$tipo_executante[0]['valor_hora']+$bm['executado_ej']*$tipo_executante[1]['valor_hora']+$bm['executado_ep']*$tipo_executante[2]['valor_hora']+$bm['executado_es']*$tipo_executante[3]['valor_hora']+$bm['executado_ee']*$tipo_executante[4]['valor_hora']+$bm['km'] * Yii::$app->db->createCommand('SELECT vl_km FROM executante WHERE usuario_id=61')->queryScalar();
 
-        $executado = Yii::$app->db->createCommand('SELECT SUM(executado_ee) executado_ee, SUM(executado_es) executado_es, SUM(executado_ep) executado_ep, SUM(executado_ej) executado_ej, SUM(executado_tp) executado_tp, SUM(km) km FROM bm WHERE projeto_id='.$projeto['id'])->queryOne();
+        $executado = Yii::$app->db->createCommand('SELECT SUM(executado_ee) executado_ee, SUM(executado_es) executado_es, SUM(executado_ep) executado_ep, SUM(executado_ej) executado_ej, SUM(executado_tp) executado_tp, SUM(km) km FROM bm WHERE projeto_id='.$projeto['projetoID'])->queryOne();
 
         $saldo = ($escopos['horas_ee']+$escopos['horas_es']+$escopos['horas_ep']+$escopos['horas_ej']+$escopos['horas_tp'])-($executado['executado_ee']+$executado['executado_es']+$executado['executado_ep']+$executado['executado_ej']+$executado['executado_tp']);
 
@@ -152,27 +150,34 @@ td { white-space:pre }
       ?>
       <?php if($key==0){ ?>
         <td ><?= 'BM-'.explode('AS-', explode('_', $projeto['proposta'])[0])[1].'_'.$bm['numero_bm'] ?></td>
-        <td ><?= $bm_escopo['horas_es']?></td>
-        <td ><?= $bm_escopo['horas_ep']?></td>
-        <td ><?= $bm_escopo['horas_tp']?></td>
-        <td ><?= $bm['km']?></td>
-        <td ><?= $valor_bm?></td>
+        <?php if(!empty($mostrar_valor)){ ?>
+            <td ><?= $bm_escopo['horas_es']?></td>
+            <td ><?= $bm_escopo['horas_ep']?></td>
+            <td ><?= $bm_escopo['horas_tp']?></td>
+            <td ><?= $bm['km']?></td>
+            <td ><?= $valor_bm?></td>
+            <td ><?= date('d/m/Y', strtotime($bm['data'])) ?></td>
+        <?php } ?>
         <td ><?= date('d/m/Y', strtotime($bm['data']))?></td>
-        <td <?= $rowspan ?> ><?= number_format($faturado, 2, ',', '.') ?></td>
-        <td <?= $rowspan ?> ><?= $escopos['horas_ee']-$executado['executado_es'] ?></td>
-        <td <?= $rowspan ?> ><?= $escopos['horas_ep']-$executado['executado_ep'] ?></td>
-        <td <?= $rowspan ?> ><?= $escopos['horas_tp']-$executado['executado_tp'] ?></td>
-        <td <?= $rowspan ?> ><?= $saldo_km ?></td>
-        <td <?= $rowspan ?> ><?= $saldo ?></td>
+        <?php if(!empty($mostrar_valor)){ ?>
+            <td <?= $rowspan ?> ><?= number_format($faturado, 2, ',', '.') ?></td>
+            <td <?= $rowspan ?> ><?= $escopos['horas_ee']-$executado['executado_es'] ?></td>
+            <td <?= $rowspan ?> ><?= $escopos['horas_ep']-$executado['executado_ep'] ?></td>
+            <td <?= $rowspan ?> ><?= $escopos['horas_tp']-$executado['executado_tp'] ?></td>
+            <td <?= $rowspan ?> ><?= $saldo_km ?></td>
+            <td <?= $rowspan ?> ><?= $saldo ?></td>
+        <?php } ?>
         <td <?= $rowspan ?> ><?= $projeto['nota_geral'] ?></td>
       <?php } else{?>
       <tr>        
         <td ><?= 'BM-'.explode('AS-', explode('_', $projeto['proposta'])[0])[1].'_'.$bm['numero_bm'] ?></td>
-        <td ><?= $bm_escopo['horas_es']?></td>
-        <td ><?= $bm_escopo['horas_ep']?></td>
-        <td ><?= $bm_escopo['horas_tp']?></td>
-        <td ><?= $bm['km'] ?></td>
-        <td ><?= $valor_bm ?></td>
+        <?php if(!empty($mostrar_valor)){ ?>
+            <td ><?= $bm_escopo['horas_es']?></td>
+            <td ><?= $bm_escopo['horas_ep']?></td>
+            <td ><?= $bm_escopo['horas_tp']?></td>
+            <td ><?= $bm['km'] ?></td>
+            <td ><?= $valor_bm ?></td>
+        <?php } ?>
         <td ><?= date('d/m/Y', strtotime($bm['data'])) ?></td>
        
       </tr>

@@ -37,6 +37,7 @@ $this->registerJs('
 
   $( document ).ready(function() {
       document.title = "HCN - Relatórios";
+      initS2Loading("projeto-id","s2options_d6851687");
     });
 
   $("#bm_btn").click(function(ev){
@@ -155,11 +156,58 @@ $this->registerJs('
         $prestadores .= '<option value="'.$key.'">'.$prest.' </option>';        
      }
 
-     $rel_geral_content = '<div style="margin-top:1em">
-                              '.Html::a('<span class="btn-label"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Gerar Relatório</span>', ['relatoriogeral'], ['class' => 'btn btn-primary', 'target'=>'_blank']).                            
-                          '</div>
+      $form = ActiveForm::begin(); 
+     $rel_geral_content = '<form action="/hcn/web/index.php?r=relatorio%2Frelatoriogeral" method="post" id="form-relgeral">
+                          <div class="row">
+                            <div class="col-md-2">
+                              <b>Projetos</b>
+                              '. 
+                              Html::dropDownList('projeto', null, $listProjetos, ['multiple' => 'multiple', 'class' => 'form-control'])                           
+                                .'
+                            </div>
+                            <div class="col-md-2">
+                            <b>Contatos</b>
+                              '. 
+                             Html::dropDownList('contato', null, $listContatos, ['multiple' => 'multiple', 'class' => 'form-control'])                   
+                                .'
+                            </div>
+                          </div>
+                          <div class="row" style="margin-top:1em">                            
+                            <div class="col-md-2">
+                              Período BM
+                              <input type="date" name="bm_de" class="form-control" placeholder="de">                           
+                              <input type="date" name="bm_ate" class="form-control" placeholder="até">
+                            </div>
+                            <div class="col-md-2">
+                              Período AS
+                              <input type="date" name="as_de" class="form-control" placeholder="de">                            
+                              <input type="date" name="as_ate" class="form-control" placeholder="até">
+                            </div>
+                            <div class="col-md-2">
+                              Período FRS
+                              <input type="date" name="frs_de" class="form-control" placeholder="de">                            
+                              <input type="date" name="frs_ate" class="form-control" placeholder="até">
+                            </div>
+                          </div>
+                          <div class="row" style="margin-top:1em">
+                            <div class="col-md-1">
+                              <input type="checkbox" name="bm" > Com BM
+                            </div>
+                            <div class="col-md-1">
+                              <input type="checkbox" name="frs" > Com FRS
+                            </div>
+                            <div class="col-md-1">
+                              <input type="checkbox" name="valor" > Mostrar Valores
+                            </div>
+                        </row>
+                        <div class="row" style="margin-top:1em">
+                          <div class="col-md-2">
+                            <button class="btn btn-primary" type="submit" form="form-relgeral" value="Submit">Gerar Relatório</button>
+                          </div>
+                        </div>
+                      </form>
      ';
-  
+  ActiveForm::end();
    $extrato_content = '<div style="margin-top:1em">
             <form id="form_extrato" method="post" enctype="multipart/form-data">
               <div class="row">
