@@ -8,6 +8,7 @@ use yii\helpers\Json;
 use app\models\Documento;
 use yii\helpers\FileHelper;
 use \Datetime;
+use app\models\Bm;
 
 class FaturamentoController extends \yii\web\Controller
 {
@@ -57,7 +58,10 @@ class FaturamentoController extends \yii\web\Controller
                             $num_folha_reg = explode(' ', trim(explode('No. Pedido / item Data', explode('No. da Folha de Registro Data', $text)[1])[0]))[0];
                             $cnpj = trim(explode('I.E:', explode('CNPJ:', $text)[2])[0]);
                             $cnpjMask = "%s%s.%s%s%s.%s%s%s/%s%s%s%s-%s%s";
-                            $cnpj = vsprintf($cnpjMask, str_split($cnpj));                            
+                            $cnpj = vsprintf($cnpjMask, str_split($cnpj));   
+                            $data_aprovacao = explode(' ',explode('No. da Folha de Registro Data', explode('No. Pedido / item Data', trim($text))[0])[1])[2];
+
+                            $data_aprovacao = date('Y-m-d', strtotime($data_aprovacao));
                             
                             $cliente = Yii::$app->db->createCommand('SELECT * FROM cliente WHERE cnpj="'.$cnpj.'"')->queryOne();
 
@@ -128,8 +132,9 @@ Inscrição Municipal: '.$cliente['insc_municipal'].'
 Valor: '.$valor_total.'
 Número do BM: '.$num_bm;
 
-
-
+                          //update BM com dados do FRS
+                          Yii::$app->db->createCommand('UPDATE bm SET frs_numero = '.$num_folha_reg.', frs_data_faturamento='.date('Y-m-d').', frs_data_aprovacao='.$data_aprovacao.' WHERE numero_bm='.$num_bm)->execute();
+    
                             return  $text_compilado.'##'.$path_projeto;
                        }  
                   }  
@@ -173,9 +178,5 @@ Número do BM: '.$num_bm;
         	Yii::$app->request->post()['file_nfse'];
         }
     }
-
-
-
-    
 
 }

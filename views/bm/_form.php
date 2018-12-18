@@ -553,6 +553,25 @@ td, th {
       <input type="text" name="total_bm" value="R$ <?= $valor_total ?>" class="form-control" disabled>
     </div>
     </div>
+    FRS
+    <div class="row" style="border:1px solid black;padding: 2px; margin-bottom: 1em">
+      <div class="col-md-2" style="text-align: center">
+      <?= $form->field($model, 'frs_data_aprovacao')->widget(\yii\widgets\MaskedInput::className(), [
+                        'mask' => '99/99/9999',
+                    ]) ?> 
+    </div>
+    <div class="col-md-2" style="text-align: center"> 
+      <?= $form->field($model, 'frs_data_faturamento')->widget(\yii\widgets\MaskedInput::className(), [
+                        'mask' => '99/99/9999',
+                    ]) ?>
+    </div>
+    <div class="col-md-2" style="text-align: center"> 
+      <?= $form->field($model, 'frs_nome')->textInput(['maxlength' => true]) ?> 
+    </div>
+    <div class="col-md-2" style="text-align: center"> 
+      <?= $form->field($model, 'frs_numero')->textInput(['maxlength' => true]) ?> 
+    </div>
+    </div>
      EXECUTADO
     <div class="row" style="border:1px solid black;padding: 2px; margin-bottom: 1em">
       <div class="col-md-1" style="text-align: center"> 

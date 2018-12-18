@@ -155,6 +155,10 @@ class BmController extends Controller
             $model->de = date_format(DateTime::createFromFormat('Y-m-d', $model->de), 'd/m/Y');
         if(!empty($model->para))
             $model->para = date_format(DateTime::createFromFormat('Y-m-d', $model->para), 'd/m/Y');
+        if(!empty($model->frs_data_aprovacao))
+            $model->frs_data_aprovacao = date_format(DateTime::createFromFormat('Y-m-d', $model->frs_data_aprovacao), 'd/m/Y');
+        if(!empty($model->frs_data_faturamento))
+            $model->frs_data_faturamento = date_format(DateTime::createFromFormat('Y-m-d', $model->frs_data_faturamento), 'd/m/Y');
 
         if ($model->load(Yii::$app->request->post())) {            
             if(!empty($_POST['Bm']['data'])){
@@ -168,6 +172,14 @@ class BmController extends Controller
             if(!empty($_POST['Bm']['para'])){
                 $dat = DateTime::createFromFormat('d/m/Y', $_POST['Bm']['para']);          
                 $model->para = date_format($dat, 'Y-m-d');
+            }
+            if(!empty($_POST['Bm']['frs_data_aprovacao'])){
+                $dat = DateTime::createFromFormat('d/m/Y', $_POST['Bm']['frs_data_aprovacao']);          
+                $model->frs_data_aprovacao = date_format($dat, 'Y-m-d');
+            }
+            if(!empty($_POST['Bm']['frs_data_faturamento'])){
+                $dat = DateTime::createFromFormat('d/m/Y', $_POST['Bm']['frs_data_faturamento']);          
+                $model->frs_data_faturamento = date_format($dat, 'Y-m-d');
             }
 
             if(isset($_POST['bm_executante'])){
