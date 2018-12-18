@@ -133,7 +133,7 @@ Valor: '.$valor_total.'
 Número do BM: '.$num_bm;
 
                           //update BM com dados do FRS
-                          Yii::$app->db->createCommand('UPDATE bm SET frs_numero = '.$num_folha_reg.', frs_data_faturamento='.date('Y-m-d').', frs_data_aprovacao='.$data_aprovacao.' WHERE numero_bm='.$num_bm)->execute();
+                          Yii::$app->db->createCommand('UPDATE bm SET frs_numero = "'.$num_folha_reg.'", frs_data_faturamento="'.date('Y-m-d').'", frs_data_aprovacao="'.$data_aprovacao.'" WHERE numero_bm="'.$num_bm.'"')->execute();
     
                             return  $text_compilado.'##'.$path_projeto;
                        }  
