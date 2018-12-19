@@ -75,7 +75,9 @@ td { white-space:pre }
         <th rowspan="2" align="center">TEC-AUT</th>
         <th rowspan="2" align="center">KM</th>
     <?php } ?>    
-    <th rowspan="2" align="center">BM</th>
+    <?php if(!empty($com_bm)){ ?>
+        <th rowspan="2" align="center">BM</th>
+    <?php } ?>    
     <?php if(!empty($mostrar_valor)){ ?>
         <th rowspan="2" align="center">ES-AUT</th>
         <th rowspan="2" align="center">EP-AUT</th>
@@ -89,17 +91,29 @@ td { white-space:pre }
         <th colspan="4" align="center">Saldo</th>
         <th rowspan="2" align="center">Saldo</th>
     <?php } ?>
+    <?php if(!empty($com_frs)){ ?>
+        <th colspan="4" align="center">FRS</th>
+    <?php } ?>
     <th rowspan="2" align="center">Status</th>
+
   
   </tr>
-      <tr>
-  <?php if(!empty($mostrar_valor)){ ?>
+      <tr>        
+  <?php if(!empty($mostrar_valor) && !empty($com_bm)){ ?>
         <th>ES-AUT</th>
         <th>EP-AUT</th>
         <th>TEC-AUT</th>
-        <th>KM</th>
+        <th>KM</th>  
+    <?php } ?>
+    <?php if(!empty($com_frs)){ ?>
+        <th align="center">Data Aprovação</th>
+        <th align="center">Nome</th>
+        <th align="center">Numero</th>
+        <th align="center">Data Faturamento</th>
+    <?php } ?>
       </tr>
-  <?php } ?>
+
+
   <?php foreach ($projetos as $key => $projeto) { 
     //$solicitante = Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.$projeto['cliente_id'])->queryScalar();
 
@@ -149,15 +163,15 @@ td { white-space:pre }
 
       ?>
       <?php if($key==0){ ?>
-        <td ><?= 'BM-'.explode('AS-', explode('_', $projeto['proposta'])[0])[1].'_'.$bm['numero_bm'] ?></td>
+        <?php if(!empty($com_bm)){ ?>
+            <td ><?= 'BM-'.explode('AS-', explode('_', $projeto['proposta'])[0])[1].'_'.$bm['numero_bm'] ?></td>
         <?php if(!empty($mostrar_valor)){ ?>
             <td ><?= $bm_escopo['horas_es']?></td>
             <td ><?= $bm_escopo['horas_ep']?></td>
             <td ><?= $bm_escopo['horas_tp']?></td>
             <td ><?= $bm['km']?></td>
             <td ><?= $valor_bm?></td>
-            <td ><?= date('d/m/Y', strtotime($bm['data'])) ?></td>
-        <?php } ?>
+        <?php }} ?>
         <td ><?= date('d/m/Y', strtotime($bm['data']))?></td>
         <?php if(!empty($mostrar_valor)){ ?>
             <td <?= $rowspan ?> ><?= number_format($faturado, 2, ',', '.') ?></td>
@@ -167,17 +181,24 @@ td { white-space:pre }
             <td <?= $rowspan ?> ><?= $saldo_km ?></td>
             <td <?= $rowspan ?> ><?= $saldo ?></td>
         <?php } ?>
-        <td <?= $rowspan ?> ><?= $projeto['nota_geral'] ?></td>
+        <?php if(!empty($com_frs)){ ?>
+            <td <?= $rowspan ?> ><?= !empty($bm['frs_data_aprovacao']) ? date('d/m/Y', strtotime($bm['frs_data_aprovacao'])) : '' ?></td>
+            <td <?= $rowspan ?> ><?= $bm['frs_nome'] ?></td>
+            <td <?= $rowspan ?> ><?= $bm['frs_numero'] ?></td>
+            <td <?= $rowspan ?> ><?= !empty($bm['frs_data_faturamento']) ? date('d/m/Y', strtotime($bm['frs_data_faturamento'])) : '' ?></td>
+        <?php } ?>
+            <td <?= $rowspan ?> ><?= $projeto['nota_geral'] ?></td>
       <?php } else{?>
-      <tr>        
-        <td ><?= 'BM-'.explode('AS-', explode('_', $projeto['proposta'])[0])[1].'_'.$bm['numero_bm'] ?></td>
+      <tr>
+        <?php if(!empty($com_bm)){ ?>        
+            <td ><?= 'BM-'.explode('AS-', explode('_', $projeto['proposta'])[0])[1].'_'.$bm['numero_bm'] ?></td>
         <?php if(!empty($mostrar_valor)){ ?>
             <td ><?= $bm_escopo['horas_es']?></td>
             <td ><?= $bm_escopo['horas_ep']?></td>
             <td ><?= $bm_escopo['horas_tp']?></td>
             <td ><?= $bm['km'] ?></td>
             <td ><?= $valor_bm ?></td>
-        <?php } ?>
+        <?php }} ?>
         <td ><?= date('d/m/Y', strtotime($bm['data'])) ?></td>
        
       </tr>

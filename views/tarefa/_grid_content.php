@@ -257,16 +257,23 @@ $this->registerJs("
       </div>
 
       <div class="modal-body">
-      <table style="width: 100%;">
+      <table style="width: 75%;">
         <tr>
           <th>BM</th>
           <th>Acumulada</th>
           <th>Saldo</th>
+          
         </tr>
         <tr>
           <th> <input class="modal_bm" type="text" > </th>
           <th> <input class="modal_acumulada" type="text" > </th>
           <th> <input class="modal_saldo" type="text" > </th>
+          
+          <th> <input class="modal_horas_tp " placeholder="Horas TP" type="text" hidden> </th>
+          <th> <input class="modal_horas_ej " placeholder="Horas EJ" type="text" hidden> </th>
+          <th> <input class="modal_horas_ep " placeholder="Horas EP" type="text" hidden> </th>
+          <th> <input class="modal_horas_es " placeholder="Horas ES" type="text" hidden> </th>
+          <th> <input class="modal_horas_ee " placeholder="Horas EE" type="text" hidden> </th>
         </tr>
         
         

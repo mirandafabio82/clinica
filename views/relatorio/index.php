@@ -191,13 +191,13 @@ $this->registerJs('
                           </div>
                           <div class="row" style="margin-top:1em">
                             <div class="col-md-1">
-                              <input type="checkbox" name="bm" > Com BM
+                              <input type="checkbox" name="bm" checked> Com BM
                             </div>
                             <div class="col-md-1">
-                              <input type="checkbox" name="frs" > Com FRS
+                              <input type="checkbox" name="frs" checked> Com FRS
                             </div>
                             <div class="col-md-1">
-                              <input type="checkbox" name="valor" > Mostrar Valores
+                              <input type="checkbox" name="valor" checked> Mostrar Valores
                             </div>
                         </row>
                         <div class="row" style="margin-top:1em">

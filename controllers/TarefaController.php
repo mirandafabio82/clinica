@@ -477,6 +477,27 @@ class TarefaController extends Controller
                     $saldo = Yii::$app->request->post()['saldo'] == "zero" ? 0 : Yii::$app->request->post()['saldo'];
                     Yii::$app->db->createCommand('UPDATE escopo SET horas_saldo='.$saldo.' WHERE id='.$escopo_id)->execute(); 
                 }
+
+                if(!empty(Yii::$app->request->post()['horas_tp'])){
+                    $horas_tp = Yii::$app->request->post()['horas_tp'] == "zero" ? 0 : Yii::$app->request->post()['horas_tp'];
+                    Yii::$app->db->createCommand('UPDATE escopo SET executado_tp='.$horas_tp.' WHERE id='.$escopo_id)->execute(); 
+                }
+                if(!empty(Yii::$app->request->post()['horas_ej'])){
+                    $horas_ej = Yii::$app->request->post()['horas_ej'] == "zero" ? 0 : Yii::$app->request->post()['horas_ej'];
+                    Yii::$app->db->createCommand('UPDATE escopo SET executado_ej='.$horas_ej.' WHERE id='.$escopo_id)->execute(); 
+                }
+                if(!empty(Yii::$app->request->post()['horas_ep'])){
+                    $horas_ep = Yii::$app->request->post()['horas_ep'] == "zero" ? 0 : Yii::$app->request->post()['horas_ep'];
+                    Yii::$app->db->createCommand('UPDATE escopo SET executado_ep='.$horas_ep.' WHERE id='.$escopo_id)->execute(); 
+                }
+                if(!empty(Yii::$app->request->post()['horas_es'])){
+                    $horas_es = Yii::$app->request->post()['horas_es'] == "zero" ? 0 : Yii::$app->request->post()['horas_es'];
+                    Yii::$app->db->createCommand('UPDATE escopo SET executado_es='.$horas_es.' WHERE id='.$escopo_id)->execute(); 
+                }
+                if(!empty(Yii::$app->request->post()['horas_ee'])){
+                    $horas_ee = Yii::$app->request->post()['horas_ee'] == "zero" ? 0 : Yii::$app->request->post()['horas_ee'];
+                    Yii::$app->db->createCommand('UPDATE escopo SET executado_ee='.$horas_ee.' WHERE id='.$escopo_id)->execute(); 
+                }
                 
                 return "success";
             }
@@ -484,7 +505,14 @@ class TarefaController extends Controller
                 return $e;
             }
 
-            
+        }
+    }
+
+    public function actionCheckhoras(){
+        if (Yii::$app->request->isAjax) { 
+            $escopo_id = Yii::$app->request->post()['escopo_id'];
+
+            echo json_encode(Yii::$app->db->createCommand('SELECT horas_tp, horas_ej, horas_ep, horas_es, horas_ee FROM projeto JOIN escopo ON escopo.projeto_id = projeto.id WHERE escopo.id='.$escopo_id)->queryAll());
         }
     }
 }
