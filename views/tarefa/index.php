@@ -93,21 +93,27 @@ else{
             type: "POST",
             success: function(response){
              console.log(JSON.parse(response)[0]["horas_tp"]);
-             if(JSON.parse(response)[0]["horas_tp"] != null)
+             if(JSON.parse(response)[0]["horas_tp"] != null){
                 $(".modal_horas_tp").removeAttr("hidden");
+                $(".modal_bm_tp").removeAttr("hidden");
+             }
 
-              if(JSON.parse(response)[0]["horas_ej"] != null)  
-                $(".modal_horas_ej").removeAttr("hidden");
-                
-              if(JSON.parse(response)[0]["horas_ep"] != null)
-                $(".modal_horas_ep").removeAttr("hidden");
-                
-              if(JSON.parse(response)[0]["horas_es"] != null)
-                $(".modal_horas_es").removeAttr("hidden");
-                
-              if(JSON.parse(response)[0]["horas_ee"] != null)
-                $(".modal_horas_ee").removeAttr("hidden");
-
+            if(JSON.parse(response)[0]["horas_ej"] != null){  
+              $(".modal_horas_ej").removeAttr("hidden");
+              $(".modal_bm_ej").removeAttr("hidden");
+            }
+            if(JSON.parse(response)[0]["horas_ep"] != null){
+              $(".modal_horas_ep").removeAttr("hidden");
+              $(".modal_bm_ep").removeAttr("hidden");
+            }
+            if(JSON.parse(response)[0]["horas_es"] != null){
+              $(".modal_horas_es").removeAttr("hidden");
+              $(".modal_bm_es").removeAttr("hidden");
+            }
+            if(JSON.parse(response)[0]["horas_ee"] != null){
+              $(".modal_horas_ee").removeAttr("hidden");
+              $(".modal_bm_ee").removeAttr("hidden");
+            }
            },
            error: function(){
              console.log("failure");
@@ -124,6 +130,12 @@ else{
       $(".modal_horas_ep").attr("id", "modal_ep_"+escopo_modal_id);
       $(".modal_horas_es").attr("id", "modal_es_"+escopo_modal_id);
       $(".modal_horas_ee").attr("id", "modal_ee_"+escopo_modal_id);
+
+      $(".modal_bm_tp").attr("id", "modal_bm_tp_"+escopo_modal_id);
+      $(".modal_bm_ej").attr("id", "modal_bm_ej_"+escopo_modal_id);
+      $(".modal_bm_ep").attr("id", "modal_bm_ep_"+escopo_modal_id);
+      $(".modal_bm_es").attr("id", "modal_bm_es_"+escopo_modal_id);
+      $(".modal_bm_ee").attr("id", "modal_bm_ee_"+escopo_modal_id);
 
       $("#editModal").modal();
       
@@ -142,19 +154,32 @@ else{
         var modal_horas_ep = $(".modal_horas_ep").val();
         var modal_horas_es = $(".modal_horas_es").val();
         var modal_horas_ee = $(".modal_horas_ee").val();
+
+        var modal_bm_tp = $(".modal_bm_tp").val();
+        var modal_bm_ej = $(".modal_bm_ej").val();
+        var modal_bm_ep = $(".modal_bm_ep").val();
+        var modal_bm_es = $(".modal_bm_es").val();
+        var modal_bm_ee = $(".modal_bm_ee").val();
         
         if($(".modal_bm").val() === "0") bm = "zero";
         if($(".modal_acumulada").val() === "0") acumulada = "zero";
         if($(".modal_saldo").val() === "0") saldo = "zero";
+        
         if($(".modal_horas_tp").val() === "0") modal_horas_tp = "zero";
         if($(".modal_horas_ej").val() === "0") modal_horas_ej = "zero";
         if($(".modal_horas_ep").val() === "0") modal_horas_ep = "zero";
         if($(".modal_horas_es").val() === "0") modal_horas_es = "zero";
         if($(".modal_horas_ee").val() === "0") modal_horas_ee = "zero";
 
+        if($(".modal_bm_tp").val() === "0") modal_bm_tp = "zero";
+        if($(".modal_bm_ej").val() === "0") modal_bm_ej = "zero";
+        if($(".modal_bm_ep").val() === "0") modal_bm_ep = "zero";
+        if($(".modal_bm_es").val() === "0") modal_bm_es = "zero";
+        if($(".modal_bm_ee").val() === "0") modal_bm_ee = "zero";
+
         $.ajax({ 
             url: "index.php?r=tarefa/editahoras",
-            data: {id: escopo_id, bm: bm, acumulada: acumulada, saldo: saldo, horas_tp: modal_horas_tp, horas_ej: modal_horas_ej, horas_ep: modal_horas_ep, horas_es: modal_horas_es, horas_ee: modal_horas_ee,  },
+            data: {id: escopo_id, bm: bm, acumulada: acumulada, saldo: saldo, horas_tp: modal_horas_tp, horas_ej: modal_horas_ej, horas_ep: modal_horas_ep, horas_es: modal_horas_es, horas_ee: modal_horas_ee, bm_tp: modal_bm_tp, bm_ej: modal_bm_ej, bm_ep: modal_bm_ep, bm_es: modal_bm_es, bm_ee: modal_bm_ee  },
             type: "POST",
             success: function(response){
              if(response=="success"){

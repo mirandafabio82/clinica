@@ -270,10 +270,20 @@ $this->registerJs("
           <th> <input class="modal_saldo" type="text" > </th>
           
           <th> <input class="modal_horas_tp " placeholder="Horas TP" type="text" hidden> </th>
+          <th> <input class="modal_bm_tp " placeholder="BM TP" type="text" hidden> </th>
+
           <th> <input class="modal_horas_ej " placeholder="Horas EJ" type="text" hidden> </th>
+          <th> <input class="modal_bm_ej " placeholder="BM EJ" type="text" hidden> </th>
+
           <th> <input class="modal_horas_ep " placeholder="Horas EP" type="text" hidden> </th>
+          <th> <input class="modal_bm_ep " placeholder="BM EP" type="text" hidden> </th>
+
           <th> <input class="modal_horas_es " placeholder="Horas ES" type="text" hidden> </th>
+          <th> <input class="modal_bm_es " placeholder="BM ES" type="text" hidden> </th>
+
           <th> <input class="modal_horas_ee " placeholder="Horas EE" type="text" hidden> </th>
+          <th> <input class="modal_bm_ee " placeholder="BM EE" type="text" hidden> </th>
+
         </tr>
         
         

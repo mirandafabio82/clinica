@@ -498,6 +498,27 @@ class TarefaController extends Controller
                     $horas_ee = Yii::$app->request->post()['horas_ee'] == "zero" ? 0 : Yii::$app->request->post()['horas_ee'];
                     Yii::$app->db->createCommand('UPDATE escopo SET executado_ee='.$horas_ee.' WHERE id='.$escopo_id)->execute(); 
                 }
+
+                if(!empty(Yii::$app->request->post()['bm_tp'])){
+                    $bm_tp = Yii::$app->request->post()['bm_tp'] == "zero" ? 0 : Yii::$app->request->post()['bm_tp'];
+                    Yii::$app->db->createCommand('UPDATE escopo SET horas_tp_bm='.$bm_tp.' WHERE id='.$escopo_id)->execute(); 
+                }
+                if(!empty(Yii::$app->request->post()['bm_ej'])){
+                    $bm_ej = Yii::$app->request->post()['bm_ej'] == "zero" ? 0 : Yii::$app->request->post()['bm_ej'];
+                    Yii::$app->db->createCommand('UPDATE escopo SET horas_ej_bm='.$bm_ej.' WHERE id='.$escopo_id)->execute(); 
+                }
+                if(!empty(Yii::$app->request->post()['bm_ep'])){
+                    $bm_ep = Yii::$app->request->post()['bm_ep'] == "zero" ? 0 : Yii::$app->request->post()['bm_ep'];
+                    Yii::$app->db->createCommand('UPDATE escopo SET horas_ep_bm='.$bm_ep.' WHERE id='.$escopo_id)->execute(); 
+                }
+                if(!empty(Yii::$app->request->post()['bm_es'])){
+                    $bm_es = Yii::$app->request->post()['bm_es'] == "zero" ? 0 : Yii::$app->request->post()['bm_es'];
+                    Yii::$app->db->createCommand('UPDATE escopo SET horas_es_bm='.$bm_es.' WHERE id='.$escopo_id)->execute(); 
+                }
+                if(!empty(Yii::$app->request->post()['bm_ee'])){
+                    $bm_ee = Yii::$app->request->post()['bm_ee'] == "zero" ? 0 : Yii::$app->request->post()['bm_ee'];
+                    Yii::$app->db->createCommand('UPDATE escopo SET horas_ee_bm='.$bm_ee.' WHERE id='.$escopo_id)->execute(); 
+                }
                 
                 return "success";
             }
