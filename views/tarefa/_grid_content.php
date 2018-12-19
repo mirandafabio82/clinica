@@ -151,6 +151,11 @@ $this->registerJs("
       </thead>
       <?php foreach ($escopos as $key => $escopo) { 
            $escopoModel = Escopo::findIdentity($escopo['id']);
+           //Não mostrar linhas sem horas
+           if(empty($escopo['horas_tp']) && empty($escopo['horas_ej']) && empty($escopo['horas_ep']) && empty($escopo['horas_es']) && empty($escopo['horas_ee'])){
+              continue;
+           }
+
             if($escopoModel['horas_ee']+$escopoModel['horas_es']+$escopoModel['horas_ep']+$escopoModel['horas_ej']+$escopoModel['horas_tp'] > 0){
               $progress = $escopoModel->executado / ($escopoModel['horas_ee']+$escopoModel['horas_es']+$escopoModel['horas_ep']+$escopoModel['horas_ej']+$escopoModel['horas_tp']) * 100;
             }
