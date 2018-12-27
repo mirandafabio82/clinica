@@ -17,7 +17,7 @@ if(!$model->isNewRecord && isset($model->projeto_id)){
 
 $scroll='';
 if(!$model->isNewRecord){
-  $scroll = 'window.scrollTo(0, 600);';
+ // $scroll = 'window.scrollTo(0, 600);';
 }
 
 $bm_id='';

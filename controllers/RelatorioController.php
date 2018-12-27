@@ -112,7 +112,12 @@ class RelatorioController extends Controller
         if (Yii::$app->request->isAjax) {                 
             $executante_id = Yii::$app->request->post()['executante_id'];
 
-            $total = Yii::$app->db->createCommand('SELECT bm.id, projeto.nome, bm.numero_bm, projeto.descricao, bm.executado_ee, bm.executado_es, bm.executado_ep, bm.executado_ej, bm.executado_tp, executante.vl_hh_tp, executante.vl_hh_ej, executante.vl_hh_ep, executante.vl_hh_es, executante.vl_hh_ee, bm_executante.data_pgt FROM bm JOIN projeto ON bm.projeto_id=projeto.id JOIN projeto_executante ON projeto_executante.projeto_id=projeto.id JOIN executante ON executante.usuario_id=projeto_executante.executante_id JOIN bm_executante ON bm.id=bm_executante.bm_id  WHERE projeto_executante.executante_id='.$executante_id.' AND bm_executante.executante_id='.$executante_id)->queryAll();
+            $exibePagos = '';
+            if(Yii::$app->request->post()['check_extrato']== 'false'){
+              $exibePagos = ' AND bm_executante.data_pgt IS NULL ';
+            }
+
+            $total = Yii::$app->db->createCommand('SELECT bm.id, projeto.nome, bm.numero_bm, projeto.descricao, bm.executado_ee, bm.executado_es, bm.executado_ep, bm.executado_ej, bm.executado_tp, executante.vl_hh_tp, executante.vl_hh_ej, executante.vl_hh_ep, executante.vl_hh_es, executante.vl_hh_ee, bm_executante.data_pgt FROM bm JOIN projeto ON bm.projeto_id=projeto.id JOIN projeto_executante ON projeto_executante.projeto_id=projeto.id JOIN executante ON executante.usuario_id=projeto_executante.executante_id JOIN bm_executante ON bm.id=bm_executante.bm_id  WHERE projeto_executante.executante_id='.$executante_id.' AND bm_executante.executante_id='.$executante_id.' '.$exibePagos)->queryAll();
 
             foreach ($total as $key => $tot) { 
 

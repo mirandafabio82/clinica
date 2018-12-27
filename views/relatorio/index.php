@@ -83,12 +83,13 @@ $this->registerJs('
   
 
   $("#filtrar-extrato").click(function(ev){
+    var check_extrato = $("#pg_checkbox").is(":checked");
     var executante_id = $("#executante-extrato-id").val();
     var tabela = $("#tabela_extrato");
     console.log(executante_id);
     $.ajax({ 
         url: "index.php?r=relatorio/tabelaextrato",
-        data: {executante_id: executante_id},
+        data: {executante_id: executante_id, check_extrato: check_extrato},
         type: "POST",
         success: function(response){
           var obj = JSON.parse(response);
@@ -217,13 +218,19 @@ $this->registerJs('
                     '.$prestadores.'
                   </select>
                 </div>
+                
                 <div class="col-md-1">
                   <button type="button" class="btn btn-primary" id="filtrar-extrato">Filtrar</button>
                 </div>
                 <div class="col-md-1">
                   <button type="button" class="btn btn-primary" id="relatorio-extrato-btn" target="_blank"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Relatório</button>
                 </div>
-              </div>  
+              </div>
+               <div class="row">
+                  <div class="col-md-2">
+                  <input type="checkbox" name="pg_checkbox" id="pg_checkbox" checked> Exibir Pagos
+                </div>
+               </div> 
               </form>
             </div>
             <div style="margin-top: 1em">
