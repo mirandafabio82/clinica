@@ -81,10 +81,10 @@ th, td {
 	</tr>
 	<?php if(!empty($escopos['executado_ee']) && $bm['executado_ee']!=0){ ?>
 	<tr>
-		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  >0<?= $item ?></td>
+		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: center;"  >0<?= $item ?></td>
 		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;"  >Mão de Obra (EE-AUT)</td>
 		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: center;"  >Hh</td>
-		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: right;"  ><?= str_replace('.',',',sprintf("%.1f",$escopos['h_ee'])) ?></td>
+		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: right;"  ><?= str_replace('.',',',sprintf("%.1f",$bm['executado_ee'])) ?></td>
 		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: right;"  ><?= str_replace('.',',',sprintf("%.2f",$tipo_exec[4]['valor_hora'])) ?></td>
 		<td style="margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: right;"  ><?= number_format($bm['executado_ee'] * $tipo_exec[4]['valor_hora'], 2, ',', '.') ?></td>
 	</tr>	
