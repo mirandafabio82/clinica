@@ -393,6 +393,9 @@ class TarefaController extends Controller
 
             $projeto_id = Yii::$app->db->createCommand('SELECT projeto_id FROM escopo WHERE id='.Yii::$app->request->post()['id'])->queryScalar();
 
+            //valor total da atividade por especialidade
+            $valor_escopo_total_especialidade = Yii::$app->db->createCommand('SELECT horas_'.explode('_', Yii::$app->request->post()['tipo'])[1].' FROM escopo WHERE id='.Yii::$app->request->post()['id'])->queryScalar();
+
             $projeto_nome = Yii::$app->db->createCommand('SELECT nome FROM projeto WHERE id='.$projeto_id)->queryScalar();
 
             //atualiza status geral
@@ -431,8 +434,11 @@ class TarefaController extends Controller
             if($bm_value==null) $bm_value = 0;
             if($tipo_bm_value==null) $tipo_bm_value = 0;
 
-            if(Yii::$app->request->post()['value']!='null'){
-                Yii::$app->db->createCommand('UPDATE escopo SET '.Yii::$app->request->post()['tipo'].'='.$tipo_value.'+'.Yii::$app->request->post()['value'].', horas_bm = '.$bm_value.' +'.Yii::$app->request->post()['value'].', '.$tipo_bm.' = '.$tipo_bm_value.'+ '.Yii::$app->request->post()['value'].', horas_saldo=horas_saldo-'.Yii::$app->request->post()['value'].' WHERE id='.Yii::$app->request->post()['id'])->execute(); 
+            if(Yii::$app->request->post()['value']!='null'){              
+
+                if($valor_escopo_total_especialidade > ($tipo_value + intval(Yii::$app->request->post()['value']))){
+                    Yii::$app->db->createCommand('UPDATE escopo SET '.Yii::$app->request->post()['tipo'].'='.$tipo_value.'+'.Yii::$app->request->post()['value'].', horas_bm = '.$bm_value.' +'.Yii::$app->request->post()['value'].', '.$tipo_bm.' = '.$tipo_bm_value.'+ '.Yii::$app->request->post()['value'].', horas_saldo=horas_saldo-'.Yii::$app->request->post()['value'].' WHERE id='.Yii::$app->request->post()['id'])->execute(); 
+                }
             }
 
             //atualiza coordenação e administração
@@ -440,8 +446,11 @@ class TarefaController extends Controller
             $totalhoras_bm_atual = Yii::$app->db->createCommand('SELECT SUM(horas_bm) FROM escopo WHERE projeto_id='.$projeto_id)->queryScalar();
             $totalhoras_bm_atual = round($totalhoras_bm_atual * 0.15);
 
-            if(!empty($coord_adm))     
-                Yii::$app->db->createCommand('UPDATE escopo SET horas_es_bm = horas_acumulada + '.$totalhoras_bm_atual.',executado_es = horas_acumulada + '.$totalhoras_bm_atual.', horas_bm = '.$totalhoras_bm_atual.' WHERE id='.$coord_adm)->execute();
+            if(!empty($coord_adm)){     
+                if($valor_escopo_total_especialidade > ($tipo_value + intval(Yii::$app->request->post()['value']))){
+                    Yii::$app->db->createCommand('UPDATE escopo SET horas_es_bm = horas_acumulada + '.$totalhoras_bm_atual.',executado_es = horas_acumulada + '.$totalhoras_bm_atual.', horas_bm = '.$totalhoras_bm_atual.' WHERE id='.$coord_adm)->execute();
+                }   
+            }
 
             if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['executante']) && Yii::$app->request->post()['ultimo'] == 1){
                 $user_nome = Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.Yii::$app->user->getId())->queryScalar();
@@ -455,7 +464,7 @@ class TarefaController extends Controller
                 }
             }
 
-            echo 'success';
+            echo $valor_escopo_total_especialidade;
            return $this->redirect(['tarefa/index', 'projeto_id' => $projeto_id, 'executante_id' => $executante]);
         }
     }

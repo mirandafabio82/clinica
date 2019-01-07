@@ -235,8 +235,8 @@ $this->registerJs('
                console.log(response);
                
              },
-             error: function(){
-              console.log("failure");
+             error: function(xhr, ajaxOptions, thrownError){
+              console.log(xhr.responseText);
             }
           });
         });
