@@ -45,14 +45,26 @@ class RelatorioController extends Controller
        $projetos = Yii::$app->db->createCommand('SELECT * FROM projeto')->queryAll();
        $listProjetos = ArrayHelper::map($projetos,'id','nome');
 
+       $proj_autocomplete = '';
+            foreach ($projetos as $key => $pr) {  
+                $proj_autocomplete .= '"'.$pr['nome'].'", ';
+        } 
+
        $contato = Yii::$app->db->createCommand('SELECT * FROM contato JOIN user ON user.id = contato.usuario_id')->queryAll();
        $listContatos = ArrayHelper::map($contato,'id','nome');
+
+       $cont_autocomplete = '';
+            foreach ($contato as $key => $cont) {  
+                $cont_autocomplete .= '"'.$cont['nome'].'", ';
+        } 
        
 
         return $this->render('index', [
             'listPrestadores' => $listPrestadores,
             'listProjetos' => $listProjetos,
-            'listContatos' =>$listContatos
+            'listContatos' => $listContatos,
+            'proj_autocomplete' => $proj_autocomplete,
+            'cont_autocomplete' => $cont_autocomplete 
         ]);
     }
 
@@ -189,13 +201,14 @@ class RelatorioController extends Controller
     public function actionRelatoriogeral(){  
 
        
-            if(isset($_POST['contato'])){
-                $contatos = Yii::$app->db->createCommand('SELECT usuario_id FROM contato WHERE usuario_id IN ('.implode(',', $_POST['contato']).') ORDER BY usuario_id DESC')->queryAll();
+            if(isset($_POST['contato']) && !empty($_POST['contato'])){
+                $contatos = Yii::$app->db->createCommand('SELECT id AS usuario_id FROM user WHERE nome = "'.$_POST['contato'].'" ORDER BY id DESC')->queryAll();                
             }
             else{
                 $contatos = Yii::$app->db->createCommand('SELECT usuario_id FROM contato ORDER BY usuario_id DESC')->queryAll();
             }
-            
+
+
             $conts = '';            
             foreach ($contatos as $key => $contato) { 
                 if(sizeof($contatos)-1 == 0){
@@ -253,13 +266,15 @@ class RelatorioController extends Controller
                 $bm_ate = ' AND data < "'.$_POST['bm_ate'].'"';
 
            
-            if(isset($_POST['projeto'])){  
-                $projetos = Yii::$app->db->createCommand('SELECT projeto.id AS projetoID, nome, projeto.descricao, site, projeto.contato, proposta, valor_proposta, projeto.qtd_km, nota_geral FROM projeto JOIN bm ON bm.projeto_id = projeto.id WHERE projeto.id IN ('.implode(',', $_POST['projeto']).') AND contato_id IN ('.$conts.') '.$as_de.' '.$as_ate.' '.$bm_de.' '.$bm_ate.' ORDER BY projeto.id DESC')->queryAll();
+            if(isset($_POST['projeto']) && !empty($_POST['projeto'])){  
+                $projetos = Yii::$app->db->createCommand('SELECT projeto.id AS projetoID, nome, projeto.descricao, site, projeto.contato, proposta, valor_proposta, projeto.qtd_km, nota_geral FROM projeto JOIN bm ON bm.projeto_id = projeto.id WHERE projeto.nome = "'.$_POST['projeto'].'" AND contato_id IN ('.$conts.') '.$as_de.' '.$as_ate.' '.$bm_de.' '.$bm_ate.' ORDER BY projeto.id DESC')->queryAll();
             }
             else{
                 $projetos = Yii::$app->db->createCommand('SELECT projeto.id AS projetoID, nome, projeto.descricao, site, projeto.contato, proposta, valor_proposta, projeto.qtd_km, nota_geral FROM projeto JOIN bm ON bm.projeto_id = projeto.id WHERE contato_id IN ('.$conts.') '.$as_de.' '.$as_ate.' '.$bm_de.' '.$bm_ate.' ORDER BY projeto.id DESC')->queryAll();
             }
             $listProjetos = ArrayHelper::map($projetos,'id','nome');
+
+            
             
             //$this->layout = 'blank';
             return $this->render('_relatoriogeral', [
