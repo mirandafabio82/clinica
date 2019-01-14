@@ -491,6 +491,8 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
 
         }
 
+
+
  
         $clientes = Yii::$app->db->createCommand('SELECT id, CONCAT(nome," - " ,site) as nome FROM cliente')->queryAll();
         $listClientes = ArrayHelper::map($clientes,'id','nome');
@@ -544,7 +546,11 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
         $caId_1=0;$caId_2=0;$caId_3=0;
         $tot_1=0;$tot_2=0;$tot_3=0;
          //atualizando os valores de hora e executante do escopo
-        if(isset($_POST['Escopo'])){
+        if(isset($_POST['Escopo'])){            
+            //se editavel nao for 1, nao permitir edição
+            if($model->editavel==0 && $_POST['Projeto']['editavel']==0){
+               return $this->redirect(['update', 'id' => $model->id]); 
+            }
 
             $totalHoras = 0;
             $valorProposta = 0;
@@ -645,7 +651,11 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                
             }
             //salva resumo e outras abas
-            if(isset($_POST['Projeto'])){
+            if(isset($_POST['Projeto'])){                
+                //se editavel nao for 1, nao permitir edição
+                if($model->editavel==0 && $_POST['Projeto']['editavel']==0){
+                   return $this->redirect(['update', 'id' => $model->id]); 
+                }
 
                 //atualiza status geral
                 if($model->as_aprovada==0 && $_POST['Projeto']['as_aprovada']==1){                  

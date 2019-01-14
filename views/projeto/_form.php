@@ -101,6 +101,8 @@ input[type=number]::-webkit-outer-spin-button {
 
 <?php 
 
+$cargo = Yii::$app->db->createCommand('SELECT cargo FROM executante WHERE usuario_id='.Yii::$app->user->id)->queryScalar();
+
 $scroll='';
 if(!$model->isNewRecord){
   $scroll = 'window.scrollTo(0, 600);';
@@ -185,6 +187,7 @@ $this->registerJs('
     $("#remetente").addClass("form-control");
     $("#assunto").addClass("form-control");
     $("#projeto-as_aprovada").removeClass("form-control");
+    $("#projeto-editavel").removeClass("form-control");
     $(".np_autocomplete").addClass("form-control");
     $(".revisao").addClass("form-control");
 
@@ -1534,6 +1537,15 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
           </div>
           <div class="col-md-2">
              <?= $form->field($model, 'as_aprovada')->checkbox(); ?>
+          </div>
+          <?php 
+              $edital_show = 'hidden';
+              if(!$model->isNewRecord && ($cargo==2 || isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin']))){
+                $edital_show = '';
+              }
+           ?>
+          <div class="col-md-2"<?= $edital_show ?> >
+             <?= $form->field($model, 'editavel')->checkbox(); ?>
           </div>
       </div>
          

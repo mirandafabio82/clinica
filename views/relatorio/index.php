@@ -185,7 +185,7 @@ $this->registerJs('
      }
 
       $form = ActiveForm::begin(); 
-     $rel_geral_content = '<form action="/hcn/web/index.php?r=relatorio%2Frelatoriogeral" method="post" id="form-relgeral">
+     $rel_geral_content = '<form action="/web/index.php?r=relatorio%2Frelatoriogeral" method="post" id="form-relgeral">
                           <div class="row">
                             <div class="autocomplete col-md-3" style="width:300px;padding: 0; margin-left:1em" id="autocomplete_div_0">
                               <label>Projeto</label>
