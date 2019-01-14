@@ -1421,7 +1421,7 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
             $nomeArquivo =  Yii::$app->request->post()['nomeArquivo'];
             $projeto_id = Yii::$app->request->post()['projeto_id'];
 
-            Yii::$app->db->createCommand('UPDATE projeto SET status=5 WHERE id = '.$projeto_id)->execute();
+            Yii::$app->db->createCommand('UPDATE projeto SET status=5, editavel=0 WHERE id = '.$projeto_id)->execute();
 
             $remetentesArr = explode(",", $remetentes);
             
