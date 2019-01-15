@@ -1236,7 +1236,11 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
     </div>     -->
     <!-- <br> -->
     
-       <div class="row">    
+    <?php if(!$model->editavel){ ?>
+      <label style="color: red">Este projeto não pode ser editado.</label>
+    <?php } ?>
+
+    <div class="row">    
     <?php 
 
         $existeExecutante = '';
@@ -1250,6 +1254,7 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
         }*/
       ?>     
       
+
       <a style="margin-left: 1em" id="add-executante"> <i class="fa fa-plus-square-o fa-2x"></i></a>
       <div class="row drop-exec" style="margin-bottom: 1em;margin-left: 1em">
       <?php if($model->isNewRecord){ ?>
