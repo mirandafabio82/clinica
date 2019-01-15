@@ -1236,7 +1236,7 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
     </div>     -->
     <!-- <br> -->
     
-    <?php if(!$model->editavel){ ?>
+    <?php if(!$model->editavel && !$model->isNewRecord){ ?>
       <label style="color: red">Este projeto não pode ser editado.</label>
     <?php } ?>
 
