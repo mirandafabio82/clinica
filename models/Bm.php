@@ -71,8 +71,8 @@ class Bm extends \yii\db\ActiveRecord
             'bpm' => 'BPM',
             'frs_data_aprovacao' => 'Data Aprovação',
             'frs_data_faturamento' => 'Data Faturamento',
-            'frs_nome' => 'Nome',
-            'frs_numero' => 'Numero',
+            'frs_nome' => 'Arquivo FRS',
+            'frs_numero' => 'FRS',
         ];
     }
 

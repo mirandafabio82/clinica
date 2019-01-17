@@ -86,6 +86,16 @@ else{
     escopo_modal_id = "";
     $(".edit-horas").click(function(){
       escopo_modal_id = this.id.split("_")[1];
+      $(".modal_horas_tp").attr("hidden", "hidden");
+      $(".modal_horas_ej").attr("hidden", "hidden");
+      $(".modal_horas_ep").attr("hidden", "hidden");
+      $(".modal_horas_es").attr("hidden", "hidden");
+      $(".modal_horas_ee").attr("hidden", "hidden");
+      $(".modal_bm_tp").attr("hidden", "hidden");
+      $(".modal_bm_ej").attr("hidden", "hidden");
+      $(".modal_bm_ep").attr("hidden", "hidden");
+      $(".modal_bm_es").attr("hidden", "hidden");
+      $(".modal_bm_ee").attr("hidden", "hidden");
 
       $.ajax({ 
             url: "index.php?r=tarefa/checkhoras",
