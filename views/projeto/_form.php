@@ -187,7 +187,7 @@ $this->registerJs('
     $("#remetente").addClass("form-control");
     $("#assunto").addClass("form-control");
     $("#projeto-as_aprovada").removeClass("form-control");
-    $("#projeto-editavel").removeClass("form-control");
+    $("#projeto-nao_editavel").removeClass("form-control");
     $(".np_autocomplete").addClass("form-control");
     $(".revisao").addClass("form-control");
 
@@ -1236,7 +1236,7 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
     </div>     -->
     <!-- <br> -->
     
-    <?php if(!$model->editavel && !$model->isNewRecord){ ?>
+    <?php if($model->nao_editavel && !$model->isNewRecord){ ?>
       <label style="color: red">Este projeto não pode ser editado.</label>
     <?php } ?>
 
@@ -1550,7 +1550,7 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
               }
            ?>
           <div class="col-md-2"<?= $edital_show ?> >
-             <?= $form->field($model, 'editavel')->checkbox(); ?>
+             <?= $form->field($model, 'nao_editavel')->checkbox(); ?>
           </div>
       </div>
          

@@ -547,8 +547,8 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
         $tot_1=0;$tot_2=0;$tot_3=0;
          //atualizando os valores de hora e executante do escopo
         if(isset($_POST['Escopo'])){            
-            //se editavel nao for 1, nao permitir edição
-            if($model->editavel==0 && $_POST['Projeto']['editavel']==0){
+            //se nao_editavel nao for 1, nao permitir edição
+            if($model->nao_editavel==1 && $_POST['Projeto']['nao_editavel']==1){
                return $this->redirect(['update', 'id' => $model->id]); 
             }
 
@@ -652,8 +652,8 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
             }
             //salva resumo e outras abas
             if(isset($_POST['Projeto'])){                
-                //se editavel nao for 1, nao permitir edição
-                if($model->editavel==0 && $_POST['Projeto']['editavel']==0){
+                //se nao_editavel nao for 1, nao permitir edição
+                if($model->nao_editavel==1 && $_POST['Projeto']['nao_editavel']==1){
                    return $this->redirect(['update', 'id' => $model->id]); 
                 }
 
@@ -1421,7 +1421,7 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
             $nomeArquivo =  Yii::$app->request->post()['nomeArquivo'];
             $projeto_id = Yii::$app->request->post()['projeto_id'];
 
-            Yii::$app->db->createCommand('UPDATE projeto SET status=5, editavel=0 WHERE id = '.$projeto_id)->execute();
+            Yii::$app->db->createCommand('UPDATE projeto SET status=5, nao_editavel=1 WHERE id = '.$projeto_id)->execute();
 
             $remetentesArr = explode(",", $remetentes);
             
