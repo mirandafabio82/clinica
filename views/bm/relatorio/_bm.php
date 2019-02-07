@@ -75,7 +75,7 @@ th, td {
 		<td style="background-color: #d3d3d3;margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: center;font-weight: bold"  >Item </td>
 		<td style="background-color: #d3d3d3;margin-top: 0.5em;font-size: 10pt;font-family: arial;font-weight: bold"  >Descrição</td>
 		<td style="background-color: #d3d3d3;margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: center;font-weight: bold"  >Un</td>
-		<td style="background-color: #d3d3d3;margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: center;font-weight: bold"  >Quantidade</td>
+		<td style="background-color: #d3d3d3;margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: center;font-weight: bold"  >Horas BM</td>
 		<td style="background-color: #d3d3d3;margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: center;font-weight: bold"  >Valor Unitário</td>
 		<td style="background-color: #d3d3d3;margin-top: 0.5em;font-size: 10pt;font-family: arial;text-align: center;font-weight: bold"  >Total</td>
 	</tr>
