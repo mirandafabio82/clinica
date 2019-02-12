@@ -75,6 +75,11 @@ class Escopo extends \yii\db\ActiveRecord
             'exe_ee_id' => 'Eng. Especialista',
             'for' => 'FOR.',
             'status' => 'status',
+            'adiantadas_tp' => 'TP',
+            'adiantadas_ej' => 'EJ',
+            'adiantadas_ep' => 'EP',
+            'adiantadas_es' => 'ES',
+            'adiantadas_ee' => 'EE',
         ];
     }
 

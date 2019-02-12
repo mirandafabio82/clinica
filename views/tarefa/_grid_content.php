@@ -242,7 +242,10 @@ $this->registerJs("
          <td style=" text-align: center;font-size: 15px; padding-right: 0.5em;color: #000"><?= $escopoModel['horas_saldo'] ?>  </td>
          <td style="font-size: 15px; padding-right: 1em;text-align: center; ">
         <div class="row"> 
-          <?php if(($escopo['exe_tp_id']==$executante_id || isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])) && !empty($escopoModel['horas_tp'])){ 
+          <?php 
+          $esc_tp=0;$esc_ej=0;$esc_ep=0;$esc_es=0;$esc_ee=0;
+
+          if(($escopo['exe_tp_id']==$executante_id || isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])) && !empty($escopoModel['horas_tp'])){ 
               $esc_tp = empty($escopoModel['adiantadas_tp']) ? 0 : explode('.',$escopoModel['adiantadas_tp'])[0];
             ?>
               <div class="col-md-5"> 
@@ -283,7 +286,7 @@ $this->registerJs("
               <?php } ?>  
             </div>
         </td>
-         <td style=" text-align: center;font-size: 15px; padding-right: 0.5em;color: #000">TOTAL  </td>      
+         <td style=" text-align: center;font-size: 15px; padding-right: 0.5em;color: #000"><?= $esc_tp + $esc_ej + $esc_ep + $esc_es +$esc_ee?>  </td>      
       </tr>
 
       

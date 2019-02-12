@@ -217,16 +217,14 @@ class TarefaController extends Controller
         return $this->redirect(['index']);
     }
 
-    public function actionGerarbm($projetoid, $km_consumida)
+    public function actionGerarbm($projetoid, $km_consumida, $horas_adiantadas)
     {
         $projetoModel = Projeto::findIdentity($projetoid);
-
-       
 
         //atualiza status geral
         Yii::$app->db->createCommand('UPDATE projeto SET status_geral=5 WHERE id='.$projetoid)->execute(); 
         
-        $executadas = Yii::$app->db->createCommand('SELECT SUM(horas_ee_bm) ee_bm, SUM(horas_es_bm) es_bm,SUM(horas_ep_bm) ep_bm,SUM(horas_ej_bm) ej_bm,SUM(horas_tp_bm) tp_bm, SUM(horas_acumulada) h_acu, SUM(horas_saldo) h_saldo FROM escopo WHERE projeto_id='.$projetoid)->queryOne();
+        $executadas = Yii::$app->db->createCommand('SELECT SUM(horas_ee_bm) ee_bm, SUM(horas_es_bm) es_bm,SUM(horas_ep_bm) ep_bm,SUM(horas_ej_bm) ej_bm,SUM(horas_tp_bm) tp_bm, SUM(horas_acumulada) h_acu, SUM(horas_saldo) h_saldo, SUM(adiantadas_tp) adiantadas_tp, SUM(adiantadas_ej) adiantadas_ej, SUM(adiantadas_ep) adiantadas_ep, SUM(adiantadas_es) adiantadas_es, SUM(adiantadas_ee) adiantadas_ee FROM escopo WHERE projeto_id='.$projetoid)->queryOne();
         
         $ultBM = Yii::$app->db->createCommand('SELECT ultimo_bm FROM config')->queryScalar();
         $ultBM = $ultBM+1;
@@ -246,7 +244,32 @@ class TarefaController extends Controller
         $horasAS = Yii::$app->db->createCommand('SELECT SUM(horas_ee) h_ee, SUM(horas_es) h_es, SUM(horas_ep) h_ep, SUM(horas_ej) h_ej, SUM(horas_tp) h_tp FROM escopo WHERE projeto_id='.$projetoid)->queryOne();
 
         $totalHoras = $horasAS['h_ee']+$horasAS['h_es']+$horasAS['h_ep']+$horasAS['h_ej']+$horasAS['h_tp'];
-       
+
+        //horas adiantadas
+        $adiantadasArr = explode(';', $horas_adiantadas);
+
+        $adiantadas_ee_valor = 0;
+        $adiantadas_es_valor = 0;
+        $adiantadas_ep_valor = 0;
+        $adiantadas_ej_valor = 0;
+        $adiantadas_tp_valor = 0;
+
+        foreach ($adiantadasArr as $key => $adiantada) {
+            if(empty($adiantada)) continue;
+            
+            $tipo = explode('-', $adiantada)[0];
+            $id = explode('-', $adiantada)[1];
+            $valor = explode('-', $adiantada)[2];
+
+            if($tipo=="adiantadas_ee") $adiantadas_ee_valor = $valor;
+            if($tipo=="adiantadas_es") $adiantadas_es_valor = $valor;
+            if($tipo=="adiantadas_ep") $adiantadas_ep_valor = $valor;
+            if($tipo=="adiantadas_ej") $adiantadas_ej_valor = $valor;
+            if($tipo=="adiantadas_tp") $adiantadas_tp_valor = $valor;
+
+            $total_atual = Yii::$app->db->createCommand('SELECT '.$tipo.' FROM escopo WHERE id='.$id)->queryScalar();
+            Yii::$app->db->createCommand('UPDATE escopo SET '.$tipo.'='.($total_atual+$valor).' WHERE id='.$id)->execute();
+        }       
 
         
         //$percAcumulada = sprintf("%.2f",(($acu_saldo['horas_acu']+$executadas['ee_bm']+$executadas['es_bm']+$executadas['ep_bm']+$executadas['ej_bm']+$executadas['tp_bm']) * 100) / $totalHoras);
@@ -261,11 +284,11 @@ class TarefaController extends Controller
         $bmModel->cnpj = "10.486.000/0002-88";
         $bmModel->data = Date('Y-m-d');
         $bmModel->contato = "HÉLDER CÂMARA DO NASCIMENTO";
-        $bmModel->executado_ee = $executadas['ee_bm']==0 ? null : $executadas['ee_bm'];
-        $bmModel->executado_es = $executadas['es_bm']==0 ? null : $executadas['es_bm'];
-        $bmModel->executado_ep = $executadas['ep_bm']==0 ? null : $executadas['ep_bm'];
-        $bmModel->executado_ej = $executadas['ej_bm']==0 ? null : $executadas['ej_bm'];
-        $bmModel->executado_tp = $executadas['tp_bm']==0 ? null : $executadas['tp_bm'];
+        $bmModel->executado_ee = ($executadas['ee_bm'] + $adiantadas_ee_valor)==0 ? null : ($executadas['ee_bm'] + $adiantadas_ee_valor);
+        $bmModel->executado_es = ($executadas['es_bm'] + $adiantadas_es_valor)==0 ? null : ($executadas['es_bm'] + $adiantadas_es_valor);
+        $bmModel->executado_ep = ($executadas['ep_bm'] + $adiantadas_ep_valor)==0 ? null : ($executadas['ep_bm'] + $adiantadas_ep_valor);
+        $bmModel->executado_ej = ($executadas['ej_bm'] + $adiantadas_ej_valor)==0 ? null : ($executadas['ej_bm'] + $adiantadas_ej_valor);
+        $bmModel->executado_tp = ($executadas['tp_bm'] + $adiantadas_tp_valor)==0 ? null : ($executadas['tp_bm'] + $adiantadas_tp_valor);
         $bmModel->km = $km_consumida;
         $bmModel->acumulado = $acu_saldo['horas_acu']+$executadas['ee_bm']+$executadas['es_bm']+$executadas['ep_bm']+$executadas['ej_bm']+$executadas['tp_bm'];
         $bmModel->saldo = $acu_saldo['h_saldo'];

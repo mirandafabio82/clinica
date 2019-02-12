@@ -305,9 +305,33 @@ $this->registerJs('
     });
 
     $("#bm_teste").click(function(){
+      var horas_adiantadas = "";
+      
       var km_consumida = $("#km_consumida").val();
+      
       if(km_consumida=="") km_consumida = 0;
-      window.location.href = "index.php?r=tarefa/gerarbm&projetoid='.$projeto_selected.'&km_consumida= "+km_consumida;
+
+      //adiciona as horas adiantadas
+      $( ".adiantada" ).each(function( index ) {
+          var ultimo = 0;
+          if(index == $( ".adiantada" ).length - 1){
+            ultimo = 1;
+          }
+          
+          divisor = this.name.split("[")[1];
+
+          id = divisor.split("]")[0];
+
+          tipo = this.name.split("[")[2].split("]")[0];
+          
+          valor = this.value;
+          if(this.value=="") valor = "null";
+        
+          horas_adiantadas = horas_adiantadas + tipo + "-" + id + "-" + valor + ";"; 
+
+        });
+        
+        window.location.href = "index.php?r=tarefa/gerarbm&projetoid='.$projeto_selected.'&km_consumida= "+km_consumida+"&horas_adiantadas="+horas_adiantadas;
     });
 
   ');
