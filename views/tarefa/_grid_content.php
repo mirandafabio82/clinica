@@ -114,6 +114,24 @@ $this->registerJs("
         $('#total-executada')[0].innerText = total_executada; 
 
     });
+
+    $('.adiantada').change(function (e) {
+        
+        id = this.name.split('[')[1];
+        id = id.split(']')[0];
+        var total_adiantada = 0;
+        $('.adiantada').each(function(){
+          tempVal = parseInt(this.value);
+          if(this.value==''){
+            tempVal = 0;
+          }
+
+          total_adiantada = total_adiantada + tempVal;
+        });
+        
+        $('#total-adiantada')[0].innerText = total_adiantada; 
+
+    });
 ");
 
 ?>
@@ -143,11 +161,11 @@ $this->registerJs("
         </tr>
         <tr>                            
           <!-- <th style="width:1em;padding-right: 1em;text-align: center;">AS</th> -->
-          <th style="width:50em;padding-right: 1em;text-align: center;">Executada</th>
+          <th style="width:80em;padding-right: 1em;text-align: center;">Executada</th>
           <th style="width:50em;padding-right: 1em;text-align: center;">BM</th>
           <th style="width:30em;text-align: center;">Acumulada</th>
           <th style="width:30em;text-align: center;">Saldo</th>
-          <th style="width:50em;text-align: center;">Horas Adiantadas</th>
+          <th style="width:80em;text-align: center;">Horas Adiantadas</th>
           <th style="width:30em;text-align: center;">Total Adiantada</th>
         </tr>
       </thead>
@@ -225,42 +243,42 @@ $this->registerJs("
          <td style="font-size: 15px; padding-right: 1em;text-align: center; ">
         <div class="row"> 
           <?php if(($escopo['exe_tp_id']==$executante_id || isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])) && !empty($escopoModel['horas_tp'])){ 
-              $esc_tp = empty($escopoModel['executado_tp']) ? 0 : explode('.',$escopoModel['executado_tp'])[0];
+              $esc_tp = empty($escopoModel['adiantadas_tp']) ? 0 : explode('.',$escopoModel['adiantadas_tp'])[0];
             ?>
               <div class="col-md-5"> 
-                <?= $form->field($escopoModel, 'executado_tp')->textInput(['maxlength' => true, 'readonly'=>$editable, 'name'=>'Escopo['.$escopo['id'].'][executado_tp]', 'class' =>'form-control executado', 'value'=> '' ])->label('TP:'.$esc_tp.'/'.$escopoModel['horas_tp'].'; BM:'.$escopo['horas_tp_bm'].'; '.explode(" ", Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.$escopo['exe_tp_id'])->queryScalar())[0]) ?>
+                <?= $form->field($escopoModel, 'adiantadas_tp')->textInput(['maxlength' => true, 'readonly'=>$editable, 'name'=>'Escopo['.$escopo['id'].'][adiantadas_tp]', 'class' =>'form-control adiantada', 'value'=> '' ]) ?>
               </div>
               <?php } ?>  
 
             <?php if(($escopo['exe_ej_id']==$executante_id || isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])) && !empty($escopoModel['horas_ej'])){ 
-              $esc_ej = empty($escopoModel['executado_ej']) ? 0 : explode('.',$escopoModel['executado_ej'])[0];
+              $esc_ej = empty($escopoModel['adiantadas_ej']) ? 0 : explode('.',$escopoModel['adiantadas_ej'])[0];
               ?>
               <div class="col-md-5"> 
-                <?= $form->field($escopoModel, 'executado_ej')->textInput(['maxlength' => true, 'readonly'=>$editable, 'name'=>'Escopo['.$escopo['id'].'][executado_ej]', 'class' =>'form-control executado', 'value'=> '' ])->label('EJ:'.$esc_ej.'/'.$escopoModel['horas_ej'].'; BM:'.$escopo['horas_ej_bm'].'; '.explode(" ", Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.$escopo['exe_ej_id'])->queryScalar())[0]) ?>
+                <?= $form->field($escopoModel, 'adiantadas_ej')->textInput(['maxlength' => true, 'readonly'=>$editable, 'name'=>'Escopo['.$escopo['id'].'][adiantadas_ej]', 'class' =>'form-control adiantada', 'value'=> '' ]) ?>
               </div>
               <?php } ?>  
 
             <?php if(($escopo['exe_ep_id']==$executante_id || isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])) && !empty($escopoModel['horas_ep'])){ 
-              $esc_ep = empty($escopoModel['executado_ep']) ? 0 : explode('.',$escopoModel['executado_ep'])[0];
+              $esc_ep = empty($escopoModel['adiantadas_ep']) ? 0 : explode('.',$escopoModel['adiantadas_ep'])[0];
               ?>
               <div class="col-md-5"> 
-              <?= $form->field($escopoModel, 'executado_ep')->textInput(['maxlength' => true, 'readonly'=>$editable, 'name'=>'Escopo['.$escopo['id'].'][executado_ep]', 'class' =>'form-control executado', 'value'=> '' ])->label('EP:'.$esc_ep.'/'.$escopoModel['horas_ep'].'; BM:'.$escopo['horas_ep_bm'].'; '.explode(" ", Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.$escopo['exe_ep_id'])->queryScalar())[0]) ?>
+              <?= $form->field($escopoModel, 'adiantadas_ep')->textInput(['maxlength' => true, 'readonly'=>$editable, 'name'=>'Escopo['.$escopo['id'].'][adiantadas_ep]', 'class' =>'form-control adiantada', 'value'=> '' ]) ?>
               </div>
               <?php } ?>  
 
             <?php if(($escopo['exe_es_id']==$executante_id || isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])) && !empty($escopoModel['horas_es'])){ 
-              $esc_es = empty($escopoModel['executado_es']) ? 0 : explode('.',$escopoModel['executado_es'])[0];
+              $esc_es = empty($escopoModel['adiantadas_es']) ? 0 : explode('.',$escopoModel['adiantadas_es'])[0];
               ?>
               <div class="col-md-5"> 
-              <?= $form->field($escopoModel, 'executado_es')->textInput(['maxlength' => true, 'readonly'=>$editable, 'name'=>'Escopo['.$escopo['id'].'][executado_es]', 'class' =>'form-control executado', 'value'=> '' ])->label('ES:'.$esc_es.'/'.$escopoModel['horas_es'].'; BM:'.$escopo['horas_es_bm'].'; '.explode(" ", Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.$escopo['exe_es_id'])->queryScalar())[0]) ?>
+              <?= $form->field($escopoModel, 'adiantadas_es')->textInput(['maxlength' => true, 'readonly'=>$editable, 'name'=>'Escopo['.$escopo['id'].'][adiantadas_es]', 'class' =>'form-control adiantada', 'value'=> '' ]) ?>
               </div>
               <?php } ?>  
 
             <?php if(($escopo['exe_ee_id']==$executante_id || isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])) && !empty($escopoModel['horas_ee'])){ 
-              $esc_ee = empty($escopoModel['executado_ee']) ? 0 : explode('.',$escopoModel['executado_ee'])[0];
+              $esc_ee = empty($escopoModel['adiantadas_ee']) ? 0 : explode('.',$escopoModel['adiantadas_ee'])[0];
               ?>
               <div class="col-md-5"> 
-              <?= $form->field($escopoModel, 'executado_ee')->textInput(['maxlength' => true, 'readonly'=>$editable, 'name'=>'Escopo['.$escopo['id'].'][executado_ee]', 'class' =>'form-control executado', 'value'=> '' ])->label('EE:'.$esc_ee.'/'.$escopoModel['horas_ee'].'; BM:'.$escopo['horas_ee_bm'].'; '.explode(" ", Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.$escopo['exe_ee_id'])->queryScalar())[0]) ?>
+              <?= $form->field($escopoModel, 'adiantadas_ee')->textInput(['maxlength' => true, 'readonly'=>$editable, 'name'=>'Escopo['.$escopo['id'].'][adiantadas_ee]', 'class' =>'form-control adiantada', 'value'=> '' ]) ?>
               </div>
               <?php } ?>  
             </div>
@@ -284,7 +302,7 @@ $this->registerJs("
          <td style=" text-align: center;font-size: 15px; padding-right: 0.5em;color: #000" id="total-bm"> <?= $totalBm ?></td> 
          <td style=" text-align: center;font-size: 15px; padding-right: 0.5em;color: #000" id="total-acumulada"> <?= $totalAcumulada ?> </td> 
          <td style=" text-align: center;font-size: 15px; padding-right: 0.5em;color: #000" id="total-saldo"> <?= $totalSaldo ?> </td>  
-         <td style=" text-align: center;font-size: 15px; padding-right: 0.5em;color: #000" id="total-saldo"> TOTAL </td>  
+         <td style=" text-align: center;font-size: 15px; padding-right: 0.5em;color: #000" id="total-adiantada"> 0.00 </td>  
          <td style=" text-align: center;font-size: 15px; padding-right: 0.5em;color: #000" id="total-saldo"> TOTAL </td>      
       </tr>
 </table>

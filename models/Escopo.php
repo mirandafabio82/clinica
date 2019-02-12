@@ -39,7 +39,8 @@ class Escopo extends \yii\db\ActiveRecord
             [['criado', 'modificado'], 'safe'],
             [['nome', 'for'], 'string', 'max' => 255],
             [['descricao'], 'string', 'max' => 160],
-            [['horas_acumulada', 'horas_bm', 'horas_saldo','horas_tp_bm', 'horas_ej_bm', 'horas_ep_bm', 'horas_es_bm', 'horas_ee_bm', 'executado', 'executado_tp','executado_ej','executado_ep','executado_es','executado_ee'], 'number'],
+            [['horas_acumulada', 'horas_bm', 'horas_saldo','horas_tp_bm', 'horas_ej_bm', 'horas_ep_bm', 'horas_es_bm', 'horas_ee_bm', 'executado', 'executado_tp','executado_ej','executado_ep','executado_es','executado_ee', 
+            'adiantadas_tp','adiantadas_ej','adiantadas_ep','adiantadas_es','adiantadas_ee'], 'number'],
         ];
     }
 
