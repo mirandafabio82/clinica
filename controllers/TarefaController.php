@@ -342,6 +342,7 @@ class TarefaController extends Controller
             $bmescopo->horas_ep = $escopo["horas_ep_bm"];
             $bmescopo->horas_es = $escopo["horas_es_bm"];
             $bmescopo->horas_ee = $escopo["horas_ee_bm"];
+            
             $bmescopo->save();
 
             Yii::$app->db->createCommand('UPDATE escopo SET horas_acumulada = '.$acumulada.', horas_saldo = '.$saldo.', horas_bm=0, horas_tp_bm=0.00 , horas_ej_bm=0.00 , horas_ep_bm=0.00 , horas_es_bm=0.00 , horas_ee_bm=0.00 WHERE id='.$escopo["id"])->execute();

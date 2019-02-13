@@ -327,8 +327,9 @@ $this->registerJs('
           valor = this.value;
           if(this.value=="") valor = "null";
         
-          horas_adiantadas = horas_adiantadas + tipo + "-" + id + "-" + valor + ";"; 
-
+          if(valor!="null"){
+            horas_adiantadas = horas_adiantadas + tipo + "-" + id + "-" + valor + ";"; 
+          }
         });
         
         window.location.href = "index.php?r=tarefa/gerarbm&projetoid='.$projeto_selected.'&km_consumida= "+km_consumida+"&horas_adiantadas="+horas_adiantadas;
