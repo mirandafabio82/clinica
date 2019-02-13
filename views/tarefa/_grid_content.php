@@ -144,6 +144,7 @@ $this->registerJs("
     $totalBm = 0;
     $totalAcumulada = 0;
     $totalSaldo = 0;
+    $totalAdiantada = 0;
 ?>
 <div id="pjax-status">
 
@@ -294,6 +295,7 @@ $this->registerJs("
           $totalBm = $totalBm + $escopoModel['horas_bm'];
           $totalAcumulada = $totalAcumulada + $escopoModel['horas_acumulada'];
           $totalSaldo = $totalSaldo + $escopoModel['horas_saldo'];
+          $totalAdiantada = $totalAdiantada + $escopoModel['adiantadas_tp'] + $escopoModel['adiantadas_ej'] + $escopoModel['adiantadas_ep']+ $escopoModel['adiantadas_es'] + $escopoModel['adiantadas_ee'];
 
       } } ?>
       <!-- row de total -->
@@ -306,7 +308,7 @@ $this->registerJs("
          <td style=" text-align: center;font-size: 15px; padding-right: 0.5em;color: #000" id="total-acumulada"> <?= $totalAcumulada ?> </td> 
          <td style=" text-align: center;font-size: 15px; padding-right: 0.5em;color: #000" id="total-saldo"> <?= $totalSaldo ?> </td>  
          <td style=" text-align: center;font-size: 15px; padding-right: 0.5em;color: #000" id="total-adiantada"> 0.00 </td>  
-         <td style=" text-align: center;font-size: 15px; padding-right: 0.5em;color: #000" id="total-saldo"> TOTAL </td>      
+         <td style=" text-align: center;font-size: 15px; padding-right: 0.5em;color: #000" id="total-saldo"> <?= $totalAdiantada ?> </td>      
       </tr>
 </table>
       <?php ActiveForm::end(); ?>
