@@ -2414,8 +2414,20 @@ HCN Automação
 
 <?php 
   
+  $atividades_projeto = Yii::$app->db->createCommand('SELECT DISTINCT disciplina_id, escopopadrao_id FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id = atividademodelo.id WHERE projeto_id='.$model->id)->queryAll();
+  
+  $condition_query = "WHERE ";
+
+  foreach ($atividades_projeto as $key => $atv_proj) {
+     $condition_query .= '(disciplina_id = '.$atv_proj['disciplina_id'].' AND escopopadrao_id='.$atv_proj['escopopadrao_id'].')';
+
+     if($key != count($atividades_projeto) - 1)
+       $condition_query .= ' OR ';
+  }
+
+
  $nPrioritarios = '';
- $nao_prioritarios_array = Yii::$app->db->createCommand('SELECT * FROM atividademodelo')->queryAll();
+ $nao_prioritarios_array = Yii::$app->db->createCommand('SELECT * FROM atividademodelo '.$condition_query)->queryAll();
 
 foreach ($nao_prioritarios_array as $key => $np) {  
     $nPrioritarios .= '"'.$np['nome'].'", ';
