@@ -80,7 +80,33 @@ class TarefaController extends Controller
         $executantes = Yii::$app->db->createCommand('SELECT usuario_id, nome FROM executante JOIN user ON executante.usuario_id = user.id')->queryAll();
         $listExecutantes = ArrayHelper::map($executantes,'usuario_id','nome');
 
-        $projetos = Yii::$app->db->createCommand('SELECT id, nome FROM projeto WHERE as_aprovada=1 ORDER BY id DESC')->queryAll();
+        $projetos = Yii::$app->db->createCommand('SELECT DISTINCT
+            projeto.id, 
+            CONCAT(projeto.nome, " (",(
+            SELECT DISTINCT
+                CASE 
+                    WHEN escopopadrao.id IN (1) THEN "PCO"
+                    WHEN escopopadrao.id IN (2) THEN "PBA"
+                    WHEN escopopadrao.id IN (3, 4) THEN "PDC"
+                    WHEN escopopadrao.id IN (3) THEN "PDE"
+                    WHEN escopopadrao.id IN (4) THEN "CFG"  
+                    WHEN escopopadrao.id IN (5) THEN "SRV"
+                    ELSE ""
+                END
+            
+            FROM escopo
+                INNER JOIN atividademodelo ON atividademodelo.id = escopo.atividademodelo_id
+                INNER JOIN escopopadrao ON escopopadrao.id = atividademodelo.escopopadrao_id
+            WHERE escopo.projeto_id = projeto.id
+            
+             ), ")") AS nome
+            
+        FROM
+            projeto
+        INNER JOIN escopo ON escopo.projeto_id = projeto.ID
+        WHERE
+            as_aprovada = 1
+        ORDER BY id DESC')->queryAll();
         $listProjetos = ArrayHelper::map($projetos,'id','nome');
 
         $executante_id = '';
