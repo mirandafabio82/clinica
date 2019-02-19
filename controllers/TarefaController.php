@@ -80,6 +80,7 @@ class TarefaController extends Controller
         $executantes = Yii::$app->db->createCommand('SELECT usuario_id, nome FROM executante JOIN user ON executante.usuario_id = user.id')->queryAll();
         $listExecutantes = ArrayHelper::map($executantes,'usuario_id','nome');
 
+        // $projetos = Yii::$app->db->createCommand('SELECT id, nome FROM projeto WHERE as_aprovada=1 ORDER BY id DESC')->queryAll();
         $projetos = Yii::$app->db->createCommand('SELECT DISTINCT
             projeto.id, 
             CONCAT(projeto.nome, " (",(
@@ -98,6 +99,7 @@ class TarefaController extends Controller
                 INNER JOIN atividademodelo ON atividademodelo.id = escopo.atividademodelo_id
                 INNER JOIN escopopadrao ON escopopadrao.id = atividademodelo.escopopadrao_id
             WHERE escopo.projeto_id = projeto.id
+            LIMIT 1
             
              ), ")") AS nome
             
