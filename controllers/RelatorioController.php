@@ -287,5 +287,11 @@ class RelatorioController extends Controller
         
 
     }
+
+    public function actionFluxocaixa(){
+      if (Yii::$app->request->isAjax) {  
+        
+      }
+    }
     
 }

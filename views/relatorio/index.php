@@ -108,6 +108,61 @@ $this->registerJs('
   });
 
   
+  $("#gerar-fluxocaixa").click(function(ev){
+    var check_extrato = $("#pg_checkbox").is(":checked");
+    var executante_id = $("#executante-extrato-id").val();
+    var tabela = $("#tabela_extrato");
+    console.log(executante_id);
+    $.ajax({ 
+        url: "index.php?r=relatorio/fluxocaixa",
+        data: {executante_id: executante_id, check_extrato: check_extrato},
+        type: "POST",
+        success: function(response){
+          var obj = JSON.parse(response);
+          console.log(obj);
+          var i = 0;
+
+          //remove as rows
+          $("#tabela_fluxocaixa").find("tr:gt(1)").remove();
+           var vl_hh_ee = '.Yii::$app->db->createCommand('SELECT valor_pago FROM tipo_executante WHERE id=5')->queryScalar().';
+           var vl_hh_es = '.Yii::$app->db->createCommand('SELECT valor_pago FROM tipo_executante WHERE id=4')->queryScalar().';
+           var vl_hh_ep = '.Yii::$app->db->createCommand('SELECT valor_pago FROM tipo_executante WHERE id=3')->queryScalar().';
+           var vl_hh_ej = '.Yii::$app->db->createCommand('SELECT valor_pago FROM tipo_executante WHERE id=2')->queryScalar().';
+           var vl_hh_tp = '.Yii::$app->db->createCommand('SELECT valor_pago FROM tipo_executante WHERE id=1')->queryScalar().';
+
+          
+          for(i=0; i < (obj.length)/2; i++){
+            var executado_ee =  obj[i+(obj.length)/2].executado_ee;
+            var executado_es =  obj[i+(obj.length)/2].executado_es;
+            var executado_ep =  obj[i+(obj.length)/2].executado_ep;
+            var executado_ej =  obj[i+(obj.length)/2].executado_ej;
+            var executado_tp =  obj[i+(obj.length)/2].executado_tp;
+
+            var row = tabela[0].insertRow(i+2);
+            row.insertCell(0).innerHTML = i+1;
+            row.insertCell(1).innerHTML = obj[i].nome;
+            row.insertCell(2).innerHTML = obj[i].numero_bm;
+            row.insertCell(3).innerHTML = obj[i].descricao;
+            row.insertCell(4).innerHTML = executado_ee;
+            row.insertCell(5).innerHTML = executado_es;
+            row.insertCell(6).innerHTML = executado_ep;
+            row.insertCell(7).innerHTML = executado_ej;
+            row.insertCell(8).innerHTML = executado_tp;
+            row.insertCell(9).innerHTML = formataDinheiro(executado_ee*vl_hh_ee + executado_es*vl_hh_es + executado_ep*vl_hh_ep + executado_ej*vl_hh_ej + executado_tp*vl_hh_tp);
+            row.insertCell(10).innerHTML = "<input type=\"date\" value="+obj[i].data_pgt+" class=\"extrato_date\" id=date_bm_"+obj[i].id+"-exe_"+executante_id+" disabled>";
+            row.insertCell(11).innerHTML = "<input type=\"checkbox\" class=\"extrato_checkbox\" id=bm_"+obj[i].id+"-exe_"+executante_id+"-row_"+(i+2)+" >";
+          }
+
+          $(".extrato_date").change(function(ev){
+              console.log("asdasd");
+          });
+
+        },
+        error: function(){
+         console.log("failure");
+        }
+    });
+  });   
 
   $("#filtrar-extrato").click(function(ev){
     var check_extrato = $("#pg_checkbox").is(":checked");
@@ -184,6 +239,11 @@ $this->registerJs('
         $prestadores .= '<option value="'.$key.'">'.$prest.' </option>';        
      }
 
+    $projetos = '';
+     foreach ($listProjetos as $key => $prost) {                   
+        $projetos .= '<option value="'.$key.'">'.$prost.' </option>';        
+     }
+
       $form = ActiveForm::begin(); 
      $rel_geral_content = '<form action="/web/index.php?r=relatorio%2Frelatoriogeral" method="post" id="form-relgeral">
                           <div class="row">
@@ -224,7 +284,7 @@ $this->registerJs('
                             <div class="col-md-1">
                               <input type="checkbox" name="valor" checked> Mostrar Valores
                             </div>
-                        </row>
+                        </div>
                         <div class="row" style="margin-top:1em">
                           <div class="col-md-2">
                             <button class="btn btn-primary" type="submit" form="form-relgeral" value="Submit">Gerar Relatório</button>
@@ -258,6 +318,48 @@ $this->registerJs('
               </form>
             </div>
             <div style="margin-top: 1em">
+              <table id="tabela_fluxocaixa">
+                <tr>
+                  <th rowspan="2">Item</th>
+                  <th rowspan="2" style="width: 11em;" >Projeto</th>
+                  <th rowspan="2">BM</th>
+                  <th rowspan="2">Descrição</th>
+                  <th colspan="5">Horas Executadas</th>
+                  <th rowspan="2">Valor Total</th>
+                  <th rowspan="2">Data Pagamento</th>
+                  <th rowspan="2">Selecionar</th>
+                </tr>
+                <tr>
+                  <th>EE</th>
+                  <th>ES</th>
+                  <th>EP</th>
+                  <th>EJ</th>
+                  <th>TP</th>                  
+                </tr>             
+                          
+              </table>
+              </div>
+            ';
+
+    $fluxo_caixa = '<div style="margin-top:1em">
+            <form id="form_extrato" method="post" enctype="multipart/form-data">
+              <div class="row">
+                <div class="autocomplete col-md-3" style="width:300px;padding: 0; margin-left:1em" id="autocomplete_div_0">
+                  <label>Projeto</label>
+                  <input class="np_autocomplete form-control" id="projeto" type="text" name="projeto" placeholder="Insira um Projeto"> 
+                </div>
+                <div class="col-md-1">
+                  <button type="button" class="btn btn-primary" id="gerar-fluxocaixa">Gerar</button>
+                </div>
+                <div class="col-md-1">
+                  <button type="button" class="btn btn-primary" id="relatorio-extrato-btn" target="_blank"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Relatório</button>
+                </div>
+              </div>
+               <div class="row">                 
+               </div> 
+              </form>
+            </div>
+            <div style="margin-top: 1em">
               <table id="tabela_extrato">
                 <tr>
                   <th rowspan="2">Item</th>
@@ -281,12 +383,18 @@ $this->registerJs('
               </div>
             ';
 
+
   $items = [
     
     [
         'label'=>'Extrato de Prestadores de Serviço',
         'content'=>$extrato_content,
         'active'=>true,       
+    ],
+    [
+        'label'=>'Fluxo de Caixa',
+        'content'=>$fluxo_caixa,
+        'active'=>false,       
     ],
     [
         'label'=>'Relatório Geral',
