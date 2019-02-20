@@ -12,6 +12,7 @@ use kartik\money\MaskMoney;
 use kartik\tabs\TabsX;
 use kartik\popover\PopoverX;
 use yii\bootstrap\Modal;
+use kartik\select2\Select2;
 /* @var $this yii\web\View */
 /* @var $model app\models\Projeto */
 /* @var $form yii\widgets\ActiveForm */
@@ -728,46 +729,29 @@ $(".remove-exec").click(function(ev){
   });
 
   $("#btn_save_avulsas").click(function(e){
-    var count_novas1 = 0;
-    var count_novas2 = 0;
-    $( ".np_autocomplete" ).each(function() {
-      count_novas1++;
-    });
-
-    $( ".np_autocomplete" ).each(function() {
-        var nome = this.value;
-        var projeto_id = window.location.href.split("id=")[1];
-        var disciplina = 0;
-        if($("#aut_radio").prop("checked")){
-          disciplina = 1;
-        }
-        else if($("#proc_radio").prop("checked")){
-          disciplina = 2
-        }
-        else{
-          disciplina = 3;
-        }
-        $.ajax({ 
+    var atividades = JSON.stringify($("#list_atividades").val(), null, 2);
+    var projeto_id = window.location.href.split("id=")[1];
+    
+    $.ajax({ 
           url: "index.php?r=projeto/addatividadeavulsa",
-          data: {nome: nome, projeto_id: projeto_id, disciplina: disciplina},
+          data: {atvmodelo_ids: atividades, projeto_id: projeto_id},
           type: "POST",
           success: function(response){
            if(response=="success"){
-             count_novas2++;
-             if(count_novas2 == count_novas1){
+              console.log(response);
+              alert("Revisão excluída com sucesso!");
               location.reload();
-             } 
            }
            else{
               alert("algum erro ocorreu");
-           }           
+           }
+           
          },
          error: function(){
           console.log("failure");
-          }
-        });
-    });
-
+        }
+      });
+    
   });
 
   $(".dropify").dropify({
@@ -1630,8 +1614,19 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
             <a style="margin-left: 1em" id="add-np"> <i class="fa fa-plus-square-o fa-2x"></i></a><br>          
           
           <div class="autocomplete col-md-3" style="width:300px;" id="autocomplete_div_0">
-            <input class="np_autocomplete" id="autocomplete_0" type="text" name="np[0]" placeholder="Digite uma atividade">
-            <a class="remove-np" id="remove-np[0]"> <i class="fa fa-ban" ></i></a>
+            <!-- <input class="np_autocomplete" id="autocomplete_0" type="text" name="np[0]" placeholder="Digite uma atividade"> -->
+            <?= // Normal select with ActiveForm & model
+               Select2::widget([
+                'name' => 'np',
+                'id' => 'list_atividades',
+                'data' => $listAtividadesProjeto,
+                'options' => [
+                    'placeholder' => 'Projetos',
+                    'multiple' => true
+                  ],
+              ]);
+            ?>
+            <!-- <a class="remove-np" id="remove-np[0]"> <i class="fa fa-ban" ></i></a> -->
           </div>         
 
          <?php  } ?>

@@ -22,6 +22,7 @@ $this->params['breadcrumbs'][] = 'Update';
         'listStatusGeral' => $listStatusGeral,
         'listEscopo' => $listEscopo,
         'listDisciplina' => $listDisciplina,
+        'listAtividadesProjeto' => $listAtividadesProjeto,
         'searchModel' => $searchModel,
         'dataProvider' => $dataProvider,
         'escopoDataProvider' => $escopoDataProvider,

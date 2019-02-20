@@ -100,6 +100,7 @@ class ProjetoController extends Controller
         $model = new Projeto();
         $model->tipo = 'A';
         $model->data_proposta =  date('d/m/Y');
+        $model->rev_proposta =  0;
         $model->contrato='CT 4600015210';
         $searchModel = new ProjetoSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -174,24 +175,27 @@ class ProjetoController extends Controller
                 if(isset($_POST['Escopos']['Automação'][3])){ $identificador = "PDE"; }
                 if(isset($_POST['Escopos']['Automação'][4])){ $identificador = "CFG"; }
                 if(isset($_POST['Escopos']['Automação'][3]) && isset($_POST['Escopos']['Automação'][4])){$identificador = "PDC"; }
+                if(isset($_POST['Escopos']['Automação'][5])){ $identificador = "SRV"; }
 
                 if(isset($_POST['Escopos']['Processo'][1])){ $identificador = "PCO"; }
                 if(isset($_POST['Escopos']['Processo'][2])){ $identificador = "PBA"; }
                 if(isset($_POST['Escopos']['Processo'][3])){ $identificador = "PDE"; }
                 if(isset($_POST['Escopos']['Processo'][4])){ $identificador = "CFG"; }
                 if(isset($_POST['Escopos']['Processo'][3]) && isset($_POST['Escopos']['Processo'][4])){$identificador = "PDC"; }
+                if(isset($_POST['Escopos']['Processo'][5])){ $identificador = "SRV"; }
 
                 if(isset($_POST['Escopos']['Instrumentação'][1])){ $identificador = "PCO"; }
                 if(isset($_POST['Escopos']['Instrumentação'][2])){ $identificador = "PBA"; }
                 if(isset($_POST['Escopos']['Instrumentação'][3])){ $identificador = "PDE"; }
                 if(isset($_POST['Escopos']['Instrumentação'][4])){ $identificador = "CFG"; }
                 if(isset($_POST['Escopos']['Instrumentação'][3]) && isset($_POST['Escopos']['Instrumentação'][4])){$identificador = "PDC"; }
+                if(isset($_POST['Escopos']['Instrumentação'][5])){ $identificador = "SRV"; }
 
                 if($model->tipo == "P"){
                     $model->proposta = 'PTC'.'-'.$model->codigo.'-SRV-'.$identificador.'-'.$model->site.'-'.$model->rev_proposta;
                 }
                 else{
-                    $model->proposta = 'AS'.'-'.$model->codigo.'-SRV-'.$identificador.'-'.$model->site.'-'.explode("-",$model->nome)[1].'_'.$model->rev_proposta;
+                    $model->proposta = 'AS'.'-'.$model->codigo.'-'.$identificador.'-'.$model->site.'-'.explode("-",$model->nome)[1].'_'.$model->rev_proposta;
                 }
                 
                 if(!empty($_POST['Projeto']['data_proposta'])){
@@ -517,6 +521,23 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
 
         $status_geral = Yii::$app->db->createCommand('SELECT id, status FROM status_geral')->queryAll();
         $listStatusGeral = ArrayHelper::map($status_geral,'id','status');
+
+
+        $atividades_projeto = Yii::$app->db->createCommand('SELECT DISTINCT disciplina_id, escopopadrao_id FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id = atividademodelo.id WHERE projeto_id='.$model->id)->queryAll();
+      
+          $condition_query = "WHERE ";
+
+          foreach ($atividades_projeto as $key => $atv_proj) {
+             $condition_query .= '(disciplina_id = '.$atv_proj['disciplina_id'].' AND escopopadrao_id='.$atv_proj['escopopadrao_id'].')';
+
+             if($key != count($atividades_projeto) - 1)
+               $condition_query .= ' OR ';
+          }
+
+
+     
+        $atividadesProjeto = Yii::$app->db->createCommand('SELECT * FROM atividademodelo '.$condition_query)->queryAll();
+        $listAtividadesProjeto = ArrayHelper::map($atividadesProjeto,'id','nome');
 
         $escopoArray = Yii::$app->db->createCommand('SELECT * FROM atividademodelo JOIN escopo  ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$model->id.' ORDER BY isEntregavel ASC, ordem ASC')->queryAll();
 
@@ -971,6 +992,7 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                 'listStatus' => $listStatus,
                 'listStatusGeral' => $listStatusGeral,
                 'listDisciplina' => $listDisciplina,
+                'listAtividadesProjeto' => $listAtividadesProjeto,
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
                 'escopoDataProvider' => $escopoDataProvider,
@@ -1392,7 +1414,7 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
 
      public function actionAddatividadeavulsa(){
         if (Yii::$app->request->isAjax) {   
-            $nome = Yii::$app->request->post()['nome'];
+            $nome = Yii::$app->request->post()['atvmodelo_ids'];
             $projeto_id = Yii::$app->request->post()['projeto_id'];
             $disciplina_id = Yii::$app->request->post()['disciplina'];
 
