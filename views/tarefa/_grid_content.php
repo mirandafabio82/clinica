@@ -250,7 +250,7 @@ $this->registerJs("
               $esc_tp = empty($escopoModel['adiantadas_tp']) ? 0 : explode('.',$escopoModel['adiantadas_tp'])[0];
             ?>
               <div class="col-md-5"> 
-                <?= $form->field($escopoModel, 'adiantadas_tp')->textInput(['maxlength' => true, 'readonly'=>$editable, 'name'=>'Escopo['.$escopo['id'].'][adiantadas_tp]', 'class' =>'form-control adiantada', 'value'=> '' ]) ?>
+                <?= $form->field($escopoModel, 'adiantadas_tp')->textInput(['maxlength' => true, 'readonly'=>$editable, 'name'=>'Escopo['.$escopo['id'].'][adiantadas_tp]', 'class' =>'form-control adiantada', 'value'=> '' ])->label('TP: '.$esc_tp) ?>
               </div>
               <?php } ?>  
 
@@ -258,7 +258,7 @@ $this->registerJs("
               $esc_ej = empty($escopoModel['adiantadas_ej']) ? 0 : explode('.',$escopoModel['adiantadas_ej'])[0];
               ?>
               <div class="col-md-5"> 
-                <?= $form->field($escopoModel, 'adiantadas_ej')->textInput(['maxlength' => true, 'readonly'=>$editable, 'name'=>'Escopo['.$escopo['id'].'][adiantadas_ej]', 'class' =>'form-control adiantada', 'value'=> '' ]) ?>
+                <?= $form->field($escopoModel, 'adiantadas_ej')->textInput(['maxlength' => true, 'readonly'=>$editable, 'name'=>'Escopo['.$escopo['id'].'][adiantadas_ej]', 'class' =>'form-control adiantada', 'value'=> '' ])->label('EJ: '.$esc_ej) ?>
               </div>
               <?php } ?>  
 
@@ -266,7 +266,7 @@ $this->registerJs("
               $esc_ep = empty($escopoModel['adiantadas_ep']) ? 0 : explode('.',$escopoModel['adiantadas_ep'])[0];
               ?>
               <div class="col-md-5"> 
-              <?= $form->field($escopoModel, 'adiantadas_ep')->textInput(['maxlength' => true, 'readonly'=>$editable, 'name'=>'Escopo['.$escopo['id'].'][adiantadas_ep]', 'class' =>'form-control adiantada', 'value'=> '' ]) ?>
+              <?= $form->field($escopoModel, 'adiantadas_ep')->textInput(['maxlength' => true, 'readonly'=>$editable, 'name'=>'Escopo['.$escopo['id'].'][adiantadas_ep]', 'class' =>'form-control adiantada', 'value'=> '' ])->label('EP: '.$esc_ep) ?>
               </div>
               <?php } ?>  
 
@@ -274,7 +274,7 @@ $this->registerJs("
               $esc_es = empty($escopoModel['adiantadas_es']) ? 0 : explode('.',$escopoModel['adiantadas_es'])[0];
               ?>
               <div class="col-md-5"> 
-              <?= $form->field($escopoModel, 'adiantadas_es')->textInput(['maxlength' => true, 'readonly'=>$editable, 'name'=>'Escopo['.$escopo['id'].'][adiantadas_es]', 'class' =>'form-control adiantada', 'value'=> '' ]) ?>
+              <?= $form->field($escopoModel, 'adiantadas_es')->textInput(['maxlength' => true, 'readonly'=>$editable, 'name'=>'Escopo['.$escopo['id'].'][adiantadas_es]', 'class' =>'form-control adiantada', 'value'=> '' ])->label('ES: '.$esc_es) ?>
               </div>
               <?php } ?>  
 
@@ -282,7 +282,7 @@ $this->registerJs("
               $esc_ee = empty($escopoModel['adiantadas_ee']) ? 0 : explode('.',$escopoModel['adiantadas_ee'])[0];
               ?>
               <div class="col-md-5"> 
-              <?= $form->field($escopoModel, 'adiantadas_ee')->textInput(['maxlength' => true, 'readonly'=>$editable, 'name'=>'Escopo['.$escopo['id'].'][adiantadas_ee]', 'class' =>'form-control adiantada', 'value'=> '' ]) ?>
+              <?= $form->field($escopoModel, 'adiantadas_ee')->textInput(['maxlength' => true, 'readonly'=>$editable, 'name'=>'Escopo['.$escopo['id'].'][adiantadas_ee]', 'class' =>'form-control adiantada', 'value'=> '' ])->label('EE: '.$esc_ee) ?>
               </div>
               <?php } ?>  
             </div>

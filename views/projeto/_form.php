@@ -1609,10 +1609,10 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
 
           <div id="nao-prioritarios_div" style="margin-bottom: 1em" hidden>   
            <input type="radio" name="disc_radio" value="auto" checked="checked" id="aut_radio"> Automação
-          <input type="radio" name="disc_radio" value="proc" id="proc_radio"> Processo
-          <input type="radio" name="disc_radio" value="inst" id="inst_radio"> Instrumentação<br>
-            <a style="margin-left: 1em" id="add-np"> <i class="fa fa-plus-square-o fa-2x"></i></a><br>          
-          
+          <!-- <input type="radio" name="disc_radio" value="proc" id="proc_radio"> Processo
+          <input type="radio" name="disc_radio" value="inst" id="inst_radio"> Instrumentação<br> -->
+            <!-- <a style="margin-left: 1em" id="add-np"> <i class="fa fa-plus-square-o fa-2x"></i></a>           -->
+          <br>
           <div class="autocomplete col-md-3" style="width:300px;" id="autocomplete_div_0">
             <!-- <input class="np_autocomplete" id="autocomplete_0" type="text" name="np[0]" placeholder="Digite uma atividade"> -->
             <?= // Normal select with ActiveForm & model
@@ -1799,7 +1799,7 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
       
       $col_delete = '<a class="icon-delete-atividade" id="delete_atividade_'.$esc["id"].'" style="margin-right: 1em;"><i class="fa fa-trash" aria-hidden="true"></i></a>'; 
 
-      $descricao = '<tr><td style="font-size: 10px">'.$esc['descricao'].'</td>';
+      $descricao = '<tr><td style="font-size: 10px">'.$col_delete.$esc['descricao'].'</td>';
 
       $descricao_entregavel = '<tr id="row_'.$key.'"><td style="font-size: 10px">'.$col_delete.$esc['descricao'].'</td>'; 
 

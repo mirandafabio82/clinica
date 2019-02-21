@@ -1414,19 +1414,21 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
 
      public function actionAddatividadeavulsa(){
         if (Yii::$app->request->isAjax) {   
-            $nome = Yii::$app->request->post()['atvmodelo_ids'];
+            $atvmodelo_ids = json_decode(Yii::$app->request->post()['atvmodelo_ids'], true);
             $projeto_id = Yii::$app->request->post()['projeto_id'];
-            $disciplina_id = Yii::$app->request->post()['disciplina'];
-
+           
             try{
-                $atv_modelo_id = Yii::$app->db->createCommand('SELECT id FROM atividademodelo WHERE nome="'.$nome.'" AND disciplina_id='.$disciplina_id)->queryScalar();
+                foreach ($atvmodelo_ids as $key => $atvid) {
+                    $atv_modelo = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE id='.$atvid)->queryOne();
                 
-                $escopo_model = new Escopo();
-                $escopo_model->projeto_id = $projeto_id;
-                $escopo_model->atividademodelo_id = $atv_modelo_id;
-                $escopo_model->nome = $nome;
-                $escopo_model->descricao = $nome;
-                $escopo_model->save();
+                    $escopo_model = new Escopo();
+                    $escopo_model->projeto_id = $projeto_id;
+                    $escopo_model->atividademodelo_id = $atv_modelo['id'];
+                    $escopo_model->nome = $atv_modelo['nome'];
+                    $escopo_model->descricao = $atv_modelo['nome'];
+                    $escopo_model->save();
+                }
+                
             }
             catch(Exception $e){
                 return 'failed';
