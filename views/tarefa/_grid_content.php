@@ -151,6 +151,13 @@ $this->registerJs("
 <?php $form = ActiveForm::begin(); ?>
 
 <!-- <?//= $form->field($model, 'obs_atividade')->textArea(['maxlength' => true, 'class' =>'form-control obs_atividade', 'id'=>'Projeto['.$model->id.']'])->label(false) ?> -->
+<div style="width: 50%; margin: 0 auto;">
+  Selecione uma coluna e preencha com o percentual indicado<br>
+</div>
+<div style="width: 50%; margin: 0 auto;">
+  <input type="text" style="width: 3em;" name="perc" id="perc-field" value="100">%
+  <button type="submit" class="btn btn-success filtrar">Preencher</button>
+</div>
 
 <table style="width:100%; margin-bottom: 1em" id="tabela-escopo">
     <col width="600">
@@ -162,11 +169,11 @@ $this->registerJs("
         </tr>
         <tr>                            
           <!-- <th style="width:1em;padding-right: 1em;text-align: center;">AS</th> -->
-          <th style="width:80em;padding-right: 1em;text-align: center;">Executada</th>
+          <th style="width:80em;padding-right: 1em;text-align: center;"><input type="checkbox" name="vehicle1" value="Bike"> Executada</th>
+          <th style="width:80em;text-align: center;"><input type="checkbox" name="vehicle1" value="Bike"> Horas Adiantadas</th>
           <th style="width:50em;padding-right: 1em;text-align: center;">BM</th>
           <th style="width:30em;text-align: center;">Acumulada</th>
           <th style="width:30em;text-align: center;">Saldo</th>
-          <th style="width:80em;text-align: center;">Horas Adiantadas</th>
           <th style="width:30em;text-align: center;">Total Adiantada</th>
         </tr>
       </thead>
@@ -235,12 +242,6 @@ $this->registerJs("
             </div>
         </td>
        
-      
-        <td style=" text-align: center;font-size: 15px; padding-right: 0.5em;color: #000"><?= $escopoModel['horas_bm'] ?>  </td>
-
-        <td style=" text-align: center;font-size: 15px; padding-right: 0.5em;color: #000"><?= $escopoModel['horas_acumulada'] ?>  </td>    
-
-         <td style=" text-align: center;font-size: 15px; padding-right: 0.5em;color: #000"><?= $escopoModel['horas_saldo'] ?>  </td>
          <td style="font-size: 15px; padding-right: 1em;text-align: center; ">
         <div class="row"> 
           <?php 
@@ -287,6 +288,10 @@ $this->registerJs("
               <?php } ?>  
             </div>
         </td>
+        <td style=" text-align: center;font-size: 15px; padding-right: 0.5em;color: #000"><?= $escopoModel['horas_bm'] ?>  </td>
+        <td style=" text-align: center;font-size: 15px; padding-right: 0.5em;color: #000"><?= $escopoModel['horas_acumulada'] ?>  </td>    
+
+         <td style=" text-align: center;font-size: 15px; padding-right: 0.5em;color: #000"><?= $escopoModel['horas_saldo'] ?>  </td>
          <td style=" text-align: center;font-size: 15px; padding-right: 0.5em;color: #000"><?= $esc_tp + $esc_ej + $esc_ep + $esc_es +$esc_ee?>  </td>      
       </tr>
 
@@ -302,13 +307,12 @@ $this->registerJs("
       <tr> 
         <td style=" padding: 1em;font-size: 15px;color: #000">Total</td>
 
-        <td style=" text-align: center;font-size: 15px; padding-right: 0.5em;color: #000" id="total-executada"> 0.00 </td>    
-
+        <td style=" text-align: center;font-size: 15px; padding-right: 0.5em;color: #000" id="total-executada"> 0.00 </td>   
+         <td style=" text-align: center;font-size: 15px; padding-right: 0.5em;color: #000" id="total-adiantada"> 0.00 </td>  
          <td style=" text-align: center;font-size: 15px; padding-right: 0.5em;color: #000" id="total-bm"> <?= $totalBm ?></td> 
          <td style=" text-align: center;font-size: 15px; padding-right: 0.5em;color: #000" id="total-acumulada"> <?= $totalAcumulada ?> </td> 
          <td style=" text-align: center;font-size: 15px; padding-right: 0.5em;color: #000" id="total-saldo"> <?= $totalSaldo ?> </td>  
-         <td style=" text-align: center;font-size: 15px; padding-right: 0.5em;color: #000" id="total-adiantada"> 0.00 </td>  
-         <td style=" text-align: center;font-size: 15px; padding-right: 0.5em;color: #000" id="total-saldo"> <?= $totalAdiantada ?> </td>      
+         <td style=" text-align: center;font-size: 15px; padding-right: 0.5em;color: #000" id="total-adiantada"> <?= $totalAdiantada ?> </td>
       </tr>
 </table>
       <?php ActiveForm::end(); ?>
