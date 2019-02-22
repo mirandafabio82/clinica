@@ -132,6 +132,59 @@ $this->registerJs("
         $('#total-adiantada')[0].innerText = total_adiantada; 
 
     });
+
+    $('.preencher-btn').click(function(){
+      if ($('#checkbox-executada').is(':checked')) {
+        
+        $('.executado' ).each(function() {
+        var tipo_executante = this.name.split('[')[2].split(']')[0].split('_')[1];          
+        var escopo_id = this.name.split('[')[1].split(']')[0];
+        var elemento = $(this);
+          
+          $.ajax({ 
+              url: 'index.php?r=tarefa/checkhoras',
+              data: {escopo_id: escopo_id, tipo_executante: tipo_executante},
+              type: 'POST',
+              success: function(response){
+                 var resposta = $.parseJSON(response);                 
+                 if(resposta[0] > 0){
+                    elemento.val(resposta[0]);
+                 }     
+              },
+              error: function(){
+                console.log('failure');
+              }
+            });
+        }); 
+      }
+
+      if ($('#checkbox-adiantada').is(':checked')) {
+        
+        $('.adiantada' ).each(function() {
+          var tipo_executante = this.name.split('[')[2].split(']')[0].split('_')[1];          
+        var escopo_id = this.name.split('[')[1].split(']')[0];
+        var elemento = $(this);
+          
+          $.ajax({ 
+              url: 'index.php?r=tarefa/checkhorasadiantadas',
+              data: {escopo_id: escopo_id, tipo_executante: tipo_executante},
+              type: 'POST',
+              success: function(response){
+                 var resposta = $.parseJSON(response);  
+                  console.log(resposta[0]);
+                 if(resposta[0] > 0){
+                    elemento.val(resposta[0]);
+                 }               
+                 
+              },
+              error: function(){
+                console.log('failure');
+              }
+            });        
+        }); 
+      } 
+      
+    });
 ");
 
 ?>
@@ -156,7 +209,7 @@ $this->registerJs("
 </div>
 <div style="width: 50%; margin: 0 auto;">
   <input type="text" style="width: 3em;" name="perc" id="perc-field" value="100">%
-  <button type="submit" class="btn btn-success filtrar">Preencher</button>
+  <a  class="btn btn-success preencher-btn">Preencher</a>
 </div>
 
 <table style="width:100%; margin-bottom: 1em" id="tabela-escopo">
@@ -169,8 +222,8 @@ $this->registerJs("
         </tr>
         <tr>                            
           <!-- <th style="width:1em;padding-right: 1em;text-align: center;">AS</th> -->
-          <th style="width:80em;padding-right: 1em;text-align: center;"><input type="checkbox" name="vehicle1" value="Bike"> Executada</th>
-          <th style="width:80em;text-align: center;"><input type="checkbox" name="vehicle1" value="Bike"> Horas Adiantadas</th>
+          <th style="width:80em;padding-right: 1em;text-align: center;"><input type="checkbox" id="checkbox-executada" value="Bike"> Executada</th>
+          <th style="width:80em;text-align: center;"><input type="checkbox" id="checkbox-adiantada" value="Bike"> Horas Adiantadas</th>
           <th style="width:50em;padding-right: 1em;text-align: center;">BM</th>
           <th style="width:30em;text-align: center;">Acumulada</th>
           <th style="width:30em;text-align: center;">Saldo</th>

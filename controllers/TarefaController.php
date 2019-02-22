@@ -593,8 +593,18 @@ class TarefaController extends Controller
     public function actionCheckhoras(){
         if (Yii::$app->request->isAjax) { 
             $escopo_id = Yii::$app->request->post()['escopo_id'];
+            $tipo_executante = Yii::$app->request->post()['tipo_executante'];
 
-            echo json_encode(Yii::$app->db->createCommand('SELECT horas_tp, horas_ej, horas_ep, horas_es, horas_ee FROM projeto JOIN escopo ON escopo.projeto_id = projeto.id WHERE escopo.id='.$escopo_id)->queryAll());
+            echo json_encode(Yii::$app->db->createCommand('SELECT (horas_'.$tipo_executante.' - executado_'.$tipo_executante.') FROM projeto JOIN escopo ON escopo.projeto_id = projeto.id WHERE escopo.id='.$escopo_id)->queryScalar());
+        }
+    }
+
+    public function actionCheckhorasadiantadas(){
+        if (Yii::$app->request->isAjax) { 
+            $escopo_id = Yii::$app->request->post()['escopo_id'];
+            $tipo_executante = Yii::$app->request->post()['tipo_executante'];
+
+            echo json_encode(Yii::$app->db->createCommand('SELECT (horas_'.$tipo_executante.' - adiantadas_'.$tipo_executante.') FROM projeto JOIN escopo ON escopo.projeto_id = projeto.id WHERE escopo.id='.$escopo_id)->queryScalar());
         }
     }
 }
