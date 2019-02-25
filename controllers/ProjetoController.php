@@ -364,6 +364,8 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                        if($proExe==61){
                             $helder_exists = 1;
                             Yii::$app->db->createCommand('UPDATE escopo SET exe_es_id=61 WHERE projeto_id='.$model->id.' AND nome="Coordenação e Administração"')->execute();
+
+                            Yii::$app->db->createCommand('UPDATE escopo SET exe_es_id=61 WHERE projeto_id='.$model->id.' AND nome="Supervisão"')->execute();
                        }
                    }
                 }
@@ -377,6 +379,8 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                     $proExeModel->save();
 
                     Yii::$app->db->createCommand('UPDATE escopo SET exe_es_id='.$proExeModel->executante_id.' WHERE projeto_id='.$model->id.' AND nome="Coordenação e Administração"')->execute();
+
+                    Yii::$app->db->createCommand('UPDATE escopo SET exe_es_id='.$proExeModel->executante_id.' WHERE projeto_id='.$model->id.' AND nome="Supervisão"')->execute();
                 }
 
                 if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['executante'])){
@@ -566,6 +570,7 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
 
         $caId_1=0;$caId_2=0;$caId_3=0;
         $tot_1=0;$tot_2=0;$tot_3=0;
+        $totSuper_1=0;
          //atualizando os valores de hora e executante do escopo
         if(isset($_POST['Escopo'])){            
             //se nao_editavel nao for 1, nao permitir edição
@@ -605,9 +610,9 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                                             + $esc['horas_ee'] * $valor_ee;  
 
                 //busca coordenação e adminstração
-                $coordEAdm_1 = Yii::$app->db->createCommand('SELECT escopo.nome FROM escopo JOIN atividademodelo ON atividademodelo.id=escopo.atividademodelo_id WHERE escopo.id='.$key.' AND disciplina_id=1')->queryScalar();
-                $coordEAdm_2 = Yii::$app->db->createCommand('SELECT escopo.nome FROM escopo JOIN atividademodelo ON atividademodelo.id=escopo.atividademodelo_id WHERE escopo.id='.$key.' AND disciplina_id=2')->queryScalar();
-                $coordEAdm_3 = Yii::$app->db->createCommand('SELECT escopo.nome FROM escopo JOIN atividademodelo ON atividademodelo.id=escopo.atividademodelo_id WHERE escopo.id='.$key.' AND disciplina_id=3')->queryScalar();
+                $coordEsup_1 = Yii::$app->db->createCommand('SELECT escopo.nome FROM escopo JOIN atividademodelo ON atividademodelo.id=escopo.atividademodelo_id WHERE escopo.id='.$key.' AND disciplina_id=1')->queryScalar();
+               /* $coordEAdm_2 = Yii::$app->db->createCommand('SELECT escopo.nome FROM escopo JOIN atividademodelo ON atividademodelo.id=escopo.atividademodelo_id WHERE escopo.id='.$key.' AND disciplina_id=2')->queryScalar();
+                $coordEAdm_3 = Yii::$app->db->createCommand('SELECT escopo.nome FROM escopo JOIN atividademodelo ON atividademodelo.id=escopo.atividademodelo_id WHERE escopo.id='.$key.' AND disciplina_id=3')->queryScalar();*/
 
                 if(Yii::$app->db->createCommand('SELECT atividademodelo.disciplina_id FROM escopo JOIN atividademodelo ON atividademodelo.id=escopo.atividademodelo_id WHERE escopo.id='.$key)->queryScalar()==1){
                     $tot_1 += $esc['horas_tp'] + $esc['horas_ej']+ $esc['horas_ep']+ $esc['horas_es']+ $esc['horas_ee'];
@@ -618,19 +623,23 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                 if(Yii::$app->db->createCommand('SELECT atividademodelo.disciplina_id FROM escopo JOIN atividademodelo ON atividademodelo.id=escopo.atividademodelo_id WHERE escopo.id='.$key)->queryScalar()==3){
                     $tot_3 += $esc['horas_tp'] + $esc['horas_ej']+ $esc['horas_ep']+ $esc['horas_es']+ $esc['horas_ee'];
                 }
-                if($coordEAdm_1=='Coordenação e Administração'){
+                if($coordEsup_1=='Coordenação e Administração'){
                    $tot_1 -= $esc['horas_es'];
                    $caId_1 = $key;                   
                 }
-                if($coordEAdm_2=='Coordenação e Administração'){
+                /*if($coordEAdm_2=='Coordenação e Administração'){
                     $tot_2 -= $esc['horas_es'];
                     $caId_2 = $key;
                 }
                 if($coordEAdm_3=='Coordenação e Administração'){
                     $tot_3 -= $esc['horas_es'];
                     $caId_3 = $key;
-                }
+                }*/
                 
+                if($coordEsup_1=='Supervisão'){                   
+                   $tot_1 -= $esc['horas_es'];
+                   $suId_1 = $key; 
+                }
             }            
                     
             $valorProposta = $valorProposta + $model->vl_km + $model->vl_taxi + $model->vl_passagem_aerea + $model->vl_hospedagem;
@@ -650,7 +659,11 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                     if($escopo->nome=="Coordenação e Administração"){
                         $escopo->horas_saldo = round($escopo->horas_saldo);
                     }
-                    
+
+                    if($escopo->nome=="Supervisão"){
+                        $escopo->horas_saldo = round($escopo->horas_saldo);
+                    }
+                    //Coordenação e Administração
                     if($key==$caId_1){
                         $escopo->horas_es = $tot_1;                        
                     }
@@ -659,6 +672,11 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                     }
                     if($key==$caId_3){
                         $escopo->horas_es = $tot_3;
+                    }
+
+                    //supervisão
+                    if($key==$suId_1){
+                        $escopo->horas_es = $tot_1;                        
                     }
 
 
@@ -955,11 +973,15 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                    }
                 }
                 $perc = $model->perc_coord_adm/100;
+                $percSupervisao = $model->perc_supervisao/100;
                 
                  //atualiza valor de coordenação e adminstração
             Yii::$app->db->createCommand('UPDATE escopo SET horas_es='.$tot_1*$perc.', horas_saldo='.round($tot_1*$perc).' WHERE id='.$caId_1)->execute();
             Yii::$app->db->createCommand('UPDATE escopo SET horas_es='.$tot_2*$perc.', horas_saldo='.round($tot_2*$perc).' WHERE id='.$caId_2)->execute();
             Yii::$app->db->createCommand('UPDATE escopo SET horas_es='.$tot_3*$perc.', horas_saldo='.round($tot_3*$perc).' WHERE id='.$caId_3)->execute();
+
+            //atualiza valor de supervisão
+            Yii::$app->db->createCommand('UPDATE escopo SET horas_es='.$tot_1*$percSupervisao.', horas_saldo='.round($tot_1*$percSupervisao).' WHERE id='.$suId_1)->execute();
 
                 if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['executante'])){
                     $user_nome = Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.Yii::$app->user->getId())->queryScalar();

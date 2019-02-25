@@ -140,15 +140,16 @@ $this->registerJs("
         var tipo_executante = this.name.split('[')[2].split(']')[0].split('_')[1];          
         var escopo_id = this.name.split('[')[1].split(']')[0];
         var elemento = $(this);
+        var perc = $('#perc-field').val();
           
           $.ajax({ 
               url: 'index.php?r=tarefa/checkhoras',
-              data: {escopo_id: escopo_id, tipo_executante: tipo_executante},
+              data: {escopo_id: escopo_id, tipo_executante: tipo_executante, perc: perc},
               type: 'POST',
               success: function(response){
                  var resposta = $.parseJSON(response);                 
-                 if(resposta[0] > 0){
-                    elemento.val(resposta[0]);
+                 if(resposta > 0){
+                    elemento.val(resposta);
                  }     
               },
               error: function(){
@@ -164,16 +165,16 @@ $this->registerJs("
           var tipo_executante = this.name.split('[')[2].split(']')[0].split('_')[1];          
         var escopo_id = this.name.split('[')[1].split(']')[0];
         var elemento = $(this);
+        var perc = $('#perc-field').val();
           
           $.ajax({ 
               url: 'index.php?r=tarefa/checkhorasadiantadas',
-              data: {escopo_id: escopo_id, tipo_executante: tipo_executante},
+              data: {escopo_id: escopo_id, tipo_executante: tipo_executante, perc: perc},
               type: 'POST',
               success: function(response){
-                 var resposta = $.parseJSON(response);  
-                  console.log(resposta[0]);
-                 if(resposta[0] > 0){
-                    elemento.val(resposta[0]);
+                 var resposta = $.parseJSON(response);                    
+                 if(resposta > 0){
+                    elemento.val(resposta);
                  }               
                  
               },

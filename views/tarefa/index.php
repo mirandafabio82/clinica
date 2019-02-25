@@ -250,6 +250,35 @@ $this->registerJs('
             }
           });
         });
+
+        $( ".adiantada" ).each(function( index ) {
+          var ultimo = 0;
+          if(index == $( ".adiantada" ).length - 1){
+            ultimo = 1;
+          }
+          
+          divisor = this.name.split("[")[1];
+
+          id = divisor.split("]")[0];
+
+          tipo = this.name.split("[")[2].split("]")[0];
+          console.log(tipo);
+          valor = this.value;
+          if(this.value=="") valor = "null";
+
+          $.ajax({ 
+              url: "index.php?r=tarefa/attatividade",
+              data: {id: id, value: valor, tipo: tipo, ultimo: ultimo},
+              type: "POST",
+              success: function(response){
+               console.log(response);
+               
+             },
+             error: function(xhr, ajaxOptions, thrownError){
+              console.log(xhr.responseText);
+            }
+          });
+        });
       });
     
     /*$("#executante-id").change(function(ev){

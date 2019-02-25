@@ -213,6 +213,7 @@ class TarefaController extends Controller
         if($_POST){
             $model->setAttributes($_POST['Tarefa']);
 
+
             if(isset($_POST['Tarefa']['data'])){
                 $dat = DateTime::createFromFormat('d/m/Y', $_POST['Tarefa']['data']);
                 $model->data = date_format($dat, 'Y-m-d');
@@ -474,6 +475,28 @@ class TarefaController extends Controller
                 $tipo_bm = "horas_ee_bm";
             }
 
+            //adiantadas
+            if(Yii::$app->request->post()['tipo']=='adiantadass_tp'){
+                $exe = 'exe_tp_id';
+                $tipo_bm = "horas_tp_bm";
+            }
+            if(Yii::$app->request->post()['tipo']=='adiantadas_ej'){
+                $exe = 'exe_ej_id';
+                $tipo_bm = "horas_ej_bm";
+            }
+            if(Yii::$app->request->post()['tipo']=='adiantadas_ep'){
+                $exe = 'exe_ep_id';
+                $tipo_bm = "horas_ep_bm";
+            }
+            if(Yii::$app->request->post()['tipo']=='adiantadas_es'){
+                $exe = 'exe_es_id';
+                $tipo_bm = "horas_es_bm";
+            }
+            if(Yii::$app->request->post()['tipo']=='adiantadas_ee'){
+                $exe = 'exe_ee_id';
+                $tipo_bm = "horas_ee_bm";
+            }
+
             $executante = Yii::$app->db->createCommand('SELECT '.$exe.' FROM escopo WHERE id='.Yii::$app->request->post()['id'])->queryScalar();
 
             $tipo_value = Yii::$app->db->createCommand('SELECT '.Yii::$app->request->post()['tipo'].' FROM escopo WHERE id='.Yii::$app->request->post()['id'])->queryScalar();
@@ -488,7 +511,8 @@ class TarefaController extends Controller
 
             if(Yii::$app->request->post()['value']!='null'){              
 
-                if($valor_escopo_total_especialidade > ($tipo_value + intval(Yii::$app->request->post()['value']))){
+                //verifica se não ultrapassa o valor total de horas
+                if($valor_escopo_total_especialidade >= ($tipo_value + intval(Yii::$app->request->post()['value']))){
                     Yii::$app->db->createCommand('UPDATE escopo SET '.Yii::$app->request->post()['tipo'].'='.$tipo_value.'+'.Yii::$app->request->post()['value'].', horas_bm = '.$bm_value.' +'.Yii::$app->request->post()['value'].', '.$tipo_bm.' = '.$tipo_bm_value.'+ '.Yii::$app->request->post()['value'].', horas_saldo=horas_saldo-'.Yii::$app->request->post()['value'].' WHERE id='.Yii::$app->request->post()['id'])->execute(); 
                 }
             }
@@ -499,7 +523,8 @@ class TarefaController extends Controller
             $totalhoras_bm_atual = round($totalhoras_bm_atual * 0.15);
 
             if(!empty($coord_adm)){     
-                if($valor_escopo_total_especialidade > ($tipo_value + intval(Yii::$app->request->post()['value']))){
+                 //verifica se não ultrapassa o valor total de horas
+                if($valor_escopo_total_especialidade >= ($tipo_value + intval(Yii::$app->request->post()['value']))){
                     Yii::$app->db->createCommand('UPDATE escopo SET horas_es_bm = horas_acumulada + '.$totalhoras_bm_atual.',executado_es = horas_acumulada + '.$totalhoras_bm_atual.', horas_bm = '.$totalhoras_bm_atual.' WHERE id='.$coord_adm)->execute();
                 }   
             }
@@ -594,8 +619,9 @@ class TarefaController extends Controller
         if (Yii::$app->request->isAjax) { 
             $escopo_id = Yii::$app->request->post()['escopo_id'];
             $tipo_executante = Yii::$app->request->post()['tipo_executante'];
+            $perc = Yii::$app->request->post()['perc'] * 0.01;
 
-            echo json_encode(Yii::$app->db->createCommand('SELECT (horas_'.$tipo_executante.' - executado_'.$tipo_executante.') FROM projeto JOIN escopo ON escopo.projeto_id = projeto.id WHERE escopo.id='.$escopo_id)->queryScalar());
+            echo json_encode(Yii::$app->db->createCommand('SELECT '.$perc.'*(horas_'.$tipo_executante.' - IFNULL(executado_'.$tipo_executante.', 0) - IFNULL(adiantadas_'.$tipo_executante.', 0)) FROM projeto JOIN escopo ON escopo.projeto_id = projeto.id WHERE escopo.id='.$escopo_id)->queryScalar());
         }
     }
 
@@ -603,8 +629,9 @@ class TarefaController extends Controller
         if (Yii::$app->request->isAjax) { 
             $escopo_id = Yii::$app->request->post()['escopo_id'];
             $tipo_executante = Yii::$app->request->post()['tipo_executante'];
+            $perc = Yii::$app->request->post()['perc'] * 0.01;
 
-            echo json_encode(Yii::$app->db->createCommand('SELECT (horas_'.$tipo_executante.' - adiantadas_'.$tipo_executante.') FROM projeto JOIN escopo ON escopo.projeto_id = projeto.id WHERE escopo.id='.$escopo_id)->queryScalar());
+            echo json_encode(Yii::$app->db->createCommand('SELECT '.$perc.'*(horas_'.$tipo_executante.' - IFNULL(adiantadas_'.$tipo_executante.', 0)  - IFNULL(executado_'.$tipo_executante.', 0)) FROM projeto JOIN escopo ON escopo.projeto_id = projeto.id WHERE escopo.id='.$escopo_id)->queryScalar());
         }
     }
 }
