@@ -1333,6 +1333,16 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
             </div>
         <?php } ?>
           </fieldset>
+
+          <fieldset>
+             <legend>Conjuntos</legend>
+             <?php
+            $codigos_escopo = Yii::$app->db->createCommand('SELECT DISTINCT codigo FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id = atividademodelo.id WHERE codigo IS NOT NULL AND codigo <> " "')->queryAll();
+               foreach ($codigos_escopo as $key => $code) { ?>
+                    <input type="checkbox" id="Codigos[<?=$code['codigo']?>]" name="Codigos[<?=$code['codigo']?>]" value="<?=$code['codigo']?>"><label for=""><?= $code['codigo'] ?></label>
+            <?php  } ?>
+
+           </fieldset>
         </div>
         <div class="col-md-5" style="margin-top: -4em;" id="desc_resumida_div">
         <?= $form->field($model, 'desc_resumida')->textarea(['maxlength' => true]) ?>
