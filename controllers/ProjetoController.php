@@ -1584,4 +1584,22 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
             
         }
     }
+
+    public function actionPreencheconjunto(){
+        if (Yii::$app->request->isAjax) {
+            $escopos = Yii::$app->request->post()['escopos'];
+
+            $conjuntos = Yii::$app->db->createCommand('SELECT DISTINCT codigo FROM atividademodelo WHERE escopopadrao_id IN '.$escopos)->queryAll();
+
+            $conjuntos_string = "";
+            
+            foreach ($conjuntos as $key => $con) {
+                if(!empty($con['codigo'])){
+                    $conjuntos_string .= $con['codigo'].',';
+                }
+            }
+
+            return $conjuntos_string;
+        }
+    }
 }
