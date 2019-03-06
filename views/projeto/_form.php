@@ -756,7 +756,7 @@ $(".remove-exec").click(function(ev){
 
   $(".dropify").dropify({
         tpl: {
-        message:         "<div class=\"dropify-message\"><span class=\"file-icon\" /> <p>Clique ou arraste um arquivo para adicioná-lo </p></div>",
+        message:         "<div class=\"dropify-message\"><span class=\"file-icon\" /> <p>Clique ou arraste um arquivo PDF para adicioná-lo </p></div>",
     }
     });
 
@@ -1536,13 +1536,7 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
             <?= $form->field($model, 'perc_coord_adm')->textInput(['maxlength' => true]) ?>
             <?php } ?>
           </div>
-          <div class="col-md-1" <?=$visible?>>
-          <?php if($model->isNewRecord){ ?>
-            <?= $form->field($model, 'perc_supervisao')->textInput(['maxlength' => true, 'value'=>10]) ?>
-            <?php } else{ ?>
-            <?= $form->field($model, 'perc_supervisao')->textInput(['maxlength' => true]) ?>
-            <?php } ?>
-          </div>
+          
           <div class="col-md-2">
              <?= $form->field($model, 'as_aprovada')->checkbox(); ?>
           </div>
@@ -1630,7 +1624,7 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
           <input type="radio" name="disc_radio" value="inst" id="inst_radio"> Instrumentação<br> -->
             <!-- <a style="margin-left: 1em" id="add-np"> <i class="fa fa-plus-square-o fa-2x"></i></a>           -->
           <br>
-          <div class="autocomplete col-md-3" style="width:300px;" id="autocomplete_div_0">
+          <div class="autocomplete col-md-3" style="width:600px;" id="autocomplete_div_0">
             <!-- <input class="np_autocomplete" id="autocomplete_0" type="text" name="np[0]" placeholder="Digite uma atividade"> -->
             <?= // Normal select with ActiveForm & model
                Select2::widget([
