@@ -876,6 +876,35 @@ $(".remove-exec").click(function(ev){
     });
   });
 
+  
+  $(".checkbox-automacao").click(function(){
+    var marcados = "(";
+      $(".checkbox-automacao").each(function( index ) {
+        if($(this).is(":checked")){
+            marcados += $(this).val() + ",";
+        }        
+      });
+      marcados = marcados.slice(0,-1) + ")";
+      
+      $.ajax({ 
+            url: "index.php?r=projeto/preencheconjunto",
+            data: {escopos: marcados},
+            type: "POST",
+            success: function(response){
+              console.log(response);
+              
+              $(".checkbox-conjuntos").each(function( index ) {
+                console.log($(this).val());  
+              });
+             
+          },
+          error: function(){
+            console.log("failure");
+          }
+        });
+
+  });
+
 ');
 ?>
 <?php
@@ -1325,9 +1354,9 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
 
               ?>
               <?php if(!empty($existeEscopo)){ ?>
-                <input type="checkbox" id="<?=$disciplina.'_'.$key2?>" name="Escopos[<?=$disciplina."][".$key2?>]" value="<?= $key2?>" checked="1"><label><?= $escopo ?></label>
+                <input type="checkbox" id="<?=$disciplina.'_'.$key2?>" name="Escopos[<?=$disciplina."][".$key2?>]" value="<?= $key2?>" checked="1" class="checkbox-automacao"><label><?= $escopo ?></label>
               <?php } else{ ?>
-                <input type="checkbox" id="<?=$disciplina.'_'.$key2?>" name="Escopos[<?=$disciplina."][".$key2?>]" value="<?= $key2?>"><label for=""><?= $escopo ?></label>
+                <input type="checkbox" id="<?=$disciplina.'_'.$key2?>" name="Escopos[<?=$disciplina."][".$key2?>]" value="<?= $key2?>" class="checkbox-automacao"><label for=""><?= $escopo ?></label>
               <?php } ?>
             <?php } ?>
             </div>
@@ -1339,7 +1368,7 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
              <?php
             $codigos_escopo = Yii::$app->db->createCommand('SELECT DISTINCT codigo FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id = atividademodelo.id WHERE codigo IS NOT NULL AND codigo <> " "')->queryAll();
                foreach ($codigos_escopo as $key => $code) { ?>
-                    <input type="checkbox" id="Codigos[<?=$code['codigo']?>]" name="Codigos[<?=$code['codigo']?>]" value="<?=$code['codigo']?>"><label for=""><?= $code['codigo'] ?></label>
+                    <input class="checkbox-conjuntos" type="checkbox" id="Codigos[<?=$code['codigo']?>]" name="Codigos[<?=$code['codigo']?>]" value="<?=$code['codigo']?>"><label for=""><?= $code['codigo'] ?></label>
             <?php  } ?>
 
            </fieldset>
