@@ -235,28 +235,32 @@ $this->registerJs("
     <?php $form = ActiveForm::begin(); ?>
     <div class="box box-primary">
         <div class="box-header with-border">
-    <div class="row">       
-    <div class="col-md-4">
+    <div class="row"> 
 
-
-    <div id="tipoExecutantes">
-    <label>Funções</label>
-    <br>
-     <?php     
-        foreach ($listTipos as $key => $tipo) { 
-          $existeTipo = '';
-          if(!$model->isNewRecord)
-            $existeTipo = Yii::$app->db->createCommand('SELECT tipo_id FROM executante_tipo WHERE tipo_id='.$key.' AND executante_id='.$model->usuario_id)->queryScalar();
-          ?>
-          <?php if(!empty($existeTipo)){ ?>
-            <input type="checkbox" name="Tipos[<?=$key?>]" value="<?= $key?>" class="tipo-<?=$key?>" checked="1"><?= $tipo ?>
-          <?php }else{ ?>        
-            <input type="checkbox" name="Tipos[<?=$key?>]" value="<?= $key?>" class="tipo-<?=$key?>"><?= $tipo ?>
+    <div class="col-md-3">
+      <div id="tipoExecutantes">
+      <label>Funções</label>
+      <br>
+       <?php     
+          foreach ($listTipos as $key => $tipo) { 
+            $existeTipo = '';
+            if(!$model->isNewRecord)
+              $existeTipo = Yii::$app->db->createCommand('SELECT tipo_id FROM executante_tipo WHERE tipo_id='.$key.' AND executante_id='.$model->usuario_id)->queryScalar();
+            ?>
+            <?php if(!empty($existeTipo)){ ?>
+            <div class="col-md-6">
+              <input type="checkbox" name="Tipos[<?=$key?>]" value="<?= $key?>" class="tipo-<?=$key?>" checked="1"><?= $tipo ?>
+            </div>
+            <?php }else{ ?> 
+            <div class="col-md-6">       
+              <input type="checkbox" name="Tipos[<?=$key?>]" value="<?= $key?>" class="tipo-<?=$key?>"><?= $tipo ?>
+            </div>
+            <?php } ?>
           <?php } ?>
-        <?php } ?>
-        
-    </div>
+      </div>
+  </div>
 
+  <div class="col-md-2">
     <div id="disciplinaExecutantes" style="margin-top: 1em">
     <label>Disciplinas</label>
     <br>

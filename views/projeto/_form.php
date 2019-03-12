@@ -756,7 +756,7 @@ $(".remove-exec").click(function(ev){
 
   $(".dropify").dropify({
         tpl: {
-        message:         "<div class=\"dropify-message\"><span class=\"file-icon\" /> <p>Clique ou arraste um arquivo para adicioná-lo </p></div>",
+        message:         "<div class=\"dropify-message\"><span class=\"file-icon\" /> <p>Clique ou arraste um arquivo PDF para adicioná-lo </p></div>",
     }
     });
 
@@ -886,17 +886,25 @@ $(".remove-exec").click(function(ev){
       });
       marcados = marcados.slice(0,-1) + ")";
       
+      $(".checkbox-conjuntos").attr("hidden","hidden");
+      $(".label-conjuntos").attr("hidden","hidden");
+
       $.ajax({ 
             url: "index.php?r=projeto/preencheconjunto",
             data: {escopos: marcados},
             type: "POST",
             success: function(response){
-              console.log(response);
+              var conjuntos = response.split(",");
+              conjuntos.splice(-1,1)
               
               $(".checkbox-conjuntos").each(function( index ) {
                 console.log($(this).val());  
-              });
-             
+                if(conjuntos.includes($(this).val())){
+                  $(this).removeAttr("hidden");
+                  $("#Codigos_label_"+ $(this).val()).removeAttr("hidden");
+                }
+                
+              });             
           },
           error: function(){
             console.log("failure");
@@ -1368,7 +1376,8 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
              <?php
             $codigos_escopo = Yii::$app->db->createCommand('SELECT DISTINCT codigo FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id = atividademodelo.id WHERE codigo IS NOT NULL AND codigo <> " "')->queryAll();
                foreach ($codigos_escopo as $key => $code) { ?>
-                    <input class="checkbox-conjuntos" type="checkbox" id="Codigos[<?=$code['codigo']?>]" name="Codigos[<?=$code['codigo']?>]" value="<?=$code['codigo']?>"><label for=""><?= $code['codigo'] ?></label>
+                    <input style="margin-left: 1em" class="checkbox-conjuntos" type="checkbox" id="Codigos[<?=$code['codigo']?>]" name="Codigos[<?=$code['codigo']?>]" value="<?=$code['codigo']?>" hidden>
+                    <label for="" hidden id="Codigos_label_<?=$code['codigo']?>" class="label-conjuntos" hidden><?= $code['codigo'] ?></label>
             <?php  } ?>
 
            </fieldset>
@@ -1565,13 +1574,7 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
             <?= $form->field($model, 'perc_coord_adm')->textInput(['maxlength' => true]) ?>
             <?php } ?>
           </div>
-          <div class="col-md-1" <?=$visible?>>
-          <?php if($model->isNewRecord){ ?>
-            <?= $form->field($model, 'perc_supervisao')->textInput(['maxlength' => true, 'value'=>10]) ?>
-            <?php } else{ ?>
-            <?= $form->field($model, 'perc_supervisao')->textInput(['maxlength' => true]) ?>
-            <?php } ?>
-          </div>
+          
           <div class="col-md-2">
              <?= $form->field($model, 'as_aprovada')->checkbox(); ?>
           </div>
@@ -1659,7 +1662,7 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
           <input type="radio" name="disc_radio" value="inst" id="inst_radio"> Instrumentação<br> -->
             <!-- <a style="margin-left: 1em" id="add-np"> <i class="fa fa-plus-square-o fa-2x"></i></a>           -->
           <br>
-          <div class="autocomplete col-md-3" style="width:300px;" id="autocomplete_div_0">
+          <div class="autocomplete col-md-3" style="width:600px;" id="autocomplete_div_0">
             <!-- <input class="np_autocomplete" id="autocomplete_0" type="text" name="np[0]" placeholder="Digite uma atividade"> -->
             <?= // Normal select with ActiveForm & model
                Select2::widget([

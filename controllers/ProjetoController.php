@@ -973,7 +973,7 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                    }
                 }
                 $perc = $model->perc_coord_adm/100;
-                $percSupervisao = $model->perc_supervisao/100;
+                // $percSupervisao = $model->perc_supervisao/100;
                 
                  //atualiza valor de coordenação e adminstração
             Yii::$app->db->createCommand('UPDATE escopo SET horas_es='.$tot_1*$perc.', horas_saldo='.round($tot_1*$perc).' WHERE id='.$caId_1)->execute();
