@@ -249,7 +249,12 @@ $this->registerJs("
       ?> 
       <?php if($escopo['exe_tp_id']==Yii::$app->user->getId() || $escopo['exe_ej_id']==Yii::$app->user->getId() || $escopo['exe_ep_id']==Yii::$app->user->getId() || $escopo['exe_es_id']==Yii::$app->user->getId() || $escopo['exe_ee_id']==Yii::$app->user->getId() || isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin']) || Yii::$app->db->createCommand('SELECT cargo FROM executante WHERE usuario_id='.Yii::$app->user->id)->queryScalar() == 1 || Yii::$app->db->createCommand('SELECT cargo FROM executante WHERE usuario_id='.Yii::$app->user->id)->queryScalar() == 2){ ?>
       <tr style="background-color: #fff !important">
-        <td style="font-size: 15px; padding: 1px;padding-left: 1em;color: #000"><a href="#"  id="edit_<?= $escopo['id'] ?>" class="edit-horas"><i class="fa fa-pencil" aria-hidden="true"></i></a> <?=$escopo['nome'] ?> </td>
+        <td style="font-size: 15px; padding: 1px;padding-left: 1em;color: #000"><a href="#"  id="edit_<?= $escopo['id'] ?>" class="edit-horas"><i class="fa fa-pencil" aria-hidden="true"></i></a> <?=$escopo['nome'] ?> 
+
+        <?php if($escopo['nome'] == 'Coordenação e Administração'){  ?>
+              <br> <label style="color: red; font-size: 8px"> * Para editar as horas desta atividade, clicar no lápis ao lado </label>
+        <?php } ?>
+      </td>
           
         
         <td style="font-size: 15px; padding-right: 1em;text-align: center; ">

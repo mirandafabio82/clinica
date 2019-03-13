@@ -98,7 +98,7 @@ else{
       $(".modal_bm_ee").attr("hidden", "hidden");
 
       $.ajax({ 
-            url: "index.php?r=tarefa/checkhoras",
+            url: "index.php?r=tarefa/verificaespecialidade",
             data: {escopo_id: escopo_modal_id},
             type: "POST",
             success: function(response){

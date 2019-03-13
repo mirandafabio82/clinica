@@ -634,4 +634,12 @@ class TarefaController extends Controller
             echo json_encode(Yii::$app->db->createCommand('SELECT '.$perc.'*(horas_'.$tipo_executante.' - IFNULL(adiantadas_'.$tipo_executante.', 0)  - IFNULL(executado_'.$tipo_executante.', 0)) FROM projeto JOIN escopo ON escopo.projeto_id = projeto.id WHERE escopo.id='.$escopo_id)->queryScalar());
         }
     }
+
+    public function actionVerificaespecialidade(){
+        if (Yii::$app->request->isAjax) { 
+            $escopo_id = Yii::$app->request->post()['escopo_id'];
+
+            echo json_encode(Yii::$app->db->createCommand('SELECT horas_tp, horas_ej, horas_ep, horas_es, horas_ee FROM projeto JOIN escopo ON escopo.projeto_id = projeto.id WHERE escopo.id='.$escopo_id)->queryAll());
+        }
+    }
 }
