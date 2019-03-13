@@ -54,15 +54,15 @@ th, td {
 
       $money_aut = $a_horas_ee*$tipo_executante[4]['valor_hora']+$a_horas_es*$tipo_executante[3]['valor_hora']+$a_horas_ep*$tipo_executante[2]['valor_hora']+$a_horas_ej*$tipo_executante[1]['valor_hora']+$a_horas_tp*$tipo_executante[0]['valor_hora'];
 
-      $vl_total_conceitual = Yii::$app->db->createCommand('SELECT SUM(horas_ee) AS horas_ee, SUM(horas_es) AS horas_es, SUM(horas_ep) AS horas_ep, SUM(horas_ej)AS horas_ej, SUM(horas_tp) AS horas_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$projeto->id.' AND escopopadrao_id=1')->queryOne();
+      $vl_total_conceitual = Yii::$app->db->createCommand('SELECT SUM(horas_ee) AS horas_ee, SUM(horas_es) AS horas_es, SUM(horas_ep) AS horas_ep, SUM(horas_ej) AS horas_ej, SUM(horas_tp) AS horas_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$projeto->id.' AND escopopadrao_id=1')->queryOne();
 
-      $vl_total_basico = Yii::$app->db->createCommand('SELECT SUM(horas_ee) AS horas_ee, SUM(horas_es) AS horas_es, SUM(horas_ep) AS horas_ep, SUM(horas_ej)AS horas_ej, SUM(horas_tp) AS horas_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$projeto->id.' AND escopopadrao_id=2')->queryOne();
+      $vl_total_basico = Yii::$app->db->createCommand('SELECT SUM(horas_ee) AS horas_ee, SUM(horas_es) AS horas_es, SUM(horas_ep) AS horas_ep, SUM(horas_ej) AS horas_ej, SUM(horas_tp) AS horas_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$projeto->id.' AND escopopadrao_id=2')->queryOne();
 
-      $vl_total_detalhamento = Yii::$app->db->createCommand('SELECT SUM(horas_ee) AS horas_ee, SUM(horas_es) AS horas_es, SUM(horas_ep) AS horas_ep, SUM(horas_ej)AS horas_ej, SUM(horas_tp) AS horas_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$projeto->id.' AND escopopadrao_id=3')->queryOne();
+      $vl_total_detalhamento = Yii::$app->db->createCommand('SELECT SUM(horas_ee) AS horas_ee, SUM(horas_es) AS horas_es, SUM(horas_ep) AS horas_ep, SUM(horas_ej) AS horas_ej, SUM(horas_tp) AS horas_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$projeto->id.' AND escopopadrao_id=3')->queryOne();
 
-      $vl_total_configuracao = Yii::$app->db->createCommand('SELECT SUM(horas_ee) AS horas_ee, SUM(horas_es) AS horas_es, SUM(horas_ep) AS horas_ep, SUM(horas_ej)AS horas_ej, SUM(horas_tp) AS horas_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$projeto->id.' AND escopopadrao_id=4')->queryOne();
+      $vl_total_configuracao = Yii::$app->db->createCommand('SELECT SUM(horas_ee) AS horas_ee, SUM(horas_es) AS horas_es, SUM(horas_ep) AS horas_ep, SUM(horas_ej) AS horas_ej, SUM(horas_tp) AS horas_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$projeto->id.' AND escopopadrao_id=4')->queryOne();
 
-      $vl_total_servico = Yii::$app->db->createCommand('SELECT SUM(horas_ee) AS horas_ee, SUM(horas_es) AS horas_es, SUM(horas_ep) AS horas_ep, SUM(horas_ej)AS horas_ej, SUM(horas_tp) AS horas_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$projeto->id.' AND escopopadrao_id=5')->queryOne();
+      $vl_total_servico = Yii::$app->db->createCommand('SELECT SUM(horas_ee) AS horas_ee, SUM(horas_es) AS horas_es, SUM(horas_ep) AS horas_ep, SUM(horas_ej) AS horas_ej, SUM(horas_tp) AS horas_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$projeto->id.' AND escopopadrao_id=5')->queryOne();
 
      
 
@@ -173,18 +173,18 @@ th, td {
       </tr>
       <tr>
             <td style="font-family: arial;font-size: 8pt" >CONCEITUAL</td>              
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$vl_total_basico['horas_ee']==0 ? '': str_replace('.',',',sprintf("%.1f",$vl_total_basico['horas_ee'])) ?></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$vl_total_basico['horas_es']==0 ? '': str_replace('.',',',sprintf("%.1f",$vl_total_basico['horas_es'])) ?></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$vl_total_basico['horas_ep']==0 ? '': str_replace('.',',',sprintf("%.1f",$vl_total_basico['horas_ep'])) ?></td>
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$vl_total_basico['horas_ej']==0 ? '': str_replace('.',',',sprintf("%.1f",$vl_total_basico['horas_ej'])) ?></td> 
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$vl_total_basico['horas_tp']==0 ? '': str_replace('.',',',sprintf("%.1f",$vl_total_basico['horas_tp'])) ?></td>    
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$vl_total_conceitual['horas_ee']==0 ? '': str_replace('.',',',sprintf("%.1f",$vl_total_conceitual['horas_ee'])) ?></td>
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$vl_total_conceitual['horas_es']==0 ? '': str_replace('.',',',sprintf("%.1f",$vl_total_conceitual['horas_es'])) ?></td>
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$vl_total_conceitual['horas_ep']==0 ? '': str_replace('.',',',sprintf("%.1f",$vl_total_conceitual['horas_ep'])) ?></td>
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$vl_total_conceitual['horas_ej']==0 ? '': str_replace('.',',',sprintf("%.1f",$vl_total_conceitual['horas_ej'])) ?></td> 
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$vl_total_conceitual['horas_tp']==0 ? '': str_replace('.',',',sprintf("%.1f",$vl_total_conceitual['horas_tp'])) ?></td>    
             <td></td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>                 
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$vl_total_basico['horas_ee']+$vl_total_basico['horas_es']+$vl_total_basico['horas_ep']+$vl_total_basico['horas_ej']+$vl_total_basico['horas_tp']==0 ? '':str_replace('.',',',sprintf("%.1f",$vl_total_basico['horas_ee']+$vl_total_basico['horas_es']+$vl_total_basico['horas_ep']+$vl_total_basico['horas_ej']+$vl_total_basico['horas_tp'])) ?></td> 
-            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$vl_total_basico['horas_ee']*$tipo_executante[4]['valor_hora']+$vl_total_basico['horas_es']*$tipo_executante[3]['valor_hora']+$vl_total_basico['horas_ep']*$tipo_executante[2]['valor_hora']+$vl_total_basico['horas_ej']*$tipo_executante[1]['valor_hora']+$vl_total_basico['horas_tp']*$tipo_executante[0]['valor_hora']==0 ? '':number_format($vl_total_basico['horas_ee']*$tipo_executante[4]['valor_hora']+$vl_total_basico['horas_es']*$tipo_executante[3]['valor_hora']+$vl_total_basico['horas_ep']*$tipo_executante[2]['valor_hora']+$vl_total_basico['horas_ej']*$tipo_executante[1]['valor_hora']+$vl_total_basico['horas_tp']*$tipo_executante[0]['valor_hora'], 2, ',', '.') ?></td> 
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$vl_total_conceitual['horas_ee']+$vl_total_conceitual['horas_es']+$vl_total_conceitual['horas_ep']+$vl_total_conceitual['horas_ej']+$vl_total_conceitual['horas_tp']==0 ? '':str_replace('.',',',sprintf("%.1f",$vl_total_conceitual['horas_ee']+$vl_total_conceitual['horas_es']+$vl_total_conceitual['horas_ep']+$vl_total_conceitual['horas_ej']+$vl_total_conceitual['horas_tp'])) ?></td> 
+            <td style="font-family: arial;font-size: 8pt" align="center" ><?=$vl_total_conceitual['horas_ee']*$tipo_executante[4]['valor_hora']+$vl_total_conceitual['horas_es']*$tipo_executante[3]['valor_hora']+$vl_total_conceitual['horas_ep']*$tipo_executante[2]['valor_hora']+$vl_total_conceitual['horas_ej']*$tipo_executante[1]['valor_hora']+$vl_total_conceitual['horas_tp']*$tipo_executante[0]['valor_hora']==0 ? '':number_format($vl_total_conceitual['horas_ee']*$tipo_executante[4]['valor_hora']+$vl_total_conceitual['horas_es']*$tipo_executante[3]['valor_hora']+$vl_total_conceitual['horas_ep']*$tipo_executante[2]['valor_hora']+$vl_total_conceitual['horas_ej']*$tipo_executante[1]['valor_hora']+$vl_total_conceitual['horas_tp']*$tipo_executante[0]['valor_hora'], 2, ',', '.') ?></td> 
 
       </tr>
       <tr>
