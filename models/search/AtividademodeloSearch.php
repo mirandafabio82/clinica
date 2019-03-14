@@ -19,7 +19,7 @@ class AtividademodeloSearch extends Atividademodelo
     {
         return [
             [['id'], 'integer'],
-            [['escopopadrao_id', 'disciplina_id'], 'safe'],
+            [['is_conceitual', 'is_basico', 'is_detalhamento', 'is_configuracao', 'is_servico', 'disciplina_id'], 'safe'],
             [['isPrioritaria', 'isEntregavel'], 'integer'],
         ];
     }
@@ -52,7 +52,7 @@ class AtividademodeloSearch extends Atividademodelo
                 'pageSize' => 10,
             ],
             'sort'=>array(
-              'defaultOrder'=>'escopopadrao_id DESC',
+              'defaultOrder'=>'nome ASC',
             ),
         ]);
 
@@ -69,8 +69,7 @@ class AtividademodeloSearch extends Atividademodelo
             'id' => $this->id,
         ]);
 
-        $query->andFilterWhere(['like', 'escopopadrao_id', $this->escopopadrao_id])
-              ->andFilterWhere(['like', 'disciplina_id', $this->disciplina_id]);
+        $query->andFilterWhere(['like', 'disciplina_id', $this->disciplina_id]);
 
         return $dataProvider;
     }

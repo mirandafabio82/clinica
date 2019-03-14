@@ -1109,31 +1109,38 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
               'contentOptions' => ['style' => 'width:11em;  min-width:8em;'],
               'value' => function ($data) {
 
+                $escopos = Yii::$app->db->createCommand('SELECT is_conceitual, is_basico, is_detalhamento, is_configuracao, is_servico FROM hcn.escopo JOIN atividademodelo ON atividademodelo.id=escopo.atividademodelo_id WHERE projeto_id = '.$data->id)->queryAll();
 
-                $escopos = Yii::$app->db->createCommand('SELECT escopopadrao_id FROM hcn.escopo JOIN atividademodelo ON atividademodelo.id=escopo.atividademodelo_id WHERE projeto_id = '.$data->id.' GROUP BY escopopadrao_id;')->queryAll();
-                
-                $esc_padrao_id = array();
+                $esc_conceitual = array();
+                $esc_basico = array();
+                $esc_detalhamento = array();
+                $esc_configuracao = array();
+                $esc_servico = array();
 
                 foreach ($escopos as $key => $escopopadrao) {
-                  array_push($esc_padrao_id, $escopopadrao['escopopadrao_id']);
+                  array_push($esc_conceitual, $escopopadrao['is_conceitual']);
+                  array_push($esc_basico, $escopopadrao['is_basico']);
+                  array_push($esc_detalhamento, $escopopadrao['is_detalhamento']);
+                  array_push($esc_configuracao, $escopopadrao['is_configuracao']);
+                  array_push($esc_servico, $escopopadrao['is_servico']);
                 }
 
-                if (in_array(1, $esc_padrao_id)) { 
+                if (in_array(1, $esc_conceitual)) { 
                     return "PCO";
                 }
-                else if (in_array(2, $esc_padrao_id)) { 
+                else if (in_array(1, $esc_basico)) { 
                     return "PBA";
                 }
-                else if (in_array(3, $esc_padrao_id) && in_array(4, $esc_padrao_id)) { 
+                else if (in_array(1, $esc_detalhamento) && in_array(1, $esc_configuracao)) { 
                     return "PDC";
                 }
-                else if (in_array(3, $esc_padrao_id)) { 
+                else if (in_array(1, $esc_detalhamento)) { 
                     return "PDE";
                 }
-                else if (in_array(4, $esc_padrao_id)) { 
+                else if (in_array(1, $esc_configuracao)) { 
                     return "CFG";
                 }
-                else if (in_array(5, $esc_padrao_id)) { 
+                else if (in_array(1, $esc_servico)) { 
                     return "SRV";
                 }
                 else{
@@ -1331,10 +1338,6 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
                 continue;
               }
 
-
-          $existeDisciplina = '';
-          if(!$model->isNewRecord)
-            $existeDisciplina = Yii::$app->db->createCommand('SELECT escopopadrao_id FROM atividademodelo JOIN escopo ON escopo.atividademodelo_id=atividademodelo.id WHERE escopopadrao_id='.$key.' AND projeto_id='.$model->id)->queryScalar();
           ?>
           
           
@@ -1357,7 +1360,7 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
               }
               $existeEscopo = '';
               if(!$model->isNewRecord){
-                $existeEscopo = Yii::$app->db->createCommand('SELECT escopopadrao_id FROM atividademodelo JOIN escopo ON escopo.atividademodelo_id=atividademodelo.id WHERE escopopadrao_id='.$key2.' AND projeto_id='.$model->id.' AND disciplina_id='.$key)->queryScalar();
+                $existeEscopo = Yii::$app->db->createCommand('SELECT id FROM atividademodelo JOIN escopo ON escopo.atividademodelo_id=atividademodelo.id WHERE (is_conceitual=1 OR is_basico=1 OR is_detalhamento=1 OR is_conficuracao=1 OR is_servico=1) AND projeto_id='.$model->id.' AND disciplina_id='.$key)->queryScalar();
               }
 
               ?>
@@ -1838,7 +1841,7 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
         if(!empty($exe_ee))
           $exe_ee = Yii::$app->db->createCommand('SELECT nome FROM executante WHERE id='.$esc['exe_ee_id'])->queryScalar();
         
-        $escopo_padrao_id = Yii::$app->db->createCommand('SELECT escopopadrao_id FROM atividademodelo WHERE id='.$esc['atividademodelo_id'])->queryScalar();
+        // $escopo_padrao_id = Yii::$app->db->createCommand('SELECT escopopadrao_id FROM atividademodelo WHERE id='.$esc['atividademodelo_id'])->queryScalar();
 
         $isEntregavel = Yii::$app->db->createCommand('SELECT isEntregavel FROM atividademodelo WHERE id='.$esc['atividademodelo_id'])->queryScalar();
 
@@ -2465,12 +2468,12 @@ HCN Automação
 <?php 
 $nPrioritarios = '';
   if(!$model->isNewRecord){
-      $atividades_projeto = Yii::$app->db->createCommand('SELECT DISTINCT disciplina_id, escopopadrao_id FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id = atividademodelo.id WHERE projeto_id='.$model->id)->queryAll();
+      $atividades_projeto = Yii::$app->db->createCommand('SELECT DISTINCT disciplina_id, (is_conceitual=1 OR is_basico=1 OR is_detalhamento=1 OR is_conficuracao=1 OR is_servico=1) FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id = atividademodelo.id WHERE projeto_id='.$model->id)->queryAll();
       
       $condition_query = "WHERE ";
 
       foreach ($atividades_projeto as $key => $atv_proj) {
-         $condition_query .= '(disciplina_id = '.$atv_proj['disciplina_id'].' AND escopopadrao_id='.$atv_proj['escopopadrao_id'].')';
+         $condition_query .= '(disciplina_id = '.$atv_proj['disciplina_id'].' AND (is_conceitual=1 OR is_basico=1 OR is_detalhamento=1 OR is_conficuracao=1 OR is_servico=1))';
 
          if($key != count($atividades_projeto) - 1)
            $condition_query .= ' OR ';

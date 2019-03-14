@@ -93,7 +93,7 @@ class AtividademodeloController extends Controller
 
         
         if ($model->load(Yii::$app->request->post()) ) {
-            if(empty($model->escopopadrao_id) || !isset($model->escopopadrao_id)){
+            /*if(empty($model->escopopadrao_id) || !isset($model->escopopadrao_id)){
                 $model->escopopadrao_id = 0;
             }
             //atualiza ordem
@@ -104,9 +104,9 @@ class AtividademodeloController extends Controller
                 foreach ($atividades as $key => $atv) {
                     Yii::$app->db->createCommand('UPDATE atividademodelo SET ordem=ordem+1 WHERE id='.$atv['id'])->execute();
                 }
-            }
+            }*/
 
-           if($model->disciplina_id==0){ //se não tiver disciplina
+           /*if($model->disciplina_id==0){ //se não tiver disciplina
                 $model->disciplina_id = 1;
                 
                 $model2->setAttributes($_POST['Atividademodelo']);
@@ -129,7 +129,7 @@ class AtividademodeloController extends Controller
                     $model4->escopopadrao_id = 0;
                 }
                 $model4->save();
-           }
+           }*/
             $model->save();
 
             return $this->redirect(['create', 'id' => $model->id]);
@@ -176,7 +176,7 @@ class AtividademodeloController extends Controller
         if ($model->load(Yii::$app->request->post()) ) {
             
             $model->setAttributes($_POST['Atividademodelo']); 
-            if(empty($model->escopopadrao_id) || !isset($model->escopopadrao_id)){
+            /*if(empty($model->escopopadrao_id) || !isset($model->escopopadrao_id)){
                 $model->escopopadrao_id = 0;
             }
            if($model->disciplina_id==0){
@@ -202,7 +202,7 @@ class AtividademodeloController extends Controller
                     $model4->escopopadrao_id = 0;
                 }
                 $model4->save();
-           }           
+           }           */
 
             $model->save();
 

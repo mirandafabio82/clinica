@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\grid\GridView;
 use yii\helpers\Url;
+use kartik\select2\Select2;
 /* @var $this yii\web\View */
 /* @var $model app\models\Atividademodelo */
 /* @var $form yii\widgets\ActiveForm */
@@ -91,10 +92,16 @@ $this->registerJs("
                 }
             ],
             [
-                'attribute'=>'escopopadrao_id',
+                'attribute'=>'Escopos',
                 'value'=>function($data){
-                    if(isset($data->escopopadrao_id))
-                        return Yii::$app->db->createCommand('SELECT nome FROM escopopadrao WHERE id='.$data->escopopadrao_id)->queryScalar();
+                    $escopos = '';
+                    if($data->is_conceitual) $escopos .= 'Conceitual / ';
+                    if($data->is_basico) $escopos .= 'Básico / ';
+                    if($data->is_detalhamento) $escopos .= 'Detalhamento / ';
+                    if($data->is_configuracao) $escopos .= 'Configuração / ';
+                    if($data->is_servico) $escopos .= 'Serviço / ';
+
+                    return $escopos;
                 }
             ],
             [
@@ -127,16 +134,30 @@ $this->registerJs("
         </div>
         <div class="col-md-2"> 
         <?= $form->field($model, 'disciplina_id')->dropDownList($listDisciplina,['prompt'=>'Selecione uma Displina']) ?>
-        </div>
-        <div class="col-md-2"> 
-        <?= $form->field($model, 'escopopadrao_id')->dropDownList($listEscopo,['prompt'=>'Selecione um Escopo']) ?>
-        </div>
+        </div>        
         <div class="col-md-2"> 
         <?= $form->field($model, 'ordem')->textInput(['maxlength' => true]) ?>
         </div>
         <div class="col-md-2"> 
         <?= $form->field($model,'isPrioritaria')->checkBox() ?>        
         <?= $form->field($model,'isEntregavel')->checkBox() ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2"> 
+            <?= $form->field($model,'is_conceitual')->checkBox() ?>     
+        </div>   
+        <div class="col-md-2">
+            <?= $form->field($model,'is_basico')->checkBox() ?>
+        </div>
+        <div class="col-md-2">
+            <?= $form->field($model,'is_detalhamento')->checkBox() ?>
+        </div>
+        <div class="col-md-2">
+            <?= $form->field($model,'is_configuracao')->checkBox() ?>
+        </div>
+        <div class="col-md-2">
+            <?= $form->field($model,'is_servico')->checkBox() ?>
         </div>
     </div>
     <!-- <input type="checkbox" name="Atividademodelo[isPrioritaria]">Atividade Prioritária

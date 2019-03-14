@@ -27,7 +27,7 @@ class Atividademodelo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['isPrioritaria', 'isEntregavel', 'escopopadrao_id', 'disciplina_id', 'ordem'], 'integer'],
+            [['isPrioritaria', 'isEntregavel', 'disciplina_id', 'ordem', 'is_conceitual', 'is_basico', 'is_detalhamento', 'is_configuracao', 'is_servico'], 'integer'],
             [['nome', 'codigo'], 'string', 'max' => 255],
         ];
     }
@@ -42,9 +42,13 @@ class Atividademodelo extends \yii\db\ActiveRecord
             'nome' => 'Nome',
             'isPrioritaria' => 'Prioritaria',
             'isEntregavel' => 'Entregável',
-            'escopopadrao_id' => 'Escopo',
             'disciplina_id' => 'Disciplina',
             'ordem' => 'Ordem',
+            'is_conceitual' => 'Conceitual',
+            'is_basico' => 'Básico',
+            'is_detalhamento' => 'Detalhamento',
+            'is_configuracao' => 'Configuração',
+            'is_servico' => 'Serviço',
         ];
     }
 }
