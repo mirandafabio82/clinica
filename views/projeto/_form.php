@@ -119,7 +119,7 @@ $this->registerJs('
   $( document ).ready(function() {
     '.$scroll.'
     document.title = "HCN - Projetos";
-
+    
     $("#enviarEmail").click(function (e) {
       $("#loading").show(); // show the gif image when ajax starts
       var projeto_id = window.location.href.split("id=")[1];
@@ -191,6 +191,8 @@ $this->registerJs('
     $("#projeto-nao_editavel").removeClass("form-control");
     $(".np_autocomplete").addClass("form-control");
     $(".revisao").addClass("form-control");
+
+    $(".checkbox-automacao").removeClass("form-control");
 
     $(".messages-inline").text("");
 
@@ -739,7 +741,7 @@ $(".remove-exec").click(function(ev){
           success: function(response){
            if(response=="success"){
               console.log(response);
-              alert("Revisão excluída com sucesso!");
+              alert("Atividade(s) adicionada(s) com sucesso!");
               location.reload();
            }
            else{
@@ -913,6 +915,7 @@ $(".remove-exec").click(function(ev){
 
   });
 
+  
 ');
 ?>
 <?php
@@ -1109,38 +1112,22 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
               'contentOptions' => ['style' => 'width:11em;  min-width:8em;'],
               'value' => function ($data) {
 
-                $escopos = Yii::$app->db->createCommand('SELECT is_conceitual, is_basico, is_detalhamento, is_configuracao, is_servico FROM hcn.escopo JOIN atividademodelo ON atividademodelo.id=escopo.atividademodelo_id WHERE projeto_id = '.$data->id)->queryAll();
-
-                $esc_conceitual = array();
-                $esc_basico = array();
-                $esc_detalhamento = array();
-                $esc_configuracao = array();
-                $esc_servico = array();
-
-                foreach ($escopos as $key => $escopopadrao) {
-                  array_push($esc_conceitual, $escopopadrao['is_conceitual']);
-                  array_push($esc_basico, $escopopadrao['is_basico']);
-                  array_push($esc_detalhamento, $escopopadrao['is_detalhamento']);
-                  array_push($esc_configuracao, $escopopadrao['is_configuracao']);
-                  array_push($esc_servico, $escopopadrao['is_servico']);
-                }
-
-                if (in_array(1, $esc_conceitual)) { 
+                if ($data->is_conceitual) { 
                     return "PCO";
                 }
-                else if (in_array(1, $esc_basico)) { 
+                else if ($data->is_basico) { 
                     return "PBA";
                 }
-                else if (in_array(1, $esc_detalhamento) && in_array(1, $esc_configuracao)) { 
+                else if ($data->is_detalhamento && $data->is_configuracao) { 
                     return "PDC";
                 }
-                else if (in_array(1, $esc_detalhamento)) { 
+                else if ($data->is_detalhamento) { 
                     return "PDE";
                 }
-                else if (in_array(1, $esc_configuracao)) { 
+                else if ($data->is_configuracao) { 
                     return "CFG";
                 }
-                else if (in_array(1, $esc_servico)) { 
+                else if ($data->is_servico) { 
                     return "SRV";
                 }
                 else{
@@ -1156,73 +1143,7 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
             ],
             
             'descricao'
-            /*[
-              'attribute' => 'status',      
-              'class' => 'kartik\grid\EditableColumn',        
-              'format' => 'raw',
-              'contentOptions' => ['style' => 'width:8em;  min-width:8em;'],
-              'value' => function ($data) {
-
-                $status = Yii::$app->db->createCommand('SELECT status, cor FROM projeto_status WHERE id='.$data->status)->queryOne();
-
-                return '<span style="color:'.$status['cor'].' "><i class="fa fa-circle" aria-hidden="true"></i> '.$status['status'].'</span>';
-
-              },
-
-              'editableOptions' => [
-              'inputType' => \kartik\editable\Editable::INPUT_DROPDOWN_LIST,
-              'data' => $listStatus                
-              ]
-            ],*/
-            /*[
-            'attribute' => 'cliente_id',   
-            'format' => 'raw',
-            'contentOptions' => ['style' => 'width:10em;'],
-            'value' => function ($data) {
-               $nome = '';
-              if(isset($data->cliente_id) && !empty($data->cliente_id))
-                $nome = Yii::$app->db->createCommand('SELECT nome FROM cliente WHERE id='.$data->cliente_id)->queryScalar();
-
-
-              return $nome;
-
-            },
-            ],
-            [
-            'attribute' => 'contato_id',              
-            'format' => 'raw',
-            'contentOptions' => ['style' => 'width:10em;  min-width:10em;'],
-            'value' => function ($data) {
-              $nome = '';
-              if(isset($data->contato_id) && !empty($data->contato_id))
-                $nome = Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.$data->contato_id)->queryScalar();                
-
-              return $nome;
-
-            },
-            ],
-            // 'descricao',
-            'codigo',            
-            'municipio',
-            [
-            'attribute' => 'uf',  
-            'contentOptions' => ['style' => 'width:1em;  min-width:1em;'],
-            ],*/
             
-            // 'tratamento',
-            // 'contato',
-            // 'setor',
-            /*[
-            'attribute' => 'fone_contato',
-            'format' => 'raw',
-            'contentOptions' => ['style' => 'width:8em;  min-width:8em;'],
-            ],
-            [
-            'attribute' => 'celular',
-            'format' => 'raw',
-            'contentOptions' => ['style' => 'width:8em;  min-width:8em;'],
-            ],
-            'email:email',*/
            
             ],
             ]); ?>
@@ -1322,56 +1243,34 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
         <div class="col-md-2"> 
           <?= $form->field($model, 'nome')->textInput(['maxlength' => true]) ?>  
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
           <?= $form->field($model, 'descricao')->textarea(['maxlength' => true]) ?>
         </div>
 
-        <div class="col-md-6" id="disciplinas-div">
+        <div class="col-md-7" id="disciplinas-div">
         
         <br>
         
         <fieldset>
            <legend>Disciplinas</legend>
-          <?php 
-            foreach ($listDisciplina as $key => $disciplina) { 
-              if($disciplina=="Diagrama"){
-                continue;
-              }
-
-          ?>
-          
-          
-           <label id="<?=$disciplina?>_checkbox"> <?=$disciplina?> </label>  
-           
-           <?php if(!$model->isNewRecord){ ?>
-           <br>
-            <div style="margin-left: 1em" id="disciplina_<?=$disciplina?>_div">
-            <?php } else{?>
-            <br>
-            <div style="margin-left: 1em" id="disciplina_<?=$disciplina?>_div" >
-            <?php } ?>
-           <?php     
-
-            foreach ($listEscopo as $key2 => $escopo) { 
-              if($disciplina=="Processo" || $disciplina=="Instrumentação"){
-                if($key2==4 || $key2==5){
-                  continue;
-                }
-              }
-              $existeEscopo = '';
-              if(!$model->isNewRecord){
-                $existeEscopo = Yii::$app->db->createCommand('SELECT id FROM atividademodelo JOIN escopo ON escopo.atividademodelo_id=atividademodelo.id WHERE (is_conceitual=1 OR is_basico=1 OR is_detalhamento=1 OR is_conficuracao=1 OR is_servico=1) AND projeto_id='.$model->id.' AND disciplina_id='.$key)->queryScalar();
-              }
-
-              ?>
-              <?php if(!empty($existeEscopo)){ ?>
-                <input type="checkbox" id="<?=$disciplina.'_'.$key2?>" name="Escopos[<?=$disciplina."][".$key2?>]" value="<?= $key2?>" checked="1" class="checkbox-automacao"><label><?= $escopo ?></label>
-              <?php } else{ ?>
-                <input type="checkbox" id="<?=$disciplina.'_'.$key2?>" name="Escopos[<?=$disciplina."][".$key2?>]" value="<?= $key2?>" class="checkbox-automacao"><label for=""><?= $escopo ?></label>
-              <?php } ?>
-            <?php } ?>
-            </div>
-        <?php } ?>
+            
+            <div class="row">
+              <div class="col-md-3">
+                <?= $form->field($model, 'is_conceitual')->checkbox(['class' => 'checkbox-automacao']) ?>
+              </div>
+              <div class="col-md-2">
+                <?= $form->field($model, 'is_basico')->checkbox(['class' => 'checkbox-automacao']) ?>
+              </div>
+              <div class="col-md-3">
+                <?= $form->field($model, 'is_detalhamento')->checkbox(['class' => 'checkbox-automacao']) ?>
+              </div>
+              <div class="col-md-3">
+                <?= $form->field($model, 'is_configuracao')->checkbox(['class' => 'checkbox-automacao']) ?>
+              </div>
+              <div class="col-md-2">
+                <?= $form->field($model, 'is_servico')->checkbox(['class' => 'checkbox-automacao']) ?>
+              </div>
+          </div>
           </fieldset>
 
           <fieldset>
@@ -1966,18 +1865,18 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
             $bodyA .=  $descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total.'<tr><th>SUBTOTAL ATIVIDADES GERAIS DE PROJETO</th><th></th><th></th><th class="sub-a-tot-ee">'.$total_a_EE.'</th><th class="sub-a-tot-es">'.$total_a_ES.'</th><th class="sub-a-tot-ep">'.$total_a_EP.'</th><th class="sub-a-tot-ej">'.$total_a_EJ.'</th><th class="sub-a-tot-tp">'.$total_a_TP.'</th><th></th><th></th><th></th><th></th><th></th></tr><tr>
           <th style="width:4.3em;"></th><th style="width:4.3em;"></th><th style="width:4.3em;"></th><th style="width:4.3em;">EE</th><th style="width:4.3em;">ES</th><th style="width:4.3em;">EP</th><th style="width:4.3em;">EJ</th><th style="width:4.3em;">TP</th><th style="width:4.3em;"></th><th style="width:4.3em;"></th><th style="width:4.3em;"></th><th style="width:4.3em;"></th><th style="width:4.3em;">Total</th></tr>';  
           }
-          else{
+          else{            
               if($isEntregavel){
-                if($escopo_padrao_id==1){
+                if($atividadeModel->is_conceitual==1){
                   $esc_conceitualA.= ' '.$descricao_entregavel.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
                 }
-                else if($escopo_padrao_id==2){
+                else if($atividadeModel->is_basico==1){
                   $esc_basicoA.= ' '.$descricao_entregavel.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
                 }
-                else if($escopo_padrao_id==3){
+                else if($atividadeModel->is_detalhamento==1){
                  $esc_detalhamentoA.= ' '.$descricao_entregavel.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
                 }
-                else if($escopo_padrao_id==4){
+                else if($atividadeModel->is_configuracao==1){
                   $esc_configuracaoA.= ' '.$descricao_entregavel.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
                 }
                 else{
@@ -2003,17 +1902,20 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
           }
           else{
             if($isEntregavel){
-              if($escopo_padrao_id==1){
+              if($atividadeModel->is_conceitual==1){
                 $esc_conceitualP.= ' '.$descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
               }
-             else if($escopo_padrao_id==2){
+             else if($atividadeModel->is_basico==1){
                 $esc_basicoP.= ' '.$descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
               }
-              else if($escopo_padrao_id==3){
+              else if($atividadeModel->is_detalhamento==1){
                $esc_detalhamentoP.= ' '.$descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
               }
+              else if($atividadeModel->is_configuracao==1){
+               $esc_configuracaoP.= ' '.$descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
+              }
               else {
-                $esc_configuracaoP.= ' '.$descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
+                $esc_servicoP.= ' '.$descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
               }
             }
               else{
@@ -2035,17 +1937,20 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
           }
           else{
               if($isEntregavel){
-                if($escopo_padrao_id==1){
+                if($atividadeModel->is_conceitual==1){
                   $esc_conceitualI.= ' '.$descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
                 }
-               else if($escopo_padrao_id==2){
+               else if($atividadeModel->is_basico==1){
                   $esc_basicoI.= ' '.$descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
                 }
-                else if($escopo_padrao_id==3){
+                else if($atividadeModel->is_detalhamento==1){
                  $esc_detalhamentoI.= ' '.$descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
                 }
+                else if($atividadeModel->is_configuracao==1){
+                 $esc_configuracaoI.= ' '.$descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
+                }
                 else{
-                  $esc_configuracaoI.= ' '.$descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
+                  $esc_servicoI.= ' '.$descricao.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
                 }
               }
               else{
@@ -2468,19 +2373,21 @@ HCN Automação
 <?php 
 $nPrioritarios = '';
   if(!$model->isNewRecord){
-      $atividades_projeto = Yii::$app->db->createCommand('SELECT DISTINCT disciplina_id, (is_conceitual=1 OR is_basico=1 OR is_detalhamento=1 OR is_conficuracao=1 OR is_servico=1) FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id = atividademodelo.id WHERE projeto_id='.$model->id)->queryAll();
+      $atividades_projeto = Yii::$app->db->createCommand('SELECT DISTINCT disciplina_id, (is_conceitual=1 OR is_basico=1 OR is_detalhamento=1 OR is_configuracao=1 OR is_servico=1) FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id = atividademodelo.id WHERE projeto_id='.$model->id)->queryAll();
       
-      $condition_query = "WHERE ";
+      $condition_query = '';
+      if(!empty($atividades_projeto)){
+        $condition_query = "WHERE ";
+      }
 
       foreach ($atividades_projeto as $key => $atv_proj) {
-         $condition_query .= '(disciplina_id = '.$atv_proj['disciplina_id'].' AND (is_conceitual=1 OR is_basico=1 OR is_detalhamento=1 OR is_conficuracao=1 OR is_servico=1))';
+         $condition_query .= '(disciplina_id = '.$atv_proj['disciplina_id'].' AND (is_conceitual=1 OR is_basico=1 OR is_detalhamento=1 OR is_configuracao=1 OR is_servico=1))';
+
 
          if($key != count($atividades_projeto) - 1)
            $condition_query .= ' OR ';
       }
 
-
-     
      $nao_prioritarios_array = Yii::$app->db->createCommand('SELECT * FROM atividademodelo '.$condition_query)->queryAll();
    }
    else{

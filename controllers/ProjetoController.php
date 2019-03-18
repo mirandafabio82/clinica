@@ -11,7 +11,7 @@ use app\models\Contato;
 use app\models\ProjetoExecutante;
 use app\models\Escopo;
 use app\models\Log;
-use app\models\search\EscopoSearch;
+use app\models\search\EscopoSearch; 
 use app\models\search\ProjetoSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -211,26 +211,7 @@ class ProjetoController extends Controller
                     $model->data_entrega = date_format($dat, 'Y-m-d');
                 }
 
-                /*$model->resumo_escopo = '1.1- Elaboração de projeto básico, com base no PROJETO CONCEITUAL BK-BA07-00200-PC-03-00003 Rev. 1 Migração para PLC do intertravamento de alta temperatura na purificação de eteno.
-1.2- Implementar no PLC de segurança o intertravamento por alta temperatura (TAHH) respectivo das colunas de purificação de eteno C-2107, C-2109, C-2111, C-2112, C-2113 e C-2115, além do TAH da coluna C-2103.
-1.3- Elaboração de MEMORA DE CÁLCULO SIL, considerando a instrumentação existe do alarme de TAHH respectivo das colunas de purificação de eteno C-2107, C-2109, C-2111, C-2112, C-2113 e C-2115, além do TAH da coluna C-2103, conforme solicitado pelo conceitual. Incluindo as sugestões de adequação das funções para atendimento do SIL requerido, (caso necessário).';
-                $model->resumo_exclusoes = '2.1- Participação em reuniões de HAZOP e Analise de risco.
-2.2- Consolidação do Projeto Coceitual.
-2.3- Analise de consistência do projeto conceitual.
-2.4- Avaliação ou instalação de instrumentos não especificados no Conceitual.
-2.5- Especificação de novos instrumentos. O projeto contempla a avaliação dos instrumentos, existentes conforme solicitação do Conceitual.
-2.6- Instalação de novas estruturas de PLC e painéis de interligação.
-2.7- Emissão de Data Book em papel.';
-                $model->resumo_premissas = '3.1- Levantamento de campo para verificação das características e modelos da instrumentação existe de temperatura e pressão das colunas C-2103, C-2107, C-2109, C-2111, C-2112, C-2113 e C-2115.
-3.2- Participação em reuniões com a BRASKEM para definição de escopo e acompanhamento do projeto.
-3.3- Todos os elementos de temperatura e pressão das colunas C-2103, C-2107, C-2109, C-2111, C-2112, C-2113 e C-2115 já estão configurados no PLC de segurança, assim como as válvulas HV-2001-2 (alimentação de eteno para a purificação) e HV-2113-8A (alimentação de eteno para o reator) e HV-2113-8B (envio do eteno para flare). 
-3.4- O intertravamento deverá atender SIL 1 possuindo um PFD de 1,52E-2 com RRF de 66 com votação 2oo3 para cada nível de medição das colunas.
-3.5- Para o caso especifico da coluna C-2103 que está fora de operação, o intertravamento deverá ser desenvolvido, porém mantido em hold e implementado caso a coluna seja recolocada em operação.';
-
-                $model->resumo_normas = 'Padrão Normativo de Engenharia - PN-0502-00062 - Critérios para Projetos de Instrumentação
-Sistemas Instrumentados de Segurança PNE-80-00087';
-
-                $model->resumo_documentos = 'PROJETO CONCEITUAL BK-BA07-00200-PC-03-00003 Rev. 1 Migração para PLC do intertravamento de alta temperatura na purificação de eteno.';*/
+                
                 $model->resumo_observacoes ='1- O valor desta proposta refere-se ao número de horas previstas na tabela do ANEXO I;                                                     
 2 - As condições e valores dessa proposta estão de acordo com o contrato N° 4600015210 firmado entre a BRASKEM e a HCN Automação;                                                      
 3 - Esta AS é válida por 30 dias, contados da data da sua emissão;                                                      
@@ -240,43 +221,78 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
 
                 if($model->save()){     
                     if($_POST['Projeto']['tipo'] == "A"){
-                        if(isset($_POST['Escopos'])){
+
                             $countCoordAdm = 0;
-                            $escopos = $_POST['Escopos'];
-                            $automacoes = isset($escopos['Automação']) ? $escopos['Automação'] : array();
-                            $processos = isset($escopos['Processo']) ? $escopos['Processo'] : array();
-                            $instrumentacoes = isset($escopos['Instrumentação']) ? $escopos['Instrumentação'] : array();
-                            // $diagramas = isset($escopos['Diagrama']) ? $escopos['Diagrama'] : array();
-
-                            if(empty($automacoes)){
-                                Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id IN(SELECT id FROM atividademodelo WHERE disciplina_id=1) AND projeto_id='.$model->id)->execute();
-                            }
-                            if(empty($processos)){
-                                Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id IN(SELECT id FROM atividademodelo WHERE disciplina_id=2) AND projeto_id='.$model->id)->execute();
-                            }
-                            if(empty($instrumentacoes)){
-                                Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id IN(SELECT id FROM atividademodelo WHERE disciplina_id=3) AND projeto_id='.$model->id)->execute();
-                            }
+                                                        
+                            Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id IN(SELECT atividademodelo.id FROM atividademodelo WHERE disciplina_id=1) AND projeto_id='.$model->id)->execute();
                             
-                            if(!isset($automacoes[1]) || empty($automacoes[1])){
-                             Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id  IN(SELECT id FROM atividademodelo WHERE (is_basico=1) AND disciplina_id=1) AND ((horas_tp=null OR horas_tp="") AND (horas_ej=null OR horas_ej="") AND (horas_ep=null OR horas_ep="") AND (horas_es=null OR horas_es="" OR horas_es=0) AND (horas_ee=null OR horas_ee="")) AND projeto_id='.$model->id)->execute();
+                            if($model->is_basico){
+                             Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id  IN(SELECT atividademodelo.id FROM atividademodelo WHERE (is_basico=1) AND disciplina_id=1) AND ((horas_tp=null OR horas_tp="") AND (horas_ej=null OR horas_ej="") AND (horas_ep=null OR horas_ep="") AND (horas_es=null OR horas_es="" OR horas_es=0) AND (horas_ee=null OR horas_ee="")) AND projeto_id='.$model->id)->execute();
 
                             }
 
-                            if(!isset($automacoes[2]) || empty($automacoes[2]))
-                             Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id  IN(SELECT id FROM atividademodelo WHERE (is_detalhamento=1) AND disciplina_id=1) AND ((horas_tp=null OR horas_tp="") AND (horas_ej=null OR horas_ej="") AND (horas_ep=null OR horas_ep="") AND (horas_es=null OR horas_es="" OR horas_es=0) AND (horas_ee=null OR horas_ee="")) AND projeto_id='.$model->id )->execute();
+                            if($model->is_detalhamento)
+                             Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id  IN(SELECT atividademodelo.id FROM atividademodelo WHERE (is_detalhamento=1) AND disciplina_id=1) AND ((horas_tp=null OR horas_tp="") AND (horas_ej=null OR horas_ej="") AND (horas_ep=null OR horas_ep="") AND (horas_es=null OR horas_es="" OR horas_es=0) AND (horas_ee=null OR horas_ee="")) AND projeto_id='.$model->id )->execute();
 
-                            if(!isset($automacoes[3]) || empty($automacoes[3]))
-                             Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id  IN(SELECT id FROM atividademodelo WHERE (is_configuracao=1) AND disciplina_id=1) AND ((horas_tp=null OR horas_tp="") AND (horas_ej=null OR horas_ej="") AND (horas_ep=null OR horas_ep="") AND (horas_es=null OR horas_es="" OR horas_es=0) AND (horas_ee=null OR horas_ee="")) AND projeto_id='.$model->id)->execute();
+                            if($model->is_configuracao)
+                             Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id  IN(SELECT atividademodelo.id FROM atividademodelo WHERE (is_configuracao=1) AND disciplina_id=1) AND ((horas_tp=null OR horas_tp="") AND (horas_ej=null OR horas_ej="") AND (horas_ep=null OR horas_ep="") AND (horas_es=null OR horas_es="" OR horas_es=0) AND (horas_ee=null OR horas_ee="")) AND projeto_id='.$model->id)->execute();
 
+                            $condition_query = '';
+                            $first = 0;
+                            if($model->is_conceitual){
+                                if($first == 0){
+                                    $condition_query .= 'is_conceitual=1';
+                                    $first = 1;
+                                }
+                                else{
+                                    $condition_query .= ' OR is_conceitual=1';                                    
+                                }
+                            }
+                            else if($model->is_basico){
+                                if($first == 0){
+                                    $condition_query .= 'is_basico=1';
+                                    $first = 1;
+                                }
+                                else{
+                                    $condition_query .= ' OR is_basico=1';                                    
+                                }
+                            }
+                            else if($model->is_detalhamento){
+                                if($first == 0){
+                                    $condition_query .= 'is_detalhamento=1';
+                                    $first = 1;
+                                }
+                                else{
+                                    $condition_query .= ' OR is_detalhamento=1';                                    
+                                }
+                            }
+                            else if($model->is_configuracao){
+                                if($first == 0){
+                                    $condition_query .= 'is_configuracao=1';
+                                    $first = 1;
+                                }
+                                else{
+                                    $condition_query .= ' OR is_configuracao=1';                                    
+                                }
+                            }
+                            else if($model->is_servico){
+                                if($first == 0){
+                                    $condition_query .= 'is_servico=1';
+                                    $first = 1;
+                                }
+                                else{
+                                    $condition_query .= ' OR is_servico=1';                                    
+                                }
+                            }
+                            else{
 
-                            foreach ($automacoes as $key => $automacao) {
-                                $atvmodelos = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE ((is_conceitual=1 OR is_basico=1 OR is_detalhamento=1 OR is_configuracao=1 OR is_servico=1)) AND disciplina_id = 1 AND isPrioritaria=1')->queryAll();
+                            }
+
+                            $atvmodelos = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE disciplina_id = 1 AND isPrioritaria=1 AND ('.$condition_query.')')->queryAll();
 
                                 foreach ($atvmodelos as $key => $atv) {
                                     $existeEscopo = Yii::$app->db->createCommand('SELECT id FROM escopo WHERE projeto_id='.$model->id.' AND atividademodelo_id='.$atv['id'])->queryScalar();
                                     
-
                                     if(!$existeEscopo){
                                         $escopo_model = new Escopo();
                                         $escopo_model->projeto_id = $model->id;
@@ -287,72 +303,11 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
                                     }
                                 }
                             }
-                            if(!isset($processos[1]) || empty($processos[1]))
-                             Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id  IN(SELECT id FROM atividademodelo WHERE (is_basico=1) AND disciplina_id=2) AND ((horas_tp=null OR horas_tp="") AND (horas_ej=null OR horas_ej="") AND (horas_ep=null OR horas_ep="") AND (horas_es=null OR horas_es="" OR horas_es=0) AND (horas_ee=null OR horas_ee="")) AND projeto_id='.$model->id)->execute();
-
-                            if(!isset($processos[2]) || empty($processos[2]))
-                             Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id  IN(SELECT id FROM atividademodelo WHERE (is_detalhamento=1) AND disciplina_id=2) AND ((horas_tp=null OR horas_tp="") AND (horas_ej=null OR horas_ej="") AND (horas_ep=null OR horas_ep="") AND (horas_es=null OR horas_es="" OR horas_es=0) AND (horas_ee=null OR horas_ee="")) AND projeto_id='.$model->id )->execute();
-
-                            if(!isset($processos[3]) || empty($processos[3]))
-                             Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id  IN(SELECT id FROM atividademodelo WHERE (is_configuracao=1) AND disciplina_id=2) AND ((horas_tp=null OR horas_tp="") AND (horas_ej=null OR horas_ej="") AND (horas_ep=null OR horas_ep="") AND (horas_es=null OR horas_es="" OR horas_es=0) AND (horas_ee=null OR horas_ee="")) AND projeto_id='.$model->id)->execute();
-                            foreach ($processos as $key => $processo) {
-                                $atvmodelos = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE ((is_conceitual=1 OR is_basico=1 OR is_detalhamento=1 OR is_configuracao=1 OR is_servico=1)) AND disciplina_id = 2 AND isPrioritaria=1')->queryAll();
-
-                                foreach ($atvmodelos as $key => $atv) {
-                                    $existeEscopo = Yii::$app->db->createCommand('SELECT id FROM escopo WHERE projeto_id='.$model->id.' AND atividademodelo_id='.$atv['id'])->queryScalar();
-                                    if(!$existeEscopo){
-                                        $escopo_model = new Escopo();
-                                        $escopo_model->projeto_id = $model->id;
-                                        $escopo_model->atividademodelo_id = $atv['id'];
-                                        $escopo_model->nome = $atv['nome'];
-                                        $escopo_model->descricao = $atv['nome'];
-                                        $escopo_model->save();
-                                    }
-                                }
-                            }
-                            if(!isset($instrumentacoes[1]) || empty($instrumentacoes[1]))
-                             Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id  IN(SELECT id FROM atividademodelo WHERE (is_basico=1) AND disciplina_id=3) AND ((horas_tp=null OR horas_tp="") AND (horas_ej=null OR horas_ej="") AND (horas_ep=null OR horas_ep="") AND (horas_es=null OR horas_es="" OR horas_es=0) AND (horas_ee=null OR horas_ee="")) AND projeto_id='.$model->id)->execute();
-
-                            if(!isset($instrumentacoes[2]) || empty($instrumentacoes[2]))
-                             Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id  IN(SELECT id FROM atividademodelo WHERE (is_detalhamento=1) AND disciplina_id=3) AND ((horas_tp=null OR horas_tp="") AND (horas_ej=null OR horas_ej="") AND (horas_ep=null OR horas_ep="") AND (horas_es=null OR horas_es="" OR horas_es=0) AND (horas_ee=null OR horas_ee="")) AND projeto_id='.$model->id )->execute();
-
-                            if(!isset($instrumentacoes[3]) || empty($instrumentacoes[3]))
-                             Yii::$app->db->createCommand('DELETE FROM escopo WHERE atividademodelo_id  IN(SELECT id FROM atividademodelo WHERE (is_configuracao=1) AND disciplina_id=3) AND ((horas_tp=null OR horas_tp="") AND (horas_ej=null OR horas_ej="") AND (horas_ep=null OR horas_ep="") AND (horas_es=null OR horas_es="" OR horas_es=0) AND (horas_ee=null OR horas_ee="")) AND projeto_id='.$model->id)->execute();
-
-                            foreach ($instrumentacoes as $key => $instrumentacao) {
-                                $atvmodelos = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE ((is_conceitual=1 OR is_basico=1 OR is_detalhamento=1 OR is_configuracao=1 OR is_servico=1) AND disciplina_id = 3 AND isPrioritaria=1')->queryAll();
-
-                                foreach ($atvmodelos as $key => $atv) {
-                                    $existeEscopo = Yii::$app->db->createCommand('SELECT id FROM escopo WHERE projeto_id='.$model->id.' AND atividademodelo_id='.$atv['id'])->queryScalar();
-                                    if(!$existeEscopo){
-                                        $escopo_model = new Escopo();
-                                        $escopo_model->projeto_id = $model->id;
-                                        $escopo_model->atividademodelo_id = $atv['id'];
-                                        $escopo_model->nome = $atv['nome'];
-                                        $escopo_model->descricao = $atv['nome'];
-                                        $escopo_model->save();
-                                    }
-                                }
-                            }
-                        }                    
+                                                                        
                     }
-                }
+                
 
-                if(isset($_POST['np'])){
-
-                    /*foreach ($_POST['np'] as $key => $np) {
-
-                       $ativi = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE id='.$np)->queryOne();
-
-                        $escopo_model = new Escopo();
-                        $escopo_model->projeto_id = $model->id;
-                        $escopo_model->atividademodelo_id = $ativi['id'];
-                        $escopo_model->nome = $ativi['nome'];
-                        $escopo_model->descricao = $ativi['nome'];
-                        $escopo_model->save();
-                    }*/
-                }
-                     
+                
                 $helder_exists = 0;
                 if(isset($_POST['ProjetoExecutante'])){
                    foreach ($_POST['ProjetoExecutante'] as $key => $proExe) {
@@ -441,8 +396,6 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
     {
 
         $model = $this->findModel($id); 
-
-
         
         if(!empty($model->data_pendencia))
             $model->data_pendencia = date_format(DateTime::createFromFormat('Y-m-d', $model->data_pendencia), 'd/m/Y');
@@ -458,26 +411,7 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
         $ldPreliminarDataProvider = $ldPreliminarSearchModel->search(Yii::$app->request->queryParams);
 
         if(Yii::$app->request->post('editableKey')){
-             
-            /*if(isset($_POST['Escopo'])){
-
-                $escopo_id = Yii::$app->request->post('editableKey');
-                $escopo = Escopo::findOne($escopo_id);
-
-                $out = Json::encode(['output'=>'', 'message'=>'']);
-                $post =[];
-                $posted = current($_POST['Escopo']);
-                $post['Escopo'] = $posted;
-
-                if($escopo->load($post)){
-                    $escopo->save();
-                    // $output = 'teste';
-                    $out = Json::encode(['output'=>'', 'message'=>'']);
-                }
-                echo $out;
-                return $this->redirect(['update', 'id' => $model->id]);
-            }*/
-               
+                       
             if(isset($_POST['Projeto'])){
 
                 $projeto_id = Yii::$app->request->post('editableKey');
@@ -498,8 +432,6 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
             }
 
         }
-
-
 
  
         $clientes = Yii::$app->db->createCommand('SELECT id, CONCAT(nome," - " ,site) as nome FROM cliente')->queryAll();
@@ -527,11 +459,15 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
         $listStatusGeral = ArrayHelper::map($status_geral,'id','status');
 
 
-        $atividades_projeto = Yii::$app->db->createCommand('SELECT DISTINCT disciplina_id, (is_conceitual, is_basico, is_detalhamento, is_configuracao, is_servico) FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id = atividademodelo.id WHERE projeto_id='.$model->id)->queryAll();
-      
-          $condition_query = "WHERE ";
+        $atividades_projeto = Yii::$app->db->createCommand('SELECT DISTINCT disciplina_id, is_conceitual, is_basico, is_detalhamento, is_configuracao, is_servico FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id = atividademodelo.id WHERE projeto_id='.$model->id)->queryAll();
 
-          foreach ($atividades_projeto as $key => $atv_proj) {
+
+          $condition_query = "";
+          if(!empty($atividades_projeto)){
+            $condition_query = "WHERE ";
+          }
+
+          foreach ($atividades_projeto as $key => $atv_proj) {            
              $condition_query .= '(disciplina_id = '.$atv_proj['disciplina_id'].' AND (is_conceitual=1 OR is_basico=1 OR is_detalhamento=1 OR is_configuracao=1 OR is_servico=1))';
 
              if($key != count($atividades_projeto) - 1)
@@ -543,7 +479,6 @@ Sistemas Instrumentados de Segurança PNE-80-00087';
 
         $escopoArray = Yii::$app->db->createCommand('SELECT * FROM atividademodelo JOIN escopo  ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$model->id.' ORDER BY isEntregavel ASC, ordem ASC')->queryAll();
 
-       
 
         $executantes = Yii::$app->db->createCommand('SELECT usuario_id, nome FROM executante JOIN user ON executante.usuario_id = user.id')->queryAll();
         $listExecutantes = ArrayHelper::map($executantes,'usuario_id','nome');

@@ -74,7 +74,7 @@ class Projeto extends \yii\db\ActiveRecord
     {
         return [
              [['cliente_id', 'contato_id'], 'required'],
-            [['id', 'criador_projeto_id','cliente_id', 'contato_id', 'rev_proposta', 'qtd_hh', 'qtd_dias', 'qtd_km', 'status', 'status_geral', 'documentos' ,'executante_id', 'perc_coord_adm', 'perc_supervisao', 'as_aprovada', 'nao_editavel'], 'integer'],
+            [['id', 'criador_projeto_id','cliente_id', 'contato_id', 'rev_proposta', 'qtd_hh', 'qtd_dias', 'qtd_km', 'status', 'status_geral', 'documentos' ,'executante_id', 'perc_coord_adm', 'perc_supervisao', 'as_aprovada', 'nao_editavel', 'is_conceitual', 'is_basico', 'is_detalhamento','is_configuracao', 'is_servico'], 'integer'],
             [['data_proposta', 'data_entrega', 'criado', 'modificado'], 'safe'],
             [['vl_hh', 'total_horas', 'vl_km', 'total_km', 'valor_proposta', 'valor_consumido', 'valor_saldo', 'vl_taxi', 'vl_passagem_aerea', 'vl_hospedagem'], 'number'],
             [['descricao', 'obs_atividade', 'nota_geral'], 'string'],
@@ -165,7 +165,13 @@ class Projeto extends \yii\db\ActiveRecord
             'vl_taxi' => 'Taxi',
             'vl_passagem_aerea' => 'Passagem Aérea',
             'vl_hospedagem' => 'Hospedagem',
-            'nao_editavel' => 'Não Editável'
+            'nao_editavel' => 'Não Editável',
+            'is_conceitual' => 'Conceitual',
+            'is_basico' => 'Básico',
+            'is_detalhamento' => 'Detalhamento',
+            'is_configuracao' => 'Configuração',
+            'is_servico' => 'Serviço'
+
         ];
     }
 

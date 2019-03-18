@@ -86,18 +86,17 @@ class TarefaController extends Controller
             CONCAT(projeto.nome, " (",(
             SELECT DISTINCT
                 CASE 
-                    WHEN escopopadrao.id IN (1) THEN "PCO"
-                    WHEN escopopadrao.id IN (2) THEN "PBA"
-                    WHEN escopopadrao.id IN (3, 4) THEN "PDC"
-                    WHEN escopopadrao.id IN (3) THEN "PDE"
-                    WHEN escopopadrao.id IN (4) THEN "CFG"  
-                    WHEN escopopadrao.id IN (5) THEN "SRV"
+                    WHEN is_conceitual=1 THEN "PCO"
+                    WHEN is_basico=1 THEN "PBA"
+                    WHEN is_detalhamento=1 THEN "PDC"
+                    WHEN is_detalhamento=1 AND is_configuracao=1 THEN "PDE"
+                    WHEN is_configuracao=1 THEN "CFG"  
+                    WHEN is_servico=1 THEN "SRV"
                     ELSE ""
                 END
             
             FROM escopo
                 INNER JOIN atividademodelo ON atividademodelo.id = escopo.atividademodelo_id
-                INNER JOIN escopopadrao ON escopopadrao.id = atividademodelo.escopopadrao_id
             WHERE escopo.projeto_id = projeto.id
             LIMIT 1
             
