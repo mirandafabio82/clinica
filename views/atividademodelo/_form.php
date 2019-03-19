@@ -156,7 +156,7 @@ $this->registerJs("
         <div class="col-md-2">
             <?= $form->field($model,'is_configuracao')->checkBox() ?>
         </div>
-        <div class="col-md-1">
+        <div class="col-md-2">
             <?= $form->field($model,'is_servico')->checkBox() ?>
         </div>
     </div>

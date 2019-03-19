@@ -86,17 +86,17 @@ class TarefaController extends Controller
             CONCAT(projeto.nome, " (",(
             SELECT DISTINCT
                 CASE 
-                    WHEN is_conceitual=1 THEN "PCO"
-                    WHEN is_basico=1 THEN "PBA"
-                    WHEN is_detalhamento=1 THEN "PDC"
-                    WHEN is_detalhamento=1 AND is_configuracao=1 THEN "PDE"
-                    WHEN is_configuracao=1 THEN "CFG"  
-                    WHEN is_servico=1 THEN "SRV"
+                    WHEN projeto.is_conceitual=1 THEN "PCO"
+                    WHEN projeto.is_basico=1 THEN "PBA"
+                    WHEN projeto.is_detalhamento=1 THEN "PDC"
+                    WHEN projeto.is_detalhamento=1 AND projeto.is_configuracao=1 THEN "PDE"
+                    WHEN projeto.is_configuracao=1 THEN "CFG"  
+                    WHEN projeto.is_servico=1 THEN "SRV"
                     ELSE ""
                 END
             
             FROM escopo
-                INNER JOIN atividademodelo ON atividademodelo.id = escopo.atividademodelo_id
+                INNER JOIN atividademodelo ON atividademodelo.id = escopo.atividademodelo_id                
             WHERE escopo.projeto_id = projeto.id
             LIMIT 1
             
@@ -445,6 +445,8 @@ class TarefaController extends Controller
 
             $projeto_id = Yii::$app->db->createCommand('SELECT projeto_id FROM escopo WHERE id='.Yii::$app->request->post()['id'])->queryScalar();
 
+            $perc_coord_adm = Yii::$app->db->createCommand('SELECT perc_coord_adm FROM projeto WHERE id='.$projeto_id)->queryScalar();
+
             //valor total da atividade por especialidade
             $valor_escopo_total_especialidade = Yii::$app->db->createCommand('SELECT horas_'.explode('_', Yii::$app->request->post()['tipo'])[1].' FROM escopo WHERE id='.Yii::$app->request->post()['id'])->queryScalar();
 
@@ -519,7 +521,7 @@ class TarefaController extends Controller
             //atualiza coordenação e administração
             $coord_adm = Yii::$app->db->createCommand('SELECT id FROM escopo WHERE nome="Coordenação e Administração" AND projeto_id='.$projeto_id)->queryScalar();       
             $totalhoras_bm_atual = Yii::$app->db->createCommand('SELECT SUM(horas_bm) FROM escopo WHERE projeto_id='.$projeto_id)->queryScalar();
-            $totalhoras_bm_atual = round($totalhoras_bm_atual * 0.15);
+            $totalhoras_bm_atual = round($totalhoras_bm_atual * $perc_coord_adm * 0.01);
 
             if(!empty($coord_adm)){     
                  //verifica se não ultrapassa o valor total de horas
