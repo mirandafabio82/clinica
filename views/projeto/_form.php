@@ -880,13 +880,15 @@ $(".remove-exec").click(function(ev){
 
   
   $(".checkbox-automacao").click(function(){
-    var marcados = "(";
+    var marcados = "[";
       $(".checkbox-automacao").each(function( index ) {
         if($(this).is(":checked")){
-            marcados += $(this).val() + ",";
+          marcados += $(this)[0].id.split("_")[1] + ",";
         }        
       });
-      marcados = marcados.slice(0,-1) + ")";
+      marcados = marcados.slice(0,-1) + "]";
+
+      console.log(marcados);
       
       $(".checkbox-conjuntos").attr("hidden","hidden");
       $(".label-conjuntos").attr("hidden","hidden");
@@ -1256,19 +1258,19 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
             
             <div class="row">
               <div class="col-md-3">
-                <?= $form->field($model, 'is_conceitual')->checkbox(['class' => 'checkbox-automacao']) ?>
+                <?= $form->field($model, 'is_conceitual')->checkbox(['class' => 'checkbox-automacao', 'id' => 'Automação_1']) ?>
               </div>
               <div class="col-md-2">
-                <?= $form->field($model, 'is_basico')->checkbox(['class' => 'checkbox-automacao']) ?>
+                <?= $form->field($model, 'is_basico')->checkbox(['class' => 'checkbox-automacao', 'id' => 'Automação_2']) ?>
               </div>
               <div class="col-md-3">
-                <?= $form->field($model, 'is_detalhamento')->checkbox(['class' => 'checkbox-automacao']) ?>
+                <?= $form->field($model, 'is_detalhamento')->checkbox(['class' => 'checkbox-automacao', 'id' => 'Automação_3']) ?>
               </div>
               <div class="col-md-3">
-                <?= $form->field($model, 'is_configuracao')->checkbox(['class' => 'checkbox-automacao']) ?>
+                <?= $form->field($model, 'is_configuracao')->checkbox(['class' => 'checkbox-automacao', 'id' => 'Automação_4']) ?>
               </div>
               <div class="col-md-2">
-                <?= $form->field($model, 'is_servico')->checkbox(['class' => 'checkbox-automacao']) ?>
+                <?= $form->field($model, 'is_servico')->checkbox(['class' => 'checkbox-automacao', 'id' => 'Automação_5']) ?>
               </div>
           </div>
           </fieldset>

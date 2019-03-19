@@ -54,15 +54,15 @@ th, td {
 
       $money_aut = $a_horas_ee*$tipo_executante[4]['valor_hora']+$a_horas_es*$tipo_executante[3]['valor_hora']+$a_horas_ep*$tipo_executante[2]['valor_hora']+$a_horas_ej*$tipo_executante[1]['valor_hora']+$a_horas_tp*$tipo_executante[0]['valor_hora'];
 
-      $vl_total_conceitual = Yii::$app->db->createCommand('SELECT SUM(horas_ee) AS horas_ee, SUM(horas_es) AS horas_es, SUM(horas_ep) AS horas_ep, SUM(horas_ej) AS horas_ej, SUM(horas_tp) AS horas_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$projeto->id.' AND escopopadrao_id=1')->queryOne();
+      $vl_total_conceitual = Yii::$app->db->createCommand('SELECT SUM(horas_ee) AS horas_ee, SUM(horas_es) AS horas_es, SUM(horas_ep) AS horas_ep, SUM(horas_ej) AS horas_ej, SUM(horas_tp) AS horas_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$projeto->id.' AND is_conceitual=1')->queryOne();
 
-      $vl_total_basico = Yii::$app->db->createCommand('SELECT SUM(horas_ee) AS horas_ee, SUM(horas_es) AS horas_es, SUM(horas_ep) AS horas_ep, SUM(horas_ej) AS horas_ej, SUM(horas_tp) AS horas_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$projeto->id.' AND escopopadrao_id=2')->queryOne();
+      $vl_total_basico = Yii::$app->db->createCommand('SELECT SUM(horas_ee) AS horas_ee, SUM(horas_es) AS horas_es, SUM(horas_ep) AS horas_ep, SUM(horas_ej) AS horas_ej, SUM(horas_tp) AS horas_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$projeto->id.' AND is_basico=1')->queryOne();
 
-      $vl_total_detalhamento = Yii::$app->db->createCommand('SELECT SUM(horas_ee) AS horas_ee, SUM(horas_es) AS horas_es, SUM(horas_ep) AS horas_ep, SUM(horas_ej) AS horas_ej, SUM(horas_tp) AS horas_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$projeto->id.' AND escopopadrao_id=3')->queryOne();
+      $vl_total_detalhamento = Yii::$app->db->createCommand('SELECT SUM(horas_ee) AS horas_ee, SUM(horas_es) AS horas_es, SUM(horas_ep) AS horas_ep, SUM(horas_ej) AS horas_ej, SUM(horas_tp) AS horas_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$projeto->id.' AND is_detalhamento=1')->queryOne();
 
-      $vl_total_configuracao = Yii::$app->db->createCommand('SELECT SUM(horas_ee) AS horas_ee, SUM(horas_es) AS horas_es, SUM(horas_ep) AS horas_ep, SUM(horas_ej) AS horas_ej, SUM(horas_tp) AS horas_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$projeto->id.' AND escopopadrao_id=4')->queryOne();
+      $vl_total_configuracao = Yii::$app->db->createCommand('SELECT SUM(horas_ee) AS horas_ee, SUM(horas_es) AS horas_es, SUM(horas_ep) AS horas_ep, SUM(horas_ej) AS horas_ej, SUM(horas_tp) AS horas_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$projeto->id.' AND is_configuracao=1')->queryOne();
 
-      $vl_total_servico = Yii::$app->db->createCommand('SELECT SUM(horas_ee) AS horas_ee, SUM(horas_es) AS horas_es, SUM(horas_ep) AS horas_ep, SUM(horas_ej) AS horas_ej, SUM(horas_tp) AS horas_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$projeto->id.' AND escopopadrao_id=5')->queryOne();
+      $vl_total_servico = Yii::$app->db->createCommand('SELECT SUM(horas_ee) AS horas_ee, SUM(horas_es) AS horas_es, SUM(horas_ep) AS horas_ep, SUM(horas_ej) AS horas_ej, SUM(horas_tp) AS horas_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$projeto->id.' AND is_servico=1')->queryOne();
 
      
 

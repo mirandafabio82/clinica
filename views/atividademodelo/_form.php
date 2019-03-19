@@ -147,7 +147,7 @@ $this->registerJs("
         <div class="col-md-2"> 
             <?= $form->field($model,'is_conceitual')->checkBox() ?>     
         </div>   
-        <div class="col-md-2">
+        <div class="col-md-1">
             <?= $form->field($model,'is_basico')->checkBox() ?>
         </div>
         <div class="col-md-2">
@@ -156,7 +156,7 @@ $this->registerJs("
         <div class="col-md-2">
             <?= $form->field($model,'is_configuracao')->checkBox() ?>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-1">
             <?= $form->field($model,'is_servico')->checkBox() ?>
         </div>
     </div>

@@ -248,11 +248,11 @@ $this->registerJs("
               $existeTipo = Yii::$app->db->createCommand('SELECT tipo_id FROM executante_tipo WHERE tipo_id='.$key.' AND executante_id='.$model->usuario_id)->queryScalar();
             ?>
             <?php if(!empty($existeTipo)){ ?>
-            <div class="col-md-6">
+            <div class="col-md-12">
               <input type="checkbox" name="Tipos[<?=$key?>]" value="<?= $key?>" class="tipo-<?=$key?>" checked="1"><?= $tipo ?>
             </div>
             <?php }else{ ?> 
-            <div class="col-md-6">       
+            <div class="col-md-12">       
               <input type="checkbox" name="Tipos[<?=$key?>]" value="<?= $key?>" class="tipo-<?=$key?>"><?= $tipo ?>
             </div>
             <?php } ?>

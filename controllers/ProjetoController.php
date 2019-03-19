@@ -286,10 +286,28 @@ class ProjetoController extends Controller
                             }
                             else{
 
+                            }                            
+
+                            $codigos = '';
+                            $condition_code = '';
+                            if (!empty($_POST['Codigos'])) {
+                                $codigos = '(';
+                            }
+                            if(isset($_POST['Codigos'])){
+                                foreach ($_POST['Codigos'] as $key => $cod) {
+                                    $codigos .= '"'.$cod.'",';
+                                }    
+                            }
+                            
+
+                            if (!empty($_POST['Codigos'])) {
+                                $codigos = rtrim($codigos,',');
+                                $codigos .= ')';
+                                $condition_code = ' AND codigo IN '.$codigos.' OR codigo IS NULL';
                             }
 
-                            $atvmodelos = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE disciplina_id = 1 AND isPrioritaria=1 AND ('.$condition_query.')')->queryAll();
-
+                            $atvmodelos = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE disciplina_id = 1 AND isPrioritaria=1 AND ('.$condition_query.')'.$condition_code)->queryAll();
+                            
                                 foreach ($atvmodelos as $key => $atv) {
                                     $existeEscopo = Yii::$app->db->createCommand('SELECT id FROM escopo WHERE projeto_id='.$model->id.' AND atividademodelo_id='.$atv['id'])->queryScalar();
                                     
@@ -923,7 +941,7 @@ class ProjetoController extends Controller
 
             $automacaoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=1 AND projeto_id='.$projeto->id.' ORDER BY isEntregavel ASC, ordem ASC')->queryAll();
             $automacaoConceitualArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=1 AND is_conceitual=1 AND projeto_id='.$projeto->id.' ORDER BY isEntregavel ASC, ordem ASC')->queryAll();
-            $automacaoBasicoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=1 AND is_basico=1 AND projeto_id='.$projeto->id.' ORDER BY isEntregavel ASC, ordem ASC')->queryAll();
+            $automacaoBasicoArray = Yii::$app->db->createCommand('SELECT * FROM escopo LEFT JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=1 AND is_basico=1 AND projeto_id='.$projeto->id.' ORDER BY isEntregavel ASC, ordem ASC')->queryAll();
             $automacaoDetalhamentoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=1 AND is_detalhamento=1 AND projeto_id='.$projeto->id.' ORDER BY isEntregavel ASC, ordem ASC')->queryAll();
             $automacaoConfiguracaoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=1 AND is_configuracao=1 AND projeto_id='.$projeto->id.' ORDER BY isEntregavel ASC, ordem ASC')->queryAll();
             $automacaoServicoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=1 AND is_servico=1 AND projeto_id='.$projeto->id.' ORDER BY isEntregavel ASC, ordem ASC')->queryAll();
@@ -986,73 +1004,33 @@ class ProjetoController extends Controller
             ]);
 
             if($projeto->tipo == "A"){
-                $processoConceitual = $this->renderPartial('relatorio/_processo_conceitual', [
-                    'projeto' => $projeto,
-                    'escopos' => $processoConceitualArray,
-                    'index' => $arrayIndex[$index]]);
-                if(!empty($processoConceitualArray)) $index++;
-                $processoBasico = $this->renderPartial('relatorio/_processo_basico', [
-                    'projeto' => $projeto,
-                    'escopos' => $processoBasicoArray,
-                    'index' => $arrayIndex[$index]]);
-                if(!empty($processoBasicoArray)) $index++;
-                $processoDetalhamento = $this->renderPartial('relatorio/_processo_detalhamento', [
-                    'projeto' => $projeto,
-                    'escopos' => $processoDetalhamentoArray,
-                    'index' => $arrayIndex[$index]]);
-                if(!empty($processoDetalhamentoArray)) $index++;
-                $processoConfiguracao = $this->renderPartial('relatorio/_processo_configuracao', [
-                    'projeto' => $projeto,
-                    'escopos' => $processoConfiguracaoArray,
-                    'index' => $arrayIndex[$index]]);
-                if(!empty($processoConfiguracaoArray)) $index++;
-
+                
                 $automacaoConceitual = $this->renderPartial('relatorio/_automacao_conceitual', [
                     'projeto' => $projeto,
                     'escopos' => $automacaoConceitualArray,
                     'index' => $arrayIndex[$index]]);
-                if(!empty($automacaoConceitualArray)) $index++;
+                if($projeto->is_conceitual) $index++;
                 $automacaoBasico = $this->renderPartial('relatorio/_automacao_basico', [
                     'projeto' => $projeto,
                     'escopos' => $automacaoBasicoArray,
                     'index' => $arrayIndex[$index]]);
-                if(!empty($automacaoBasicoArray)) $index++;
+                if($projeto->is_basico) $index++;
                 $automacaoDetalhamento = $this->renderPartial('relatorio/_automacao_detalhamento', [
                     'projeto' => $projeto,
                     'escopos' => $automacaoDetalhamentoArray,
                     'index' => $arrayIndex[$index]]);
-                if(!empty($automacaoDetalhamentoArray)) $index++;
+                if($projeto->is_detalhamento) $index++;
                 $automacaoConfiguracao = $this->renderPartial('relatorio/_automacao_configuracao', [
                     'projeto' => $projeto,
                     'escopos' => $automacaoConfiguracaoArray,
                     'index' => $arrayIndex[$index]]);
-                if(!empty($automacaoConfiguracaoArray)) $index++;
+                if($projeto->is_configuracao) $index++;
                 $automacaoServico = $this->renderPartial('relatorio/_automacao_servico', [
                     'projeto' => $projeto,
                     'escopos' => $automacaoServicoArray,
                     'index' => $arrayIndex[$index]]);
-                if(!empty($automacaoServicoArray)) $index++;
-
-                $instrumentacaoConceitual = $this->renderPartial('relatorio/_instrumentacao_conceitual', [
-                    'projeto' => $projeto,
-                    'escopos' => $instrumentacaoConceitualArray,
-                    'index' => $arrayIndex[$index]]);
-                if(!empty($instrumentacaoConceitualArray)) $index++;
-                $instrumentacaoBasico = $this->renderPartial('relatorio/_instrumentacao_basico', [
-                    'projeto' => $projeto,
-                    'escopos' => $instrumentacaoBasicoArray,
-                    'index' => $arrayIndex[$index]]);
-                if(!empty($instrumentacaoBasicoArray)) $index++;
-                $instrumentacaoDetalhamento = $this->renderPartial('relatorio/_instrumentacao_detalhamento', [
-                    'projeto' => $projeto,
-                    'escopos' => $instrumentacaoDetalhamentoArray,
-                    'index' => $arrayIndex[$index]]);
-                if(!empty($instrumentacaoDetalhamentoArray)) $index++;
-                $instrumentacaoConfiguracao = $this->renderPartial('relatorio/_instrumentacao_configuracao', [
-                    'projeto' => $projeto,
-                    'escopos' => $instrumentacaoConfiguracaoArray,
-                    'index' => $arrayIndex[$index]]);
-                if(!empty($instrumentacaoConfiguracaoArray)) $index++;
+                if($projeto->is_servico) $index++;
+                
             }
             if($projeto->tipo == "P"){
                 $atividade = $this->renderPartial('relatorio/_atividade', [
@@ -1087,60 +1065,29 @@ class ProjetoController extends Controller
                 $mpdf->WriteHTML($as);
             }
             if($projeto->tipo == "A"){
-                if(!empty($processoConceitualArray)){
-                    $mpdf->AddPage();
-                    $mpdf->WriteHTML($processoConceitual);
-                }
-                if(!empty($processoBasicoArray)){
-                    $mpdf->AddPage();
-                    $mpdf->WriteHTML($processoBasico);
-                }
-                if(!empty($processoDetalhamentoArray)){
-                    $mpdf->AddPage();
-                    $mpdf->WriteHTML($processoDetalhamento);
-                }
-                if(!empty($processoConfiguracaoArray)){
-                    $mpdf->AddPage();
-                    $mpdf->WriteHTML($processoConfiguracao);
-                }
-
-                if(!empty($automacaoConceitualArray)){
+                
+                if($projeto->is_conceitual){
                     $mpdf->AddPage();
                     $mpdf->WriteHTML($automacaoConceitual);
                 }
-                if(!empty($automacaoBasicoArray)){
+                if($projeto->is_basico){
                     $mpdf->AddPage();
                     $mpdf->WriteHTML($automacaoBasico);
                 }
-                if(!empty($automacaoDetalhamentoArray)){
+                if($projeto->is_detalhamento){
                     $mpdf->AddPage();
                     $mpdf->WriteHTML($automacaoDetalhamento);
                 }
-                if(!empty($automacaoConfiguracaoArray)){
+                if($projeto->is_configuracao){
                     $mpdf->AddPage();
                     $mpdf->WriteHTML($automacaoConfiguracao);
                 }
-                if(!empty($automacaoServicoArray)){
+                if($projeto->is_servico){
                     $mpdf->AddPage();
                     $mpdf->WriteHTML($automacaoServico);
                 }
 
-                if(!empty($instrumentacaoConceitualArray)){
-                    $mpdf->AddPage();
-                    $mpdf->WriteHTML($instrumentacaoConceitual);
-                }
-                if(!empty($instrumentacaoBasicoArray)){
-                    $mpdf->AddPage();
-                    $mpdf->WriteHTML($instrumentacaoBasico);
-                }
-                if(!empty($instrumentacaoDetalhamentoArray)){
-                    $mpdf->AddPage();
-                    $mpdf->WriteHTML($instrumentacaoDetalhamento);
-                }
-                if(!empty($instrumentacaoConfiguracaoArray)){
-                    $mpdf->AddPage();
-                    $mpdf->WriteHTML($instrumentacaoConfiguracao);
-                }
+                
             }
             if($projeto->tipo == "P"){
                 if(!empty($atividadeArray)){
@@ -1347,7 +1294,61 @@ class ProjetoController extends Controller
         if (Yii::$app->request->isAjax) {
             $escopos = Yii::$app->request->post()['escopos'];
 
-            $conjuntos = Yii::$app->db->createCommand('SELECT DISTINCT codigo FROM atividademodelo WHERE (is_conceitual=1 OR is_basico=1 OR is_detalhamento=1 OR is_configuracao=1 OR is_servico=1)')->queryAll();
+            $escopos = (json_decode($escopos));
+            $condition_query = 'WHERE ';
+
+            if(empty($escopos)){
+                return "";
+            }
+
+            $first = 0;
+            if(in_array(1, $escopos)){
+                if($first == 0){
+                    $condition_query .= 'is_conceitual=1';
+                        $first = 1;
+                }
+                else{
+                    $condition_query .= ' OR is_conceitual=1';                                    
+                }
+            }
+            if(in_array(2, $escopos)){
+                if($first == 0){
+                    $condition_query .= 'is_basico=1';
+                        $first = 1;
+                }
+                else{
+                    $condition_query .= ' OR is_basico=1';                                    
+                }
+            }
+            if(in_array(3, $escopos)){
+                if($first == 0){
+                    $condition_query .= 'is_detalhamento=1';
+                        $first = 1;
+                }
+                else{
+                    $condition_query .= ' OR is_detalhamento=1';                                    
+                }
+            }
+            if(in_array(4, $escopos)){
+                if($first == 0){
+                    $condition_query .= 'is_configuracao=1';
+                        $first = 1;
+                }
+                else{
+                    $condition_query .= ' OR is_configuracao=1';                                    
+                }
+            }
+            if(in_array(5, $escopos)){
+                if($first == 0){
+                    $condition_query .= 'is_servico=1';
+                        $first = 1;
+                }
+                else{
+                    $condition_query .= ' OR is_servico=1';                                    
+                }
+            }
+
+            $conjuntos = Yii::$app->db->createCommand('SELECT DISTINCT codigo FROM atividademodelo '.$condition_query)->queryAll();
 
             $conjuntos_string = "";
             
