@@ -1255,22 +1255,29 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
         
         <fieldset>
            <legend>Disciplinas</legend>
+
+           <?php 
+                $disabled = '';
+                if(!$model->isNewRecord){
+                    $disabled = 'disabled';
+                }
+           ?>
             
             <div class="row">
               <div class="col-md-3">
-                <?= $form->field($model, 'is_conceitual')->checkbox(['class' => 'checkbox-automacao', 'id' => 'Automação_1']) ?>
+                <?= $form->field($model, 'is_conceitual')->checkbox(['class' => 'checkbox-automacao', 'id' => 'Automação_1', $disabled => $disabled ]) ?>
               </div>
               <div class="col-md-2">
-                <?= $form->field($model, 'is_basico')->checkbox(['class' => 'checkbox-automacao', 'id' => 'Automação_2']) ?>
+                <?= $form->field($model, 'is_basico')->checkbox(['class' => 'checkbox-automacao', 'id' => 'Automação_2', $disabled => $disabled ]) ?>
               </div>
               <div class="col-md-3">
-                <?= $form->field($model, 'is_detalhamento')->checkbox(['class' => 'checkbox-automacao', 'id' => 'Automação_3']) ?>
+                <?= $form->field($model, 'is_detalhamento')->checkbox(['class' => 'checkbox-automacao', 'id' => 'Automação_3', $disabled => $disabled ]) ?>
               </div>
               <div class="col-md-3">
-                <?= $form->field($model, 'is_configuracao')->checkbox(['class' => 'checkbox-automacao', 'id' => 'Automação_4']) ?>
+                <?= $form->field($model, 'is_configuracao')->checkbox(['class' => 'checkbox-automacao', 'id' => 'Automação_4', $disabled => $disabled ]) ?>
               </div>
               <div class="col-md-2">
-                <?= $form->field($model, 'is_servico')->checkbox(['class' => 'checkbox-automacao', 'id' => 'Automação_5']) ?>
+                <?= $form->field($model, 'is_servico')->checkbox(['class' => 'checkbox-automacao', 'id' => 'Automação_5', $disabled => $disabled ]) ?>
               </div>
           </div>
           </fieldset>

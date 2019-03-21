@@ -168,7 +168,7 @@ $this->registerJs('
     var check_extrato = $("#pg_checkbox").is(":checked");
     var executante_id = $("#executante-extrato-id").val();
     var tabela = $("#tabela_extrato");
-    console.log(executante_id);
+    
     $.ajax({ 
         url: "index.php?r=relatorio/tabelaextrato",
         data: {executante_id: executante_id, check_extrato: check_extrato},
@@ -318,7 +318,7 @@ $this->registerJs('
               </form>
             </div>
             <div style="margin-top: 1em">
-              <table id="tabela_fluxocaixa">
+              <table id="tabela_extrato">
                 <tr>
                   <th rowspan="2">Item</th>
                   <th rowspan="2" style="width: 11em;" >Projeto</th>
