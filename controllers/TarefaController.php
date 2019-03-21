@@ -326,17 +326,18 @@ class TarefaController extends Controller
         $bmModel->num_bm_proj = $numeroBmAtual;
 
         $tipo_exec = Yii::$app->db->createCommand('SELECT * FROM tipo_executante')->queryAll();
-        $valorTotalBm = number_format($bmModel->executado_ee * $tipo_exec[4]['valor_hora']+
+        $valorTotalBm = $bmModel->executado_ee * $tipo_exec[4]['valor_hora']+
                         $bmModel->executado_es * $tipo_exec[3]['valor_hora'] +
                         $bmModel->executado_ep * $tipo_exec[2]['valor_hora']+
                         $bmModel->executado_ej * $tipo_exec[1]['valor_hora']+
                         $bmModel->executado_tp * $tipo_exec[0]['valor_hora']+
-                        $bmModel->km * $vl_km, 2, ',', '.');
+                        $bmModel->km * $vl_km;
 
-        $percBm = number_format((($valorTotalBm) * 100) / $projetoModel->valor_proposta, 2, ',', '.');
-
+        
         $bms = Yii::$app->db->createCommand('SELECT * FROM bm WHERE projeto_id='.$projetoid)->queryAll();
         $valor_todos_bms = 0;
+
+        $saldo = Yii::$app->db->createCommand('SELECT SUM(horas_saldo) FROM escopo WHERE projeto_id='.$projetoid)->queryScalar();
 
         foreach ($bms as $key => $bm) {
             $valor_todos_bms = $valor_todos_bms + $bm['executado_ee'] * $tipo_exec[4]['valor_hora']+
@@ -347,9 +348,16 @@ class TarefaController extends Controller
                         $bm['km'] * $vl_km;
         }
 
-        $percAcumulada = number_format((($valor_todos_bms) * 100) / $projetoModel->valor_proposta, 2, ',', '.');
+        $percBm = (($valorTotalBm) * 100) / $projetoModel->valor_proposta;
+        $percAcumulada = number_format(((($valor_todos_bms) * 100) / $projetoModel->valor_proposta) + $percBm, 2, ',', '.');
+        $percBm = number_format($percBm, 2, ',', '.');
 
         $bmModel->descricao = $projetoModel->desc_resumida.'.'.PHP_EOL.'Esse '.$numbm.'º Boletim de Medição corresponde a '.$percBm.'% das atividades citadas na '.$projetoModel->proposta.''.PHP_EOL.'A medição total acumulada incluindo este BM corresponde a '.$percAcumulada.'% das atividades realizadas.';
+        
+        
+        if($saldo <= 0){//se o BM estiver completando os 100% do projeto
+        	$bmModel->descricao = $projetoModel->desc_resumida.'.'.PHP_EOL.'Esse Boletim de Medição corresponde a 100% das atividades citadas na '.$projetoModel->proposta;
+        }
 
         if(!$bmModel->save()){
             print_r($bmModel->getErrors());

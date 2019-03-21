@@ -170,26 +170,12 @@ class ProjetoController extends Controller
                 $model->setAttributes($_POST['Projeto']); 
                 
                 $identificador = "";
-                if(isset($_POST['Escopos']['Automação'][1])){ $identificador = "PCO"; }
-                if(isset($_POST['Escopos']['Automação'][2])){ $identificador = "PBA"; }
-                if(isset($_POST['Escopos']['Automação'][3])){ $identificador = "PDE"; }
-                if(isset($_POST['Escopos']['Automação'][4])){ $identificador = "CFG"; }
-                if(isset($_POST['Escopos']['Automação'][3]) && isset($_POST['Escopos']['Automação'][4])){$identificador = "PDC"; }
-                if(isset($_POST['Escopos']['Automação'][5])){ $identificador = "SRV"; }
-
-                if(isset($_POST['Escopos']['Processo'][1])){ $identificador = "PCO"; }
-                if(isset($_POST['Escopos']['Processo'][2])){ $identificador = "PBA"; }
-                if(isset($_POST['Escopos']['Processo'][3])){ $identificador = "PDE"; }
-                if(isset($_POST['Escopos']['Processo'][4])){ $identificador = "CFG"; }
-                if(isset($_POST['Escopos']['Processo'][3]) && isset($_POST['Escopos']['Processo'][4])){$identificador = "PDC"; }
-                if(isset($_POST['Escopos']['Processo'][5])){ $identificador = "SRV"; }
-
-                if(isset($_POST['Escopos']['Instrumentação'][1])){ $identificador = "PCO"; }
-                if(isset($_POST['Escopos']['Instrumentação'][2])){ $identificador = "PBA"; }
-                if(isset($_POST['Escopos']['Instrumentação'][3])){ $identificador = "PDE"; }
-                if(isset($_POST['Escopos']['Instrumentação'][4])){ $identificador = "CFG"; }
-                if(isset($_POST['Escopos']['Instrumentação'][3]) && isset($_POST['Escopos']['Instrumentação'][4])){$identificador = "PDC"; }
-                if(isset($_POST['Escopos']['Instrumentação'][5])){ $identificador = "SRV"; }
+                if(isset($projeto->is_conceitual)){ $identificador = "PCO"; }
+                if(isset($projeto->is_basico)){ $identificador = "PBA"; }
+                if(isset($projeto->is_detalhamento)){ $identificador = "PDE"; }
+                if(isset($projeto->is_configuracao)){ $identificador = "CFG"; }
+                if(isset($projeto->is_detalhamento) && isset($projeto->is_configuracao)){$identificador = "PDC"; }
+                if(isset($projeto->is_servico)){ $identificador = "SRV"; }                
 
                 if($model->tipo == "P"){
                     $model->proposta = 'PTC'.'-'.$model->codigo.'-SRV-'.$identificador.'-'.$model->site.'-'.$model->rev_proposta;
@@ -303,10 +289,10 @@ class ProjetoController extends Controller
                             if (!empty($_POST['Codigos'])) {
                                 $codigos = rtrim($codigos,',');
                                 $codigos .= ')';
-                                $condition_code = ' AND codigo IN '.$codigos.' OR codigo IS NULL';
+                                $condition_code = ' AND codigo IN '.$codigos.' OR ((codigo IS NULL OR codigo="") AND '.$condition_query.')';
                             }
 
-                            $atvmodelos = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE disciplina_id = 1 AND isPrioritaria=1 AND ('.$condition_query.')'.$condition_code)->queryAll();
+                            $atvmodelos = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE disciplina_id = 1 AND isPrioritaria=1 AND '.$condition_query.$condition_code)->queryAll();
                             
                                 foreach ($atvmodelos as $key => $atv) {
                                     $existeEscopo = Yii::$app->db->createCommand('SELECT id FROM escopo WHERE projeto_id='.$model->id.' AND atividademodelo_id='.$atv['id'])->queryScalar();
