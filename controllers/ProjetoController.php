@@ -958,15 +958,15 @@ class ProjetoController extends Controller
  
            
             foreach ($escopos as $key => $escopo) {
-                if($escopo['is_conceitual']==1)
+                if($projeto->is_conceitual==1)
                     $conceitual = 'checked="checked"';
-                if($escopo['is_basico']==1)
+                if($projeto->is_basico==1)
                     $basico = 'checked="checked"';
-                if($escopo['is_detalhamento']==1)
+                if($projeto->is_detalhamento==1)
                     $detalhamento = 'checked="checked"';
-                if($escopo['is_configuracao']==1)
+                if($projeto->is_configuracao==1)
                     $config = 'checked="checked"';
-                if($escopo['is_servico']==1)
+                if($projeto->is_servico==1)
                     $servico = 'checked="checked"';
             }
 
