@@ -1986,34 +1986,17 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
 
           
  } 
-    if(!empty($esc_conceitualA)) 
+    if($model->is_conceitual) 
       $bodyA .= '<tr style="background: aquamarine;"><td>CONCEITUAL</td><td></td><td></td><td>EE<td>ES</td><td>EP</td><td>EJ</td><td>TP</td><td></td><td></td><td></td><td></td><td>Total</td></tr>'.$esc_conceitualA;
-    if(!empty($esc_basicoA)) 
+    if($model->is_basico) 
       $bodyA .= '<tr style="background: aquamarine;"><td>BÁSICO</td><td></td><td></td><td>EE<td>ES</td><td>EP</td><td>EJ</td><td>TP</td><td></td><td></td><td></td><td></td><td>Total</td></tr>'.$esc_basicoA;
-    if(!empty($esc_detalhamentoA))
+    if($model->is_detalhamento)
       $bodyA .= '<tr style="background: aquamarine;"><td>DETALHAMENTO</td><td></td><td></td><td>EE<td>ES</td><td>EP</td><td>EJ</td><td>TP</td><td></td><td></td><td></td><td></td><td>Total</td></tr>'.$esc_detalhamentoA;
-    if(!empty($esc_configuracaoA))
+    if($model->is_configuracao)
       $bodyA .= '<tr style="background: aquamarine;"><td>CONFIGURAÇÃO</td><td></td><td></td><td>EE<td>ES</td><td>EP</td><td>EJ</td><td>TP</td><td></td><td></td><td></td><td></td><td>Total</td></tr>'.$esc_configuracaoA;
-    if(!empty($esc_servicoA))
+    if($model->is_servico)
       $bodyA .= '<tr style="background: aquamarine;"><td>SERVIÇO</td><td></td><td></td><td>EE<td>ES</td><td>EP</td><td>EJ</td><td>TP</td><td></td><td></td><td></td><td></td><td>Total</td></tr>'.$esc_servicoA;
 
-    if(!empty($esc_conceitualP))
-      $bodyP .= '<tr style="background: aquamarine;"><td>CONCEITUAL</td><td></td><td></td><td>EE<td>ES</td><td>EP</td><td>EJ</td><td>TP</td><td></td><td></td><td></td><td></td><td>Total</td></tr>'.$esc_conceitualP;
-    if(!empty($esc_basicoP))
-      $bodyP .= '<tr style="background: aquamarine;"><td>BÁSICO</td><td></td><td></td><td>EE<td>ES</td><td>EP</td><td>EJ</td><td>TP</td><td></td><td></td><td></td><td></td><td>Total</td></tr>'.$esc_basicoP;
-    if(!empty($esc_detalhamentoP))
-      $bodyP .= '<tr style="background: aquamarine;"><td>DETALHAMENTO</td><td></td><td></td><td>EE<td>ES</td><td>EP</td><td>EJ</td><td>TP</td><td></td><td></td><td></td><td></td><td>Total</td></tr>'.$esc_detalhamentoP;
-    if(!empty($esc_configuracaoP))
-      $bodyP .= '<tr style="background: aquamarine;"><td>CONFIGURAÇÃO</td><td></td><td></td><td>EE<td>ES</td><td>EP</td><td>EJ</td><td>TP</td><td></td><td></td><td></td><td></td><td>Total</td></tr>'.$esc_configuracaoP;
-
-    if(!empty($esc_conceitualI))
-      $bodyI .= '<tr style="background: aquamarine;"><td>CONCEITUAL</td><td></td><td></td><td>EE<td>ES</td><td>EP</td><td>EJ</td><td>TP</td><td></td><td></td><td></td><td></td><td>Total</td></tr>'.$esc_conceitualI;
-    if(!empty($esc_basicoI))
-      $bodyI .= '<tr style="background: aquamarine;"><td>BÁSICO</td><td></td><td></td><td>EE<td>ES</td><td>EP</td><td>EJ</td><td>TP</td><td></td><td></td><td></td><td></td><td>Total</td></tr>'.$esc_basicoI;
-    if(!empty($esc_detalhamentoI))
-      $bodyI .= '<tr style="background: aquamarine;"><td>DETALHAMENTO</td><td></td><td></td><td>EE<td>ES</td><td>EP</td><td>EJ</td><td>TP</td><td></td><td></td><td></td><td></td><td>Total</td></tr>'.$esc_detalhamentoI;
-    if(!empty($esc_configuracaoI))
-      $bodyI .= '<tr style="background: aquamarine;"><td>CONFIGURAÇÃO</td><td></td><td></td><td>EE<td>ES</td><td>EP</td><td>EJ</td><td>TP</td><td></td><td></td><td></td><td></td><td>Total</td></tr>'.$esc_configuracaoI;
 
 
     $entr = Yii::$app->db->createCommand('SELECT SUM(horas_ee) entr_horas_a_ee,SUM(horas_es) entr_horas_a_es,SUM(horas_ep) entr_horas_a_ep,SUM(horas_ej) entr_horas_a_ej,SUM(horas_tp) entr_horas_a_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$model->id.' AND isEntregavel=1 AND disciplina_id=1')->queryOne();
@@ -2052,53 +2035,12 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
     if(!isset($entr['entr_horas_p_ej'])) $entr['entr_horas_p_ej'] = 0;
     if(!isset($entr['entr_horas_p_tp'])) $entr['entr_horas_p_tp'] = 0;
 
-    $bodyPOld = $bodyP;
-    $bodyP = $bodyP.'<tr><th>SUBTOTAL ATIVIDADES GERAIS DE PROJETO</th><th></th><th></th><th>'.$entr['entr_horas_p_ee'].'</th><th>'.$entr['entr_horas_p_es'].'</th><th>'.$entr['entr_horas_p_ep'].'</th><th>'.$entr['entr_horas_p_ej'].'</th><th>'.$entr['entr_horas_p_tp'].'</th><th></th><th></th><th></th><th></th><th></th></tr>
-    <tr><th>HH TOTAL DE ENGENHARIA</th><th></th><th></th><th class="full-p-tot-ee">'.$full['entr_horas_p_ee'].'</th><th class="full-p-tot-es">'.$full['entr_horas_p_es'].'</th><th class="full-p-tot-ep">'.$full['entr_horas_p_ep'].'</th><th class="full-p-tot-ej">'.$full['entr_horas_p_ej'].'</th><th class="full-p-tot-tp">'.$full['entr_horas_p_tp'].'</th><th></th><th></th><th></th><th></th><th></th></tr>';
-
-    $entr = Yii::$app->db->createCommand('SELECT SUM(horas_ee) entr_horas_i_ee,SUM(horas_es) entr_horas_i_es,SUM(horas_ep) entr_horas_i_ep,SUM(horas_ej) entr_horas_i_ej,SUM(horas_tp) entr_horas_i_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$model->id.' AND isEntregavel=1 AND disciplina_id=3')->queryOne();
-
-    $full = Yii::$app->db->createCommand('SELECT SUM(horas_ee) entr_horas_i_ee,SUM(horas_es) entr_horas_i_es,SUM(horas_ep) entr_horas_i_ep,SUM(horas_ej) entr_horas_i_ej,SUM(horas_tp) entr_horas_i_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=3 AND projeto_id='.$model->id)->queryOne();
-
-    if(!isset($full['entr_horas_i_ee'])) $full['entr_horas_i_ee'] = 0;
-    if(!isset($full['entr_horas_i_es'])) $full['entr_horas_i_es'] = 0;
-    if(!isset($full['entr_horas_i_ep'])) $full['entr_horas_i_ep'] = 0;
-    if(!isset($full['entr_horas_i_ej'])) $full['entr_horas_i_ej'] = 0;
-    if(!isset($full['entr_horas_i_tp'])) $full['entr_horas_i_tp'] = 0;
-
-    if(!isset($entr['entr_horas_i_ee'])) $entr['entr_horas_i_ee'] = 0;
-    if(!isset($entr['entr_horas_i_es'])) $entr['entr_horas_i_es'] = 0;
-    if(!isset($entr['entr_horas_i_ep'])) $entr['entr_horas_i_ep'] = 0;
-    if(!isset($entr['entr_horas_i_ej'])) $entr['entr_horas_i_ej'] = 0;
-    if(!isset($entr['entr_horas_i_tp'])) $entr['entr_horas_i_tp'] = 0;
-
-    $bodyIOld = $bodyI;
-    $bodyI = $bodyI.'<tr><th>SUBTOTAL ATIVIDADES GERAIS DE PROJETO</th><th></th><th></th><th>'.$entr['entr_horas_i_ee'].'</th><th>'.$entr['entr_horas_i_es'].'</th><th>'.$entr['entr_horas_i_ep'].'</th><th>'.$entr['entr_horas_i_ej'].'</th><th>'.$entr['entr_horas_i_tp'].'</th><th></th><th></th><th></th><th></th><th></th></tr>
-    <tr><th>HH TOTAL DE ENGENHARIA</th><th></th><th></th><th class="full-i-tot-ee">'.$full['entr_horas_i_ee'].'</th><th class="full-i-tot-es">'.$full['entr_horas_i_es'].'</th><th class="full-i-tot-ep">'.$full['entr_horas_i_ep'].'</th><th class="full-i-tot-ej">'.$full['entr_horas_i_ej'].'</th><th class="full-i-tot-tp">'.$full['entr_horas_i_tp'].'</th><th></th><th></th><th></th><th></th><th></th></tr>';
-
-    $entr = Yii::$app->db->createCommand('SELECT SUM(horas_ee) entr_horas_d_ee,SUM(horas_es) entr_horas_d_es,SUM(horas_ep) entr_horas_d_ep,SUM(horas_ej) entr_horas_d_ej,SUM(horas_tp) entr_horas_d_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$model->id.' AND isEntregavel=1 AND disciplina_id=3')->queryOne();
-
-    $full = Yii::$app->db->createCommand('SELECT SUM(horas_ee) entr_horas_d_ee,SUM(horas_es) entr_horas_d_es,SUM(horas_ep) entr_horas_d_ep,SUM(horas_ej) entr_horas_d_ej,SUM(horas_tp) entr_horas_d_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=3 AND projeto_id='.$model->id)->queryOne();
-
-    if(!isset($full['entr_horas_d_ee'])) $full['entr_horas_d_ee'] = 0;
-    if(!isset($full['entr_horas_d_es'])) $full['entr_horas_d_es'] = 0;
-    if(!isset($full['entr_horas_d_ep'])) $full['entr_horas_d_ep'] = 0;
-    if(!isset($full['entr_horas_d_ej'])) $full['entr_horas_d_ej'] = 0;
-    if(!isset($full['entr_horas_d_tp'])) $full['entr_horas_d_tp'] = 0;
-
-    if(!isset($entr['entr_horas_d_ee'])) $entr['entr_horas_d_ee'] = 0;
-    if(!isset($entr['entr_horas_d_es'])) $entr['entr_horas_d_es'] = 0;
-    if(!isset($entr['entr_horas_d_ep'])) $entr['entr_horas_d_ep'] = 0;
-    if(!isset($entr['entr_horas_d_ej'])) $entr['entr_horas_d_ej'] = 0;
-    if(!isset($entr['entr_horas_d_tp'])) $entr['entr_horas_d_tp'] = 0;
-
+    
     $bodyDOld = $bodyD;
     
 
     $automacao = '<div style="height: 50em; overflow-y: scroll;">'.$header.''.$bodyA.'</table></div>';
-    $processo = '<div style="height: 50em; overflow-y: scroll;">'.$header.''.$bodyP.'</table></div>';
-    $instrumentacao = '<div style="height: 50em; overflow-y: scroll;">'.$header.''.$bodyI.'</table></div>';
-    $atividade = '<div style="height: 50em; overflow-y: scroll;">'.$header.''.$bodyD.'</table></div>';
+    
     // $diagrama = '<div style="height: 50em; overflow-y: scroll;">'.$header.''.$bodyD.'</table></div>';
     $as = '<div>'. $form2->field($model, "nota_geral")->textArea() .'</div>';
     $resumo = '<div>'. $form2->field($model, "resumo_escopo")->textArea() .'</div>
@@ -2145,20 +2087,7 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
    
     if(!empty($bodyAOld))
       $visibleA = true;
-    else
-      $visibleA = false;
-    if(!empty($bodyPOld))
-      $visibleP = true;
-    else
-      $visibleP = false;
-    if(!empty($bodyIOld))
-      $visibleI = true;
-    else
-      $visibleI = false;
-    if(!empty($bodyDOld))
-      $visibleD = true;
-    else
-      $visibleD = false;
+    
 
 
 $items = [
@@ -2168,21 +2097,7 @@ $items = [
     'active'=>true,
     'visible' => $model->tipo=="A" ? $visibleA : false
 ],
-[
-    'label'=>'Processo',
-    'content'=>$processo,   
-    'visible' => $model->tipo=="A" ? $visibleP : false   
-],
-[
-    'label'=>'Instrumentação',
-    'content'=>$instrumentacao, 
-    'visible' => $model->tipo=="A" ? $visibleI : false
-],
-[
-    'label'=>'Atividade',
-    'content'=> $atividade, 
-    'visible' => $model->tipo=="P" ? true : false      
-],
+
 /*[
     'label'=>'AS',
     'content'=>$as,        
