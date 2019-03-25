@@ -929,7 +929,12 @@ class ProjetoController extends Controller
             $automacaoConceitualArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=1 AND is_conceitual=1 AND projeto_id='.$projeto->id.' ORDER BY isEntregavel ASC, ordem ASC')->queryAll();
             $automacaoBasicoArray = Yii::$app->db->createCommand('SELECT * FROM escopo LEFT JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=1 AND is_basico=1 AND projeto_id='.$projeto->id.' ORDER BY isEntregavel ASC, ordem ASC')->queryAll();
             $automacaoDetalhamentoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=1 AND is_detalhamento=1 AND projeto_id='.$projeto->id.' ORDER BY isEntregavel ASC, ordem ASC')->queryAll();
-            $automacaoConfiguracaoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=1 AND is_configuracao=1 AND projeto_id='.$projeto->id.' ORDER BY isEntregavel ASC, ordem ASC')->queryAll();
+           $automacaoConfiguracaoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=1 AND is_configuracao=1 AND projeto_id='.$projeto->id.' ORDER BY isEntregavel ASC, ordem ASC')->queryAll();
+           
+           if($projeto->is_detalhamento){
+                $automacaoConfiguracaoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=1 AND is_configuracao=1 AND is_detalhamento=0 AND projeto_id='.$projeto->id.' ORDER BY isEntregavel ASC, ordem ASC')->queryAll();
+           }            
+
             $automacaoServicoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=1 AND is_servico=1 AND projeto_id='.$projeto->id.' ORDER BY isEntregavel ASC, ordem ASC')->queryAll();
 
             $instrumentacaoArray = Yii::$app->db->createCommand('SELECT * FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE disciplina_id=3 AND projeto_id='.$projeto->id.' ORDER BY isEntregavel ASC, ordem ASC')->queryAll();

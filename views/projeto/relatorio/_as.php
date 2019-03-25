@@ -64,8 +64,11 @@ th, td {
       if($projeto->is_detalhamento)
       $vl_total_detalhamento = Yii::$app->db->createCommand('SELECT SUM(horas_ee) AS horas_ee, SUM(horas_es) AS horas_es, SUM(horas_ep) AS horas_ep, SUM(horas_ej) AS horas_ej, SUM(horas_tp) AS horas_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$projeto->id.' AND is_detalhamento=1')->queryOne();
       
-      if($projeto->is_configuracao)
-      $vl_total_configuracao = Yii::$app->db->createCommand('SELECT SUM(horas_ee) AS horas_ee, SUM(horas_es) AS horas_es, SUM(horas_ep) AS horas_ep, SUM(horas_ej) AS horas_ej, SUM(horas_tp) AS horas_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$projeto->id.' AND is_configuracao=1')->queryOne();
+      if($projeto->is_configuracao){
+            $vl_total_configuracao = Yii::$app->db->createCommand('SELECT SUM(horas_ee) AS horas_ee, SUM(horas_es) AS horas_es, SUM(horas_ep) AS horas_ep, SUM(horas_ej) AS horas_ej, SUM(horas_tp) AS horas_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$projeto->id.' AND is_configuracao=1')->queryOne();
+            if($projeto->is_detalhamento)
+                        $vl_total_configuracao = Yii::$app->db->createCommand('SELECT SUM(horas_ee) AS horas_ee, SUM(horas_es) AS horas_es, SUM(horas_ep) AS horas_ep, SUM(horas_ej) AS horas_ej, SUM(horas_tp) AS horas_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$projeto->id.' AND is_configuracao=1 AND is_detalhamento = 0')->queryOne();
+      }
       
       if($projeto->is_servico)
       $vl_total_servico = Yii::$app->db->createCommand('SELECT SUM(horas_ee) AS horas_ee, SUM(horas_es) AS horas_es, SUM(horas_ep) AS horas_ep, SUM(horas_ej) AS horas_ej, SUM(horas_tp) AS horas_tp FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$projeto->id.' AND is_servico=1')->queryOne();
