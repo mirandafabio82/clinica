@@ -1259,7 +1259,7 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
            <?php 
                 $disabled = '';
                 if(!$model->isNewRecord){
-                    $disabled = 'disabled';
+                    $disabled = '';
                 }
            ?>
             
@@ -1879,16 +1879,16 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
                 if($atividadeModel->is_conceitual==1){
                   $esc_conceitualA.= ' '.$descricao_entregavel.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
                 }
-                else if($atividadeModel->is_basico==1){
+                if($atividadeModel->is_basico==1){
                   $esc_basicoA.= ' '.$descricao_entregavel.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
                 }
-                else if($atividadeModel->is_detalhamento==1){
+                if($atividadeModel->is_detalhamento==1){
                  $esc_detalhamentoA.= ' '.$descricao_entregavel.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
                 }
-                else if($atividadeModel->is_configuracao==1){
+                if($atividadeModel->is_configuracao==1){
                   $esc_configuracaoA.= ' '.$descricao_entregavel.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
                 }
-                else{
+                if($atividadeModel->is_servico==1){
                   $esc_servicoA.= ' '.$descricao_entregavel.' '.$qtd.' '.$for.' '.$horas_ee.' '.$horas_es.' '.$horas_ep.' '.$horas_ej.' '.$horas_tp.'<td></td><td></td><td></td><td></td> '.$total;
                 }
               }
