@@ -33,7 +33,7 @@ $this->title = 'HCN Automação';
           <!-- small box -->
           <div class="small-box bg-aqua">
             <div class="inner">
-              <h3><?= $numBm ?></h3>
+              <h3><?= $numBm -1 ?></h3>
 
               <p>Nº do último BM</p>
             </div>

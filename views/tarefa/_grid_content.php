@@ -188,6 +188,8 @@ $this->registerJs("
     });
 ");
 
+$cargo = Yii::$app->db->createCommand('SELECT cargo FROM executante WHERE usuario_id='.Yii::$app->user->id)->queryScalar(); 
+
 ?>
 
 
@@ -259,7 +261,9 @@ $this->registerJs("
         
         <td style="font-size: 15px; padding-right: 1em;text-align: center; ">
         <div class="row"> 
-          <?php if(($escopo['exe_tp_id']==$executante_id || isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])) && !empty($escopoModel['horas_tp'])){ 
+          <?php 
+            
+          if(($escopo['exe_tp_id']==$executante_id || isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])  || (isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['executante']) && $cargo==2)) && !empty($escopoModel['horas_tp'])){ 
               $esc_tp = empty($escopoModel['executado_tp']) ? 0 : explode('.',$escopoModel['executado_tp'])[0];
             ?>
               <div class="col-md-5"> 
@@ -267,7 +271,7 @@ $this->registerJs("
               </div>
               <?php } ?>  
 
-            <?php if(($escopo['exe_ej_id']==$executante_id || isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])) && !empty($escopoModel['horas_ej'])){ 
+            <?php if(($escopo['exe_ej_id']==$executante_id || isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])  || (isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['executante']) && $cargo==2)) && !empty($escopoModel['horas_ej']) ){ 
               $esc_ej = empty($escopoModel['executado_ej']) ? 0 : explode('.',$escopoModel['executado_ej'])[0];
               ?>
               <div class="col-md-5"> 
@@ -275,7 +279,7 @@ $this->registerJs("
               </div>
               <?php } ?>  
 
-            <?php if(($escopo['exe_ep_id']==$executante_id || isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])) && !empty($escopoModel['horas_ep'])){ 
+            <?php if(($escopo['exe_ep_id']==$executante_id || isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])  || (isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['executante']) && $cargo==2)) && !empty($escopoModel['horas_ep']) ){ 
               $esc_ep = empty($escopoModel['executado_ep']) ? 0 : explode('.',$escopoModel['executado_ep'])[0];
               ?>
               <div class="col-md-5"> 
@@ -283,7 +287,7 @@ $this->registerJs("
               </div>
               <?php } ?>  
 
-            <?php if(($escopo['exe_es_id']==$executante_id || isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])) && !empty($escopoModel['horas_es'])){ 
+            <?php if(($escopo['exe_es_id']==$executante_id || isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])  || (isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['executante']) && $cargo==2)) && !empty($escopoModel['horas_es']) ){ 
               $esc_es = empty($escopoModel['executado_es']) ? 0 : explode('.',$escopoModel['executado_es'])[0];
               ?>
               <div class="col-md-5"> 
@@ -291,7 +295,7 @@ $this->registerJs("
               </div>
               <?php } ?>  
 
-            <?php if(($escopo['exe_ee_id']==$executante_id || isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])) && !empty($escopoModel['horas_ee'])){ 
+            <?php if(($escopo['exe_ee_id']==$executante_id || isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])  || (isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['executante']) && $cargo==2)) && !empty($escopoModel['horas_ee']) ){ 
               $esc_ee = empty($escopoModel['executado_ee']) ? 0 : explode('.',$escopoModel['executado_ee'])[0];
               ?>
               <div class="col-md-5"> 
@@ -306,7 +310,7 @@ $this->registerJs("
           <?php 
           $esc_tp=0;$esc_ej=0;$esc_ep=0;$esc_es=0;$esc_ee=0;
 
-          if(($escopo['exe_tp_id']==$executante_id || isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])) && !empty($escopoModel['horas_tp'])){ 
+          if(($escopo['exe_tp_id']==$executante_id || isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin']) || (isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['executante']) && $cargo==2)) && !empty($escopoModel['horas_tp'])  ){ 
               $esc_tp = empty($escopoModel['adiantadas_tp']) ? 0 : explode('.',$escopoModel['adiantadas_tp'])[0];
             ?>
               <div class="col-md-5"> 
@@ -314,7 +318,7 @@ $this->registerJs("
               </div>
               <?php } ?>  
 
-            <?php if(($escopo['exe_ej_id']==$executante_id || isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])) && !empty($escopoModel['horas_ej'])){ 
+            <?php if(($escopo['exe_ej_id']==$executante_id || isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin']) || (isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['executante']) && $cargo==2)) && !empty($escopoModel['horas_ej'])  ){ 
               $esc_ej = empty($escopoModel['adiantadas_ej']) ? 0 : explode('.',$escopoModel['adiantadas_ej'])[0];
               ?>
               <div class="col-md-5"> 
@@ -322,7 +326,7 @@ $this->registerJs("
               </div>
               <?php } ?>  
 
-            <?php if(($escopo['exe_ep_id']==$executante_id || isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])) && !empty($escopoModel['horas_ep'])){ 
+            <?php if(($escopo['exe_ep_id']==$executante_id || isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin']) || (isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['executante']) && $cargo==2)) && !empty($escopoModel['horas_ep'])  ){ 
               $esc_ep = empty($escopoModel['adiantadas_ep']) ? 0 : explode('.',$escopoModel['adiantadas_ep'])[0];
               ?>
               <div class="col-md-5"> 
@@ -330,7 +334,7 @@ $this->registerJs("
               </div>
               <?php } ?>  
 
-            <?php if(($escopo['exe_es_id']==$executante_id || isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])) && !empty($escopoModel['horas_es'])){ 
+            <?php if(($escopo['exe_es_id']==$executante_id || isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin']) || (isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['executante']) && $cargo==2)) && !empty($escopoModel['horas_es'])  ){ 
               $esc_es = empty($escopoModel['adiantadas_es']) ? 0 : explode('.',$escopoModel['adiantadas_es'])[0];
               ?>
               <div class="col-md-5"> 
@@ -338,7 +342,7 @@ $this->registerJs("
               </div>
               <?php } ?>  
 
-            <?php if(($escopo['exe_ee_id']==$executante_id || isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])) && !empty($escopoModel['horas_ee'])){ 
+            <?php if(($escopo['exe_ee_id']==$executante_id || isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin']) || (isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['executante']) && $cargo==2)) && !empty($escopoModel['horas_ee'])  ){ 
               $esc_ee = empty($escopoModel['adiantadas_ee']) ? 0 : explode('.',$escopoModel['adiantadas_ee'])[0];
               ?>
               <div class="col-md-5"> 
