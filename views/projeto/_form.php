@@ -781,6 +781,7 @@ $(".remove-exec").click(function(ev){
             processData: false, // Dont process the files
             contentType: false,
           success: function(response){    
+            console.log(response);
             //checa se o texto contem a substring
             var pj = "";            
             pj = response.split("PJ-")[1].replace(/\s\s+/g, " ").split(" ")[0];
@@ -1480,7 +1481,7 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
           </div>
           <div class="col-md-1" <?=$visible?>>
           <?php if($model->isNewRecord){ ?>
-            <?= $form->field($model, 'perc_coord_adm')->textInput(['maxlength' => true, 'value'=>15]) ?>
+            <?= $form->field($model, 'perc_coord_adm')->textInput(['maxlength' => true, 'value'=>20]) ?>
             <?php } else{ ?>
             <?= $form->field($model, 'perc_coord_adm')->textInput(['maxlength' => true]) ?>
             <?php } ?>
