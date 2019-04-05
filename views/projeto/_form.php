@@ -799,6 +799,7 @@ $(".remove-exec").click(function(ev){
               descricao = response.split("PROJETO CONCEITUAL")[1].split("PJ")[0];
               planta = response.split(pjnum)[1].split("-")[0].trim();
               $("#Automação_2").attr("checked", "checked");
+              preencheconjunto("[2]");
             }
             else if(response.indexOf("-ME-") !== -1){//Projeto Básico 
                descricao = response.split("TÍTULO DO PROJETO ")[1].split("Rev Data")[0];
@@ -806,9 +807,17 @@ $(".remove-exec").click(function(ev){
                $("#Automação_3").attr("checked", "checked");
             }
             else { //Memorial Descritivo
-              descricao = response.split("TÍTULO DO PROJETO ")[1].split("Rev Data")[0];
+              descricao = response.split("TÍTULO DO PROJETO ")[1].split("MEMORIAL")[0];
               planta = response.split(pjnum)[1].split("-")[0].trim();
               $("#Automação_4").attr("checked", "checked");
+
+              if(response.includes("PROJETO BÁSICO")){
+                $("#Automação_3").attr("checked", "checked");  
+                preencheconjunto("[3,4]");              
+              }
+              else{
+                preencheconjunto("[4]");
+              }
             }
   
               console.log(planta);
@@ -917,6 +926,30 @@ $(".remove-exec").click(function(ev){
         });
 
   });
+
+  function preencheconjunto(marcados) {
+    $.ajax({ 
+            url: "index.php?r=projeto/preencheconjunto",
+            data: {escopos: marcados},
+            type: "POST",
+            success: function(response){
+              var conjuntos = response.split(",");
+              conjuntos.splice(-1,1)
+              
+              $(".checkbox-conjuntos").each(function( index ) {
+                console.log($(this).val());  
+                if(conjuntos.includes($(this).val())){
+                  $(this).removeAttr("hidden");
+                  $("#Codigos_label_"+ $(this).val()).removeAttr("hidden");
+                }
+                
+              });             
+          },
+          error: function(){
+            console.log("failure");
+          }
+        });
+  }
 
   
 ');
