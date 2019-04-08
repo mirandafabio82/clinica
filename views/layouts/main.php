@@ -181,7 +181,20 @@ $usuario = Yii::$app->db->createCommand('SELECT * FROM user WHERE id='.Yii::$app
         <?php } ?>
         
         <?php if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin']) || (isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['executante']) && (Yii::$app->db->createCommand('SELECT cargo FROM executante WHERE usuario_id='.Yii::$app->user->id)->queryScalar() == 2))){ ?>
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-cloud-upload"></i> <span>Importação de Dados</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu" style="display: none;">
+            <li><a href="<?= Url::to(['importacao/frs']) ?>"><i class="fa fa-bar-chart"></i> FRS </a></li>
+            <li><a href="<?= Url::to(['importacao/nfse']) ?>"><i class="fa fa-barcode"></i> NFSe </a></li>
+          </ul>
+        </li>
         <li><a href="<?= Url::to(['relatorio/index']) ?>"><i class="fa fa-file-pdf-o"></i> <span>Relatórios</span></a></li>
+        
         <?php } ?>
 
         <?php if(!isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['contato'])){ ?>
