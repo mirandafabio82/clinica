@@ -48,7 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'data_lancamento',
                     'data_pagamento',
                     'valor_bruto',
-                    'rentencoes',
+                    'retencoes',
                     'abatimentos',
                     'valor_liquido',
                     'forma_pagamento',

@@ -28,7 +28,8 @@
         "kartik-v/yii2-mpdf": "*",
         "mpdf/mpdf": "^7.0",
         "smalot/pdfparser": "*",
-        "philippfrenzel/yii2fullcalendar": "*"
+        "philippfrenzel/yii2fullcalendar": "*",
+        "phpoffice/phpexcel": "^1.8"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
