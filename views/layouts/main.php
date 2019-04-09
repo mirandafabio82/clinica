@@ -189,8 +189,9 @@ $usuario = Yii::$app->db->createCommand('SELECT * FROM user WHERE id='.Yii::$app
             </span>
           </a>
           <ul class="treeview-menu" style="display: none;">
-            <li><a href="<?= Url::to(['importacao/frs']) ?>"><i class="fa fa-bar-chart"></i> FRS </a></li>
-            <li><a href="<?= Url::to(['importacao/nfse']) ?>"><i class="fa fa-barcode"></i> NFSe </a></li>
+            <li><a href="<?= Url::to(['frs/index']) ?>"><i class="fa fa-bar-chart"></i> FRS </a></li>
+            <li><a href="<?= Url::to(['nfse/index']) ?>"><i class="fa fa-barcode"></i> NFSe </a></li>
+            <li><a href="<?= Url::to(['pagamento/index']) ?>"><i class="fa fa-money"></i> Pagamento </a></li>
           </ul>
         </li>
         <li><a href="<?= Url::to(['relatorio/index']) ?>"><i class="fa fa-file-pdf-o"></i> <span>Relatórios</span></a></li>
