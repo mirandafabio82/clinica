@@ -71,19 +71,22 @@ class FrsController extends Controller
                 }
                 
                 $model = new Frs();
+                $date_e = explode('/',$line['E']);
+                $date_g = explode('/',$line['G']);
 
-                $model->contrato = $line['A'];
-                $model->pedido = $line['B'];
-                $model->frs = $line['C'];
+                $model->contrato = ''.$line['A'];
+                $model->pedido = ''.$line['B'];
+                $model->frs = ''.$line['C'];
                 $model->criador = $line['D'];
-                $model->data_criacao = $line['E'];
+                $model->data_criacao = $date_e[2].'-'.$date_e[0].'-'.$date_e[1];
                 $model->aprovador = $line['F'];
-                $model->data_aprovacao = $line['G'];
+                $model->data_aprovacao = $date_g[2].'-'.$date_g[0].'-'.$date_g[1];
                 $model->cnpj_emitente = $line['H'];
-                $model->valor = $line['I'];
-                $model->nota_fiscal = $line['J'];
-                $model->referencia = $line['K'];
-                $model->texto_breve = $line['L'];
+                $model->cnpj_braskem = $line['I'];
+                $model->valor = str_replace(',','',$line['J']);
+                $model->nota_fiscal = ''.$line['K'];
+                $model->referencia = ''.$line['L'];
+                $model->texto_breve = ''.$line['M'];
                 
                 if(!$model->save()){
                     print_r($model->getErrors());

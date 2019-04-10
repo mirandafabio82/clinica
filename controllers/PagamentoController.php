@@ -71,12 +71,15 @@ class PagamentoController extends Controller
                 }
                 
                 $model = new Pagamento();
+                $date_c = explode('/',$line['C']);
+                $date_d = explode('/',$line['D']);
+                $date_e = explode('/',$line['E']);
 
                 $model->nota_fiscal = ''.$line['A'];
                 $model->tipo_documento = $line['B'];
-                $model->data_emissao = date_format(DateTime::createFromFormat('d/m/Y', $line['C']), 'Y-m-d'); 
-                $model->data_lancamento = date_format(DateTime::createFromFormat('d/m/Y', $line['D']), 'Y-m-d');
-                $model->data_pagamento = date_format(DateTime::createFromFormat('d/m/Y', $line['E']), 'Y-m-d');
+                $model->data_emissao = $date_c[2].'-'.$date_c[0].'-'.$date_c[1]; 
+                $model->data_lancamento = $date_d[2].'-'.$date_d[0].'-'.$date_d[1];
+                $model->data_pagamento = $date_e[2].'-'.$date_e[0].'-'.$date_e[1];
                 $model->valor_bruto = str_replace(',','',$line['F']);
                 $model->retencoes = $line['G'];
                 $model->abatimentos = $line['H'];

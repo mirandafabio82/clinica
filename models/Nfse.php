@@ -10,6 +10,7 @@ use Yii;
  * @property int $id
  * @property string $processo
  * @property string $nota_fiscal
+ * @property string $serie
  * @property string $data_emissao
  * @property string $data_entrega
  * @property string $status
@@ -38,7 +39,7 @@ class Nfse extends \yii\db\ActiveRecord
         return [
             [['data_emissao', 'data_entrega', 'data_pagamento'], 'safe'],
             [['pendencia', 'comentario_devolucao'], 'string'],
-            [['processo', 'nota_fiscal', 'nf_devolvida', 'usuario_pendencia', 'cnpj_emitente'], 'string', 'max' => 45],
+            [['processo', 'nota_fiscal', 'nf_devolvida', 'usuario_pendencia', 'cnpj_emitente', 'serie'], 'string', 'max' => 45],
             [['status'], 'string', 'max' => 255],
         ];
     }
@@ -61,6 +62,7 @@ class Nfse extends \yii\db\ActiveRecord
             'data_pagamento' => 'Data Pagamento',
             'usuario_pendencia' => 'Usuario Pendencia',
             'cnpj_emitente' => 'Cnpj Emitente',
+            'serie' => 'Série',
         ];
     }
 }

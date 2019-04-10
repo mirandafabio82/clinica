@@ -469,7 +469,7 @@ $this->registerJs('
 <div class="row">
   <div class="col-md-2">
     <label>KM Consumida </label>
-    <input type="text" name="km_consumida" class="form-control" id="km_consumida"><br>
+    <input type="text" name="km_consumida" class="form-control km_consumida" id="km_consumida_<?= $projeto_selected ?>"><br>
   </div>
 </div>
 <?php } ?>

@@ -184,6 +184,23 @@ $this->registerJs("
             });        
         }); 
       } 
+  
+      var perc = $('#perc-field').val();
+      $.ajax({ 
+              url: 'index.php?r=tarefa/checkkm',
+              data: {projeto_id: $('.km_consumida')[0].id.split('_')[2], perc: perc},
+              type: 'POST',
+              success: function(response){
+                 var resposta = $.parseJSON(response);    
+                 if(resposta > 0){
+                    $('.km_consumida').val(resposta);
+                 }                                
+              },
+              error: function(){
+                console.log('failure');
+              }
+            });        
+        
       
     });
 ");

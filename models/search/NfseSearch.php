@@ -19,7 +19,7 @@ class NfseSearch extends Nfse
     {
         return [
             [['id'], 'integer'],
-            [['processo', 'nota_fiscal', 'data_emissao', 'data_entrega', 'status', 'pendencia', 'nf_devolvida', 'comentario_devolucao', 'data_pagamento', 'usuario_pendencia', 'cnpj_emitente'], 'safe'],
+            [['processo', 'nota_fiscal', 'data_emissao', 'data_entrega', 'status', 'pendencia', 'nf_devolvida', 'comentario_devolucao', 'data_pagamento', 'usuario_pendencia', 'cnpj_emitente', 'serie'], 'safe'],
         ];
     }
 
@@ -72,7 +72,8 @@ class NfseSearch extends Nfse
             ->andFilterWhere(['like', 'nf_devolvida', $this->nf_devolvida])
             ->andFilterWhere(['like', 'comentario_devolucao', $this->comentario_devolucao])
             ->andFilterWhere(['like', 'usuario_pendencia', $this->usuario_pendencia])
-            ->andFilterWhere(['like', 'cnpj_emitente', $this->cnpj_emitente]);
+            ->andFilterWhere(['like', 'cnpj_emitente', $this->cnpj_emitente])
+            ->andFilterWhere(['like', 'serie', $this->serie]);
 
         return $dataProvider;
     }

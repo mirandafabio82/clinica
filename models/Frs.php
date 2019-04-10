@@ -40,7 +40,7 @@ class Frs extends \yii\db\ActiveRecord
             [['data_criacao', 'data_aprovacao'], 'safe'],
             [['valor'], 'number'],
             [['texto_breve'], 'string'],
-            [['contrato', 'pedido', 'frs', 'cnpj_emitente', 'nota_fiscal', 'referencia'], 'string', 'max' => 45],
+            [['contrato', 'pedido', 'frs', 'cnpj_emitente', 'nota_fiscal', 'referencia', 'cnpj_braskem'], 'string', 'max' => 45],
             [['criador', 'aprovador'], 'string', 'max' => 255],
         ];
     }
@@ -59,11 +59,12 @@ class Frs extends \yii\db\ActiveRecord
             'data_criacao' => 'Data Criacao',
             'aprovador' => 'Aprovador',
             'data_aprovacao' => 'Data Aprovacao',
-            'cnpj_emitente' => 'Cnpj Emitente',
+            'cnpj_emitente' => 'CNPJ Emitente',
             'valor' => 'Valor',
             'nota_fiscal' => 'Nota Fiscal',
             'referencia' => 'Referencia',
             'texto_breve' => 'Texto Breve',
+            'cnpj_braskem' => 'CNPJ Braskem'
         ];
     }
 }

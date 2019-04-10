@@ -11,6 +11,24 @@ use yii\widgets\ActiveForm;
 $this->title = 'Pagamentos';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<style>
+.table-bordered > tbody > tr > td{
+  padding-top: 3px !important;
+  padding-bottom: 3px !important;
+}
+
+.table-striped > tbody > tr:nth-of-type(odd){
+  background-color: #b6b6b6 !important;
+}
+
+.summary{
+  display: none;
+}
+
+.pagination{
+    margin: 0px;
+}
+</style>
 
     <div class="box box-primary">
         <div class="box-header with-border">
@@ -34,13 +52,18 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
                 
 
-        <div class="pagamento-index" style="margin-top:1em">
+        <div class="pagamento-index" style="margin-top:1em;height: 50em; overflow-y: scroll;">
 
             <?= GridView::widget([
                 'dataProvider' => $dataProvider,
                 'filterModel' => $searchModel,
+                'options' => ['style' => 'font-size:12px;'],
                 'columns' => [
-                    ['class' => 'yii\grid\SerialColumn'],
+                    [
+                      'class' => 'yii\grid\ActionColumn',
+                      'template' => '{delete}',    
+                      'contentOptions' => ['style' => 'width:2em;  min-width:2em;'],
+                    ],
 
                     'nota_fiscal',
                     'tipo_documento',
@@ -55,8 +78,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     'conta',
                     'documento_contabil',
                     'compensacao',
-
-                    ['class' => 'yii\grid\ActionColumn'],
                 ],
             ]); ?>
         </div>

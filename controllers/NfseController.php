@@ -71,18 +71,22 @@ class NfseController extends Controller
                 }
                 
                 $model = new Nfse();
+                $date_d = explode('/',$line['D']);
+                $date_e = explode('/',$line['E']);
+                $date_j = explode('/',$line['J']);
 
-                $model->processo = $line['A'];
-                $model->nota_fiscal = $line['B'];
-                $model->data_emissao = date_format(DateTime::createFromFormat('d/m/Y', $line['C'], 'Y-m-d');
-                $model->data_entrega = date_format(DateTime::createFromFormat('d/m/Y', $line['D'], 'Y-m-d');
-                $model->status = $line['E'];
-                $model->pendencia = $line['F'];
-                $model->nf_devolvida = $line['G'];
-                $model->comentario_devolucao = $line['H'];
-                $model->data_pagamento = date_format(DateTime::createFromFormat('d/m/Y', $line['I'], 'Y-m-d');
-                $model->usuario_pendencia = $line['J'];
-                $model->cnpj_emitente = $line['K'];
+                $model->processo = ''.$line['A'];
+                $model->nota_fiscal = ''.$line['B'];
+                $model->serie = $line['C'];
+                $model->data_emissao = $date_d[2].'-'.$date_d[0].'-'.$date_d[1];
+                $model->data_entrega = $date_e[2].'-'.$date_e[0].'-'.$date_e[1];
+                $model->status = $line['F'];
+                $model->pendencia = $line['G'];
+                $model->nf_devolvida = $line['H'];
+                $model->comentario_devolucao = $line['I'];
+                $model->data_pagamento = $date_j[2].'-'.$date_j[0].'-'.$date_j[1];
+                $model->usuario_pendencia = $line['K'];
+                $model->cnpj_emitente = $line['L'];
 
                 if(!$model->save()){
                     print_r($model->getErrors());

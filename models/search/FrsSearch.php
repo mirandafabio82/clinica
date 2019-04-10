@@ -19,7 +19,7 @@ class FrsSearch extends FrsModel
     {
         return [
             [['id'], 'integer'],
-            [['contrato', 'pedido', 'frs', 'criador', 'data_criacao', 'aprovador', 'data_aprovacao', 'cnpj_emitente', 'nota_fiscal', 'referencia', 'texto_breve'], 'safe'],
+            [['contrato', 'pedido', 'frs', 'criador', 'data_criacao', 'aprovador', 'data_aprovacao', 'cnpj_emitente', 'nota_fiscal', 'referencia', 'texto_breve', 'cnpj_braskem'], 'safe'],
             [['valor'], 'number'],
         ];
     }
@@ -74,7 +74,8 @@ class FrsSearch extends FrsModel
             ->andFilterWhere(['like', 'cnpj_emitente', $this->cnpj_emitente])
             ->andFilterWhere(['like', 'nota_fiscal', $this->nota_fiscal])
             ->andFilterWhere(['like', 'referencia', $this->referencia])
-            ->andFilterWhere(['like', 'texto_breve', $this->texto_breve]);
+            ->andFilterWhere(['like', 'texto_breve', $this->texto_breve])
+            ->andFilterWhere(['like', 'cnpj_braskem', $this->cnpj_braskem]);
 
         return $dataProvider;
     }

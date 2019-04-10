@@ -634,6 +634,15 @@ class TarefaController extends Controller
         }
     }
 
+    public function actionCheckkm(){
+        if (Yii::$app->request->isAjax) { 
+            $projeto_id = Yii::$app->request->post()['projeto_id'];
+            $perc = Yii::$app->request->post()['perc'] * 0.01;
+
+            echo json_encode(Yii::$app->db->createCommand('SELECT ('.$perc.' * qtd_km) FROM projeto WHERE id='.$projeto_id)->queryScalar());
+        }
+    }
+
     public function actionCheckhorasadiantadas(){
         if (Yii::$app->request->isAjax) { 
             $escopo_id = Yii::$app->request->post()['escopo_id'];
