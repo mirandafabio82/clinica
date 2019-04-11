@@ -2192,7 +2192,7 @@ echo TabsX::widget([
 
         <label>Destinatário(s)</label>
         <br>
-        <input type="text" id="remetente" name="remetente" class="form-control" value="helder010161@uol.com.br">
+        <input type="text" id="remetente" name="remetente" class="form-control" value="helder010161@uol.com.br, patricia.santos@hcnautomacao.com.br">
         <br>
 
         <label>Assunto</label>

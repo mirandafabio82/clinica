@@ -763,7 +763,7 @@ td, th {
       <div class="modal-body">
 
         <label>Destinatário(s)</label>
-        <input type="text" id="remetente" name="remetente" class="form-control" value="helder010161@uol.com.br ">
+        <input type="text" id="remetente" name="remetente" class="form-control" value="helder010161@uol.com.br, patricia.santos@hcnautomacao.com.br">
 
         <label>Assunto</label>
         <input type="text" id="assunto" name="assunto" class="form-control" value="HCN - BM <?= $model->numero_bm ?>/<?= Date('Y') ?> - <?= $projetoNome ?> ">

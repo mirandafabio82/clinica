@@ -317,7 +317,7 @@ class TarefaController extends Controller
         $bmModel->executado_ep = ($executadas['ep_bm'] + $adiantadas_ep_valor)==0 ? null : ($executadas['ep_bm'] + $adiantadas_ep_valor);
         $bmModel->executado_ej = ($executadas['ej_bm'] + $adiantadas_ej_valor)==0 ? null : ($executadas['ej_bm'] + $adiantadas_ej_valor);
         $bmModel->executado_tp = ($executadas['tp_bm'] + $adiantadas_tp_valor)==0 ? null : ($executadas['tp_bm'] + $adiantadas_tp_valor);
-        $bmModel->km = $km_consumida;
+        $bmModel->km = empty($km_consumida) ? 0 : $km_consumida;
         $bmModel->acumulado = $acu_saldo['horas_acu']+$executadas['ee_bm']+$executadas['es_bm']+$executadas['ep_bm']+$executadas['ej_bm']+$executadas['tp_bm'];
         $bmModel->saldo = $acu_saldo['h_saldo'];
         // $bmModel->qtd_dias = $projetoModel->qtd_dias;

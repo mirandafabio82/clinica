@@ -336,7 +336,7 @@ $this->registerJs('
     $("#bm_teste").click(function(){
       var horas_adiantadas = "";
       
-      var km_consumida = $("#km_consumida").val();
+      var km_consumida = $(".km_consumida").val();
       
       if(km_consumida=="") km_consumida = 0;
 
