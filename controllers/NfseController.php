@@ -71,9 +71,9 @@ class NfseController extends Controller
                 }
                 
                 $model = new Nfse();
-                $date_d = explode('/',$line['D']);
-                $date_e = explode('/',$line['E']);
-                $date_j = explode('/',$line['J']);
+                $date_d = explode('-',$line['D']);
+                $date_e = explode('-',$line['E']);
+                $date_j = explode('-',$line['J']);
 
                 $model->processo = ''.$line['A'];
                 $model->nota_fiscal = ''.$line['B'];

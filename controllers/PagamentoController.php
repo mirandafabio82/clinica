@@ -71,9 +71,9 @@ class PagamentoController extends Controller
                 }
                 
                 $model = new Pagamento();
-                $date_c = explode('/',$line['C']);
-                $date_d = explode('/',$line['D']);
-                $date_e = explode('/',$line['E']);
+                $date_c = explode('-',$line['C']);
+                $date_d = explode('-',$line['D']);
+                $date_e = explode('-',$line['E']);
 
                 $model->nota_fiscal = ''.$line['A'];
                 $model->tipo_documento = $line['B'];

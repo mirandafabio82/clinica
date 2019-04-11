@@ -71,8 +71,8 @@ class FrsController extends Controller
                 }
                 
                 $model = new Frs();
-                $date_e = explode('/',$line['E']);
-                $date_g = explode('/',$line['G']);
+                $date_e = explode('-',$line['E']);
+                $date_g = explode('-',$line['G']);
 
                 $model->contrato = ''.$line['A'];
                 $model->pedido = ''.$line['B'];
