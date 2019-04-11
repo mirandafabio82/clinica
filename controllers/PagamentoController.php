@@ -105,6 +105,12 @@ class PagamentoController extends Controller
         ]);
     }
 
+     //habilitar ajax
+    public function beforeAction($action) {
+        $this->enableCsrfValidation = false;
+        return parent::beforeAction($action);
+    }
+
     /**
      * Displays a single Pagamento model.
      * @param integer $id

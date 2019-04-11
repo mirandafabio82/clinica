@@ -103,6 +103,12 @@ class NfseController extends Controller
         ]);
     }
 
+     //habilitar ajax
+    public function beforeAction($action) {
+        $this->enableCsrfValidation = false;
+        return parent::beforeAction($action);
+    }
+    
     /**
      * Displays a single Nfse model.
      * @param integer $id

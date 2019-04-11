@@ -103,6 +103,12 @@ class FrsController extends Controller
         ]);
     }
 
+     //habilitar ajax
+    public function beforeAction($action) {
+        $this->enableCsrfValidation = false;
+        return parent::beforeAction($action);
+    }
+
     /**
      * Displays a single Frs model.
      * @param integer $id
