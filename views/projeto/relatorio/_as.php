@@ -454,8 +454,8 @@ th, td {
         <td style="font-family: arial;font-size: 8pt;border:1mm solid #ffffff;" align="center">DATA</td>        
      </tr>
      <tr style="border:1mm solid #ffffff;">
-            <td style="font-family: arial;font-size: 8pt;border:1mm solid #ffffff;" colspan="2" align="center"><img src="resources/dist/img/assinatura.png" alt="User Image" style="width: 8em"><br>____________________________________</td>    
-            <td style="font-family: arial;font-size: 8pt;border:1mm solid #ffffff;" colspan="2" align="center"><br><br><br>____________________________________</td>        
+            <td style="font-family: arial;font-size: 6pt;border:1mm solid #ffffff;" colspan="2" align="center"><img src="resources/dist/img/assinatura.png" alt="User Image" style="width: 8em"><br>____________________________________</td>    
+            <td style="font-family: arial;font-size: 6pt;border:1mm solid #ffffff;" colspan="2" align="center"><br><br><br>____________________________________</td>        
      </tr>
      <tr style="border:1mm solid #ffffff;">
             <td style="font-family: arial;font-size: 8pt;border:1mm solid #ffffff;" colspan="2" align="center">Coordenação Projetista</td> 
