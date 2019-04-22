@@ -243,6 +243,15 @@ class ProjetoController extends Controller
                                     $condition_query .= ' OR is_basico=1';                                    
                                 }
                             }
+                            else if($model->is_detalhamento && $model->is_configuracao){
+                                if($first == 0){
+                                    $condition_query .= 'is_detalhamento=1 OR is_configuracao=1';
+                                    $first = 1;
+                                }
+                                else{
+                                    $condition_query .= ' OR is_detalhamento=1 OR is_configuracao=1';                                    
+                                }
+                            }
                             else if($model->is_detalhamento){
                                 if($first == 0){
                                     $condition_query .= 'is_detalhamento=1';
@@ -293,6 +302,8 @@ class ProjetoController extends Controller
                             }
 
                             $atvmodelos = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE disciplina_id = 1 AND isPrioritaria=1 AND '.$condition_query.$condition_code)->queryAll();
+
+                            
                             
                                 foreach ($atvmodelos as $key => $atv) {
                                     $existeEscopo = Yii::$app->db->createCommand('SELECT id FROM escopo WHERE projeto_id='.$model->id.' AND atividademodelo_id='.$atv['id'])->queryScalar();
