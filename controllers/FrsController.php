@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Frs;
+use app\models\BM;
 use app\models\search\FrsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -71,16 +72,16 @@ class FrsController extends Controller
                 }
                 
                 $model = new Frs();
-                $date_e = explode('-',$line['E']);
-                $date_g = explode('-',$line['G']);
+                $date_e = explode('/',$line['E']);
+                $date_g = explode('/',$line['G']);
 
                 $model->contrato = ''.$line['A'];
                 $model->pedido = ''.$line['B'];
                 $model->frs = ''.$line['C'];
                 $model->criador = $line['D'];
-                $model->data_criacao = $date_e[2].'-'.$date_e[0].'-'.$date_e[1];
+                $model->data_criacao = !empty($line['E']) ? $date_e[2].'-'.$date_e[0].'-'.$date_e[1] : '';
                 $model->aprovador = $line['F'];
-                $model->data_aprovacao = $date_g[2].'-'.$date_g[0].'-'.$date_g[1];
+                $model->data_aprovacao = !empty($line['G']) ? $date_g[2].'-'.$date_g[0].'-'.$date_g[1] : '';
                 $model->cnpj_emitente = $line['H'];
                 $model->cnpj_braskem = $line['I'];
                 $model->valor = str_replace(',','',$line['J']);
@@ -92,6 +93,34 @@ class FrsController extends Controller
                     print_r($model->getErrors());
                     die();
                 }
+
+                $tipo_exec = Yii::$app->db->createCommand('SELECT * FROM tipo_executante')->queryAll();
+
+                $bm_id =Yii::$app->db->createCommand('
+                                    SELECT bm.id
+                                        FROM bm 
+                                            JOIN projeto ON bm.projeto_id = projeto.id
+                                            JOIN cliente ON cliente.id = projeto.cliente_id
+                                        WHERE
+                                            cliente.cnpj = "'.$model->cnpj_braskem.'"
+                                            AND (IFNULL(bm.executado_ee, 0) * '.$tipo_exec[4]['valor_hora'].' +
+                                                                IFNULL(bm.executado_es, 0) * '.$tipo_exec[3]['valor_hora'].' +
+                                                                IFNULL(bm.executado_ep, 0) * '.$tipo_exec[2]['valor_hora'].' +
+                                                                IFNULL(bm.executado_ej, 0) * '.$tipo_exec[1]['valor_hora'].' +
+                                                                IFNULL(bm.executado_tp, 0) * '.$tipo_exec[0]['valor_hora'].' +
+                                                                IFNULL(bm.km, 0) * '.Yii::$app->db->createCommand('SELECT vl_km FROM executante WHERE usuario_id=61')->queryScalar().') = '.$model->valor)->queryScalar();
+                if(!empty($bm_id)){
+                    $bm_model = new BM();
+                    $bm_model = $bm_model::findOne($bm_id);
+                    $bm_model->frs_numero = $model->frs; 
+                    $bm_model->frs_data_aprovacao = $model->data_aprovacao;
+                    
+                    if(!$bm_model->save()){
+                        print_r($bm_model->getErrors());
+                        die();
+                    } 
+                }
+
             }
 
         }
