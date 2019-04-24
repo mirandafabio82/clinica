@@ -4,7 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Frs;
-use app\models\BM;
+use app\models\Bm;
 use app\models\search\FrsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -72,8 +72,8 @@ class FrsController extends Controller
                 }
                 
                 $model = new Frs();
-                $date_e = explode('/',$line['E']);
-                $date_g = explode('/',$line['G']);
+                $date_e = explode('-',$line['E']);
+                $date_g = explode('-',$line['G']);
 
                 $model->contrato = ''.$line['A'];
                 $model->pedido = ''.$line['B'];
@@ -110,7 +110,7 @@ class FrsController extends Controller
                                                                 IFNULL(bm.executado_tp, 0) * '.$tipo_exec[0]['valor_hora'].' +
                                                                 IFNULL(bm.km, 0) * '.Yii::$app->db->createCommand('SELECT vl_km FROM executante WHERE usuario_id=61')->queryScalar().') = '.$model->valor)->queryScalar();
                 if(!empty($bm_id)){
-                    $bm_model = new BM();
+                    $bm_model = new Bm();
                     $bm_model = $bm_model::findOne($bm_id);
                     $bm_model->frs_numero = $model->frs; 
                     $bm_model->frs_data_aprovacao = $model->data_aprovacao;
