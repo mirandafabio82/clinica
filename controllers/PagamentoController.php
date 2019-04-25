@@ -77,9 +77,9 @@ class PagamentoController extends Controller
 
                 $model->nota_fiscal = ''.$line['A'];
                 $model->tipo_documento = $line['B'];
-                $model->data_emissao = $date_c[2].'-'.$date_c[0].'-'.$date_c[1]; 
-                $model->data_lancamento = $date_d[2].'-'.$date_d[0].'-'.$date_d[1];
-                $model->data_pagamento = $date_e[2].'-'.$date_e[0].'-'.$date_e[1];
+                $model->data_emissao = !empty($line['C']) ? $date_c[2].'-'.$date_c[0].'-'.$date_c[1] : ''; 
+                $model->data_lancamento = !empty($line['D']) ? $date_d[2].'-'.$date_d[0].'-'.$date_d[1] : '';
+                $model->data_pagamento = !empty($line['E']) ? $date_e[2].'-'.$date_e[0].'-'.$date_e[1] : '';
                 $model->valor_bruto = str_replace(',','',$line['F']);
                 $model->retencoes = $line['G'];
                 $model->abatimentos = $line['H'];

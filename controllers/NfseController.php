@@ -78,13 +78,13 @@ class NfseController extends Controller
                 $model->processo = ''.$line['A'];
                 $model->nota_fiscal = ''.$line['B'];
                 $model->serie = $line['C'];
-                $model->data_emissao = $date_d[2].'-'.$date_d[0].'-'.$date_d[1];
-                $model->data_entrega = $date_e[2].'-'.$date_e[0].'-'.$date_e[1];
+                $model->data_emissao = !empty($line['D']) ? $date_d[2].'-'.$date_d[0].'-'.$date_d[1] : '';
+                $model->data_entrega = !empty($line['E']) ? $date_e[2].'-'.$date_e[0].'-'.$date_e[1] : '';
                 $model->status = $line['F'];
                 $model->pendencia = $line['G'];
                 $model->nf_devolvida = $line['H'];
                 $model->comentario_devolucao = $line['I'];
-                $model->data_pagamento = $date_j[2].'-'.$date_j[0].'-'.$date_j[1];
+                $model->data_pagamento = !empty($line['J']) ? $date_j[2].'-'.$date_j[0].'-'.$date_j[1] : '';
                 $model->usuario_pendencia = $line['K'];
                 $model->cnpj_emitente = $line['L'];
 
