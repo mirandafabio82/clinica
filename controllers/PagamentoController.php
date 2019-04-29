@@ -69,8 +69,15 @@ class PagamentoController extends Controller
                 if($key <= 1){
                     continue;
                 }
+
+                $pagamento_id = Yii::$app->db->createCommand('SELECT id FROM pagamento WHERE nota_fiscal = "'.$line['A'].'"')->queryScalar();
                 
                 $model = new Pagamento();
+
+                if(!empty($pagamento_id)){
+                  $model = $model::findOne($pagamento_id);
+                }
+
                 $date_c = explode('-',$line['C']);
                 $date_d = explode('-',$line['D']);
                 $date_e = explode('-',$line['E']);

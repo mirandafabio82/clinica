@@ -69,8 +69,15 @@ class NfseController extends Controller
                 if($key <= 1){
                     continue;
                 }
+
+                $nfse_id = Yii::$app->db->createCommand('SELECT id FROM nfse WHERE nota_fiscal = "'.$line['A'].'"')->queryScalar();
                 
                 $model = new Nfse();
+
+                if(!empty($nfse_id)){
+                  $model = $model::findOne($nfse_id);
+                }
+                
                 $date_d = explode('-',$line['D']);
                 $date_e = explode('-',$line['E']);
                 $date_j = explode('-',$line['J']);

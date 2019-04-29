@@ -55,6 +55,7 @@ class Frs extends \yii\db\ActiveRecord
             'contrato' => 'Contrato',
             'pedido' => 'Pedido',
             'frs' => 'Frs',
+            'bm' => 'BM',
             'criador' => 'Criador',
             'data_criacao' => 'Data Criacao',
             'aprovador' => 'Aprovador',

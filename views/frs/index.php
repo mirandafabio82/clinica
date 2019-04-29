@@ -68,6 +68,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'contrato',
                     'pedido',
                     'frs',
+                    'bm',
                     'criador',
                     'data_criacao',
                     'aprovador',

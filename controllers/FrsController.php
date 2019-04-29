@@ -71,7 +71,14 @@ class FrsController extends Controller
                     continue;
                 }
                 
+                $frs_id = Yii::$app->db->createCommand('SELECT id FROM frs WHERE frs LIKE "%'.$line['C'].'%"')->queryScalar();
+
                 $model = new Frs();
+
+                if(!empty($frs_id)){
+                  $model = $model::findOne($frs_id);
+                }
+
                 $date_e = explode('-',$line['E']);
                 $date_g = explode('-',$line['G']);
 
@@ -87,12 +94,8 @@ class FrsController extends Controller
                 $model->valor = str_replace(',','',$line['J']);
                 $model->nota_fiscal = ''.$line['K'];
                 $model->referencia = ''.$line['L'];
-                $model->texto_breve = ''.$line['M'];
+                $model->texto_breve = ''.$line['M'];               
                 
-                if(!$model->save()){
-                    print_r($model->getErrors());
-                    die();
-                }
 
                 $tipo_exec = Yii::$app->db->createCommand('SELECT * FROM tipo_executante')->queryAll();
 
@@ -114,11 +117,17 @@ class FrsController extends Controller
                     $bm_model = $bm_model::findOne($bm_id);
                     $bm_model->frs_numero = $model->frs; 
                     $bm_model->frs_data_aprovacao = $model->data_aprovacao;
-                    
+                    $model->bm = $bm_model->numero_bm;
+
                     if(!$bm_model->save()){
                         print_r($bm_model->getErrors());
                         die();
                     } 
+                }
+
+                if(!$model->save()){
+                    print_r($model->getErrors());
+                    die();
                 }
 
             }
