@@ -555,43 +555,40 @@ td, th {
     </div>
     FRS
     <div class="row" style="border:1px solid black;padding: 2px; margin-bottom: 1em">
+      <div class="col-md-2" style="text-align: center"> 
+        <label>FRS</label>
+        <input type="text" name="frs_nfse_pag" value="<?= !empty($frs_nfse_pagamento['frs']) ? $frs_nfse_pagamento['frs'] : '' ?>" class="form-control" >
+    </div>
     <div class="col-md-2" style="text-align: center"> 
-      <?= $form->field($model, 'frs_data_faturamento')->widget(\yii\widgets\MaskedInput::className(), [
-                        'mask' => '99/99/9999',
-                    ]) ?>
+      <label>Data Criação</label>
+      <input type="text" name="frs_nfse_pag" value="<?= !empty($frs_nfse_pagamento['data_criacao']) ? date_format(DateTime::createFromFormat('Y-m-d', $frs_nfse_pagamento['data_criacao']), 'd/m/Y') : '' ?>" class="form-control" >
     </div>
       <div class="col-md-2" style="text-align: center">
-      <?= $form->field($model, 'frs_data_aprovacao')->widget(\yii\widgets\MaskedInput::className(), [
-                        'mask' => '99/99/9999'
-
-                    ]) ?> 
+      <label>Data Aprovação</label>
+      <input type="text" name="frs_nfse_pag" value="<?= !empty($frs_nfse_pagamento['data_aprovacao']) ? date_format(DateTime::createFromFormat('Y-m-d', $frs_nfse_pagamento['data_aprovacao']), 'd/m/Y') : '' ?>" class="form-control" >
     </div>
-    <div class="col-md-2" style="text-align: center"> 
+    <div class="col-md-1" style="text-align: center"> 
       <label>Nº NF</label>
-      <input type="text" name="total_bm" value="<?= $frs_nfse_pagamento['nota_fiscal'] ?>" class="form-control" >
+      <input type="text" name="frs_nfse_pag" value="<?= !empty($frs_nfse_pagamento['nota_fiscal']) ? $frs_nfse_pagamento['nota_fiscal'] : '' ?>" class="form-control" >
     </div>
     <div class="col-md-2" style="text-align: center"> 
       <label>Previsão Pagamento</label>
-      <input type="text" name="total_bm" value="<?= date_format(DateTime::createFromFormat('Y-m-d', $frs_nfse_pagamento['data_previsao']), 'd/m/Y') ?>" class="form-control" >
+      <input type="text" name="frs_nfse_pag" value="<?= !empty($frs_nfse_pagamento['data_previsao']) ? date_format(DateTime::createFromFormat('Y-m-d', $frs_nfse_pagamento['data_previsao']), 'd/m/Y') : '' ?>" class="form-control" >
     </div>
     <div class="col-md-2" style="text-align: center"> 
       <label>Data Pagamento</label>
-      <input type="text" name="total_bm" value="<?= date_format(DateTime::createFromFormat('Y-m-d', $frs_nfse_pagamento['data_pagamento']), 'd/m/Y') ?>" class="form-control" >
+      <input type="text" name="frs_nfse_pag" value="<?= !empty($frs_nfse_pagamento['data_pagamento']) ? date_format(DateTime::createFromFormat('Y-m-d', $frs_nfse_pagamento['data_pagamento']), 'd/m/Y') : '' ?>" class="form-control" >
     </div>
     <div class="col-md-2" style="text-align: center">
     <label>Valor Pagamento</label> 
-     <input type="text" name="total_bm" value="<?= number_format($frs_nfse_pagamento['valor_liquido'], 2, ',', '.') ?>" class="form-control" >
+     <input type="text" name="frs_nfse_pag" value="<?= !empty($frs_nfse_pagamento['valor_liquido']) ? number_format($frs_nfse_pagamento['valor_liquido'], 2, ',', '.') : '' ?>" class="form-control" >
     </div>
-    <div class="col-md-2" style="text-align: center"> 
-      <label>Houve Retenção</label>
-      <input type="text" name="total_bm" value="<?= $frs_nfse_pagamento['retencoes'] ?>" class="form-control" >
+    <div class="col-md-1" style="text-align: center"> 
+      <label>Retenção</label>
+      <input type="text" name="frs_nfse_pag" value="<?= !empty($frs_nfse_pagamento['retencoes']) ? $frs_nfse_pagamento['retencoes'] : '' ?>" class="form-control" >
     </div>
-    <div class="col-md-2" style="text-align: center"> 
-      <?= $form->field($model, 'frs_nome')->textInput(['maxlength' => true]) ?> 
-    </div>
-    <div class="col-md-2" style="text-align: center"> 
-      <?= $form->field($model, 'frs_numero')->textInput(['maxlength' => true]) ?> 
-    </div>
+     
+    
     </div>
      EXECUTADO
     <div class="row" style="border:1px solid black;padding: 2px; margin-bottom: 1em">

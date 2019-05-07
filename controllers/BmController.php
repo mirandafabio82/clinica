@@ -222,7 +222,7 @@ class BmController extends Controller
                         $model['km'] * Yii::$app->db->createCommand('SELECT vl_km FROM executante WHERE usuario_id=61')->queryScalar(), 2, ',', '.');
 
 
-       $frs_nfse_pagamento = Yii::$app->db->createCommand('SELECT nfse.nota_fiscal, pagamento.data_pagamento, nfse.data_pagamento as data_previsao, valor_liquido, retencoes 
+       $frs_nfse_pagamento = Yii::$app->db->createCommand('SELECT frs.frs, frs.data_criacao, frs.data_aprovacao,frs.nota_fiscal, pagamento.data_pagamento, nfse.data_pagamento as data_previsao, valor_liquido, retencoes 
                                                             FROM frs 
                                                             LEFT JOIN nfse ON frs.nota_fiscal = nfse.nota_fiscal
                                                             LEFT JOIN pagamento ON nfse.nota_fiscal = pagamento.nota_fiscal 
