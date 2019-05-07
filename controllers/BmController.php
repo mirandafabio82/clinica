@@ -204,8 +204,7 @@ class BmController extends Controller
                 }
             }    
             }
-                   
-
+                              
 
             $model->save();            
             return $this->redirect(['update', 'id' => $model->id, 'bm_executantes' => $bm_executantes]);
@@ -221,7 +220,16 @@ class BmController extends Controller
                         $model->executado_ej * $tipo_exec[1]['valor_hora']+
                         $model->executado_tp * $tipo_exec[0]['valor_hora']+
                         $model['km'] * Yii::$app->db->createCommand('SELECT vl_km FROM executante WHERE usuario_id=61')->queryScalar(), 2, ',', '.');
-       
+
+
+       $frs_nfse_pagamento = Yii::$app->db->createCommand('SELECT nfse.nota_fiscal, pagamento.data_pagamento, nfse.data_pagamento as data_previsao, valor_liquido, retencoes 
+                                                            FROM frs 
+                                                            LEFT JOIN nfse ON frs.nota_fiscal = nfse.nota_fiscal
+                                                            LEFT JOIN pagamento ON nfse.nota_fiscal = pagamento.nota_fiscal 
+                                                            WHERE frs.bm="'.$model->numero_bm.'"')->queryOne();
+
+        $frs_nfse_pagamento = !empty($frs_nfse_pagamento) ? $frs_nfse_pagamento : '';
+
 
         return $this->render('update', [
             'model' => $model,
@@ -231,6 +239,7 @@ class BmController extends Controller
             'bmescopos' => $bmescopos,
             'valor_total' => $valor_total,
             'bm_executantes' => $bm_executantes,
+            'frs_nfse_pagamento' => $frs_nfse_pagamento
         ]);
     }
 

@@ -21,6 +21,7 @@ $this->params['breadcrumbs'][] = 'Update';
         'bmescopos' => $bmescopos,
         'valor_total' => $valor_total,
         'bm_executantes' => $bm_executantes,
+        'frs_nfse_pagamento' => $frs_nfse_pagamento
     ]) ?>
 
 </div>

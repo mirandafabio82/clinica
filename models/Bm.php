@@ -70,7 +70,7 @@ class Bm extends \yii\db\ActiveRecord
             'qtd_dias' => 'Dias',
             'bpm' => 'BPM',
             'frs_data_aprovacao' => 'Data Aprovação',
-            'frs_data_faturamento' => 'Data Faturamento',
+            'frs_data_faturamento' => 'Data Criação',
             'frs_nome' => 'Arquivo FRS',
             'frs_numero' => 'FRS',
         ];
