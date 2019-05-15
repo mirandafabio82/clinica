@@ -587,6 +587,9 @@ td, th {
       <label>Retenção</label>
       <input type="text" name="frs_nfse_pag" value="<?= !empty($frs_nfse_pagamento['retencoes']) ? $frs_nfse_pagamento['retencoes'] : '' ?>" class="form-control" >
     </div>
+    <div class="col-md-4"> 
+        <?= $form->field($model, 'frs_observacao')->textarea(['rows' => 2]) ?>
+      </div>
      
     
     </div>
@@ -845,11 +848,11 @@ HCN Automação
         <?php foreach ($escopos_bm as $key => $esc) {   ?>
           <tr>
             <td><?= $esc['nome'] ?></td>
-            <td><input type="text" class="horas_bm" name="fname" id="bm-horas_tp-<?= $esc['escopo_id'] ?>" value="<?= $esc['horas_tp'] ?>" style="width: 3em;"></td>
-            <td><input type="text" class="horas_bm" name="fname" id="bm-horas_ej-<?= $esc['escopo_id'] ?>" value="<?= $esc['horas_ej'] ?>" style="width: 3em;"></td>
-            <td><input type="text" class="horas_bm" name="fname" id="bm-horas_ep-<?= $esc['escopo_id'] ?>" value="<?= $esc['horas_ep'] ?>" style="width: 3em;"></td>
-            <td><input type="text" class="horas_bm" name="fname" id="bm-horas_es-<?= $esc['escopo_id'] ?>" value="<?= $esc['horas_es'] ?>" style="width: 3em;"></td>
-            <td><input type="text" class="horas_bm" name="fname" id="bm-horas_ee-<?= $esc['escopo_id'] ?>" value="<?= $esc['horas_ee'] ?>" style="width: 3em;"></td>
+            <td><input type="text" class="horas_bm" name="fname" id="bm-horas_tp-<?= $esc['escopo_id'] ?>" value="<?= $esc['horas_tp'] ?>" style="width: 5em;"></td>
+            <td><input type="text" class="horas_bm" name="fname" id="bm-horas_ej-<?= $esc['escopo_id'] ?>" value="<?= $esc['horas_ej'] ?>" style="width: 5em;"></td>
+            <td><input type="text" class="horas_bm" name="fname" id="bm-horas_ep-<?= $esc['escopo_id'] ?>" value="<?= $esc['horas_ep'] ?>" style="width: 5em;"></td>
+            <td><input type="text" class="horas_bm" name="fname" id="bm-horas_es-<?= $esc['escopo_id'] ?>" value="<?= $esc['horas_es'] ?>" style="width: 5em;"></td>
+            <td><input type="text" class="horas_bm" name="fname" id="bm-horas_ee-<?= $esc['escopo_id'] ?>" value="<?= $esc['horas_ee'] ?>" style="width: 5em;"></td>
           </tr>         
         
         <?php } ?>

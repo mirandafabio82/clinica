@@ -38,7 +38,7 @@ class Bm extends \yii\db\ActiveRecord
         return [
             [['projeto_id', 'qtd_dias', 'numero_bm', 'num_bm_proj'], 'integer'],
             [['data', 'de', 'para', 'frs_data_aprovacao', 'frs_data_faturamento'], 'safe'],
-            [['descricao', 'frs_nome', 'frs_numero'], 'string'],
+            [['descricao', 'frs_nome', 'frs_numero', 'frs_observacao'], 'string'],
             [['contrato', 'objeto', 'contratada', 'cnpj', 'contato', 'bpm'], 'string', 'max' => 255],
             [['acumulado', 'saldo', 'km', 'executado_es', 'executado_ep', 'executado_ej', 'executado_tp', 'executado_ee'], 'number'],
         ];
@@ -73,6 +73,7 @@ class Bm extends \yii\db\ActiveRecord
             'frs_data_faturamento' => 'Data Criação',
             'frs_nome' => 'Arquivo FRS',
             'frs_numero' => 'FRS',
+            'frs_observacao' => 'Observação',
         ];
     }
 
