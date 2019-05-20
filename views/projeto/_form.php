@@ -1090,7 +1090,7 @@ tbody {
 
 <?php 
 $visible = 'hidden = "hidden"';
-if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])){ 
+if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin']) || (isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['executante']) && (Yii::$app->db->createCommand('SELECT cargo FROM executante WHERE usuario_id='.Yii::$app->user->id)->queryScalar() == 2))){ 
   $visible = '';
  } ?>
 
