@@ -32,8 +32,21 @@ class ExecutanteController extends Controller
                     [
                         // 'actions' => ['index', 'view', 'create', 'update'],
                         'allow' => true,
-                        'roles' => ['admin'],
+                        'roles' => ['admin']
                     ],
+                    [
+                        'allow' => true,'roles' => ['executante'],
+                        'matchCallback' => function ($rule, $action) {
+                            $cargo = Yii::$app->db->createCommand('SELECT cargo FROM executante WHERE usuario_id='.Yii::$app->user->id)->queryScalar();
+                            if($cargo==2){
+                                return true;
+                            }
+                            else{
+                                return false;
+                            }
+                        }
+                    ],  
+                    
                 ],
             ],
             'verbs' => [
