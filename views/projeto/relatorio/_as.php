@@ -548,8 +548,28 @@ function numeroEscrito($n) {
     $casa = $qtd;
     $pulaum = false;
     $x = 0;
+
     for ($y = 0; $y < $qtd; $y++) {
+
+       if ($casa == 6) {
  
+            if ($n[$x] == '1' && $n[$x + 1] != '0') {
+ 
+                $numero .= 'cento ';
+            } else {
+ 
+                if ($n[$x] != '0') {
+ 
+                    if (isset($n[$x - 1])) {
+ 
+                        $numero .= ' e ';
+                    }
+ 
+                    $numero .= $numeros[3][$n[$x]];
+                }
+            }
+        }
+     
         if ($casa == 5) {
  
             if ($n[$x] == '1') {
