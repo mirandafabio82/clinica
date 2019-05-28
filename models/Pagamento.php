@@ -58,7 +58,7 @@ class Pagamento extends \yii\db\ActiveRecord
             'data_lancamento' => 'Data Lancamento',
             'data_pagamento' => 'Data Pagamento',
             'valor_bruto' => 'Valor Bruto',
-            'retencoes' => 'Retencoes',
+            'retencoes' => 'Retenção',
             'abatimentos' => 'Abatimentos',
             'valor_liquido' => 'Valor Liquido',
             'forma_pagamento' => 'Forma Pagamento',

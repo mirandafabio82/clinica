@@ -556,36 +556,36 @@ td, th {
     FRS
     <div class="row" style="border:1px solid black;padding: 2px; margin-bottom: 1em">
       <div class="col-md-2" style="text-align: center"> 
-        <label>FRS</label>
-        <input type="text" name="frs_nfse_pag" value="<?= !empty($frs_nfse_pagamento['frs']) ? $frs_nfse_pagamento['frs'] : '' ?>" class="form-control" >
+        
+        <?= $form->field($frsModel, 'frs')->textInput(['maxlength' => true]) ?>
     </div>
     <div class="col-md-2" style="text-align: center"> 
-      <label>Data Criação</label>
-      <input type="text" name="frs_nfse_pag" value="<?= !empty($frs_nfse_pagamento['data_criacao']) ? date_format(DateTime::createFromFormat('Y-m-d', $frs_nfse_pagamento['data_criacao']), 'd/m/Y') : '' ?>" class="form-control" >
+      
+      <?= $form->field($frsModel, 'data_criacao')->textInput(['maxlength' => true]) ?>
     </div>
       <div class="col-md-2" style="text-align: center">
-      <label>Data Aprovação</label>
-      <input type="text" name="frs_nfse_pag" value="<?= !empty($frs_nfse_pagamento['data_aprovacao']) ? date_format(DateTime::createFromFormat('Y-m-d', $frs_nfse_pagamento['data_aprovacao']), 'd/m/Y') : '' ?>" class="form-control" >
+     
+      <?= $form->field($frsModel, 'data_aprovacao')->textInput(['maxlength' => true]) ?>
     </div>
     <div class="col-md-1" style="text-align: center"> 
-      <label>Nº NF</label>
-      <input type="text" name="frs_nfse_pag" value="<?= !empty($frs_nfse_pagamento['nota_fiscal']) ? $frs_nfse_pagamento['nota_fiscal'] : '' ?>" class="form-control" >
+      
+      <?= $form->field($frsModel, 'nota_fiscal')->textInput(['maxlength' => true]) ?>
     </div>
     <div class="col-md-2" style="text-align: center"> 
-      <label>Previsão Pagamento</label>
-      <input type="text" name="frs_nfse_pag" value="<?= !empty($frs_nfse_pagamento['data_previsao']) ? date_format(DateTime::createFromFormat('Y-m-d', $frs_nfse_pagamento['data_previsao']), 'd/m/Y') : '' ?>" class="form-control" >
+      
+      <?= $form->field($nfseModel, 'data_pagamento')->textInput(['maxlength' => true]) ?>
     </div>
     <div class="col-md-2" style="text-align: center"> 
-      <label>Data Pagamento</label>
-      <input type="text" name="frs_nfse_pag" value="<?= !empty($frs_nfse_pagamento['data_pagamento']) ? date_format(DateTime::createFromFormat('Y-m-d', $frs_nfse_pagamento['data_pagamento']), 'd/m/Y') : '' ?>" class="form-control" >
+      
+      <?= $form->field($pagamentoModel, 'data_pagamento')->textInput(['maxlength' => true]) ?>
     </div>
     <div class="col-md-2" style="text-align: center">
-    <label>Valor Pagamento</label> 
-     <input type="text" name="frs_nfse_pag" value="<?= !empty($frs_nfse_pagamento['valor_liquido']) ? number_format($frs_nfse_pagamento['valor_liquido'], 2, ',', '.') : '' ?>" class="form-control" >
+    
+     <?= $form->field($model, 'bpm')->textInput(['maxlength' => true]) ?>
     </div>
     <div class="col-md-1" style="text-align: center"> 
-      <label>Retenção</label>
-      <input type="text" name="frs_nfse_pag" value="<?= !empty($frs_nfse_pagamento['retencoes']) ? $frs_nfse_pagamento['retencoes'] : '' ?>" class="form-control" >
+      
+      <?= $form->field($pagamentoModel, 'retencoes')->textInput(['maxlength' => true]) ?>
     </div>
     <div class="col-md-4"> 
         <?= $form->field($model, 'frs_observacao')->textarea(['rows' => 2]) ?>

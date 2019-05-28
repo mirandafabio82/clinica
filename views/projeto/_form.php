@@ -373,12 +373,12 @@ $("#projeto-qtd_dias").focusout(function() {
      var resposta = $.parseJSON(response);     
      var qtd_km = resposta["qtd_km_dia"] * dias;
      var valor_km = qtd_km * resposta["vl_km"];
-
-
+     valor_km = valor_km.toFixed();
+      console.log(valor_km);
      
      $("#projeto-qtd_km").val(qtd_km);
      $("#projeto-vl_km").val(valor_km);
-     $("#projeto-vl_km-disp").val(valor_km ).trigger("mask.maskMoney");
+     $("#projeto-vl_km-disp").val(valor_km).trigger("mask.maskMoney");
 
   },
   error: function(){

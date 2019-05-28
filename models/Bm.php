@@ -68,7 +68,7 @@ class Bm extends \yii\db\ActiveRecord
             'executado_ej' => 'EJ',
             'executado_tp' => 'TP',
             'qtd_dias' => 'Dias',
-            'bpm' => 'BPM',
+            'bpm' => 'Valor Pagamento',
             'frs_data_aprovacao' => 'Data Aprovação',
             'frs_data_faturamento' => 'Data Criação',
             'frs_nome' => 'Arquivo FRS',

@@ -4,6 +4,9 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Bm;
+use app\models\Frs;
+use app\models\Nfse;
+use app\models\Pagamento;
 use app\models\search\BmSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -148,6 +151,36 @@ class BmController extends Controller
 
         $bm_executantes = Yii::$app->db->createCommand('SELECT * FROM bm_executante WHERE bm_id='.$model->id)->queryAll();
         
+        
+        $frs_nfse_pagamento = Yii::$app->db->createCommand('SELECT frs.id as frs, nfse.id as nfse, pagamento.id as pagamento 
+                                                            FROM frs 
+                                                            LEFT JOIN nfse ON frs.nota_fiscal = nfse.nota_fiscal
+                                                            LEFT JOIN pagamento ON nfse.nota_fiscal = pagamento.nota_fiscal 
+                                                            WHERE frs.bm="'.$model->numero_bm.'"')->queryOne();
+
+        if(!empty($frs_nfse_pagamento['frs'])){
+            $frsModel = Frs::findOne($frs_nfse_pagamento['frs']);           
+        }
+        else{
+            $frsModel = new Frs();            
+        }
+
+        if(!empty($frs_nfse_pagamento['nfse'])){
+            $nfseModel = Nfse::findOne($frs_nfse_pagamento['nfse']);   
+                   
+        }
+        else{
+            $nfseModel = new Nfse();            
+        }
+
+        if(!empty($frs_nfse_pagamento['pagamento'])){
+            $pagamentoModel = Pagamento::findOne($frs_nfse_pagamento['pagamento']);           
+        }
+        else{
+            $pagamentoModel = new Pagamento();            
+        }
+
+      
 
         if(!empty($model->data))
             $model->data = date_format(DateTime::createFromFormat('Y-m-d', $model->data), 'd/m/Y');
@@ -160,7 +193,9 @@ class BmController extends Controller
         if(!empty($model->frs_data_faturamento))
             $model->frs_data_faturamento = date_format(DateTime::createFromFormat('Y-m-d', $model->frs_data_faturamento), 'd/m/Y');
 
-        if ($model->load(Yii::$app->request->post())) {            
+        if ($model->load(Yii::$app->request->post())) {          
+
+
             if(!empty($_POST['Bm']['data'])){
                 $dat = DateTime::createFromFormat('d/m/Y', $_POST['Bm']['data']);          
                 $model->data = date_format($dat, 'Y-m-d');
@@ -182,27 +217,71 @@ class BmController extends Controller
                 $model->frs_data_faturamento = date_format($dat, 'Y-m-d');
             }
 
+            $frs_id = Yii::$app->db->createCommand('SELECT id FROM frs WHERE bm="'.$model->numero_bm.'"')->queryScalar();
+            $frs_nfse_pagamento = Yii::$app->db->createCommand('SELECT frs.id as frs, nfse.id as nfse, pagamento.id as pagamento 
+                                                            FROM frs 
+                                                            LEFT JOIN nfse ON frs.nota_fiscal = nfse.nota_fiscal
+                                                            LEFT JOIN pagamento ON nfse.nota_fiscal = pagamento.nota_fiscal 
+                                                            WHERE frs.bm="'.$model->numero_bm.'"')->queryOne();
+
+            if(!empty($frs_nfse_pagamento['frs'])){
+                $frsModel = Frs::findOne($frs_nfse_pagamento['frs']);           
+            }
+            else{
+                $frsModel = new Frs();            
+            }
+
+            if(!empty($frs_nfse_pagamento['nfse'])){
+                $nfseModel = Nfse::findOne($frs_nfse_pagamento['nfse']);           
+            }
+            else{
+                $nfseModel = new Nfse();            
+            }
+
+            if(!empty($frs_nfse_pagamento['pagamento'])){
+                $pagamentoModel = Pagamento::findOne($frs_nfse_pagamento['pagamento']);           
+            }
+            else{
+                $pagamentoModel = new Pagamento();            
+            }
+
+            $frsModel->frs = $_POST['Frs']['frs'];
+            $frsModel->data_criacao = $_POST['Frs']['data_criacao'];
+            $frsModel->data_aprovacao = $_POST['Frs']['data_aprovacao'];
+            $frsModel->nota_fiscal = $_POST['Frs']['nota_fiscal'];
+            $frsModel->save();
+
+            $nfseModel->data_pagamento =  $_POST['Nfse']['data_pagamento'];
+            $nfseModel->nota_fiscal = $_POST['Frs']['nota_fiscal'];
+            $nfseModel->save();
+            
+            $pagamentoModel->data_pagamento = $_POST['Pagamento']['data_pagamento'];
+            $pagamentoModel->retencoes = $_POST['Pagamento']['retencoes'];
+            $pagamentoModel->nota_fiscal = $_POST['Frs']['nota_fiscal'];
+            $pagamentoModel->save();
+
+
             if(isset($_POST['bm_executante'])){
                 foreach ($_POST['bm_executante'] as $key => $bm_exe) {
-                $bm_executante = Yii::$app->db->createCommand('SELECT * FROM bm_executante WHERE bm_id='.$model->id.' AND executante_id='.$key)->queryOne();
-               
-                if(!empty($bm_executante)){
-                    $bm_exe_model = BmExecutante::findOne($bm_executante['id']);
-                }
-                else{
-                    $bm_exe_model = new BmExecutante();
-                    $bm_exe_model->bm_id = $model->id;
-                    $bm_exe_model->executante_id = $key;
-                }   
-                
-                $bm_exe_model->previsao_pgt = !empty($bm_exe['previsao_pgt']) ? $bm_exe['previsao_pgt'] : NULL;
-                $bm_exe_model->data_pgt = !empty($bm_exe['data_pgt']) ? $bm_exe['data_pgt'] : NULL;
-                $bm_exe_model->pago = !empty($bm_exe['pago']) ? 1 : 0;
-                if(!$bm_exe_model->save()){
-                    print_r($bm_exe_model->getErrors());
-                    die();
-                }
-            }    
+                    $bm_executante = Yii::$app->db->createCommand('SELECT * FROM bm_executante WHERE bm_id='.$model->id.' AND executante_id='.$key)->queryOne();
+                   
+                    if(!empty($bm_executante)){
+                        $bm_exe_model = BmExecutante::findOne($bm_executante['id']);
+                    }
+                    else{
+                        $bm_exe_model = new BmExecutante();
+                        $bm_exe_model->bm_id = $model->id;
+                        $bm_exe_model->executante_id = $key;
+                    }   
+                    
+                    $bm_exe_model->previsao_pgt = !empty($bm_exe['previsao_pgt']) ? $bm_exe['previsao_pgt'] : NULL;
+                    $bm_exe_model->data_pgt = !empty($bm_exe['data_pgt']) ? $bm_exe['data_pgt'] : NULL;
+                    $bm_exe_model->pago = !empty($bm_exe['pago']) ? 1 : 0;
+                    if(!$bm_exe_model->save()){
+                        print_r($bm_exe_model->getErrors());
+                        die();
+                    }
+                }    
             }
                               
 
@@ -222,11 +301,11 @@ class BmController extends Controller
                         $model['km'] * Yii::$app->db->createCommand('SELECT vl_km FROM executante WHERE usuario_id=61')->queryScalar(), 2, ',', '.');
 
 
-       $frs_nfse_pagamento = Yii::$app->db->createCommand('SELECT frs.frs, frs.data_criacao, frs.data_aprovacao,frs.nota_fiscal, pagamento.data_pagamento, nfse.data_pagamento as data_previsao, valor_liquido, retencoes 
+       /*$frs_nfse_pagamento = Yii::$app->db->createCommand('SELECT frs.frs, frs.data_criacao, frs.data_aprovacao,frs.nota_fiscal, pagamento.data_pagamento, nfse.data_pagamento as data_previsao, valor_liquido, retencoes 
                                                             FROM frs 
                                                             LEFT JOIN nfse ON frs.nota_fiscal = nfse.nota_fiscal
                                                             LEFT JOIN pagamento ON nfse.nota_fiscal = pagamento.nota_fiscal 
-                                                            WHERE frs.bm="'.$model->numero_bm.'"')->queryOne();
+                                                            WHERE frs.bm="'.$model->numero_bm.'"')->queryOne();*/
 
         $frs_nfse_pagamento = !empty($frs_nfse_pagamento) ? $frs_nfse_pagamento : '';
 
@@ -239,7 +318,10 @@ class BmController extends Controller
             'bmescopos' => $bmescopos,
             'valor_total' => $valor_total,
             'bm_executantes' => $bm_executantes,
-            'frs_nfse_pagamento' => $frs_nfse_pagamento
+            'frs_nfse_pagamento' => $frs_nfse_pagamento,
+            'frsModel' => $frsModel,
+            'nfseModel' => $nfseModel,
+            'pagamentoModel' => $pagamentoModel
         ]);
     }
 

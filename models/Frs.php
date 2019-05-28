@@ -54,7 +54,7 @@ class Frs extends \yii\db\ActiveRecord
             'id' => 'ID',
             'contrato' => 'Contrato',
             'pedido' => 'Pedido',
-            'frs' => 'Frs',
+            'frs' => 'FRS',
             'bm' => 'BM',
             'criador' => 'Criador',
             'data_criacao' => 'Data Criacao',
@@ -62,7 +62,7 @@ class Frs extends \yii\db\ActiveRecord
             'data_aprovacao' => 'Data Aprovacao',
             'cnpj_emitente' => 'CNPJ Emitente',
             'valor' => 'Valor',
-            'nota_fiscal' => 'Nota Fiscal',
+            'nota_fiscal' => 'Nº NF',
             'referencia' => 'Referencia',
             'texto_breve' => 'Texto Breve',
             'cnpj_braskem' => 'CNPJ Braskem'

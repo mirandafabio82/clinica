@@ -59,7 +59,7 @@ class Nfse extends \yii\db\ActiveRecord
             'pendencia' => 'Pendencia',
             'nf_devolvida' => 'Nf Devolvida',
             'comentario_devolucao' => 'Comentario Devolucao',
-            'data_pagamento' => 'Data Pagamento',
+            'data_pagamento' => 'Previsão Pagamento',
             'usuario_pendencia' => 'Usuario Pendencia',
             'cnpj_emitente' => 'Cnpj Emitente',
             'serie' => 'Série',
