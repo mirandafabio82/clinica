@@ -561,11 +561,15 @@ td, th {
     </div>
     <div class="col-md-2" style="text-align: center"> 
       
-      <?= $form->field($frsModel, 'data_criacao')->textInput(['maxlength' => true]) ?>
+      <?= $form->field($frsModel, 'data_criacao')->widget(\yii\widgets\MaskedInput::className(), [
+                        'mask' => '99/99/9999',
+                    ]) ?>
     </div>
       <div class="col-md-2" style="text-align: center">
      
-      <?= $form->field($frsModel, 'data_aprovacao')->textInput(['maxlength' => true]) ?>
+      <?= $form->field($frsModel, 'data_aprovacao')->widget(\yii\widgets\MaskedInput::className(), [
+                        'mask' => '99/99/9999',
+                    ]) ?>
     </div>
     <div class="col-md-1" style="text-align: center"> 
       
@@ -573,11 +577,15 @@ td, th {
     </div>
     <div class="col-md-2" style="text-align: center"> 
       
-      <?= $form->field($nfseModel, 'data_pagamento')->textInput(['maxlength' => true]) ?>
+      <?= $form->field($nfseModel, 'data_pagamento')->widget(\yii\widgets\MaskedInput::className(), [
+                        'mask' => '99/99/9999',
+                    ]) ?>
     </div>
     <div class="col-md-2" style="text-align: center"> 
       
-      <?= $form->field($pagamentoModel, 'data_pagamento')->textInput(['maxlength' => true]) ?>
+      <?= $form->field($pagamentoModel, 'data_pagamento')->widget(\yii\widgets\MaskedInput::className(), [
+                        'mask' => '99/99/9999',
+                    ]) ?>
     </div>
     <div class="col-md-2" style="text-align: center">
     

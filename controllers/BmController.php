@@ -193,6 +193,14 @@ class BmController extends Controller
         if(!empty($model->frs_data_faturamento))
             $model->frs_data_faturamento = date_format(DateTime::createFromFormat('Y-m-d', $model->frs_data_faturamento), 'd/m/Y');
 
+        if(!empty($model->frs_data_faturamento))
+            $model->frs_data_faturamento = date_format(DateTime::createFromFormat('Y-m-d', $model->frs_data_faturamento), 'd/m/Y');
+
+        $frsModel->data_criacao = date_format(DateTime::createFromFormat('Y-m-d', $frsModel->data_criacao), 'd/m/Y');
+        $frsModel->data_aprovacao = date_format(DateTime::createFromFormat('Y-m-d', $frsModel->data_aprovacao), 'd/m/Y');
+        $nfseModel->data_pagamento =  date_format(DateTime::createFromFormat('Y-m-d', $nfseModel->data_pagamento), 'd/m/Y');
+        $pagamentoModel->data_pagamento = date_format(DateTime::createFromFormat('Y-m-d', $pagamentoModel->data_pagamento), 'd/m/Y');
+
         if ($model->load(Yii::$app->request->post())) {          
 
 
@@ -245,17 +253,19 @@ class BmController extends Controller
                 $pagamentoModel = new Pagamento();            
             }
 
+                
+
             $frsModel->frs = $_POST['Frs']['frs'];
-            $frsModel->data_criacao = $_POST['Frs']['data_criacao'];
-            $frsModel->data_aprovacao = $_POST['Frs']['data_aprovacao'];
+            $frsModel->data_criacao = isset($_POST['Frs']['data_criacao']) ? date_format(DateTime::createFromFormat('d/m/Y', $_POST['Frs']['data_criacao']), 'Y-m-d') : '';
+            $frsModel->data_aprovacao = isset($_POST['Frs']['data_aprovacao']) ? date_format(DateTime::createFromFormat('d/m/Y', $_POST['Frs']['data_aprovacao']), 'Y-m-d') : '';
             $frsModel->nota_fiscal = $_POST['Frs']['nota_fiscal'];
             $frsModel->save();
 
-            $nfseModel->data_pagamento =  $_POST['Nfse']['data_pagamento'];
+            $nfseModel->data_pagamento =  isset($_POST['Nfse']['data_pagamento']) ? date_format(DateTime::createFromFormat('d/m/Y', $_POST['Nfse']['data_pagamento']), 'Y-m-d') : '';
             $nfseModel->nota_fiscal = $_POST['Frs']['nota_fiscal'];
             $nfseModel->save();
             
-            $pagamentoModel->data_pagamento = $_POST['Pagamento']['data_pagamento'];
+            $pagamentoModel->data_pagamento = isset($_POST['Pagamento']['data_pagamento']) ? date_format(DateTime::createFromFormat('d/m/Y', $_POST['Pagamento']['data_pagamento']), 'Y-m-d') : '';
             $pagamentoModel->retencoes = $_POST['Pagamento']['retencoes'];
             $pagamentoModel->nota_fiscal = $_POST['Frs']['nota_fiscal'];
             $pagamentoModel->save();
