@@ -188,19 +188,21 @@ class BmController extends Controller
             $model->de = date_format(DateTime::createFromFormat('Y-m-d', $model->de), 'd/m/Y');
         if(!empty($model->para))
             $model->para = date_format(DateTime::createFromFormat('Y-m-d', $model->para), 'd/m/Y');
-        if(!empty($model->frs_data_aprovacao))
+        /*if(!empty($model->frs_data_aprovacao))
             $model->frs_data_aprovacao = date_format(DateTime::createFromFormat('Y-m-d', $model->frs_data_aprovacao), 'd/m/Y');
         if(!empty($model->frs_data_faturamento))
-            $model->frs_data_faturamento = date_format(DateTime::createFromFormat('Y-m-d', $model->frs_data_faturamento), 'd/m/Y');
+            $model->frs_data_faturamento = date_format(DateTime::createFromFormat('Y-m-d', $model->frs_data_faturamento), 'd/m/Y');*/
+        
+        if(!empty($frsModel->data_criacao))
+            $frsModel->data_criacao = date_format(DateTime::createFromFormat('Y-m-d', $frsModel->data_criacao), 'd/m/Y');
+        if(!empty($frsModel->data_aprovacao))
+            $frsModel->data_aprovacao = date_format(DateTime::createFromFormat('Y-m-d', $frsModel->data_aprovacao), 'd/m/Y');
+        if(!empty($nfseModel->data_pagamento))
+            $nfseModel->data_pagamento =  date_format(DateTime::createFromFormat('Y-m-d', $nfseModel->data_pagamento), 'd/m/Y');
+        if(!empty($pagamentoModel->data_pagamento))
+            $pagamentoModel->data_pagamento = date_format(DateTime::createFromFormat('Y-m-d', $pagamentoModel->data_pagamento), 'd/m/Y');
 
-        if(!empty($model->frs_data_faturamento))
-            $model->frs_data_faturamento = date_format(DateTime::createFromFormat('Y-m-d', $model->frs_data_faturamento), 'd/m/Y');
-
-        $frsModel->data_criacao = date_format(DateTime::createFromFormat('Y-m-d', $frsModel->data_criacao), 'd/m/Y');
-        $frsModel->data_aprovacao = date_format(DateTime::createFromFormat('Y-m-d', $frsModel->data_aprovacao), 'd/m/Y');
-        $nfseModel->data_pagamento =  date_format(DateTime::createFromFormat('Y-m-d', $nfseModel->data_pagamento), 'd/m/Y');
-        $pagamentoModel->data_pagamento = date_format(DateTime::createFromFormat('Y-m-d', $pagamentoModel->data_pagamento), 'd/m/Y');
-
+        
         if ($model->load(Yii::$app->request->post())) {          
 
 
@@ -216,14 +218,14 @@ class BmController extends Controller
                 $dat = DateTime::createFromFormat('d/m/Y', $_POST['Bm']['para']);          
                 $model->para = date_format($dat, 'Y-m-d');
             }
-            if(!empty($_POST['Bm']['frs_data_aprovacao'])){
+            /*if(!empty($_POST['Bm']['frs_data_aprovacao'])){
                 $dat = DateTime::createFromFormat('d/m/Y', $_POST['Bm']['frs_data_aprovacao']);          
                 $model->frs_data_aprovacao = date_format($dat, 'Y-m-d');
             }
             if(!empty($_POST['Bm']['frs_data_faturamento'])){
                 $dat = DateTime::createFromFormat('d/m/Y', $_POST['Bm']['frs_data_faturamento']);          
                 $model->frs_data_faturamento = date_format($dat, 'Y-m-d');
-            }
+            }*/
 
             $frs_id = Yii::$app->db->createCommand('SELECT id FROM frs WHERE bm="'.$model->numero_bm.'"')->queryScalar();
             $frs_nfse_pagamento = Yii::$app->db->createCommand('SELECT frs.id as frs, nfse.id as nfse, pagamento.id as pagamento 
