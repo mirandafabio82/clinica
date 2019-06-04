@@ -244,7 +244,7 @@ $this->title = 'HCN Automação';
               </div>
               <div class="autocomplete col-md-3" style="width:300px;padding: 0; margin-left:1em" id="autocomplete_div_0">
                 <label>Contato</label>
-                <input class="np_autocomplete form-control" id="contato" type="text" name="contato" placeholder="Insira um Projeto"> 
+                <input class="np_autocomplete form-control" id="contato" type="text" name="contato" placeholder="Insira um Contato"> 
               </div>
            
             </div>
