@@ -90,21 +90,7 @@ class SiteController extends Controller
                 $conts .= $contato['usuario_id'].','; 
             }
 
-            /*if(isset($_POST['executante'])){
-                $executantes = Yii::$app->db->createCommand('SELECT DISTINCT executante_id FROM projeto_executante WHERE executante_id IN ('.implode(',', $_POST['executante']).') ORDER BY executante_id DESC')->queryAll();
-            }
-            else{
-                $executantes = Yii::$app->db->createCommand('SELECT DISTINCT executante_id FROM projeto_executante ORDER BY executante_id DESC')->queryAll();
-            }
-
-            $exec = '';            
-            foreach ($executantes as $key2 => $executante) {    
-                if(empty($executante['executante_id']) || sizeof($executantes)-1 == $key2){
-                    $exec = substr($exec, 0, -1);
-                    continue;                    
-                }         
-                $exec .= $executante['executante_id'].','; 
-            }*/
+           
             $bm = ''; 
             if(isset($_POST['bm']))
                 $bm = ' AND count(bm.id) > 0';            
@@ -140,7 +126,26 @@ class SiteController extends Controller
             else{
                 $projetos = Yii::$app->db->createCommand('SELECT projeto.id AS projetoID, nome, projeto.descricao, site, projeto.contato, proposta, valor_proposta, projeto.qtd_km, nota_geral FROM projeto JOIN bm ON bm.projeto_id = projeto.id WHERE contato_id IN ('.$conts.') '.$as_de.' '.$as_ate.' '.$bm_de.' '.$bm_ate.' ORDER BY projeto.id DESC')->queryAll();
             }
-            $listProjetos = ArrayHelper::map($projetos,'id','nome');
+                    $listProjetos = ArrayHelper::map($projetos,'id','nome');
+
+                    $prestadores = Yii::$app->db->createCommand('SELECT * FROM executante JOIN user ON user.id=executante.usuario_id WHERE is_prestador=1')->queryAll();
+               $listPrestadores = ArrayHelper::map($prestadores,'id','nome');
+
+               $projetos = Yii::$app->db->createCommand('SELECT * FROM projeto')->queryAll();
+               $listProjetos = ArrayHelper::map($projetos,'id','nome');
+
+               $proj_autocomplete = '';
+                foreach ($projetos as $key => $pr) {  
+                        $proj_autocomplete .= '"'.$pr['nome'].'", ';
+                } 
+
+               $contato = Yii::$app->db->createCommand('SELECT * FROM contato JOIN user ON user.id = contato.usuario_id')->queryAll();
+               $listContatos = ArrayHelper::map($contato,'id','nome');
+
+               $cont_autocomplete = '';
+                foreach ($contato as $key => $cont) {  
+                    $cont_autocomplete .= '"'.$cont['nome'].'", ';
+                } 
 
         return $this->render('index', [
             'emitirAS' => $emitirAS,
@@ -154,7 +159,9 @@ class SiteController extends Controller
             'listProjetos' => $listProjetos,
             'com_bm' => $bm,
             'com_frs' => $frs,
-            'mostrar_valor' => $mostrar_valor
+            'mostrar_valor' => $mostrar_valor,
+            'proj_autocomplete' => $proj_autocomplete,
+            'cont_autocomplete' => $cont_autocomplete 
         ]);
     }
 
