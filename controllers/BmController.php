@@ -261,6 +261,7 @@ class BmController extends Controller
             $frsModel->data_criacao = !empty($_POST['Frs']['data_criacao']) ? date_format(DateTime::createFromFormat('d/m/Y', $_POST['Frs']['data_criacao']), 'Y-m-d') : '';
             $frsModel->data_aprovacao = !empty($_POST['Frs']['data_aprovacao']) ? date_format(DateTime::createFromFormat('d/m/Y', $_POST['Frs']['data_aprovacao']), 'Y-m-d') : '';
             $frsModel->nota_fiscal = $_POST['Frs']['nota_fiscal'];
+            $frsModel->bm = $model->numero_bm;
             $frsModel->save();
 
             $nfseModel->data_pagamento =  !empty($_POST['Nfse']['data_pagamento']) ? date_format(DateTime::createFromFormat('d/m/Y', $_POST['Nfse']['data_pagamento']), 'Y-m-d') : '';
