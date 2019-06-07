@@ -131,8 +131,33 @@ class SiteController extends Controller
                     $prestadores = Yii::$app->db->createCommand('SELECT * FROM executante JOIN user ON user.id=executante.usuario_id WHERE is_prestador=1')->queryAll();
                $listPrestadores = ArrayHelper::map($prestadores,'id','nome');
 
-               $projetos = Yii::$app->db->createCommand('SELECT * FROM projeto')->queryAll();
-               $listProjetos = ArrayHelper::map($projetos,'id','nome');
+            $allProjetos = Yii::$app->db->createCommand('SELECT DISTINCT
+                projeto.id, 
+                CONCAT(projeto.nome, " (",(
+                SELECT DISTINCT
+                    CASE 
+                        WHEN projeto.is_conceitual=1 THEN "PCO"
+                        WHEN projeto.is_basico=1 THEN "PBA"
+                        WHEN projeto.is_detalhamento=1 THEN "PDC"
+                        WHEN projeto.is_detalhamento=1 AND projeto.is_configuracao=1 THEN "PDE"
+                        WHEN projeto.is_configuracao=1 THEN "CFG"  
+                        WHEN projeto.is_servico=1 THEN "SRV"
+                        ELSE ""
+                    END
+                
+                FROM escopo
+                    INNER JOIN atividademodelo ON atividademodelo.id = escopo.atividademodelo_id                
+                WHERE escopo.projeto_id = projeto.id
+                
+                 ), ")") AS nome
+                
+            FROM
+                projeto
+            INNER JOIN escopo ON escopo.projeto_id = projeto.ID
+            
+            ORDER BY id DESC')->queryAll();
+        
+               $listAllProjetos = ArrayHelper::map($allProjetos,'id','nome');
 
                $proj_autocomplete = '';
                 foreach ($projetos as $key => $pr) {  
@@ -161,7 +186,8 @@ class SiteController extends Controller
             'com_frs' => $frs,
             'mostrar_valor' => $mostrar_valor,
             'proj_autocomplete' => $proj_autocomplete,
-            'cont_autocomplete' => $cont_autocomplete 
+            'cont_autocomplete' => $cont_autocomplete,
+            'listAllProjetos' => $listAllProjetos
         ]);
     }
 
@@ -196,6 +222,37 @@ class SiteController extends Controller
         Yii::$app->user->logout();
 
        return $this->redirect(['login']);
+    }
+
+     //habilitar ajax
+    public function beforeAction($action) {
+        $this->enableCsrfValidation = false;
+        return parent::beforeAction($action);
+    }
+
+    public function actionProjetoresumo()
+    {
+        if (Yii::$app->request->isAjax) {
+            $projeto_id = Yii::$app->request->post()['id'];
+
+            $tipo_exec = Yii::$app->db->createCommand('SELECT * FROM tipo_executante')->queryAll();
+
+            echo json_encode(Yii::$app->db->createCommand('SELECT bm.numero_bm as bm_num, bm.data as bm_data, 
+                       ROUND(IFNULL(bm.executado_ee,0) * '.$tipo_exec[4]["valor_hora"].' +
+                       IFNULL(bm.executado_es,0) * '.$tipo_exec[3]["valor_hora"].' +
+                       IFNULL(bm.executado_ep,0) * '.$tipo_exec[2]["valor_hora"].' +
+                       IFNULL(bm.executado_ej,0) * '.$tipo_exec[1]["valor_hora"].' +
+                       IFNULL(bm.executado_tp,0) * '.$tipo_exec[0]["valor_hora"].' +
+                        bm.km * (SELECT vl_km FROM executante WHERE usuario_id=61)
+                        ) as bm_valor, 
+                        frs.frs, frs.data_criacao as frs_data, nfse.nota_fiscal, nfse.data_emissao as nfse_data, pagamento.valor_liquido as pagamento, pagamento.data_pagamento
+                                                            FROM bm
+                                                            LEFT JOIN frs ON frs.bm = bm.numero_bm 
+                                                            LEFT JOIN nfse ON frs.nota_fiscal = nfse.nota_fiscal
+                                                            LEFT JOIN pagamento ON nfse.nota_fiscal = pagamento.nota_fiscal 
+                                                            WHERE bm.projeto_id='.$projeto_id.' ORDER BY bm_num DESC')->queryAll());
+
+        }
     }
 
     /**

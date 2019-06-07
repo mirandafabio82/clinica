@@ -7,9 +7,65 @@ use kartik\money\MaskMoney;
 use kartik\tabs\TabsX;
 use kartik\popover\PopoverX;
 use yii\bootstrap\Modal;
+use yii\widgets\Pjax;
+use kartik\select2\Select2;
+use app\models\Projeto;
+
 /* @var $this yii\web\View */
 
 $this->title = 'HCN Automação';
+
+$this->registerJs(' 
+    $("#rel_resumido").click(function(){
+        var id = $("#projeto_rel_resumido").val();
+        
+        $.ajax({ 
+          url: "index.php?r=site/projetoresumo",
+          data: {id: id},
+          type: "POST",
+          success: function(response){
+            var bms = $.parseJSON(response);
+           
+            var tabela = document.getElementById("tabela_rel_resumido");
+            
+            if(tabela.rows.length>1){
+              for(var i=1;i<=tabela.rows.length;i++){
+                tabela.deleteRow(i);
+              }
+            }
+            
+            
+            for(var i=0;i<bms.length;i++){
+                row = tabela.insertRow(i+1);
+                cell1 = row.insertCell(0);
+                cell2 = row.insertCell(1);
+                cell3 = row.insertCell(2);
+                cell4 = row.insertCell(3);
+                cell5 = row.insertCell(4);
+                cell6 = row.insertCell(5);
+                cell7 = row.insertCell(6);
+                cell8 = row.insertCell(7);
+                cell9 = row.insertCell(8);
+
+                cell1.innerHTML = bms[i]["bm_num"];
+                cell2.innerHTML = bms[i]["bm_data"];
+                cell3.innerHTML = bms[i]["bm_valor"];
+                cell4.innerHTML = "adiantamento";
+                cell5.innerHTML = bms[i]["frs"];
+                cell6.innerHTML = bms[i]["frs_data"];
+                cell7.innerHTML = bms[i]["nota_fiscal"];
+                cell8.innerHTML = bms[i]["nfse_data"];
+                cell9.innerHTML = bms[i]["pagamento"];
+                
+            }
+        },
+        error: function(){
+          console.log("failure");
+        }
+      });
+    });   
+
+');
 ?>
 
 <style>
@@ -159,39 +215,41 @@ $this->title = 'HCN Automação';
       
 
       <div class="col-md-6">
-
-      	 <!-- PRODUCT LIST -->
-          <div class="box box-primary">
-            <div class="box-header with-border">
-              <h3 class="box-title">Últimas Atividades</h3>
-
-              <!-- <div class="box-tools pull-right">
-                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                </button>
-                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-              </div> -->
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body">
-              <ul class="products-list product-list-in-box">
-              	<?php foreach ($logs as $key => $log) { ?> 
-	                <li class="item">	                  
-	                  <div class="product-info">
-	                    <a href="javascript:void(0)" class="product-description"><?= $log['descricao'] ?><span
-	                        class="label label-info pull-right"><?= date_format(DateTime::createFromFormat('Y-m-d H:i:s', $log['data']), 'd/m/Y H:i:s') ?></span></a>                 
-	                    
-	                  </div>
-	                </li>
-                <?php } ?>
-                <!-- /.item -->
-              </ul>
-            </div>
-            <!-- /.box-body -->
-            <div class="box-footer text-center">
-              <a href="<?= Url::to(['log/index']) ?>" class="uppercase">Visualizar o Log Completo</a>
-            </div>
-            <!-- /.box-footer -->
-          </div>      
+          <!-- PRODUCT LIST -->
+        <div class="box box-primary">
+          <div class="box-header with-border">
+            <h3 class="box-title">Relatório Resumido</h3>    
+            
+                    <div class="row">
+                      <div class="autocomplete col-md-3" style="width:300px;padding: 0; margin-left:1em" id="autocomplete_div_0">
+                        <?= Html::dropDownList('id', null, $listAllProjetos, ['id' => 'projeto_rel_resumido', 'class' => 'form-control']) ?>
+                      </div>                            
+                    <div class="row" style="margin-top:1em">
+                      <div class="col-md-2">
+                        <button class="btn btn-primary" type="submit" id="rel_resumido" form="form-relgeral" value="Submit">Gerar Relatório</button>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="scrollmenu">
+                    <table id="tabela_rel_resumido">
+                      <tr>
+                        <th>BM</th>
+                        <th>Data</th>
+                        <th>Valor</th>
+                        <th>Andamento</th>
+                        <th>FRS</th>
+                        <th>Data FRS</th>
+                        <th>NF</th>
+                        <th>Data NF</th>
+                        <th>Pagamento</th>
+                      </tr>                    
+                    </table>
+                  </div>                                
+                
+            </div>            
+          </div>
+           
       </div>
   <div class="col-md-6">
 
@@ -230,61 +288,41 @@ $this->title = 'HCN Automação';
 <?php } ?>
 
 
-<div class="col-md-12">
+<div class="col-md-6">
 
-<!-- PRODUCT LIST -->
-<div class="box box-primary">
-  <div class="box-header with-border">
-    <h3 class="box-title">Relatório Geral</h3>    
-    <form action="/web/index.php?r=relatorio%2Frelatoriogeral" method="post" id="form-relgeral">
-            <div class="row">
-              <div class="autocomplete col-md-3" style="width:300px;padding: 0; margin-left:1em" id="autocomplete_div_0">
-                <label>Projeto</label>
-                <input class="np_autocomplete form-control" id="projeto" type="text" name="projeto" placeholder="Insira um Projeto"> 
-              </div>
-              <div class="autocomplete col-md-3" style="width:300px;padding: 0; margin-left:1em" id="autocomplete_div_0">
-                <label>Contato</label>
-                <input class="np_autocomplete form-control" id="contato" type="text" name="contato" placeholder="Insira um Contato"> 
-              </div>
-           
+   <!-- PRODUCT LIST -->
+          <div class="box box-primary">
+            <div class="box-header with-border">
+              <h3 class="box-title">Últimas Atividades</h3>
+
+              <!-- <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              </div> -->
             </div>
-            <div class="row" style="margin-top:1em">                            
-              <div class="col-md-2">
-                Período BM
-                <input type="date" name="bm_de" class="form-control" placeholder="de">                           
-                <input type="date" name="bm_ate" class="form-control" placeholder="até">
-              </div>
-              <div class="col-md-2">
-                Período AS
-                <input type="date" name="as_de" class="form-control" placeholder="de">                            
-                <input type="date" name="as_ate" class="form-control" placeholder="até">
-              </div>
-              <div class="col-md-2">
-                Período FRS
-                <input type="date" name="frs_de" class="form-control" placeholder="de">                            
-                <input type="date" name="frs_ate" class="form-control" placeholder="até">
-              </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <ul class="products-list product-list-in-box">
+                <?php foreach ($logs as $key => $log) { ?> 
+                  <li class="item">                   
+                    <div class="product-info">
+                      <a href="javascript:void(0)" class="product-description"><?= $log['descricao'] ?><span
+                          class="label label-info pull-right"><?= date_format(DateTime::createFromFormat('Y-m-d H:i:s', $log['data']), 'd/m/Y H:i:s') ?></span></a>                 
+                      
+                    </div>
+                  </li>
+                <?php } ?>
+                <!-- /.item -->
+              </ul>
             </div>
-            <div class="row" style="margin-top:1em">
-              <div class="col-md-1">
-                <input type="checkbox" name="bm" checked> Com BM
-              </div>
-              <div class="col-md-1">
-                <input type="checkbox" name="frs" checked> Com FRS
-              </div>
-              <div class="col-md-1">
-                <input type="checkbox" name="valor" checked> Mostrar Valores
-              </div>
-          </div>
-          <div class="row" style="margin-top:1em">
-            <div class="col-md-2">
-              <button class="btn btn-primary" type="submit" form="form-relgeral" value="Submit">Gerar Relatório</button>
+            <!-- /.box-body -->
+            <div class="box-footer text-center">
+              <a href="<?= Url::to(['log/index']) ?>" class="uppercase">Visualizar o Log Completo</a>
             </div>
-          </div>
-        </form>
-        
-    </div>            
-  </div>      
+            <!-- /.box-footer -->
+          </div> 
+      
 </div>        
 
 
