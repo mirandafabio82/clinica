@@ -138,8 +138,8 @@ class SiteController extends Controller
                     CASE 
                         WHEN projeto.is_conceitual=1 THEN "PCO"
                         WHEN projeto.is_basico=1 THEN "PBA"
-                        WHEN projeto.is_detalhamento=1 THEN "PDC"
-                        WHEN projeto.is_detalhamento=1 AND projeto.is_configuracao=1 THEN "PDE"
+                        WHEN projeto.is_detalhamento=1 THEN "PDE"
+                        WHEN projeto.is_detalhamento=1 AND projeto.is_configuracao=1 THEN "PDC"
                         WHEN projeto.is_configuracao=1 THEN "CFG"  
                         WHEN projeto.is_servico=1 THEN "SRV"
                         ELSE ""
@@ -245,8 +245,15 @@ class SiteController extends Controller
                        IFNULL(bm.executado_tp,0) * '.$tipo_exec[0]["valor_hora"].' +
                         bm.km * (SELECT vl_km FROM executante WHERE usuario_id=61)
                         ) as bm_valor, 
-                        frs.frs, frs.data_criacao as frs_data, nfse.nota_fiscal, nfse.data_emissao as nfse_data, pagamento.valor_liquido as pagamento, pagamento.data_pagamento
+                        ((ROUND(IFNULL(bm.executado_ee,0) * '.$tipo_exec[4]["valor_hora"].' +
+                       IFNULL(bm.executado_es,0) * '.$tipo_exec[3]["valor_hora"].' +
+                       IFNULL(bm.executado_ep,0) * '.$tipo_exec[2]["valor_hora"].' +
+                       IFNULL(bm.executado_ej,0) * '.$tipo_exec[1]["valor_hora"].' +
+                       IFNULL(bm.executado_tp,0) * '.$tipo_exec[0]["valor_hora"].' +
+                        bm.km * (SELECT vl_km FROM executante WHERE usuario_id=61)
+                        ) * 100) / projeto.valor_proposta) as andamento, frs.frs, frs.data_criacao as frs_data, nfse.nota_fiscal, nfse.data_emissao as nfse_data, pagamento.valor_liquido as pagamento, pagamento.data_pagamento
                                                             FROM bm
+                                                            JOIN projeto ON bm.projeto_id = projeto.id
                                                             LEFT JOIN frs ON frs.bm = bm.numero_bm 
                                                             LEFT JOIN nfse ON frs.nota_fiscal = nfse.nota_fiscal
                                                             LEFT JOIN pagamento ON nfse.nota_fiscal = pagamento.nota_fiscal 

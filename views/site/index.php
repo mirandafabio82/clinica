@@ -49,13 +49,22 @@ $this->registerJs('
 
                 cell1.innerHTML = bms[i]["bm_num"];
                 cell2.innerHTML = bms[i]["bm_data"];
-                cell3.innerHTML = bms[i]["bm_valor"];
-                cell4.innerHTML = "adiantamento";
+                if(bms[i]["bm_valor"] != null)
+                 cell3.innerHTML = "R$ "+bms[i]["bm_valor"];
+                else
+                  cell3.innerHTML = "";
+                if(bms[i]["andamento"] != null)
+                  cell4.innerHTML = Math.round10(bms[i]["andamento"], -1)+"%";
+                else
+                  cell4.innerHTML = "";
                 cell5.innerHTML = bms[i]["frs"];
                 cell6.innerHTML = bms[i]["frs_data"];
                 cell7.innerHTML = bms[i]["nota_fiscal"];
                 cell8.innerHTML = bms[i]["nfse_data"];
-                cell9.innerHTML = bms[i]["pagamento"];
+                if(bms[i]["pagamento"] != null)
+                  cell9.innerHTML = "R$ "+bms[i]["pagamento"];
+                else
+                  cell9.innerHTML = "";
                 
             }
         },
@@ -237,7 +246,7 @@ $this->registerJs('
                         <th>BM</th>
                         <th>Data</th>
                         <th>Valor</th>
-                        <th>Andamento</th>
+                        <th align="center">Andamento</th>
                         <th>FRS</th>
                         <th>Data FRS</th>
                         <th>NF</th>

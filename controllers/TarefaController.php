@@ -88,8 +88,8 @@ class TarefaController extends Controller
                 CASE 
                     WHEN projeto.is_conceitual=1 THEN "PCO"
                     WHEN projeto.is_basico=1 THEN "PBA"
-                    WHEN projeto.is_detalhamento=1 THEN "PDC"
-                    WHEN projeto.is_detalhamento=1 AND projeto.is_configuracao=1 THEN "PDE"
+                    WHEN projeto.is_detalhamento=1 THEN "PDE"
+                    WHEN projeto.is_detalhamento=1 AND projeto.is_configuracao=1 THEN "PDC"
                     WHEN projeto.is_configuracao=1 THEN "CFG"  
                     WHEN projeto.is_servico=1 THEN "SRV"
                     ELSE ""
