@@ -237,7 +237,7 @@ class SiteController extends Controller
 
             $tipo_exec = Yii::$app->db->createCommand('SELECT * FROM tipo_executante')->queryAll();
 
-            echo json_encode(Yii::$app->db->createCommand('SELECT bm.numero_bm as bm_num, bm.data as bm_data, 
+            echo json_encode(Yii::$app->db->createCommand('SELECT DISTINCT bm.numero_bm as bm_num, bm.data as bm_data, 
                        ROUND(IFNULL(bm.executado_ee,0) * '.$tipo_exec[4]["valor_hora"].' +
                        IFNULL(bm.executado_es,0) * '.$tipo_exec[3]["valor_hora"].' +
                        IFNULL(bm.executado_ep,0) * '.$tipo_exec[2]["valor_hora"].' +

@@ -17,12 +17,18 @@ $this->title = 'HCN Automação';
 
 $this->registerJs(' 
     $( document ).ready(function() {
-       $("#rel_resumido").click(); 
+     //  $("#rel_resumido").click(); 
     });
 
     $("#rel_resumido").click(function(){
-        var id = $("#projeto_rel_resumido").val();
-        
+        var id = $("#projeto_rel_resumido").val();    
+        var tabela = document.getElementById("tabela_rel_resumido");
+
+        if(tabela.rows.length>1){
+            for(var i=1;i<=tabela.rows.length;i++){
+              tabela.deleteRow(i);
+            }
+          }    
         
         $.ajax({ 
           url: "index.php?r=site/projetoresumo",
@@ -31,15 +37,10 @@ $this->registerJs('
           success: function(response){
             var bms = $.parseJSON(response);
            
-            var tabela = document.getElementById("tabela_rel_resumido");
-            
-            if(tabela.rows.length>1){
-              for(var i=1;i<=tabela.rows.length;i++){
-                tabela.deleteRow(i);
-              }
-            }
             
             var porcentagem = 0;
+            var valorTotal = 0;
+            var pagamento = 0;
             for(var i=0;i<bms.length;i++){
                 row = tabela.insertRow(i+1);
                 cell1 = row.insertCell(0);
@@ -51,6 +52,7 @@ $this->registerJs('
                 cell7 = row.insertCell(6);
                 cell8 = row.insertCell(7);
                 cell9 = row.insertCell(8);
+                cell10 = row.insertCell(9);
 
                 cell1.innerHTML = bms[i]["bm_num"];
                 cell2.innerHTML = bms[i]["bm_data"];
@@ -70,9 +72,52 @@ $this->registerJs('
                   cell9.innerHTML = "R$ "+bms[i]["pagamento"];
                 else
                   cell9.innerHTML = "";
+                if(bms[i]["andamento"]!=null){
+                    porcentagem = porcentagem + Math.round10(bms[i]["andamento"], -1);
+                }
+                if(bms[i]["bm_valor"]!=null){
+                  valorTotal = valorTotal + Math.round10(bms[i]["bm_valor"], -1);
+                }
+                if(bms[i]["pagamento"]!=null){
+                  pagamento = pagamento + Math.round10(bms[i]["pagamento"], -1);
+                }
+                cell10.innerHTML = bms[i]["data_pagamento"];
                 
-                porcentagem += Math.round10(bms[i]["andamento"], -1);
             }
+                row = tabela.insertRow(i+1);
+                cell1 = row.insertCell(0);
+                cell2 = row.insertCell(1);
+                cell3 = row.insertCell(2);
+                cell4 = row.insertCell(3);
+                cell5 = row.insertCell(4);
+                cell6 = row.insertCell(5);
+                cell7 = row.insertCell(6);
+                cell8 = row.insertCell(7);
+                cell9 = row.insertCell(8);
+                cell10 = row.insertCell(9);
+
+                cell1.innerHTML = "Total";
+                cell3.innerHTML = "R$ "+ valorTotal;
+                cell4.innerHTML = porcentagem+"%";
+                cell9.innerHTML = "R$ "+pagamento;
+                
+                row = tabela.insertRow(i+2);
+                cell1 = row.insertCell(0);
+                cell2 = row.insertCell(1);
+                cell3 = row.insertCell(2);
+                cell4 = row.insertCell(3);
+                cell5 = row.insertCell(4);
+                cell6 = row.insertCell(5);
+                cell7 = row.insertCell(6);
+                cell8 = row.insertCell(7);
+                cell9 = row.insertCell(8);
+                cell10 = row.insertCell(9);
+
+                cell1.innerHTML = "Saldo";
+                cell3.innerHTML = "R$ "+ valorTotal;
+                cell4.innerHTML = (100-porcentagem) +"%";
+                
+
             console.log(porcentagem);
             document.getElementById("progress-bar").style.width = porcentagem+"%";
         },
@@ -193,11 +238,11 @@ div.scrollmenu {
           <div class="box-header with-border">
             <h3 class="box-title">Relatório Resumido</h3>    
             
-                    <div class="row">
+                    <div class="row" style="margin-bottom: 0.5em">
                       <div class="autocomplete col-md-3" style="width:300px;padding: 0; margin-left:1em" id="autocomplete_div_0">
                         <?= Html::dropDownList('id', null, $listAllProjetos, ['id' => 'projeto_rel_resumido', 'class' => 'form-control']) ?>
                       </div>                            
-                    <div class="row" style="margin-top:1em">
+                    <div class="row" >
                       <div class="col-md-2">
                         <button class="btn btn-primary" type="submit" id="rel_resumido" form="form-relgeral" value="Submit">Gerar Relatório</button>
                       </div>
@@ -221,6 +266,7 @@ div.scrollmenu {
                         <th>NF</th>
                         <th>Data NF</th>
                         <th>Pagamento</th>
+                        <th>Data Pagamento</th>
                       </tr>                    
                     </table>
                   </div>                                
@@ -229,8 +275,63 @@ div.scrollmenu {
           </div>
            
       </div>
-  <div class="col-md-6">
 
+  <div class="col-md-6">
+        <!-- PRODUCT LIST -->
+          <div class="box box-primary">
+            <div class="box-header with-border">
+              <h3 class="box-title">Últimas Atividades</h3>
+              
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <ul class="products-list product-list-in-box">
+                <?php foreach ($logs as $key => $log) { ?> 
+                  <li class="item">                   
+                    <div class="product-info">
+                      <a href="javascript:void(0)" class="product-description"><?= $log['descricao'] ?><span
+                          class="label label-info pull-right"><?= date_format(DateTime::createFromFormat('Y-m-d H:i:s', $log['data']), 'd/m/Y H:i:s') ?></span></a>                 
+                      
+                    </div>
+                  </li>
+                <?php } ?>
+                <!-- /.item -->
+              </ul>
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer text-center">
+              <a href="<?= Url::to(['log/index']) ?>" class="uppercase">Visualizar o Log Completo</a>
+            </div>
+            <!-- /.box-footer -->
+          </div> 
+
+      </div>
+<?php } ?>
+      <!-- /.col -->
+        <div class="col-md-6">
+          <div class="box box-primary">
+            <div class="box-body no-padding">
+              <!-- THE CALENDAR -->
+                  <?= yii2fullcalendar\yii2fullcalendar::widget([
+                        'options' => [
+                          'lang' => 'pt',
+                          'hidden' => 'hidden',
+                          //... more options to be defined here!
+                        ],
+                        'events' => Url::to(['/timetrack/default/jsoncalendar'])
+                      ]);
+                  ?>
+                  <div id="calendar"></div>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /. box -->
+        </div>
+        <!-- /.col -->
+
+<?php if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])){ ?>
+
+<div class="col-md-6">
          <!-- PRODUCT LIST -->
           <div class="box box-primary">
             <div class="box-header with-border">
@@ -260,76 +361,10 @@ div.scrollmenu {
               </ul>
             </div>
             
-          </div>      
-      </div>
-
-      <!-- /.col -->
-        <div class="col-md-6">
-          <div class="box box-primary">
-            <div class="box-body no-padding">
-              <!-- THE CALENDAR -->
-                  <?= yii2fullcalendar\yii2fullcalendar::widget([
-                        'options' => [
-                          'lang' => 'pt',
-                          'hidden' => 'hidden',
-                          //... more options to be defined here!
-                        ],
-                        'events' => Url::to(['/timetrack/default/jsoncalendar'])
-                      ]);
-                  ?>
-                  <div id="calendar"></div>
-            </div>
-            <!-- /.box-body -->
-          </div>
-          <!-- /. box -->
-        </div>
-        <!-- /.col -->
-
-
-
-<div class="col-md-6">
-
-   <!-- PRODUCT LIST -->
-          <div class="box box-primary">
-            <div class="box-header with-border">
-              <h3 class="box-title">Últimas Atividades</h3>
-
-              <!-- <div class="box-tools pull-right">
-                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                </button>
-                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-              </div> -->
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body">
-              <ul class="products-list product-list-in-box">
-                <?php foreach ($logs as $key => $log) { ?> 
-                  <li class="item">                   
-                    <div class="product-info">
-                      <a href="javascript:void(0)" class="product-description"><?= $log['descricao'] ?><span
-                          class="label label-info pull-right"><?= date_format(DateTime::createFromFormat('Y-m-d H:i:s', $log['data']), 'd/m/Y H:i:s') ?></span></a>                 
-                      
-                    </div>
-                  </li>
-                <?php } ?>
-                <!-- /.item -->
-              </ul>
-            </div>
-            <!-- /.box-body -->
-            <div class="box-footer text-center">
-              <a href="<?= Url::to(['log/index']) ?>" class="uppercase">Visualizar o Log Completo</a>
-            </div>
-            <!-- /.box-footer -->
-          </div> 
+          </div>     
       
 </div>        
-<?php } ?>
-
-
-
-
-
-
+ <?php } ?>
 
 
 <script>
