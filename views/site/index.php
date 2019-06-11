@@ -16,8 +16,13 @@ use app\models\Projeto;
 $this->title = 'HCN Automação';
 
 $this->registerJs(' 
+    $( document ).ready(function() {
+       $("#rel_resumido").click(); 
+    });
+
     $("#rel_resumido").click(function(){
         var id = $("#projeto_rel_resumido").val();
+        
         
         $.ajax({ 
           url: "index.php?r=site/projetoresumo",
@@ -34,7 +39,7 @@ $this->registerJs('
               }
             }
             
-            
+            var porcentagem = 0;
             for(var i=0;i<bms.length;i++){
                 row = tabela.insertRow(i+1);
                 cell1 = row.insertCell(0);
@@ -66,7 +71,10 @@ $this->registerJs('
                 else
                   cell9.innerHTML = "";
                 
+                porcentagem += Math.round10(bms[i]["andamento"], -1);
             }
+            console.log(porcentagem);
+            document.getElementById("progress-bar").style.width = porcentagem+"%";
         },
         error: function(){
           console.log("failure");
@@ -78,25 +86,7 @@ $this->registerJs('
 ?>
 
 <style>
-  table {
-      font-family: arial, sans-serif;
-      border-collapse: collapse;
-      width: 100%;
-      font-size: 8px;
-  }
-
-  td, th {
-      border: 1px solid #dddddd;
-      text-align: left;
-      padding: 8px;
-      font-size: 10px;
-  }
-
-  tr:nth-child(even) {
-      /*background-color: #dddddd;*/
-  }
-
-  div.scrollmenu {
+div.scrollmenu {
       overflow: auto;
       white-space: nowrap;
   }
@@ -109,11 +99,6 @@ $this->registerJs('
       text-decoration: none;
   }
 
-  th {
-      background-color: #3c8dbc;
-      color: white;
-  }
-  td { white-space:pre }
 </style>
 
 <?php
@@ -197,33 +182,12 @@ $this->registerJs('
       </div>
 <?php } ?>
      <div class="row">
-      <!-- /.col -->
-        <div class="col-md-6">
-          <div class="box box-primary">
-            <div class="box-body no-padding">
-              <!-- THE CALENDAR -->
-                  <?= yii2fullcalendar\yii2fullcalendar::widget([
-                        'options' => [
-                          'lang' => 'pt',
-                          'hidden' => 'hidden',
-                          //... more options to be defined here!
-                        ],
-                        'events' => Url::to(['/timetrack/default/jsoncalendar'])
-                      ]);
-                  ?>
-                  <div id="calendar"></div>
-            </div>
-            <!-- /.box-body -->
-          </div>
-          <!-- /. box -->
-        </div>
-        <!-- /.col -->
-      
+            
       
 <?php if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])){ ?>
       
 
-      <div class="col-md-6">
+      <div class="col-md-12">
           <!-- PRODUCT LIST -->
         <div class="box box-primary">
           <div class="box-header with-border">
@@ -239,9 +203,14 @@ $this->registerJs('
                       </div>
                     </div>
                   </div>
+
+                  <div class="progress progress-xs">
+                        <div class="progress-bar progress-bar-success progress-bar-striped" id="progress-bar" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+                          </div>
+                      </div>
                   
-                  <div class="scrollmenu">
-                    <table id="tabela_rel_resumido">
+                  <div class="scrollmenu" style="height: 20em">
+                    <table id="tabela_rel_resumido" class="table table-hover">
                       <tr>
                         <th>BM</th>
                         <th>Data</th>
@@ -294,7 +263,28 @@ $this->registerJs('
           </div>      
       </div>
 
-<?php } ?>
+      <!-- /.col -->
+        <div class="col-md-6">
+          <div class="box box-primary">
+            <div class="box-body no-padding">
+              <!-- THE CALENDAR -->
+                  <?= yii2fullcalendar\yii2fullcalendar::widget([
+                        'options' => [
+                          'lang' => 'pt',
+                          'hidden' => 'hidden',
+                          //... more options to be defined here!
+                        ],
+                        'events' => Url::to(['/timetrack/default/jsoncalendar'])
+                      ]);
+                  ?>
+                  <div id="calendar"></div>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /. box -->
+        </div>
+        <!-- /.col -->
+
 
 
 <div class="col-md-6">
@@ -333,6 +323,7 @@ $this->registerJs('
           </div> 
       
 </div>        
+<?php } ?>
 
 
 
