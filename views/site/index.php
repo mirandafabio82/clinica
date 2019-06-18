@@ -23,12 +23,38 @@ $this->registerJs('
     $("#rel_resumido").click(function(){
         var id = $("#projeto_rel_resumido").val();    
         var tabela = document.getElementById("tabela_rel_resumido");
-
+        var tabela_header = document.getElementById("tabela_rel_resumido_header");
+        
         if(tabela.rows.length>1){
             for(var i=1;i<=tabela.rows.length;i++){
-              tabela.deleteRow(i);
+              $("#tabela_rel_resumido tr").remove(); 
             }
           }    
+
+        $("#rel_resumido").attr("disabled", true);
+
+        row = tabela.insertRow(0);
+        cell1 = row.insertCell(0);
+        cell2 = row.insertCell(1);
+        cell3 = row.insertCell(2);
+        cell4 = row.insertCell(3);
+        cell5 = row.insertCell(4);
+        cell6 = row.insertCell(5);
+        cell7 = row.insertCell(6);
+        cell8 = row.insertCell(7);
+        cell9 = row.insertCell(8);
+        cell10 = row.insertCell(9);
+        
+         cell1.innerHTML = "BM";
+         cell2.innerHTML = "Data";
+         cell3.innerHTML = "Valor";
+         cell4.innerHTML = "Andamento";
+         cell5.innerHTML = "FRS";
+         cell6.innerHTML = "Data FRS";
+         cell7.innerHTML = "NF";
+         cell8.innerHTML = "Data NF";
+         cell9.innerHTML = "Pagamento";
+         cell10.innerHTML ="Data Pagamento";
         
         $.ajax({ 
           url: "index.php?r=site/projetoresumo",
@@ -36,12 +62,39 @@ $this->registerJs('
           type: "POST",
           success: function(response){
             var bms = $.parseJSON(response);
-           
+            
+            console.log(bms);
             
             var porcentagem = 0;
             var valorTotal = 0;
             var pagamento = 0;
+
+            row_header = tabela_header.insertRow(0);
+            cell1_header = row_header.insertCell(0);
+            cell2_header = row_header.insertCell(1);
+            cell3_header = row_header.insertCell(2);
+            cell4_header = row_header.insertCell(3);
+            row_header.bgColor = "blanchedalmond";
+
+            cell1_header.innerHTML = bms[0]["projeto_nome"];
+            //cell2_header.innerHTML = bms[0]["bm_num"];
+            cell3_header.innerHTML = bms[0]["site"];
+            cell4_header.innerHTML = bms[0]["contato"];
+            
+            row_header = tabela_header.insertRow(1);
+            cell1_header = row_header.insertCell(0);
+            cell2_header = row_header.insertCell(1);
+            cell3_header = row_header.insertCell(2);
+            cell4_header = row_header.insertCell(3);
+            row_header.bgColor = "blanchedalmond";    
+
+            cell1_header.innerHTML = bms[0]["descricao"];
+            cell2_header.innerHTML = bms[0]["proposta"];
+            cell3_header.innerHTML = bms[0]["data_proposta"];
+            cell4_header.innerHTML = "R$ " + mascaraValor(bms[0]["valor_proposta"]);
+
             for(var i=0;i<bms.length;i++){
+
                 row = tabela.insertRow(i+1);
                 cell1 = row.insertCell(0);
                 cell2 = row.insertCell(1);
@@ -57,7 +110,7 @@ $this->registerJs('
                 cell1.innerHTML = bms[i]["bm_num"];
                 cell2.innerHTML = bms[i]["bm_data"];
                 if(bms[i]["bm_valor"] != null)
-                 cell3.innerHTML = "R$ "+bms[i]["bm_valor"];
+                 cell3.innerHTML = "R$ " + mascaraValor(bms[i]["bm_valor"]);
                 else
                   cell3.innerHTML = "";
                 if(bms[i]["andamento"] != null)
@@ -69,7 +122,7 @@ $this->registerJs('
                 cell7.innerHTML = bms[i]["nota_fiscal"];
                 cell8.innerHTML = bms[i]["nfse_data"];
                 if(bms[i]["pagamento"] != null)
-                  cell9.innerHTML = "R$ "+bms[i]["pagamento"];
+                  cell9.innerHTML = "R$ " + mascaraValor(bms[i]["pagamento"]);
                 else
                   cell9.innerHTML = "";
                 if(bms[i]["andamento"]!=null){
@@ -95,11 +148,12 @@ $this->registerJs('
                 cell8 = row.insertCell(7);
                 cell9 = row.insertCell(8);
                 cell10 = row.insertCell(9);
+                row.bgColor = "antiquewhite";
 
                 cell1.innerHTML = "Total";
-                cell3.innerHTML = "R$ "+ valorTotal;
+                cell3.innerHTML = "R$ " + mascaraValor(valorTotal);
                 cell4.innerHTML = porcentagem+"%";
-                cell9.innerHTML = "R$ "+pagamento;
+                cell9.innerHTML = "R$ " + mascaraValor(pagamento);
                 
                 row = tabela.insertRow(i+2);
                 cell1 = row.insertCell(0);
@@ -112,13 +166,15 @@ $this->registerJs('
                 cell8 = row.insertCell(7);
                 cell9 = row.insertCell(8);
                 cell10 = row.insertCell(9);
+                row.bgColor = "aliceblue";
 
                 cell1.innerHTML = "Saldo";
-                cell3.innerHTML = "R$ "+ valorTotal;
-                cell4.innerHTML = (100-porcentagem) +"%";
+                cell3.innerHTML = "R$ " + mascaraValor(valorTotal);
+                cell4.innerHTML = Math.round10((100-porcentagem), -1) +"%";
                 
 
             console.log(porcentagem);
+            $("#rel_resumido").attr("disabled", false);
             document.getElementById("progress-bar").style.width = porcentagem+"%";
         },
         error: function(){
@@ -127,11 +183,20 @@ $this->registerJs('
       });
     });   
 
+    function mascaraValor(valor) {
+          valor = valor * 100;
+        valor = valor.toString().replace(/\D/g,"");
+        valor = valor.toString().replace(/(\d)(\d{8})$/,"$1.$2");
+        valor = valor.toString().replace(/(\d)(\d{5})$/,"$1.$2");
+        valor = valor.toString().replace(/(\d)(\d{2})$/,"$1,$2");
+        return valor                    
+    }
+
 ');
 ?>
 
 <style>
-div.scrollmenu {
+  div.scrollmenu {
       overflow: auto;
       white-space: nowrap;
   }
@@ -143,6 +208,11 @@ div.scrollmenu {
       padding: 14px;
       text-decoration: none;
   }
+  
+  .endRows {
+        background-color: aliceblue;
+  }
+
 
 </style>
 
@@ -249,11 +319,17 @@ div.scrollmenu {
                     </div>
                   </div>
 
-                  <div class="progress progress-xs">
+                  <div class="progress progress-xs" style="margin-bottom: 0px;">
                         <div class="progress-bar progress-bar-success progress-bar-striped" id="progress-bar" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
                           </div>
                       </div>
-                  
+
+                    
+                    <table id="tabela_rel_resumido_header" class="table table-hover" style="margin-bottom: 0px;"> 
+                        <tr>                                              
+                        </tr>                    
+                    </table>                 
+
                   <div class="scrollmenu" style="height: 20em">
                     <table id="tabela_rel_resumido" class="table table-hover">
                       <tr>
