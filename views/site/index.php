@@ -31,7 +31,13 @@ $this->registerJs('
             }
           }    
 
-        $("#rel_resumido").attr("disabled", true);
+          if(tabela_header.rows.length>1){
+            for(var i=1;i<=tabela_header.rows.length;i++){
+              $("#tabela_rel_resumido_header tr").remove(); 
+            }
+          }    
+
+       // $("#rel_resumido").attr("disabled", true);
 
         row = tabela.insertRow(0);
         cell1 = row.insertCell(0);
@@ -55,6 +61,8 @@ $this->registerJs('
          cell8.innerHTML = "Data NF";
          cell9.innerHTML = "Pagamento";
          cell10.innerHTML ="Data Pagamento";
+
+         document.getElementById("progress-bar").style.width = "0%";
         
         $.ajax({ 
           url: "index.php?r=site/projetoresumo",
@@ -71,27 +79,21 @@ $this->registerJs('
 
             row_header = tabela_header.insertRow(0);
             cell1_header = row_header.insertCell(0);
-            cell2_header = row_header.insertCell(1);
-            cell3_header = row_header.insertCell(2);
-            cell4_header = row_header.insertCell(3);
             row_header.bgColor = "blanchedalmond";
-
+            
             cell1_header.innerHTML = bms[0]["projeto_nome"];
-            //cell2_header.innerHTML = bms[0]["bm_num"];
-            cell3_header.innerHTML = bms[0]["site"];
-            cell4_header.innerHTML = bms[0]["contato"];
+            cell1_header.innerHTML = cell1_header.innerHTML + " - Nº BM " +bms[0]["bm_num"];
+            cell1_header.innerHTML = cell1_header.innerHTML + " - Área: " +bms[0]["site"];
+            cell1_header.innerHTML = cell1_header.innerHTML + " - Contato: " +bms[0]["contato"];
             
             row_header = tabela_header.insertRow(1);
             cell1_header = row_header.insertCell(0);
-            cell2_header = row_header.insertCell(1);
-            cell3_header = row_header.insertCell(2);
-            cell4_header = row_header.insertCell(3);
             row_header.bgColor = "blanchedalmond";    
 
             cell1_header.innerHTML = bms[0]["descricao"];
-            cell2_header.innerHTML = bms[0]["proposta"];
-            cell3_header.innerHTML = bms[0]["data_proposta"];
-            cell4_header.innerHTML = "R$ " + mascaraValor(bms[0]["valor_proposta"]);
+            cell1_header.innerHTML = cell1_header.innerHTML + " - " + bms[0]["proposta"];
+            cell1_header.innerHTML = cell1_header.innerHTML + " - " + formatData(bms[0]["data_proposta"]);
+            cell1_header.innerHTML = cell1_header.innerHTML + " - " + "R$ " + mascaraValor(bms[0]["valor_proposta"]);
 
             for(var i=0;i<bms.length;i++){
 
@@ -108,7 +110,7 @@ $this->registerJs('
                 cell10 = row.insertCell(9);
 
                 cell1.innerHTML = bms[i]["bm_num"];
-                cell2.innerHTML = bms[i]["bm_data"];
+                cell2.innerHTML = formatData(bms[i]["bm_data"]);
                 if(bms[i]["bm_valor"] != null)
                  cell3.innerHTML = "R$ " + mascaraValor(bms[i]["bm_valor"]);
                 else
@@ -118,9 +120,19 @@ $this->registerJs('
                 else
                   cell4.innerHTML = "";
                 cell5.innerHTML = bms[i]["frs"];
-                cell6.innerHTML = bms[i]["frs_data"];
+
+                if(bms[i]["frs_data"] != null)
+                  cell6.innerHTML = formatData(bms[i]["frs_data"]);
+                else
+                  cell6.innerHTML = "";
+
                 cell7.innerHTML = bms[i]["nota_fiscal"];
-                cell8.innerHTML = bms[i]["nfse_data"];
+                  
+                if(bms[i]["nfse_data"] != null)
+                  cell8.innerHTML = formatData(bms[i]["nfse_data"]);
+                else
+                  cell8.innerHTML = "";
+                
                 if(bms[i]["pagamento"] != null)
                   cell9.innerHTML = "R$ " + mascaraValor(bms[i]["pagamento"]);
                 else
@@ -174,7 +186,7 @@ $this->registerJs('
                 
 
             console.log(porcentagem);
-            $("#rel_resumido").attr("disabled", false);
+           // $("#rel_resumido").attr("disabled", false);
             document.getElementById("progress-bar").style.width = porcentagem+"%";
         },
         error: function(){
@@ -190,6 +202,12 @@ $this->registerJs('
         valor = valor.toString().replace(/(\d)(\d{5})$/,"$1.$2");
         valor = valor.toString().replace(/(\d)(\d{2})$/,"$1,$2");
         return valor                    
+    }
+
+    function formatData(data){
+      var aux = data.split("-");
+      data = aux[2]+"/"+aux[1]+"/"+aux[0];
+      return data;
     }
 
 ');
@@ -316,13 +334,16 @@ $this->registerJs('
                       <div class="col-md-2">
                         <button class="btn btn-primary" type="submit" id="rel_resumido" form="form-relgeral" value="Submit">Gerar Relatório</button>
                       </div>
+                      <div class="col-md-2" style="margin-left: -5em; margin-top: 0.5em">
+                        <div class="progress progress-xs" style="margin-bottom: 2px; background-color: #9c9898; height: 20px;">
+                          <div class="progress-bar progress-bar-success progress-bar-striped" id="progress-bar" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
 
-                  <div class="progress progress-xs" style="margin-bottom: 0px;">
-                        <div class="progress-bar progress-bar-success progress-bar-striped" id="progress-bar" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                          </div>
-                      </div>
+                      
 
                     
                     <table id="tabela_rel_resumido_header" class="table table-hover" style="margin-bottom: 0px;"> 
