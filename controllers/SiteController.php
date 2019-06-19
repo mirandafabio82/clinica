@@ -131,6 +131,7 @@ class SiteController extends Controller
                     $prestadores = Yii::$app->db->createCommand('SELECT * FROM executante JOIN user ON user.id=executante.usuario_id WHERE is_prestador=1')->queryAll();
                $listPrestadores = ArrayHelper::map($prestadores,'id','nome');
 
+            //projetos com BM
             $allProjetos = Yii::$app->db->createCommand('SELECT DISTINCT
                 projeto.id, 
                 CONCAT(projeto.nome, " (",(
@@ -154,6 +155,7 @@ class SiteController extends Controller
             FROM
                 projeto
             INNER JOIN escopo ON escopo.projeto_id = projeto.ID
+            INNER JOIN bm ON bm.projeto_id = projeto.ID
             
             ORDER BY id DESC')->queryAll();
         
@@ -251,7 +253,25 @@ class SiteController extends Controller
                        IFNULL(bm.executado_ej,0) * '.$tipo_exec[1]["valor_hora"].' +
                        IFNULL(bm.executado_tp,0) * '.$tipo_exec[0]["valor_hora"].' +
                         bm.km * (SELECT vl_km FROM executante WHERE usuario_id=61)
-                        ) * 100) / projeto.valor_proposta) as andamento, frs.frs, frs.data_criacao as frs_data, nfse.nota_fiscal, nfse.data_emissao as nfse_data, pagamento.valor_liquido as pagamento, pagamento.data_pagamento, projeto.nome AS projeto_nome, projeto.site, user.nome AS contato, projeto.descricao, projeto.proposta, projeto.data_proposta, projeto.valor_proposta
+                        ) * 100) / projeto.valor_proposta) as andamento, 
+                        projeto.nome AS projeto_nome, (
+                        SELECT DISTINCT
+                            CASE 
+                                WHEN projeto.is_conceitual=1 THEN "PCO"
+                                WHEN projeto.is_basico=1 THEN "PBA"
+                                WHEN projeto.is_detalhamento=1 THEN "PDE"
+                                WHEN projeto.is_detalhamento=1 AND projeto.is_configuracao=1 THEN "PDC"
+                                WHEN projeto.is_configuracao=1 THEN "CFG"  
+                                WHEN projeto.is_servico=1 THEN "SRV"
+                                ELSE ""
+                            END
+                        
+                        FROM escopo
+                            INNER JOIN atividademodelo ON atividademodelo.id = escopo.atividademodelo_id                
+                        WHERE escopo.projeto_id = projeto.id
+                        
+                         ) AS projeto_tipo,
+                        frs.frs, frs.data_criacao as frs_data, nfse.nota_fiscal, nfse.data_emissao as nfse_data, pagamento.valor_liquido as pagamento, pagamento.data_pagamento, projeto.site, user.nome AS contato, projeto.descricao, projeto.proposta, projeto.data_proposta, projeto.valor_proposta
                                                             FROM bm
                                                             JOIN projeto ON bm.projeto_id = projeto.id
                                                             LEFT JOIN user ON projeto.contato_id = user.id 

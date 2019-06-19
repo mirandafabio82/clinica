@@ -81,19 +81,21 @@ $this->registerJs('
             cell1_header = row_header.insertCell(0);
             row_header.bgColor = "blanchedalmond";
             
-            cell1_header.innerHTML = bms[0]["projeto_nome"];
-            cell1_header.innerHTML = cell1_header.innerHTML + " - Nº BM " +bms[0]["bm_num"];
-            cell1_header.innerHTML = cell1_header.innerHTML + " - Área: " +bms[0]["site"];
-            cell1_header.innerHTML = cell1_header.innerHTML + " - Contato: " +bms[0]["contato"];
+            cell1_header.innerHTML = bms[0]["projeto_nome"];   
+            cell1_header.innerHTML = cell1_header.innerHTML + " &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; " +bms[0]["projeto_tipo"];         
+            cell1_header.innerHTML = cell1_header.innerHTML + " &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; " +bms[0]["site"];
+            cell1_header.innerHTML = cell1_header.innerHTML + " &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;" +bms[0]["contato"];
+            cell1_header.style.fontWeight = "bolder";
             
             row_header = tabela_header.insertRow(1);
             cell1_header = row_header.insertCell(0);
             row_header.bgColor = "blanchedalmond";    
 
             cell1_header.innerHTML = bms[0]["descricao"];
-            cell1_header.innerHTML = cell1_header.innerHTML + " - " + bms[0]["proposta"];
-            cell1_header.innerHTML = cell1_header.innerHTML + " - " + formatData(bms[0]["data_proposta"]);
-            cell1_header.innerHTML = cell1_header.innerHTML + " - " + "R$ " + mascaraValor(bms[0]["valor_proposta"]);
+            cell1_header.innerHTML = cell1_header.innerHTML + " &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; "  + bms[0]["proposta"];
+            cell1_header.innerHTML = cell1_header.innerHTML + " &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; "  + formatData(bms[0]["data_proposta"]);
+            cell1_header.innerHTML = cell1_header.innerHTML + " &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; "  + "R$ " + mascaraValor(bms[0]["valor_proposta"]);
+            cell1_header.style.fontWeight = "bolder";
 
             for(var i=0;i<bms.length;i++){
 
@@ -164,7 +166,7 @@ $this->registerJs('
 
                 cell1.innerHTML = "Total";
                 cell3.innerHTML = "R$ " + mascaraValor(valorTotal);
-                cell4.innerHTML = porcentagem+"%";
+                cell4.innerHTML = Math.round10(porcentagem, -1) +"%";
                 cell9.innerHTML = "R$ " + mascaraValor(pagamento);
                 
                 row = tabela.insertRow(i+2);
@@ -183,6 +185,8 @@ $this->registerJs('
                 cell1.innerHTML = "Saldo";
                 cell3.innerHTML = "R$ " + mascaraValor(valorTotal);
                 cell4.innerHTML = Math.round10((100-porcentagem), -1) +"%";
+
+                $("#label_evolucao").text("Evolução "+ Math.round10(porcentagem, -1) +"%");
                 
 
             console.log(porcentagem);
@@ -334,7 +338,8 @@ $this->registerJs('
                       <div class="col-md-2">
                         <button class="btn btn-primary" type="submit" id="rel_resumido" form="form-relgeral" value="Submit">Gerar Relatório</button>
                       </div>
-                      <div class="col-md-2" style="margin-left: -5em; margin-top: 0.5em">
+                      <div class="col-md-2" style="margin-left: -5em; margin-top: -1em">
+                        <label id="label_evolucao"></label>
                         <div class="progress progress-xs" style="margin-bottom: 2px; background-color: #9c9898; height: 20px;">
                           <div class="progress-bar progress-bar-success progress-bar-striped" id="progress-bar" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
                           </div>
