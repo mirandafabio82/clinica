@@ -162,7 +162,7 @@ class SiteController extends Controller
                $listAllProjetos = ArrayHelper::map($allProjetos,'id','nome');
 
                $proj_autocomplete = '';
-                foreach ($projetos as $key => $pr) {  
+                foreach ($allProjetos as $key => $pr) {  
                         $proj_autocomplete .= '"'.$pr['nome'].'", ';
                 } 
 

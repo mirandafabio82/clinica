@@ -21,7 +21,8 @@ $this->registerJs('
     });
 
     $("#rel_resumido").click(function(){
-        var id = $("#projeto_rel_resumido").val();    
+        var id = $("#projeto_rel_resumido").val(); 
+        console.log(id);   
         var tabela = document.getElementById("tabela_rel_resumido");
         var tabela_header = document.getElementById("tabela_rel_resumido_header");
         
@@ -61,6 +62,8 @@ $this->registerJs('
          cell8.innerHTML = "Data NF";
          cell9.innerHTML = "Pagamento";
          cell10.innerHTML ="Data Pagamento";
+
+         cell1.style.fontWeight = "bolder"; cell2.style.fontWeight = "bolder"; cell3.style.fontWeight = "bolder"; cell4.style.fontWeight = "bolder"; cell5.style.fontWeight = "bolder"; cell6.style.fontWeight = "bolder"; cell7.style.fontWeight = "bolder"; cell8.style.fontWeight = "bolder"; cell9.style.fontWeight = "bolder"; cell10.style.fontWeight = "bolder";
 
          document.getElementById("progress-bar").style.width = "0%";
         
@@ -200,7 +203,7 @@ $this->registerJs('
     });   
 
     function mascaraValor(valor) {
-          valor = valor * 100;
+        valor = valor * 100;
         valor = valor.toString().replace(/\D/g,"");
         valor = valor.toString().replace(/(\d)(\d{8})$/,"$1.$2");
         valor = valor.toString().replace(/(\d)(\d{5})$/,"$1.$2");
@@ -214,7 +217,14 @@ $this->registerJs('
       return data;
     }
 
-');
+', \yii\web\View::POS_READY);
+
+$this->registerJs(' 
+
+  $("#projeto_rel_resumido").select2(); 
+  "select2-projeto_rel_resumido-results"
+
+', \yii\web\View::POS_READY);
 ?>
 
 <style>
@@ -234,7 +244,37 @@ $this->registerJs('
   .endRows {
         background-color: aliceblue;
   }
+  
+  .autocomplete-items {
+  position: absolute;
+  border: 1px solid #d4d4d4;
+  border-bottom: none;
+  border-top: none;
+  z-index: 99;
+  /*position the autocomplete items to be the same width as the container:*/
+  top: 100%;
+  left: 0;
+  right: 0;
+}
+.autocomplete-items div {
+  padding: 10px;
+  cursor: pointer;
+  background-color: #fff; 
+  border-bottom: 1px solid #d4d4d4; 
+}
+.autocomplete-items div:hover {
+  /*when hovering an item:*/
+  background-color: #e9e9e9; 
+}
+.autocomplete-active {
+  /*when navigating through the items using the arrow keys:*/
+  background-color: DodgerBlue !important; 
+  color: #ffffff; 
+}
 
+.select2-results__options {
+  background-color: white;
+}
 
 </style>
 
@@ -330,9 +370,22 @@ $this->registerJs('
           <div class="box-header with-border">
             <h3 class="box-title">Relatório Resumido</h3>    
             
-                    <div class="row" style="margin-bottom: 0.5em">
-                      <div class="autocomplete col-md-3" style="width:300px;padding: 0; margin-left:1em" id="autocomplete_div_0">
-                        <?= Html::dropDownList('id', null, $listAllProjetos, ['id' => 'projeto_rel_resumido', 'class' => 'form-control']) ?>
+                    <div class="row" style="margin-bottom: 0.5em; margin-top: 1em">
+                      <div class="col-md-4" style="width: 230px;padding: 0; margin-left:1em" >
+                        <?= Html::dropDownList('id', null, $listAllProjetos, ['id' => 'projeto_rel_resumido', 'style' => 'display: none']) ?>
+                        <?= // Normal select with ActiveForm & model
+                           Select2::widget([
+                            'name' => 'projeto',
+                            'id' => 'projeto-id',
+                            'data' => $listAllProjetos,
+                            'options' => [
+                                'placeholder' => 'Projetos',
+                                'multiple' => false,
+                                'hashVarLoadPosition' => \yii\web\View::POS_READY
+                              ],
+                          ]);
+                        ?>
+                        <!-- <input class="np_autocomplete form-control" id="projeto" type="text" name="projeto" placeholder="Insira um Projeto" autocomplete="off">     -->                    
                       </div>                            
                     <div class="row" >
                       <div class="col-md-2">
@@ -340,7 +393,7 @@ $this->registerJs('
                       </div>
                       <div class="col-md-2" style="margin-left: -5em; margin-top: -1em">
                         <label id="label_evolucao"></label>
-                        <div class="progress progress-xs" style="margin-bottom: 2px; background-color: #9c9898; height: 20px;">
+                        <div class="progress progress-xs" style="margin-bottom: 2px; border-color: #54a953; border-style: solid; height: 20px;">
                           <div class="progress-bar progress-bar-success progress-bar-striped" id="progress-bar" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
                           </div>
                         </div>
@@ -358,18 +411,7 @@ $this->registerJs('
 
                   <div class="scrollmenu" style="height: 20em">
                     <table id="tabela_rel_resumido" class="table table-hover">
-                      <tr>
-                        <th>BM</th>
-                        <th>Data</th>
-                        <th>Valor</th>
-                        <th align="center">Andamento</th>
-                        <th>FRS</th>
-                        <th>Data FRS</th>
-                        <th>NF</th>
-                        <th>Data NF</th>
-                        <th>Pagamento</th>
-                        <th>Data Pagamento</th>
-                      </tr>                    
+                      
                     </table>
                   </div>                                
                 
@@ -640,10 +682,8 @@ var cont = [<?= $cont_autocomplete ?>];
 /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
 var i = 0;
 
-  autocomplete(document.getElementById("projeto"), proj);
-  autocomplete(document.getElementById("contato"), cont);
-
+  autocomplete(document.getElementById("projeto"), proj);  
   autocomplete(document.getElementById("up_projeto"), proj);
-  autocomplete(document.getElementById("up_contato"), cont);
+  
 
 </script>
