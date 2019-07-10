@@ -203,7 +203,7 @@ $this->registerJs('
     });   
 
     function mascaraValor(valor) {
-        valor = valor * 100;
+        valor = Math.round((valor * 100));
         valor = valor.toString().replace(/\D/g,"");
         valor = valor.toString().replace(/(\d)(\d{8})$/,"$1.$2");
         valor = valor.toString().replace(/(\d)(\d{5})$/,"$1.$2");
