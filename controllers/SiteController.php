@@ -155,7 +155,7 @@ class SiteController extends Controller
             FROM
                 projeto
             INNER JOIN escopo ON escopo.projeto_id = projeto.ID
-            INNER JOIN bm ON bm.projeto_id = projeto.ID
+            LEFT JOIN bm ON bm.projeto_id = projeto.ID
             
             ORDER BY id DESC')->queryAll();
         
@@ -272,13 +272,13 @@ class SiteController extends Controller
                         
                          ) AS projeto_tipo,
                         frs.frs, frs.data_criacao as frs_data, nfse.nota_fiscal, nfse.data_emissao as nfse_data, pagamento.valor_liquido as pagamento, pagamento.data_pagamento, projeto.site, user.nome AS contato, projeto.descricao, projeto.proposta, projeto.data_proposta, projeto.valor_proposta
-                                                            FROM bm
-                                                            JOIN projeto ON bm.projeto_id = projeto.id
+                                                            FROM projeto
+                                                            LEFT JOIN bm ON bm.projeto_id = projeto.id
                                                             LEFT JOIN user ON projeto.contato_id = user.id 
                                                             LEFT JOIN frs ON frs.bm = bm.numero_bm 
                                                             LEFT JOIN nfse ON frs.nota_fiscal = nfse.nota_fiscal
                                                             LEFT JOIN pagamento ON nfse.nota_fiscal = pagamento.nota_fiscal 
-                                                            WHERE bm.projeto_id='.$projeto_id.' ORDER BY bm_num DESC')->queryAll());
+                                                            WHERE projeto.id='.$projeto_id.' ORDER BY bm_num DESC')->queryAll());
 
         }
     }
