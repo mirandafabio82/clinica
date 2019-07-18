@@ -25,6 +25,8 @@ $this->registerJs('
         console.log(id);   
         var tabela = document.getElementById("tabela_rel_resumido");
         var tabela_header = document.getElementById("tabela_rel_resumido_header");
+
+        $("#label_evolucao").text("Evolução 0%");
         
         if(tabela.rows.length>1){
             for(var i=1;i<=tabela.rows.length;i++){
