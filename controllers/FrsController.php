@@ -95,7 +95,6 @@ class FrsController extends Controller
                 $model->nota_fiscal = ''.$line['K'];
                 $model->referencia = ''.$line['L'];
                 $model->texto_breve = ''.$line['M'];               
-                
 
                 $tipo_exec = Yii::$app->db->createCommand('SELECT * FROM tipo_executante')->queryAll();
 
@@ -106,12 +105,12 @@ class FrsController extends Controller
                                             JOIN cliente ON cliente.id = projeto.cliente_id
                                         WHERE
                                             cliente.cnpj = "'.$model->cnpj_braskem.'"
-                                            AND ROUND((IFNULL(bm.executado_ee, 0) * '.$tipo_exec[4]['valor_hora'].' +
+                                            AND (IFNULL(bm.executado_ee, 0) * '.$tipo_exec[4]['valor_hora'].' +
                                                                 IFNULL(bm.executado_es, 0) * '.$tipo_exec[3]['valor_hora'].' +
                                                                 IFNULL(bm.executado_ep, 0) * '.$tipo_exec[2]['valor_hora'].' +
                                                                 IFNULL(bm.executado_ej, 0) * '.$tipo_exec[1]['valor_hora'].' +
                                                                 IFNULL(bm.executado_tp, 0) * '.$tipo_exec[0]['valor_hora'].' +
-                                                                IFNULL(bm.km, 0) * '.Yii::$app->db->createCommand('SELECT vl_km FROM executante WHERE usuario_id=61')->queryScalar().')) = '.$model->valor)->queryScalar();
+                                                                IFNULL(bm.km, 0) * '.Yii::$app->db->createCommand('SELECT vl_km FROM executante WHERE usuario_id=61')->queryScalar().') = '.$model->valor)->queryScalar();
                 if(!empty($bm_id)){
                     $bm_model = new Bm();
                     $bm_model = $bm_model::findOne($bm_id);

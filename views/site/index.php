@@ -25,8 +25,6 @@ $this->registerJs('
         console.log(id);   
         var tabela = document.getElementById("tabela_rel_resumido");
         var tabela_header = document.getElementById("tabela_rel_resumido_header");
-
-        $("#label_evolucao").text("Evolução 0%");
         
         if(tabela.rows.length>1){
             for(var i=1;i<=tabela.rows.length;i++){
@@ -81,6 +79,7 @@ $this->registerJs('
             var porcentagem = 0;
             var valorTotal = 0;
             var pagamento = 0;
+            var valorProposta = 0;
 
             row_header = tabela_header.insertRow(0);
             cell1_header = row_header.insertCell(0);
@@ -101,6 +100,8 @@ $this->registerJs('
             cell1_header.innerHTML = cell1_header.innerHTML + " &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; "  + formatData(bms[0]["data_proposta"]);
             cell1_header.innerHTML = cell1_header.innerHTML + " &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; "  + "R$ " + mascaraValor(bms[0]["valor_proposta"]);
             cell1_header.style.fontWeight = "bolder";
+
+            valorProposta = bms[0]["valor_proposta"];
 
             for(var i=0;i<bms.length;i++){
 
@@ -188,7 +189,7 @@ $this->registerJs('
                 row.bgColor = "aliceblue";
 
                 cell1.innerHTML = "Saldo";
-                cell3.innerHTML = "R$ " + mascaraValor(valorTotal);
+                cell3.innerHTML = "R$ " + mascaraValor(valorProposta - valorTotal);
                 cell4.innerHTML = Math.round10((100-porcentagem), -1) +"%";
 
                 $("#label_evolucao").text("Evolução "+ Math.round10(porcentagem, -1) +"%");
@@ -205,11 +206,13 @@ $this->registerJs('
     });   
 
     function mascaraValor(valor) {
+
         valor = Math.round((valor * 100));
-        valor = valor.toString().replace(/\D/g,"");
+
         valor = valor.toString().replace(/(\d)(\d{8})$/,"$1.$2");
         valor = valor.toString().replace(/(\d)(\d{5})$/,"$1.$2");
         valor = valor.toString().replace(/(\d)(\d{2})$/,"$1,$2");
+      
         return valor                    
     }
 
