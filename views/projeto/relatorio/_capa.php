@@ -21,7 +21,7 @@ th, td {
 <div style="margin-top:2em;font-size: 15pt;font-family: arial" align="center"><?=$projeto->nome?> </div>
 <div style="margin-top:1.5em;font-size: 20pt;font-family: arial" align="center"><?=$projeto->descricao?> </div>
 
-<?php if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['executante'])){ ?>
+<?php if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['executante']) && (Yii::$app->db->createCommand('SELECT cargo FROM executante WHERE usuario_id='.Yii::$app->user->id)->queryScalar() <> 2)){ ?>
       <div style="margin-top:2em;font-size: 12pt;font-family: arial;" align="center" >
             EXECUTANTE: <?=Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.Yii::$app->user->getId())->queryScalar() ?> </div>
 <?php } ?>
