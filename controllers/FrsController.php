@@ -79,8 +79,8 @@ class FrsController extends Controller
                   $model = $model::findOne($frs_id);
                 }
 
-                $date_e = explode('-',$line['E']);
-                $date_g = explode('-',$line['G']);
+                $date_e = explode('/',$line['E']);
+                $date_g = explode('/',$line['G']);
 
                 $model->contrato = ''.$line['A'];
                 $model->pedido = ''.$line['B'];
@@ -94,7 +94,8 @@ class FrsController extends Controller
                 $model->valor = str_replace(',','',$line['J']);
                 $model->nota_fiscal = ''.$line['K'];
                 $model->referencia = ''.$line['L'];
-                $model->texto_breve = ''.$line['M'];               
+                $model->texto_breve = ''.$line['M'];
+                $numero_bm_frs = ''.$line['N'];               
 
                 $tipo_exec = Yii::$app->db->createCommand('SELECT * FROM tipo_executante')->queryAll();
 
@@ -104,13 +105,7 @@ class FrsController extends Controller
                                             JOIN projeto ON bm.projeto_id = projeto.id
                                             JOIN cliente ON cliente.id = projeto.cliente_id
                                         WHERE
-                                            cliente.cnpj = "'.$model->cnpj_braskem.'"
-                                            AND (IFNULL(bm.executado_ee, 0) * '.$tipo_exec[4]['valor_hora'].' +
-                                                                IFNULL(bm.executado_es, 0) * '.$tipo_exec[3]['valor_hora'].' +
-                                                                IFNULL(bm.executado_ep, 0) * '.$tipo_exec[2]['valor_hora'].' +
-                                                                IFNULL(bm.executado_ej, 0) * '.$tipo_exec[1]['valor_hora'].' +
-                                                                IFNULL(bm.executado_tp, 0) * '.$tipo_exec[0]['valor_hora'].' +
-                                                                IFNULL(bm.km, 0) * '.Yii::$app->db->createCommand('SELECT vl_km FROM executante WHERE usuario_id=61')->queryScalar().') = '.$model->valor)->queryScalar();
+                                            bm.numero_bm = '.$numero_bm_frs)->queryScalar();
                 if(!empty($bm_id)){
                     $bm_model = new Bm();
                     $bm_model = $bm_model::findOne($bm_id);
