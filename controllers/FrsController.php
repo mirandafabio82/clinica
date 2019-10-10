@@ -79,8 +79,8 @@ class FrsController extends Controller
                   $model = $model::findOne($frs_id);
                 }
 
-                $date_e = explode('/',$line['E']);
-                $date_g = explode('/',$line['G']);
+                $date_e = explode('-',$line['E']);
+                $date_g = explode('-',$line['G']);
 
                 $model->contrato = ''.$line['A'];
                 $model->pedido = ''.$line['B'];
