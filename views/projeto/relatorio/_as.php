@@ -139,7 +139,7 @@ th, td {
       <tr>
             <td style="font-family: arial;font-size: 8pt" align="center" colspan="2"><input type="checkbox"  >ADMINISTRAÇÃO <input type="checkbox"  checked="checked">PREÇO GLOBAL</td> 
             <td style="font-family: arial;font-size: 8pt" align="center" colspan="2"><input type="checkbox"  <?=$basico ?>>BÁSICO <input type="checkbox"  <?=$detalhamento ?>>DETALHAMENTO  <input type="checkbox"  <?=$config ?>>CONFIGURAÇÃO <input type="checkbox"  <?=$servico ?>>SERVIÇO</td>                       
-            <td style="font-family: arial;font-size: 8pt" align="center" colspan="3"><?=number_format($money_proc+$money_inst+$money_aut+$projeto->vl_km, 2, ',', '.') ?> (<?= escreverValorMoeda(number_format($money_proc+$money_inst+$money_aut+$projeto->vl_km, 2, ',', '.'))?>)</td>
+            <td style="font-family: arial;font-size: 8pt" align="center" colspan="3"><?= number_format($money_proc+$money_inst+$money_aut+$projeto->vl_passagem_aerea+$projeto->vl_hospedagem+$projeto->vl_taxi+$projeto->vl_km, 2, ',', '.') ?> (<?= escreverValorMoeda(number_format($money_proc+$money_inst+$money_aut+$projeto->vl_passagem_aerea+$projeto->vl_hospedagem+$projeto->vl_taxi+$projeto->vl_km, 2, ',', '.'))?>)</td>
       </tr>
       </tbody>
       </table>
