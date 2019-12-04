@@ -519,22 +519,24 @@ class TarefaController extends Controller
             if($tipo_bm_value==null) $tipo_bm_value = 0;
 
             if(Yii::$app->request->post()['value']!='null'){              
-
+                
                 //verifica se não ultrapassa o valor total de horas
                 if($valor_escopo_total_especialidade >= ($tipo_value + intval(Yii::$app->request->post()['value']))){
-                    Yii::$app->db->createCommand('UPDATE escopo SET '.Yii::$app->request->post()['tipo'].'='.$tipo_value.'+'.Yii::$app->request->post()['value'].', horas_bm = '.$bm_value.' +'.Yii::$app->request->post()['value'].', '.$tipo_bm.' = '.$tipo_bm_value.'+ '.Yii::$app->request->post()['value'].', horas_saldo=horas_saldo-'.Yii::$app->request->post()['value'].' WHERE id='.Yii::$app->request->post()['id'])->execute(); 
+                    Yii::$app->db->createCommand('UPDATE escopo SET '.Yii::$app->request->post()['tipo'].'='.$tipo_value.'+'.Yii::$app->request->post()['value'].', horas_bm = '.$bm_value.' +'.Yii::$app->request->post()['value'].', '.$tipo_bm.' = '.$tipo_bm_value.'+ '.Yii::$app->request->post()['value'].', horas_saldo=horas_saldo-'.Yii::$app->request->post()['value'].' WHERE id='.Yii::$app->request->post()['id'])->execute();
                 }
             }
 
             //atualiza coordenação e administração
             $coord_adm = Yii::$app->db->createCommand('SELECT id FROM escopo WHERE nome="Coordenação e Administração" AND projeto_id='.$projeto_id)->queryScalar();       
             $totalhoras_bm_atual = Yii::$app->db->createCommand('SELECT SUM(horas_bm) FROM escopo WHERE projeto_id='.$projeto_id)->queryScalar();
-            $totalhoras_bm_atual = round($totalhoras_bm_atual * $perc_coord_adm * 0.01);
+            $totalhoras_bm_atual = ($totalhoras_bm_atual * $perc_coord_adm * 0.01);
+            $horas_bm_atual = Yii::$app->db->createCommand('SELECT horas_bm FROM escopo WHERE projeto_id='.$projeto_id.' LIMIT 1')->queryScalar();
 
-            if(!empty($coord_adm)){     
+            if(!empty($coord_adm)){
+
                  //verifica se não ultrapassa o valor total de horas
                 if($valor_escopo_total_especialidade >= ($tipo_value + intval(Yii::$app->request->post()['value']))){
-                    Yii::$app->db->createCommand('UPDATE escopo SET horas_es_bm = horas_acumulada + '.$totalhoras_bm_atual.',executado_es = horas_acumulada + '.$totalhoras_bm_atual.', horas_bm = '.$totalhoras_bm_atual.' WHERE id='.$coord_adm)->execute();
+                    Yii::$app->db->createCommand('UPDATE escopo SET horas_es_bm = '.$horas_bm_atual.',executado_es = horas_acumulada + '.$horas_bm_atual.', horas_bm = '.$horas_bm_atual.' WHERE id='.$coord_adm)->execute();
                 }   
             }
 

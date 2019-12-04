@@ -103,7 +103,7 @@ $this->registerJs("
         id = id.split(']')[0];
         var total_executada = 0;
         $('.executado').each(function(){
-          tempVal = parseInt(this.value);
+          tempVal = parseFloat(this.value);
           if(this.value==''){
             tempVal = 0;
           }
@@ -121,7 +121,7 @@ $this->registerJs("
         id = id.split(']')[0];
         var total_adiantada = 0;
         $('.adiantada').each(function(){
-          tempVal = parseInt(this.value);
+          tempVal = parseFloat(this.value);
           if(this.value==''){
             tempVal = 0;
           }

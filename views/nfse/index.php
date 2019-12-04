@@ -47,6 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 </div>
                                 <div class="form-group">
                                     <?= Html::submitButton('Carregar Dados', ['class' => 'btn btn-success']) ?>
+                                    <?= Html::buttonInput('Excluir Dados', ['class' => 'btn btn-danger', 'id' => 'buttonDelete', 'style' => 'margin-left: 10px']) ?>
                                 </div>                                                               
                             </div>                          
                         <?php ActiveForm::end(); ?>
@@ -57,12 +58,11 @@ $this->params['breadcrumbs'][] = $this->title;
             <?= GridView::widget([
                 'dataProvider' => $dataProvider,
                 'filterModel' => $searchModel,
+                'id' => 'grid',
                 'options' => ['style' => 'font-size:12px;'],
                 'columns' => [
                     [
-                      'class' => 'yii\grid\ActionColumn',
-                      'template' => '{delete}',    
-                      'contentOptions' => ['style' => 'width:2em;  min-width:2em;'],
+                        'class' => 'yii\grid\CheckboxColumn'
                     ],
 
                     'processo',
@@ -82,3 +82,35 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
+
+<?php
+    $this->registerJs('
+        $(document).ajaxStart(function() {
+            $("#projeto-id").attr("readonly", true);
+            $("#loading").show(); // show the gif image when ajax starts
+                }).ajaxStop(function() {
+                    $("#projeto-id").attr("readonly", false);
+            $("#loading").hide(); // hide the gif image when ajax completes
+        });
+        
+        $("#buttonDelete").click(function(){
+
+            var keys = $("#grid").yiiGridView("getSelectedRows");
+
+            for(var i = 0; i < keys.length; i++) {
+                $.ajax({ 
+                    url: "index.php?r=nfse/delete",
+                    data: {id: keys[i]},
+                    type: "POST",
+                    success: function(response){
+                    console.log(response);
+                    
+                },
+                error: function(xhr, ajaxOptions, thrownError){
+                    console.log(xhr.responseText);
+                }
+                });
+            }
+        });
+        ');
+?>

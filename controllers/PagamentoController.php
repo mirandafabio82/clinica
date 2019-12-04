@@ -176,8 +176,11 @@ class PagamentoController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
+    public function actionDelete()
     {
+
+        $id = Yii::$app->request->post()['id'];
+
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
