@@ -510,6 +510,10 @@ class ProjetoController extends Controller
         if(isset($_POST['Escopo'])){            
             //se nao_editavel nao for 1, nao permitir edição
             if($model->nao_editavel==1 && $_POST['Projeto']['nao_editavel']==1){
+                // Caso seja mudança na aprovação da AS, realiza a mudança mesmo sendo NAO EDITAVEL
+                if($model->as_aprovada != $_POST['Projeto']['as_aprovada']) {
+                    Yii::$app->db->createCommand('UPDATE projeto SET as_aprovada = ' . $_POST['Projeto']['as_aprovada'] . ' WHERE id = ' . $model->id)->execute();
+                }
                return $this->redirect(['update', 'id' => $model->id]); 
             }
 
@@ -628,9 +632,12 @@ class ProjetoController extends Controller
             if(isset($_POST['Projeto'])){                
                 //se nao_editavel nao for 1, nao permitir edição
                 if($model->nao_editavel==1 && $_POST['Projeto']['nao_editavel']==1){
+                    // Caso seja mudança na aprovação da AS, realiza a mudança mesmo sendo NAO EDITAVEL
+                    if($model->as_aprovada != $_POST['Projeto']['as_aprovada']) {
+                        Yii::$app->db->createCommand('UPDATE projeto SET as_aprovada = ' . $_POST['Projeto']['as_aprovada'] . ' WHERE id = ' . $model->id)->execute();
+                    }
                    return $this->redirect(['update', 'id' => $model->id]); 
                 }
-
                 //atualiza status geral
                 if($model->as_aprovada==0 && $_POST['Projeto']['as_aprovada']==1){                  
                     Yii::$app->db->createCommand('UPDATE projeto SET status_geral=3 WHERE id='.$model->id)->execute();
