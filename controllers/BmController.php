@@ -347,6 +347,28 @@ class BmController extends Controller
      */
     public function actionDelete($id)
     {
+        $numero_bm = Yii::$app->db->createCommand('SELECT numero_bm FROM bm WHERE id = ' . $id)->queryScalar();
+
+
+        $atividades_bm = Yii::$app->db->createCommand('SELECT * FROM bm_atividade WHERE bm_id = ' . $numero_bm)->queryAll();
+
+        $hora_total = 0;
+
+        foreach ($atividades_bm as $key => $atividade) {
+
+            $hora_total = 0;
+
+            if($atividade['executado_ee']==null) $atividade['executado_ee'] = 0.0000;
+            if($atividade['executado_es']==null) $atividade['executado_es'] = 0.0000;
+            if($atividade['executado_ep']==null) $atividade['executado_ep'] = 0.0000;
+            if($atividade['executado_ej']==null) $atividade['executado_ej'] = 0.0000;
+            if($atividade['executado_tp']==null) $atividade['executado_tp'] = 0.0000;
+
+            $hora_total = $atividade['executado_ee'] + $atividade['executado_es'] + $atividade['executado_ep'] + $atividade['executado_ej'] + $atividade['executado_tp'];
+
+            Yii::$app->db->createCommand('UPDATE escopo SET executado_tp = executado_tp - ' . $atividade['executado_tp'] . ', executado_ej = executado_ej - ' . $atividade['executado_ej'] . ', executado_ep = executado_ep - ' . $atividade['executado_ep'] . ', executado_es = executado_es - ' . $atividade['executado_es'] . ', executado_ee = executado_ee - ' . $atividade['executado_ee'] . ', horas_acumulada = horas_acumulada - ' . $hora_total . ', horas_saldo = horas_saldo + ' . $hora_total . ' WHERE id = ' . $atividade['atividade_id'])->execute();
+        }
+
         $this->findModel($id)->delete();
 
         return $this->redirect(['create']);

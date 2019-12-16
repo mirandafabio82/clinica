@@ -261,8 +261,6 @@ class TarefaController extends Controller
 
         $numeroBmAtual = count(Yii::$app->db->createCommand('SELECT COUNT(id) FROM bm WHERE projeto_id='.$projetoid)->queryAll()) + 1;
 
-
-
         $acu_saldo = Yii::$app->db->createCommand('SELECT SUM(horas_acumulada) horas_acu, SUM(horas_saldo) h_saldo FROM escopo WHERE projeto_id='.$projetoid)->queryOne();
 
         
@@ -449,9 +447,29 @@ class TarefaController extends Controller
 
     public function actionAttatividade(){
         if (Yii::$app->request->isAjax) {                 
-           // Yii::$app->db->createCommand('UPDATE escopo SET status='.Yii::$app->request->post()['status'].' WHERE id='.Yii::$app->request->post()['id'])->execute();  
+           // Yii::$app->db->createCommand('UPDATE escopo SET status='.Yii::$app->request->post()['status'].' WHERE id='.Yii::$app->request->post()['id'])->execute();
+           
+           $atividade_id = Yii::$app->request->post()['id'];
+
+           $atividade_tipo = Yii::$app->request->post()['tipo'];
+
+           $atividade_valor = Yii::$app->request->post()['value'];
 
             $projeto_id = Yii::$app->db->createCommand('SELECT projeto_id FROM escopo WHERE id='.Yii::$app->request->post()['id'])->queryScalar();
+
+            // Vinculo BM-Atividade
+            $bm_atividade = Yii::$app->db->createCommand('SELECT id_bm_atividade FROM bm_atividade WHERE projeto_id = ' . $projeto_id . ' AND atividade_id = ' . $atividade_id)->queryScalar();
+
+            $bm_id = Yii::$app->db->createCommand('SELECT ultimo_bm FROM config')->queryScalar();
+            $bm_id = $bm_id + 1;
+    
+            if(!empty($bm_atividade)) {
+                // Update
+                Yii::$app->db->createCommand('UPDATE bm_atividade SET ' . $atividade_tipo . ' = ' . $atividade_valor . ' WHERE id_bm_atividade = ' . $bm_atividade . ' AND atividade_id = ' . $atividade_id)->execute();
+            } else {
+                // Insert
+                Yii::$app->db->createCommand('INSERT INTO bm_atividade (projeto_id, bm_id, atividade_id, ' . $atividade_tipo . ') VALUES (' . $projeto_id . ', ' . $bm_id . ', ' . $atividade_id . ',' . $atividade_valor .')')->execute();
+            }
 
             $perc_coord_adm = Yii::$app->db->createCommand('SELECT perc_coord_adm FROM projeto WHERE id='.$projeto_id)->queryScalar();
 
@@ -532,13 +550,13 @@ class TarefaController extends Controller
             $totalhoras_bm_atual = ($totalhoras_bm_atual * $perc_coord_adm * 0.01);
             $horas_bm_atual = Yii::$app->db->createCommand('SELECT horas_bm FROM escopo WHERE projeto_id='.$projeto_id.' LIMIT 1')->queryScalar();
 
-            if(!empty($coord_adm)){
+            // if(!empty($coord_adm)){
 
-                 //verifica se não ultrapassa o valor total de horas
-                if($valor_escopo_total_especialidade >= ($tipo_value + intval(Yii::$app->request->post()['value']))){
-                    Yii::$app->db->createCommand('UPDATE escopo SET horas_es_bm = '.$horas_bm_atual.',executado_es = horas_acumulada + '.$horas_bm_atual.', horas_bm = '.$horas_bm_atual.' WHERE id='.$coord_adm)->execute();
-                }   
-            }
+            //      //verifica se não ultrapassa o valor total de horas
+            //     if($valor_escopo_total_especialidade >= ($tipo_value + intval(Yii::$app->request->post()['value']))){
+            //         Yii::$app->db->createCommand('UPDATE escopo SET horas_es_bm = '.$horas_bm_atual.',executado_es = horas_acumulada + '.$horas_bm_atual.', horas_bm = '.$horas_bm_atual.' WHERE id='.$coord_adm)->execute();
+            //     }   
+            // }
 
             if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['executante']) && Yii::$app->request->post()['ultimo'] == 1){
                 $user_nome = Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.Yii::$app->user->getId())->queryScalar();
