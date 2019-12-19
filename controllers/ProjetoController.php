@@ -294,11 +294,14 @@ class ProjetoController extends Controller
                                 }    
                             }
                             
-
+                            $complemento = ' OR ((codigo IS NULL OR codigo="")';
                             if (!empty($_POST['Codigos'])) {
                                 $codigos = rtrim($codigos,',');
                                 $codigos .= ')';
-                                $condition_code = ' AND codigo IN '.$codigos.' OR ((codigo IS NULL OR codigo="") AND '.$condition_query.')';
+                                if(strpos($codigos, 'CODIFICADO')) {
+                                    $complemento = ' AND ((codigo IS NOT NULL AND codigo<>"" AND codigo<>" ")';
+                                }
+                                $condition_code = ' AND codigo IN '.$codigos.$complemento . ' AND '.$condition_query.')';
                             }
 
                             $atvmodelos = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE disciplina_id = 1 AND isPrioritaria=1 AND '.$condition_query.$condition_code)->queryAll();
