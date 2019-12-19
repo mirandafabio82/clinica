@@ -170,12 +170,12 @@ class ProjetoController extends Controller
                 $model->setAttributes($_POST['Projeto']); 
                 
                 $identificador = "";
-                if(isset($projeto->is_conceitual)){ $identificador = "PCO"; }
-                if(isset($projeto->is_basico)){ $identificador = "PBA"; }
-                if(isset($projeto->is_detalhamento)){ $identificador = "PDE"; }
-                if(isset($projeto->is_configuracao)){ $identificador = "CFG"; }
-                if(isset($projeto->is_detalhamento) && isset($projeto->is_configuracao)){$identificador = "PDC"; }
-                if(isset($projeto->is_servico)){ $identificador = "SRV"; }                
+                if(isset($model->is_conceitual) && $model->is_conceitual == 1){ $identificador = "PCO"; }
+                if(isset($model->is_basico) && $model->is_basico == 1){ $identificador = "PBA"; }
+                if(isset($model->is_detalhamento) && $model->is_detalhamento == 1){ $identificador = "PDE"; }
+                if(isset($model->is_configuracao) && $model->is_configuracao == 1){ $identificador = "CFG"; }
+                if(isset($model->is_detalhamento) && isset($model->is_configuracao) && $model->is_detalhamento == 1 && $model->is_configuracao == 1){ $identificador = "PDC"; }
+                if(isset($model->is_servico) && $model->is_servico == 1){ $identificador = "SRV"; }                
 
                 if($model->tipo == "P"){
                     $model->proposta = 'PTC'.'-'.$model->codigo.'-SRV-'.$identificador.'-'.$model->site.'-'.$model->rev_proposta;
@@ -302,6 +302,7 @@ class ProjetoController extends Controller
                             }
 
                             $atvmodelos = Yii::$app->db->createCommand('SELECT * FROM atividademodelo WHERE disciplina_id = 1 AND isPrioritaria=1 AND '.$condition_query.$condition_code)->queryAll();
+                            
 
                             
                             
@@ -896,10 +897,10 @@ class ProjetoController extends Controller
         if (Yii::$app->request->isAjax) {        
                 $idExecutante = Yii::$app->request->post()['idExecutante'];
                 if(!empty($idExecutante)){
-                    echo json_encode(Yii::$app->db->createCommand('SELECT qtd_km_dia, vl_km FROM executante WHERE usuario_id=61')->queryOne()); 
+                    echo json_encode(Yii::$app->db->createCommand('SELECT qtd_km_dia, vl_km FROM executante WHERE usuario_id=88')->queryOne()); 
                 }
                 else{
-                    echo json_encode(Yii::$app->db->createCommand('SELECT qtd_km_dia, vl_km FROM executante WHERE usuario_id=61')->queryOne());  
+                    echo json_encode(Yii::$app->db->createCommand('SELECT qtd_km_dia, vl_km FROM executante WHERE usuario_id=88')->queryOne());  
                 }
         }
         
