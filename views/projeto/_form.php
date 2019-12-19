@@ -364,7 +364,7 @@ $(".ld-create").click(function(ev){
 $("#projeto-qtd_dias").focusout(function() {
     dias = this.value;
     idExecutante = $("[name=\"ProjetoExecutante[0]\"]")[0].value;
-
+    
     $.ajax({ 
     url: "index.php?r=projeto/preenchekm",
     data:{idExecutante: idExecutante},
@@ -916,6 +916,8 @@ $(".remove-exec").click(function(ev){
                 if(conjuntos.includes($(this).val())){
                   $(this).removeAttr("hidden");
                   $("#Codigos_label_"+ $(this).val()).removeAttr("hidden");
+                  $("#CODIFICADO").removeAttr("hidden");
+                  $("#Codigos_label_CODIFICADO").removeAttr("hidden");
                 }
                 
               });             
@@ -1317,13 +1319,16 @@ if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admi
           </fieldset>
 
           <fieldset>
-             <legend>Conjuntos</legend>
+             <legend>Conjuntos</legend>           
              <?php
             $codigos_escopo = Yii::$app->db->createCommand('SELECT DISTINCT codigo FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id = atividademodelo.id WHERE codigo IS NOT NULL AND codigo <> " "')->queryAll();
                foreach ($codigos_escopo as $key => $code) { ?>
                     <input style="margin-left: 1em" class="checkbox-conjuntos" type="checkbox" id="Codigos[<?=$code['codigo']?>]" name="Codigos[<?=$code['codigo']?>]" value="<?=$code['codigo']?>" hidden>
                     <label for="" hidden id="Codigos_label_<?=$code['codigo']?>" class="label-conjuntos" hidden><?= $code['codigo'] ?></label>
             <?php  } ?>
+            <br>
+            <input style="margin-left: 1em" class="checkbox-conjuntos" type="checkbox" id="CODIFICADO" name="Codigos[CODIFICADO]" value="CODIFICADO" hidden>
+              <label for="" hidden id="Codigos_label_CODIFICADO" class="label-conjuntos" hidden>CODIFICADO</label>
 
            </fieldset>
         </div>
