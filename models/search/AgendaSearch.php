@@ -5,12 +5,13 @@ namespace app\models\search;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Agenda;
+use app\models\Agendamento;
+use app\models\AgendaStatus;
 
 /**
  * AgendaSearch represents the model behind the search form about `app\models\Agenda`.
  */
-class AgendaSearch extends Agenda
+class AgendaSearch extends Agendamento
 {
     /**
      * @inheritdoc
@@ -18,14 +19,14 @@ class AgendaSearch extends Agenda
     public function rules()
     {
         return [
-            [['status'], 'integer'],
-            [['hr_inicio', 'hr_final', 'status'], 'required'],
-            [['hr_inicio', 'hr_final', 'prazo'], 'safe'],
-            [['descricao', 'pendente'], 'string'],
-            [['local'], 'string', 'max' => 15],
-            [['assunto'], 'string', 'max' => 80],
-            [['projeto', 'responsavel', 'contato'], 'string', 'max' => 255],
-            //[['status'], 'exist', 'skipOnError' => true, 'targetClass' => AgendaStatus::className(), 'targetAttribute' => ['status' => 'id']],
+            [['nome', 'horario'], 'required'],
+            [['horario'], 'safe'],
+            [['id_status'], 'integer'],
+            [['nome'], 'string', 'max' => 55],
+            [['cpf'], 'string', 'max' => 15],
+            [['tipo_atendimento', 'plano_particular'], 'string', 'max' => 50],
+            [['descricao'], 'string', 'max' => 255],
+            [['id_status'], 'exist', 'skipOnError' => true, 'targetClass' => AgendaStatus::className(), 'targetAttribute' => ['id_status' => 'id']],
         ];
     }
 
@@ -47,7 +48,7 @@ class AgendaSearch extends Agenda
      */
     public function search($params)
     {
-        $query = Agenda::find();
+        $query = Agendamento::find();
 
         // add conditions that should always apply here
 

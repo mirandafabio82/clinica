@@ -21,5 +21,3 @@ $this->params['breadcrumbs'][] = 'Update';
         'searchModel' => $searchModel,
         'dataProvider' => $dataProvider,
     ]) ?>
-
-</div>

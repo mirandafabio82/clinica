@@ -10,7 +10,7 @@ use kartik\select2\Select2;
 
 $this->registerJs('   
     $( document ).ready(function() {
-       document.title = "HCN - Relatório Geral";
+       document.title = "Relatório Geral";
        });
 ');
 ?>

@@ -19,6 +19,10 @@ background: none !important;
 -webkit-appearance: none !important;
 }
 
+.box.box-primary {
+    border: none;
+}
+
 </style>
     
     <?= GridView::widget([

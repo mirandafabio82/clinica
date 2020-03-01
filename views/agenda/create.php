@@ -14,18 +14,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= $this->render('_form', [
         'model' => $model,
-        'listProjetos' => $listProjetos,
-        'listSites' => $listSites,
+        'arrayEventos' => $arrayEventos,
+        'listConsultas' => $listConsultas,
         'listStatus' => $listStatus,
+        'listResponsavel' => $listResponsavel,
         'searchModel' => $searchModel,
         'dataProvider' => $dataProvider,
-        'arrayEventos' => $arrayEventos,
-        'listContatos' => $listContatos,
-        'listExecutantes' => $listExecutantes,
-        'arrayExecutantes' => $arrayExecutantes,
-        'proj_autocomplete' => $proj_autocomplete,
-        'cont_autocomplete' => $cont_autocomplete,
         'resp_autocomplete' => $resp_autocomplete,
+        'listProcedimento' => $listProcedimento,
     ]) ?>
 
 </div>

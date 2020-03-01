@@ -418,40 +418,12 @@ class BmController extends Controller
     public function actionGerarbm()
     {
         if($_GET['id']){
-            $bm = Yii::$app->db->createCommand('SELECT * FROM bm WHERE id='.$_GET['id'])->queryOne();
-            $projeto = Projeto::findOne($bm['projeto_id']);
-            $escopos = Yii::$app->db->createCommand('SELECT SUM(horas_tp) h_tp,SUM(horas_ej) h_ej,SUM(horas_ep) h_ep,SUM(horas_es) h_es,SUM(horas_ee) h_ee,SUM(executado_tp) executado_tp,SUM(executado_ej) executado_ej,SUM(executado_ep) executado_ep,SUM(executado_es) executado_es,SUM(executado_ee) executado_ee, escopo.nome as nomeE FROM escopo JOIN atividademodelo ON escopo.atividademodelo_id=atividademodelo.id WHERE projeto_id='.$projeto->id)->queryOne();
 
-            $tipo_exec = Yii::$app->db->createCommand('SELECT * FROM tipo_executante')->queryAll();
-
-
-            $bm_page = $this->renderPartial('relatorio/_bm', [
-                'bm' => $bm,
-                'projeto' => $projeto,
-                'escopos' => $escopos,
-                'tipo_exec' => $tipo_exec]);
-
-            if (!file_exists('uploaded-files/'.$projeto['id'])) {
-                mkdir('uploaded-files/'.$projeto['id'], 0777, true);
-            }
+            $bm_page = $this->renderPartial('relatorio/_teste');
 
             $mpdf = new \Mpdf\Mpdf();
             $mpdf->WriteHTML($bm_page);   
-            $mpdf->Output('uploaded-files/'.$projeto['id'].'/BM-'.explode('AS-', explode('_', $projeto['proposta'])[0])[1].'_'.$bm['numero_bm'].'.pdf', 'F');     
-            $mpdf->Output('uploaded-files/'.$projeto['id'].'/BM-'.explode('AS-', explode('_', $projeto['proposta'])[0])[1].'_'.$bm['numero_bm'].'.pdf', 'I');         
-
-            $existsFile = Yii::$app->db->createCommand('SELECT id FROM documento WHERE nome="BM-'.$projeto['proposta'].'_'.$bm['numero_bm'].'.pdf"')->queryScalar();
-
-            if(empty($existsFile)){                          
-                //cria o registro do arquivo
-                $doc = new Documento();
-                $doc->projeto_id = $bm['projeto_id'];
-                $doc->nome = 'BM-'.explode('AS-', explode('_', $projeto['proposta'])[0])[1].'_'.$bm['numero_bm'].'.pdf';
-                $doc->revisao = 0;
-                $doc->path = 'BM-'.explode('AS-', explode('_', $projeto['proposta'])[0])[1].'_'.$bm['numero_bm'].'.pdf';
-                $doc->is_global = 0;
-                $doc->save();
-            }
+            $mpdf->Output();
 
         }
     }

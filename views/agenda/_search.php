@@ -17,14 +17,6 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'id') ?>
 
-    <?= $form->field($model, 'projeto_id') ?>
-
-    <?= $form->field($model, 'data') ?>
-
-    <?= $form->field($model, 'local') ?>
-
-    <?= $form->field($model, 'quem') ?>
-
     <?php // echo $form->field($model, 'assunto') ?>
 
     <?php // echo $form->field($model, 'hr_inicio') ?>

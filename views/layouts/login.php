@@ -12,9 +12,12 @@ AppAsset::register($this);
 <?php $this->beginPage() ?>
 <style>
 body { 
-    background-image: url('resources/dist/img/login_background.jpg');
+    background-image: url('resources/dist/img/login_background3.jpg');
     background-repeat: no-repeat;
     background-attachment: fixed;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
     background-position: center; 
 }
 </style>
@@ -48,7 +51,7 @@ body {
 
         <div class="wrap">
             <div class="container">    
-            <h1 style="font-weight: 700;text-align: center; color:#fff">HCN Automação</h1>
+            <h1 style="font-family: 'Righteous', sans-serif;font-weight: 700;text-align: center; color:#fff">Login</h1>
                 <?= $content ?>
                <!--  <a href="https://br.freepik.com/fotos-gratis/o-inspetor-financeiro-e-o-secretario-fazem-relatorio-calculam-ou-verificam-o-saldo-documento-de-verificacao-do-inspetor-do-servico-de-receita-federal-conceito-de-auditoria_1202418.htm">Projetado pelo Freepik</a> -->
             </div>

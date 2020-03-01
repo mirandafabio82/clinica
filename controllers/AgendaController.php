@@ -3,16 +3,13 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\Agenda;
+use app\models\Agendamento;
 use app\models\search\AgendaSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use yii\filters\AccessControl;
-use \Datetime;
-use yii\helpers\Json;
-use app\models\Log;
 /**
  * AgendaController implements the CRUD actions for Agenda model.
  */
@@ -24,15 +21,15 @@ class AgendaController extends Controller
     public function behaviors()
     {
         return [
-        'access' => [
+            'access' => [
                 'class' => AccessControl::className(),
                 'only' => ['*'],
                 'rules' => [
-                    ['allow' => true,'roles' => ['admin']],
-                    ['allow' => true,'roles' => ['executante']],                    
-                    ['actions' => ['index', 'view'],'allow' => true,'roles' => ['executante']],
+                    ['allow' => true, 'roles' => ['admin']],
+                    ['allow' => true, 'roles' => ['executante']],
+                    ['actions' => ['index', 'view'], 'allow' => true, 'roles' => ['executante']],
                 ],
-                
+
             ],
             'verbs' => [
                 'class' => VerbFilter::className(),
@@ -77,101 +74,85 @@ class AgendaController extends Controller
      */
     public function actionCreate()
     {
-         $searchModel = new AgendaSearch();
+        $searchModel = new AgendaSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        if(isset($_GET['pagination'])) $dataProvider->pagination = false;
+        if (isset($_GET['pagination'])) $dataProvider->pagination = false;
 
-        $model = new Agenda();
-        $projetos = Yii::$app->db->createCommand('SELECT id, nome FROM projeto')->queryAll();
-        $listProjetos = ArrayHelper::map($projetos,'id','nome');
-
-        $sites = Yii::$app->db->createCommand('SELECT id, nome FROM site')->queryAll();
-        $listSites = ArrayHelper::map($sites,'id','nome');
+        $model = new Agendamento();
 
         $status = Yii::$app->db->createCommand('SELECT id, status FROM agenda_status')->queryAll();
-        $listStatus = ArrayHelper::map($status,'id','status');
+        $listStatus = ArrayHelper::map($status, 'id', 'status');
 
-        $executantes = Yii::$app->db->createCommand('SELECT usuario_id, nome, cor FROM executante JOIN user ON executante.usuario_id = user.id')->queryAll();
-        $listExecutantes = ArrayHelper::map($executantes,'usuario_id','nome');
+        $consultas = Yii::$app->db->createCommand('SELECT id_agendamento, nome, s.cor as cor FROM agendamento a JOIN agenda_status s ON a.id_status = s.id')->queryAll();
+        $listConsultas = ArrayHelper::map($consultas, 'id_agendamento', 'nome');
 
-        $contatos = Yii::$app->db->createCommand('SELECT id, nome FROM contato JOIN user ON contato.usuario_id = user.id')->queryAll();
-        $listContatos = ArrayHelper::map($contatos,'id','nome');
+        $procedimento = Yii::$app->db->createCommand('SELECT id_procedimento, nome FROM procedimento  ORDER BY nome ASC')->queryAll();
+        $listProcedimento = ArrayHelper::map($procedimento, 'id_procedimento', 'nome');
 
-        $arrayEventos = Yii::$app->db->createCommand('SELECT * FROM agenda')->queryAll();
+        $responsavel = Yii::$app->db->createCommand('SELECT id_responsavel, nome FROM responsavel')->queryAll();
+        $listResponsavel = ArrayHelper::map($responsavel, 'id_responsavel', 'nome');
 
-        $proj_autocomplete = '';
-            foreach ($projetos as $key => $pr) {  
-                $proj_autocomplete .= '"'.$pr['nome'].'", ';
-        } 
+        $arrayEventos = Yii::$app->db->createCommand('SELECT * FROM agendamento a JOIN agenda_status s ON a.id_status = s.id WHERE a.id_status <> 3')->queryAll();
 
-        $cont_autocomplete = '';
-            foreach ($contatos as $key => $ct) {  
-                $cont_autocomplete .= '"'.$ct['nome'].'", ';
-        } 
 
         $resp_autocomplete = '';
-            foreach ($executantes as $key => $res) {  
-                $resp_autocomplete .= '"'.$res['nome'].'", ';
-        } 
- 
-        if($_POST){            
-            $model->setAttributes($_POST['Agenda']); 
+        foreach ($consultas as $key => $res) {
+            $resp_autocomplete .= '"' . $res['nome'] . '", ';
+        }
 
-            
-            $model->hr_inicio = str_replace('T', ' ', $_POST['Agenda']['hr_inicio']);
-            $model->hr_final = str_replace('T', ' ', $_POST['Agenda']['hr_final']);
+        if ($_POST) {
+            $model->setAttributes($_POST['Agenda']);
 
-            if(!$model->save()){
+
+            $model->horario = str_replace('T', ' ', $_POST['Agenda']['horario']);
+
+            if (!$model->save()) {
                 print_r($model->getErrors());
                 die();
             }
 
-           
-            $_SESSION['msg'] = '<div class="alert alert-success" role="alert">Cadastrado com sucesso</div';
 
-            $destinatario = Yii::$app->db->createCommand('SELECT email FROM user WHERE nome = "'.$model->responsavel.'"')->queryScalar();
-            $assunto = 'Evento Adicionado à sua Agenda';
-            $corpoEmail = Yii::$app->db->createCommand('SELECT nome FROM user WHERE id = '.Yii::$app->user->getId())->queryScalar().' lhe adicionou ao evento '.$model->assunto.' de '.date('d/m/Y H:i', strtotime($model->hr_inicio)).' até '. date('d/m/Y H:i', strtotime($model->hr_final)).'.';
-            
-                try{
-                    Yii::$app->mailer->compose()
-                    ->setFrom('hcnautomacaoweb@gmail.com')
-                    ->setTo(trim($destinatario))
-                    ->setSubject($assunto)
-                    ->setTextBody($corpoEmail)
-                    ->send();
-                }
-                catch(Exception $e){
-                    print_r($e);
-                    die();
-                }
+            // $_SESSION['msg'] = '<div class="alert alert-success" role="alert">Cadastrado com sucesso</div';
 
-            $user_nome = Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.Yii::$app->user->getId())->queryScalar();
-            $logModel = new Log();
-            $logModel->user_id = Yii::$app->user->getId();
-            $logModel->descricao = $user_nome.' criou o evento '.$model->assunto.'. Inicio:'.$model->hr_inicio.' Fim: '.$model->hr_final;
-            $logModel->data = Date('Y-m-d H:i:s');
-            if(!$logModel->save()){
-                print_r($logModel->getErrors());
-                die();
-            }
-              
+            // $destinatario = Yii::$app->db->createCommand('SELECT email FROM user WHERE nome = "'.$model->responsavel.'"')->queryScalar();
+            // $assunto = 'Evento Adicionado à sua Agenda';
+            // $corpoEmail = Yii::$app->db->createCommand('SELECT nome FROM user WHERE id = '.Yii::$app->user->getId())->queryScalar().' lhe adicionou ao evento '.$model->assunto.' de '.date('d/m/Y H:i', strtotime($model->hr_inicio)).' até '. date('d/m/Y H:i', strtotime($model->hr_final)).'.';
+
+            //     try{
+            //         Yii::$app->mailer->compose()
+            //         ->setFrom('hcnautomacaoweb@gmail.com')
+            //         ->setTo(trim($destinatario))
+            //         ->setSubject($assunto)
+            //         ->setTextBody($corpoEmail)
+            //         ->send();
+            //     }
+            //     catch(Exception $e){
+            //         print_r($e);
+            //         die();
+            //     }
+
+            // $user_nome = Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.Yii::$app->user->getId())->queryScalar();
+            // $logModel = new Log();
+            // $logModel->user_id = Yii::$app->user->getId();
+            // $logModel->descricao = $user_nome.' criou o evento '.$model->assunto.'. Inicio:'.$model->hr_inicio.' Fim: '.$model->hr_final;
+            // $logModel->data = Date('Y-m-d H:i:s');
+            // if(!$logModel->save()){
+            //     print_r($logModel->getErrors());
+            //     die();
+            // }
+
             return $this->redirect(['create']);
         } else {
             return $this->render('create', [
                 'model' => $model,
-                'listProjetos' => $listProjetos,
-                'listSites' => $listSites,
                 'listStatus' => $listStatus,
+                'listProcedimento' => $listProcedimento,
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
+                'listResponsavel' => $listResponsavel,
                 'arrayEventos' => $arrayEventos,
-                'listContatos' => $listContatos,
-                'listExecutantes' => $listExecutantes,
-                'arrayExecutantes' => $executantes,
-                'proj_autocomplete' => $proj_autocomplete,
-                'cont_autocomplete' => $cont_autocomplete,
+                'listConsultas' => $listConsultas,
                 'resp_autocomplete' => $resp_autocomplete,
             ]);
         }
@@ -183,43 +164,30 @@ class AgendaController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionUpdate($id)
+    public function actionUpdate()
     {
-        $searchModel = new AgendaSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $id = Yii::$app->request->post()['id'];
+        $up_nome = Yii::$app->request->post()['nome'];
+        $up_tipo_atendimento = Yii::$app->request->post()['tipo_atendimento'];
+        $up_cpf = Yii::$app->request->post()['cpf'];
+        $up_horario = Yii::$app->request->post()['horario'];
+        $up_plano_particular = Yii::$app->request->post()['plano_particular'];
+        $up_status = Yii::$app->request->post()['status'];
+        $up_descricao = Yii::$app->request->post()['descricao'];
 
-        $model = $this->findModel($id);
-               
-        if($_POST){
-            $model->setAttributes($_POST['Agenda']);            
-            $model->hr_inicio = str_replace('T', ' ', $_POST['Agenda']['hr_inicio']);
-            $model->hr_final = str_replace('T', ' ', $_POST['Agenda']['hr_final']);
+        $pizza  = "piece1 piece2 piece3 piece4 piece5 piece6";
+        $pieces = explode(" ", $pizza);
+        $teste = $pieces[14]; // piece1
 
-            if(!$model->save()){
-                print_r($model->getErrors());
-                die();
-            }
+        Yii::$app->db->createCommand('UPDATE agendamento SET nome="' . $up_nome . '",cpf="' . $up_cpf . '",horario="' . $up_horario . '",tipo_atendimento="' . $up_tipo_atendimento . '",plano_particular="' . $up_plano_particular . '",id_status=' . $up_status . ',descricao="' . $up_descricao . '" WHERE id_agendamento=' . $id)->execute();
 
-            $_SESSION['msg'] = '<div class="alert alert-success" role="alert">Atualizado com sucesso</div';
-            
-            $user_nome = Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.Yii::$app->user->getId())->queryScalar();
-            $logModel = new Log();
-            $logModel->user_id = Yii::$app->user->getId();
-            $logModel->descricao = $user_nome.' editou o evento '.$model->assunto.'. Inicio:'.$model->hr_inicio.' Fim: '.$model->hr_final;
-            $logModel->data = Date('Y-m-d H:i:s');
-            if(!$logModel->save()){
-                print_r($logModel->getErrors());
-                die();
-            }
-
-            return $this->redirect(['create']);
-        }else {
-            return $this->render('update');
-        }
+        return $this->redirect(['create']);
     }
 
-     //habilitar ajax
-    public function beforeAction($action) {
+
+    //habilitar ajax
+    public function beforeAction($action)
+    {
         $this->enableCsrfValidation = false;
         return parent::beforeAction($action);
     }
@@ -229,23 +197,49 @@ class AgendaController extends Controller
      * @param integer $id
      * @return mixed
      */
+    public function actionFinish()
+    {
+
+        $id = Yii::$app->request->post()['id'];
+
+        $tratamento = Yii::$app->request->post()['tratamento'];
+        $dente = Yii::$app->request->post()['dente'];
+
+        Yii::$app->db->createCommand('INSERT INTO tratamento_realizado(id_agendamento, dente, tratamento_realizado) VALUES (' . $id . ',' . $dente . ',"' . $tratamento . '")')->execute();
+
+        Yii::$app->db->createCommand('UPDATE agendamento SET id_status = 4 WHERE id_agendamento= ' . $id)->execute();
+
+        return $this->redirect(['create']);
+    }
+
     public function actionDelete()
     {
-        if (Yii::$app->request->isAjax) {
-            $model = $this->findModel(Yii::$app->request->post()['id']);
-            $this->findModel(Yii::$app->request->post()['id'])->delete();
 
-            $user_nome = Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.Yii::$app->user->getId())->queryScalar();
-            $logModel = new Log();
-            $logModel->user_id = Yii::$app->user->getId();
-            $logModel->descricao = $user_nome.' excluiu o evento '.$model->assunto.'. Inicio:'.$model->hr_inicio.' Fim: '.$model->hr_final;
-            $logModel->data = Date('Y-m-d H:i:s');
-            if(!$logModel->save()){
-                print_r($logModel->getErrors());
-                die();
-            }
-            return $this->redirect(['create']);
-        }
+        $id = Yii::$app->request->post()['id'];
+
+        Yii::$app->db->createCommand('UPDATE agendamento SET id_status = 3 WHERE id_agendamento= ' . $id)->execute();
+
+        return $this->redirect(['create']);
+    }
+
+    public function actionDeleteOne()
+    {
+
+        $id = Yii::$app->request->post()['id'];
+
+        $this->findModel($id)->delete();
+
+        return $this->redirect(['create']);
+    }
+
+    public function actionConfirm()
+    {
+
+        $id = Yii::$app->request->post()['id'];
+
+        Yii::$app->db->createCommand('UPDATE agendamento SET id_status = 2 WHERE id_agendamento= ' . $id)->execute();
+
+        return $this->redirect(['create']);
     }
 
     /**
@@ -257,7 +251,7 @@ class AgendaController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = Agenda::findOne($id)) !== null) {
+        if (($model = Agendamento::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
@@ -265,21 +259,35 @@ class AgendaController extends Controller
     }
 
 
-    public function actionGetevent(){
-        if (Yii::$app->request->isAjax) {                 
-            return json_encode(Yii::$app->db->createCommand('SELECT projeto, DATE_FORMAT(hr_inicio, "%Y-%m-%dT%H:%i:%s") AS hr_inicio, DATE_FORMAT(hr_final, "%Y-%m-%dT%H:%i:%s") AS hr_final, local, responsavel, contato, assunto, status, descricao, prazo, pendente, cor FROM agenda WHERE id ='.Yii::$app->request->post()['id'])->queryOne());  
+    public function actionGetevent()
+    {
+        if (Yii::$app->request->isAjax) {
+            return json_encode(Yii::$app->db->createCommand('SELECT a.nome, p.id_procedimento as tipo_atendimento, p.nome as nome_atendimento, p.valor_inicial as valor_inicial, p.valor_final as valor_final, cpf, DATE_FORMAT(horario, "%Y-%m-%dT%H:%i:%s") AS horario, plano_particular, c.id as status, descricao, c.cor, a.id_responsavel FROM agendamento a JOIN agenda_status c ON (a.id_status = c.id) JOIN procedimento p ON (CONVERT(tipo_atendimento, INT) = p.id_procedimento) WHERE id_agendamento = ' . Yii::$app->request->post()['id'])->queryOne());
         }
-        
     }
 
-    public function actionUpdateevent(){
-        if (Yii::$app->request->isAjax) {               
-            if(empty(Yii::$app->request->post()['hr_final'])){
-                return json_encode(Yii::$app->db->createCommand('UPDATE agenda SET hr_inicio="'.Yii::$app->request->post()['hr_inicio'].'" WHERE id='.Yii::$app->request->post()['id'])->execute());  
-            }else{
-                return json_encode(Yii::$app->db->createCommand('UPDATE agenda SET hr_inicio="'.Yii::$app->request->post()['hr_inicio'].'", hr_final="'.Yii::$app->request->post()['hr_final'].'" WHERE id='.Yii::$app->request->post()['id'])->execute());  
-            }  
+    public function actionUpdateevent()
+    {
+        if (Yii::$app->request->isAjax) {
+            if (empty(Yii::$app->request->post()['horario'])) {
+                return json_encode(Yii::$app->db->createCommand('UPDATE agendamento SET horario="' . Yii::$app->request->post()['horario'] . '" WHERE id_agendamento=' . Yii::$app->request->post()['id'])->execute());
+            }
         }
-        
+    }
+
+    public function actionGetagendamento()
+    {
+        if (Yii::$app->request->isAjax) {
+
+            $tipo = Yii::$app->request->post()['tipo'];
+            $dataStart = Yii::$app->request->post()['dataStart'];
+            $dataEnd = Yii::$app->request->post()['dataEnd'];
+
+            if ($tipo == 'agendaDay') {
+                return json_encode(Yii::$app->db->createCommand('SELECT id_agendamento, nome, tipo_atendimento, cpf, DATE_FORMAT(horario, "%Y-%m-%dT%H:%i:%s") AS horario, plano_particular, c.id as status, descricao, c.cor FROM agendamento JOIN agenda_status c ON (agendamento.id_status = c.id) WHERE horario LIKE "'  . $dataStart . '%" ORDER BY id_status ASC,  horario ASC')->queryAll());
+            } else {
+                return json_encode(Yii::$app->db->createCommand('SELECT id_agendamento, nome, tipo_atendimento, cpf, DATE_FORMAT(horario, "%Y-%m-%dT%H:%i:%s") AS horario, plano_particular, c.id as status, descricao, c.cor FROM agendamento JOIN agenda_status c ON (agendamento.id_status = c.id) WHERE horario BETWEEN "'  . $dataStart . '" AND "' . $dataEnd . '" ORDER BY id_status ASC,  horario ASC')->queryAll());
+            }
+        }
     }
 }

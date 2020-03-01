@@ -7,18 +7,15 @@ use Yii;
 /**
  * This is the model class for table "documento".
  *
- * @property integer $id
- * @property integer $projeto_id
- * @property integer $cliente_id
- * @property string $nome
- * @property integer $revisao
+ * @property int $id_documento
+ * @property int $id_tipo_documento
+ * @property int $id_paciente
+ * @property string $observacao
  * @property string $path
  * @property string $data
- * @property string $tipo
- * @property string $criado
- * @property string $modificado
  *
- * @property Projeto $projeto
+ * @property Paciente $paciente
+ * @property TipoDocumento $tipoDocumento
  */
 class Documento extends \yii\db\ActiveRecord
 {
@@ -36,11 +33,12 @@ class Documento extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            // [['projeto_id'], 'required'],
-            [['projeto_id', 'revisao', 'is_global'], 'integer'],
-            [['data', 'criado', 'modificado'], 'safe'],
-            [['nome', 'tipo'], 'string', 'max' => 255],
-            [['projeto_id'], 'exist', 'skipOnError' => true, 'targetClass' => Projeto::className(), 'targetAttribute' => ['projeto_id' => 'id']],
+            [['id_tipo_documento', 'id_paciente'], 'integer'],
+            [['id_paciente'], 'required'],
+            [['data'], 'safe'],
+            [['observacao', 'path'], 'string', 'max' => 255],
+            [['id_paciente'], 'exist', 'skipOnError' => true, 'targetClass' => Paciente::className(), 'targetAttribute' => ['id_paciente' => 'id_paciente']],
+            [['id_tipo_documento'], 'exist', 'skipOnError' => true, 'targetClass' => TipoDocumento::className(), 'targetAttribute' => ['id_tipo_documento' => 'id_tipo_documento']],
         ];
     }
 
@@ -50,31 +48,28 @@ class Documento extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'projeto_id' => 'Projeto',            
-            'nome' => 'Nome',
-            'revisao' => 'Revisao',
+            'id_documento' => 'Id Documento',
+            'id_tipo_documento' => 'Tipo Documento',
+            'id_paciente' => 'Paciente',
+            'observacao' => 'Observacao',
+            'path' => 'Caminho',
             'data' => 'Data',
-            'tipo' => 'Tipo',
-            'criado' => 'Criado',
-            'modificado' => 'Modificado',
-            'path' => 'Arquivo',
-            'is_global' => 'Visível para executantes'
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getProjeto()
+    public function getPaciente()
     {
-        return $this->hasOne(Projeto::className(), ['id' => 'projeto_id']);
+        return $this->hasOne(Paciente::className(), ['id_paciente' => 'id_paciente']);
     }
+
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getProjeto_executante()
+    public function getTipoDocumento()
     {
-        return $this->hasOne(ProjetoExecutante::className(), ['projeto_id' => 'projeto.id']);
+        return $this->hasOne(TipoDocumento::className(), ['id_tipo_documento' => 'id_tipo_documento']);
     }
 }

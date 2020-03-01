@@ -14,7 +14,7 @@ use kartik\select2\Select2;
 /* @var $form yii\widgets\ActiveForm */
 $this->registerJs('   
     $( document ).ready(function() {
-       document.title = "HCN - Gerenciamento das Atividades";
+       document.title = "Gerenciamento das Atividades";
        });
 ');
 

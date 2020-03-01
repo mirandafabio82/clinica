@@ -63,7 +63,7 @@ th {
 $this->registerJs('
 
   $( document ).ready(function() {
-      document.title = "HCN - Relatórios";
+      document.title = "Relatórios";
       initS2Loading("projeto-id","s2options_d6851687");
     });
 

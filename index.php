@@ -8,5 +8,5 @@
  </html>
 
  <?php
- header("location: /hcn/web/");
+ header("location: /clinica/web/");
 ?>

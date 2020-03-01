@@ -13,7 +13,7 @@ use kartik\select2\Select2;
 $this->registerJs("
     $( document ).ready(function() {
         window.scrollTo(0, 50000);
-        document.title = 'HCN - Ativ. Modelo';
+        document.title = 'Ativ. Modelo';
     });
     $('td').click(function (e) {
         var id = $(this).closest('tr').attr('data-key');

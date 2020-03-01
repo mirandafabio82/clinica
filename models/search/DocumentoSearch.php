@@ -8,20 +8,22 @@ use yii\data\ActiveDataProvider;
 use app\models\Documento;
 
 /**
- * DocumentoSearch represents the model behind the search form about `app\models\Documento`.
+ * DocumentoSearch represents the model behind the search form of `app\models\Documento`.
  */
 class DocumentoSearch extends Documento
 {
-    public $projeto;
-    public $projeto_executante;
+    public $pacienteNome;
+    public $pacienteCPF;
+    
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['id', 'projeto_id', 'revisao'], 'integer'],
-            [['nome', 'data', 'tipo', 'criado', 'modificado', 'projeto', 'projeto_executante'], 'safe'],
+            [['id_documento', 'id_tipo_documento', 'id_paciente'], 'integer'],
+            [['observacao', 'path', 'data'], 'safe'],
+            [['pacienteNome', 'pacienteCPF'], 'safe'],
         ];
     }
 
@@ -43,37 +45,29 @@ class DocumentoSearch extends Documento
      */
     public function search($params)
     {
-        
         $query = Documento::find();
-        $query->joinWith(['projeto']);
 
-        if(!isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['admin'])){      
-            $query->join('LEFT JOIN','projeto_executante', 'projeto.id =projeto_executante.projeto_id');              
-            $query->where(['is_global' => 1, 'projeto_executante.executante_id' => Yii::$app->user->getId()]);
-        }
-
-
-        
-        // add conditions that should always apply here
-        $dataProvider->sort->attributes['projeto'] = [
-            // The tables are the ones our relation are configured to
-            // in my case they are prefixed with "tbl_"
-            'asc' => ['projeto.nome' => SORT_ASC],
-            'desc' => ['projeto.nome' => SORT_DESC],
-        ];
+        $query->joinWith(['paciente']);
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'pagination' => [
-                'pageSize' => 10,
-            ],
-            'sort' => [
-            'defaultOrder' => [
-                'id' => SORT_DESC,
-            ]]
         ]);
+
+        $dataProvider->sort->attributes['paciente.nome'] = [
+            // The tables are the ones our relation are configured to
+            // in my case they are prefixed with "tbl_"
+            'asc' => ['paciente.nome' => SORT_ASC],
+            'desc' => ['paciente.nome' => SORT_DESC],
+        ];
+
+        $dataProvider->sort->attributes['paciente.cpf'] = [
+            // The tables are the ones our relation are configured to
+            // in my case they are prefixed with "tbl_"
+            'asc' => ['paciente.cpf' => SORT_ASC],
+            'desc' => ['paciente.cpf' => SORT_DESC],
+        ];
 
         $this->load($params);
 
@@ -85,17 +79,16 @@ class DocumentoSearch extends Documento
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
-            'projeto_id' => $this->projeto_id,            
-            'revisao' => $this->revisao,
+            'id_documento' => $this->id_documento,
+            'id_tipo_documento' => $this->id_tipo_documento,
+            'id_paciente' => $this->id_paciente,
             'data' => $this->data,
-            'criado' => $this->criado,
-            'modificado' => $this->modificado,
         ]);
 
-        $query->andFilterWhere(['like', 'nome', $this->nome])
-            ->andFilterWhere(['like', 'tipo', $this->tipo])
-            ->andFilterWhere(['like', 'projeto.nome', $this->projeto]);
+        $query->andFilterWhere(['like', 'observacao', $this->observacao])
+            ->andFilterWhere(['like', 'path', $this->path])
+            ->andFilterWhere(['like', 'paciente.nome', $this->pacienteNome])
+            ->andFilterWhere(['like', 'paciente.cpf', $this->pacienteCPF]);
 
         return $dataProvider;
     }

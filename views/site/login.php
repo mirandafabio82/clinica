@@ -12,9 +12,8 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="row">
     <div class="col-md-4 col-md-offset-4">
-        <div class="login-panel panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title"><?= Html::encode($this->title) ?></h3>
+        <div class="login-panel panel panel-default" style="background-color: #fdfdfd;border-radius: 50px 20px;border: 2px solid #ffc9fb;">
+            <div class="panel-heading" style="background-color: #fdfdfd;border-radius: 50px 20px;border: 2px solid white">
                 <span>Por favor, forneça suas credenciais</span>
             </div>
             <div class="panel-body">

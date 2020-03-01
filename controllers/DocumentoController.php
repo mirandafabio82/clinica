@@ -8,12 +8,7 @@ use app\models\search\DocumentoSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
-use yii\web\UploadedFile;
-use \Datetime;
-use yii\helpers\FileHelper;
-use app\models\Log;
 
 /**
  * DocumentoController implements the CRUD actions for Documento model.
@@ -26,15 +21,6 @@ class DocumentoController extends Controller
     public function behaviors()
     {
         return [
-        'access' => [
-                'class' => AccessControl::className(),
-                'only' => ['*'],
-                'rules' => [
-                    ['allow' => true,'roles' => ['admin']],
-                    ['allow' => true,'roles' => ['executante']],                    
-                    ['actions' => ['index', 'view'],'allow' => true,'roles' => ['executante']],
-                ],
-            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -42,6 +28,13 @@ class DocumentoController extends Controller
                 ],
             ],
         ];
+    }
+
+    //habilitar ajax
+    public function beforeAction($action)
+    {
+        $this->enableCsrfValidation = false;
+        return parent::beforeAction($action);
     }
 
     /**
@@ -63,11 +56,74 @@ class DocumentoController extends Controller
      * Displays a single Documento model.
      * @param integer $id
      * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id)
     {
         return $this->render('view', [
             'model' => $this->findModel($id),
+        ]);
+    }
+
+    public function actionUpload()
+    {
+
+        $model = new Documento();
+
+        $fileName = $_FILES["Documento"]["name"]['path'];
+
+        $cpf = Yii::$app->request->post()['Documento']['cpf'];
+        $model->id_tipo_documento = Yii::$app->request->post()['Documento']['id_tipo_documento'];
+        $model->observacao = Yii::$app->request->post()['Documento']['observacao'];
+        $model->data = Yii::$app->request->post()['Documento']['data'];
+
+        if($model->id_tipo_documento == '1003') {
+            $tipo_documento =Yii::$app->request->post()['Documento']['outro_tipo'];
+            Yii::$app->db->createCommand('INSERT INTO tipo_documento (nome) VALUES ("' . $tipo_documento  . '");')->execute();
+        }
+
+        $pieces = explode("/", $model->data);
+        $model->data = $pieces[2] . '-' . $pieces[1] . '-' . $pieces[0];
+
+        $cpf = str_replace(".", "", $cpf);
+        $cpf = str_replace("-", "", $cpf);
+
+        $model->id_paciente = Yii::$app->db->createCommand('SELECT id_paciente FROM paciente WHERE cpf= "' . $cpf . '"')->queryOne()['id_paciente'];
+
+        $target = '../../Documentos/' . $model->id_paciente . '/';
+
+        // Caso o diretório não exista, cria um novo
+        if (!file_exists($target)) {
+            mkdir($target, 0700, true);
+        }
+
+        $fileTarget = $target . $fileName;
+        $tempFileName = $_FILES["Documento"]["tmp_name"]['path'];
+        $result = move_uploaded_file($tempFileName, $fileTarget);
+
+        $model->path = $fileTarget;
+        /*
+        *     If file was successfully uploaded in the destination folder
+        */
+        if ($result) {
+            $model->save();
+        } else {
+            echo "Sorry !!! There was an error in uploading your file";
+        }
+
+        $model = new Documento();
+
+        $searchModel = new DocumentoSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        $tipo_docs = Yii::$app->db->createCommand('SELECT id_tipo_documento, nome FROM tipo_documento  UNION SELECT 1003,"Outro"')->queryAll();
+        $listTipoDoc = ArrayHelper::map($tipo_docs, 'id_tipo_documento', 'nome');
+        
+        return $this->redirect('create', [
+            'model' => $model,
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'listTipoDoc' => $listTipoDoc,
         ]);
     }
 
@@ -79,103 +135,23 @@ class DocumentoController extends Controller
     public function actionCreate()
     {
         $model = new Documento();
-        $model->data = date('d/m/Y');
+
         $searchModel = new DocumentoSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        if(isset($_GET['pagination'])) $dataProvider->pagination = false;
+        $tipo_docs = Yii::$app->db->createCommand('SELECT id_tipo_documento, nome FROM tipo_documento  UNION SELECT 1003,"Outro"')->queryAll();
+        $listTipoDoc = ArrayHelper::map($tipo_docs, 'id_tipo_documento', 'nome');
 
-        $projetos = Yii::$app->db->createCommand('SELECT id, nome FROM projeto')->queryAll();
-        $listProjetos = ArrayHelper::map($projetos,'id','nome');
-
-
-
-        if (isset($_POST['Documento'])) {           
-            try{
-                
-                $files = UploadedFile::getInstances($model,'path');
-
-                foreach ($files as $key => $file) {
-                    $model = new Documento();
-                    $model->data = date('d/m/Y');
-                    $searchModel = new DocumentoSearch();
-                    $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-                    $connection = \Yii::$app->db;
-                    $transaction = $connection->beginTransaction();
-                    $model->setAttributes($_POST['Documento']);
-                    $projeto_id = $model->projeto_id;
-               
-                
-                    if($file != null){
-
-                        $nomeOriginal = $file->name;
-                        $extensao = explode('.', $nomeOriginal)[1];
-                        
-                        if (!is_dir(Yii::$app->basePath . '/web/uploaded-files/' . $projeto_id)) {
-                            mkdir(Yii::$app->basePath . '/web/uploaded-files/' . $projeto_id);
-                            FileHelper::createDirectory(Yii::$app->basePath . '/web/uploaded-files/' . $projeto_id, $mode = 0775, $recursive = true);
-                        }
-
-                        $model->path = $file;                
-                        $model->path->name = $model->path->name;     
-
-                        $fileName = "{$nomeOriginal}";  
-                        $model->nome = $fileName;              
-
-                        $model->path->saveAs(Yii::$app->basePath.'/web/uploaded-files/'.$projeto_id.'/'.$fileName);                
-                        $model->path = $fileName;
-                    }
-                    if(!empty($_POST['Documento']['data'])){ 
-                        $dat = DateTime::createFromFormat('d/m/Y', $_POST['Documento']['data']);          
-                        $model->data = date_format($dat, 'Y-m-d');
-                    }
-
-                    $qtdDocs = count(scandir(Yii::$app->basePath.'/web/uploaded-files/'.$projeto_id)) - 2;
-                   
-                    //atualiza qtd documentos no projeto
-                    Yii::$app->db->createCommand('UPDATE projeto SET documentos='.$qtdDocs.' WHERE id='.$projeto_id)->execute();
-                    
-                    if(!$model->save()){
-                        print_r($model->getErrors());
-                        die();
-                    }
-
-                    $projeto_nome = Yii::$app->db->createCommand('SELECT nome FROM projeto WHERE id='.$projeto_id)->queryScalar();
-                    if(isset(\Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())['executante'])){
-                        $user_nome = Yii::$app->db->createCommand('SELECT nome FROM user WHERE id='.Yii::$app->user->getId())->queryScalar();
-                        $logModel = new Log();
-                        $logModel->user_id = Yii::$app->user->getId();
-                        $logModel->descricao = $user_nome.' adicionou um novo arquivo para o Projeto '.$projeto_nome;
-                        $logModel->data = Date('Y-m-d H:i:s');
-                        if(!$logModel->save()){
-                            print_r($logModel->getErrors());
-                            die();
-                        }
-                    }
-
-                    $transaction->commit();
-                }
-                return $this->render('create', [
-                'model' => $model,
-                'searchModel' => $searchModel,
-                'dataProvider' => $dataProvider,
-                'listProjetos' => $listProjetos
-            ]);
-
-            }
-            catch(Exception $e){
-                $transaction->rollBack();
-                throw $e;
-            }            
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-                'searchModel' => $searchModel,
-                'dataProvider' => $dataProvider,
-                'listProjetos' => $listProjetos
-            ]);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id_documento]);
         }
+
+        return $this->render('create', [
+            'model' => $model,
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'listTipoDoc' => $listTipoDoc,
+        ]);
     }
 
     /**
@@ -183,65 +159,19 @@ class DocumentoController extends Controller
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $searchModel = new DocumentoSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $model->data = date_format(DateTime::createFromFormat('Y-m-d', $model->data), 'd/m/Y');
-        $projetos = Yii::$app->db->createCommand('SELECT id, nome FROM projeto')->queryAll();
-        $listProjetos = ArrayHelper::map($projetos,'id','nome');
 
-        if (isset($_POST['Documento'])) {           
-            try{
-                $connection = \Yii::$app->db;
-                $transaction = $connection->beginTransaction();
-                $model->setAttributes($_POST['Documento']);
-
-
-                if(UploadedFile::getInstance($model,'path') != null){
-
-                    $nomeOriginal = UploadedFile::getInstance($model,'path')->name;
-                    $extensao = explode('.', $nomeOriginal)[1];
-                    
-                    if (!is_dir(Yii::$app->basePath . '/web/uploaded-files/' . $model->projeto_id)) {
-                        mkdir(Yii::$app->basePath . '/web/uploaded-files/' . $model->projeto_id);
-                    }
-
-                    $model->path = UploadedFile::getInstance($model,'path');                
-                    $model->path->name = $model->path->name;                
-                    $rnd = rand(0,9999);               
-                    $fileName = "{$model->nome}-{$nomeOriginal}";                
-                    $model->path->saveAs(Yii::$app->basePath.'/web/uploaded-files/'.$model->projeto_id.'/'.$fileName);                
-                    $model->path = $fileName;
-                }
-                if(!empty($_POST['Documento']['data'])){                    
-                    $dat = DateTime::createFromFormat('d/m/Y', $_POST['Documento']['data']);          
-                    $model->data = date_format($dat, 'Y-m-d');
-                }
-
-                $model->save();
-                $transaction->commit();
-                return $this->redirect(['create']);
-            }
-            catch(Exception $e){
-                $transaction->rollBack();
-                throw $e;
-            } 
-            }else {
-            return $this->render('create', [
-                'model' => $model,
-                'searchModel' => $searchModel,
-                'dataProvider' => $dataProvider,
-                'listProjetos' => $listProjetos
-            ]);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id_documento]);
         }
-    }
-     //habilitar ajax
-    public function beforeAction($action) {
-        $this->enableCsrfValidation = false;
-        return parent::beforeAction($action);
+
+        return $this->render('update', [
+            'model' => $model,
+        ]);
     }
 
     /**
@@ -249,12 +179,26 @@ class DocumentoController extends Controller
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
 
-        return $this->redirect(['create']);
+        $model = new Documento();
+
+        $searchModel = new DocumentoSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        $tipo_docs = Yii::$app->db->createCommand('SELECT id_tipo_documento, nome FROM tipo_documento  UNION SELECT 1003,"Outro"')->queryAll();
+        $listTipoDoc = ArrayHelper::map($tipo_docs, 'id_tipo_documento', 'nome');
+        
+        return $this->render('create', [
+            'model' => $model,
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'listTipoDoc' => $listTipoDoc,
+        ]);
     }
 
     /**
@@ -268,8 +212,8 @@ class DocumentoController extends Controller
     {
         if (($model = Documento::findOne($id)) !== null) {
             return $model;
-        } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
         }
+
+        throw new NotFoundHttpException('The requested page does not exist.');
     }
 }

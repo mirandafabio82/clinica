@@ -67,7 +67,7 @@ class SiteController extends Controller
 
         $logs = Yii::$app->db->createCommand('SELECT * FROM log ORDER BY id DESC LIMIT 5')->queryAll();
 
-        $arrayEventos = Yii::$app->db->createCommand('SELECT * FROM agenda')->queryAll();
+        $arrayEventos = Yii::$app->db->createCommand('SELECT * FROM agendamento')->queryAll();
 
         if(isset($_POST['contato']) && !empty($_POST['contato'])){
                 $contatos = Yii::$app->db->createCommand('SELECT id AS usuario_id FROM user WHERE nome = "'.$_POST['contato'].'" ORDER BY id DESC')->queryAll();                

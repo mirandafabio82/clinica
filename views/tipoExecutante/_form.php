@@ -34,7 +34,7 @@ use kartik\money\MaskMoney;
 $this->registerJs("
 
   $( document ).ready(function() {
-        document.title = 'HCN - Especialidades';
+        document.title = 'Especialidades';
     });
 
     $('td').click(function (e) {

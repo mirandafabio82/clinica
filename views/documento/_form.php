@@ -11,23 +11,24 @@ use yii\helpers\Url;
 <!-- mask so funciona com isso -->
 <?php $this->head() ?>
 <style>
-.table-bordered > tbody > tr > td{
-  padding-top: 3px !important;
-  padding-bottom: 3px !important;
-}
+    .table-bordered>tbody>tr>td {
+        padding-top: 3px !important;
+        padding-bottom: 3px !important;
+    }
 
-.table-striped > tbody > tr:nth-of-type(odd){
-  background-color: #b6b6b6 !important;
-}
-.pagination{
-    margin: 0px;
-}
+    .table-striped>tbody>tr:nth-of-type(odd) {
+        background-color: #b6b6b6 !important;
+    }
 
-.dropify-wrapper.touch-fallback .dropify-clear {
-  display:none;
-}
+    .pagination {
+        margin: 0px;
+    }
 
-/*.summary{
+    .dropify-wrapper.touch-fallback .dropify-clear {
+        display: none;
+    }
+
+    /*.summary{
   display: none;
 }
 
@@ -38,7 +39,9 @@ use yii\helpers\Url;
 <?php
 $this->registerJs("
     $( document ).ready(function() {
-        document.title = 'HCN - Documentos';
+        document.title = 'Documentos';
+        var d = new Date();
+        $('#documento-data').val( ('00' + (d.getDate())).slice(-2) + '/' + ('00' + (d.getMonth() + 1)).slice(-2) + '/' + d.getFullYear());
     });
 
    /* $('td').click(function (e) {
@@ -50,169 +53,185 @@ $this->registerJs("
     });*/
     $('.dropify').dropify({
         tpl: {
-        message:         '<div class=\'dropify-message\'><span class=\'file-icon\' /> <p>Clique ou arraste um arquivo para adicioná-lo </p></div>',
+        message:'<div class=\'dropify-message\'><span class=\'file-icon\' /> <p>Clique ou arraste um arquivo para adicioná-lo </p></div>',
     }
     });
 
+    $('#documento-id_tipo_documento').change(function() {
+        if ($('#documento-id_tipo_documento').val() == 1003) {
+            $('#outro_tipo').removeAttr('readonly');
+            $('#outro_tipo').focus();
+        } else {
+            $('#outro_tipo').attr('readonly', true);
+        }
+      });
+
+      $('#up_cpf').focusout(function(){
+        var cpf = $('#up_cpf').val();
+        if(!cpf.includes('_')) {
+            $.ajax({ 
+                url: 'index.php?r=paciente/getdatapaciente',
+                data: {cpf: cpf},
+                type: 'POST',
+                success: function(response){
+                    var resposta = $.parseJSON(response);
+                    var ao_cpf = cpf; 
+                    ao_cpf = ao_cpf.replace( /(\d{3})(\d)/ , '$1.$2'); //Coloca um ponto entre o terceiro e o quarto dígitos
+                    ao_cpf = ao_cpf.replace( /(\d{3})(\d)/ , '$1.$2'); //Coloca um ponto entre o terceiro e o quarto dígitos
+                    ao_cpf = ao_cpf.replace( /(\d{3})(\d{1,2})$/ , '$1-$2'); //Coloca um hífen entre o terceiro e o quarto dígitos
+                    $('#up_cpf').val(ao_cpf);
+                    $('#up_nome').val(resposta[0]['nome']);  
+                },
+                error: function(request, status, error){
+                  console.log(request.responseText);
+                }
+            });
+        }
+    });
 ");
 ?>
 <div class="box box-primary">
     <div class="box-header with-border">
 
-<div style="background-color: #337ab7;color:white;padding: 10px"><i class="fa fa-file"></i> Documentos </div>
-<div style="margin-bottom:1em;margin-top: 1em">
-    <?= Html::a('Mostrar Todos', ['/documento/create', 'pagination' => true], ['class'=>'btn btn-primary grid-button']) ?>
-</div>
-<?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'options' => ['style' => 'font-size:12px;'],
-        // 'pjax' => true,
-        
-        /*'hover' => true,
-        'panel' => [
-            'type' => GridView::TYPE_PRIMARY,
-            'heading' => '<i class="fa fa-file"></i> Documentos'
-        ],*/
-        'columns' => [
-            // ['class' => 'yii\grid\SerialColumn'],
-            [
-              'class' => 'yii\grid\ActionColumn',
-              'template' => '{delete}',    
-              'contentOptions' => ['style' => 'width:5em;  min-width:5em;'],
-            ],
-
-            
-            [   
-                'attribute' => 'path',
-                'format' => 'raw',
-                'contentOptions' => ['style' => 'width:20em;  min-width:4em;'],
-                'value' => function($data){
-                    $nome = Yii::$app->db->createCommand('SELECT path FROM documento WHERE id ='.$data->id)->queryScalar(); 
-                    if(!empty($data->projeto_id)){
-                        return Html::a(
-                            $nome, 
-                            Yii::$app->basePath.'/web/uploaded-files/'.$data->projeto_id.'/'.$data->path,
-                             [                                 // link options
-                             'title'=>'Download!',
-                             'target'=>'_blank',
-                             'class' => 'linksWithTarget',
-                             'data-pjax'=>"0"
-                           ]
-                        );
+        <div style="background-color: #337ab7;color:white;padding: 10px"><i class="fa fa-file"></i> Documentos </div>
+        <div style="margin-bottom:1em;margin-top: 1em">
+            <?= Html::a('Mostrar Todos', ['/documento/create', 'pagination' => true], ['class' => 'btn btn-primary grid-button']) ?>
+        </div>
+        <?= GridView::widget([
+            'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+            'options' => ['style' => 'font-size:12px;'],
+            'columns' => [
+                [
+                    'header' => '<span style="color:#337ab7">Excluir</span>',
+                    'class' => 'yii\grid\ActionColumn',
+                    'template' => '{delete}',
+                    'contentOptions' => ['style' => 'width:5em;  min-width:5em; text-align: center'],
+                ],
+                [
+                    'header' => '<span style="color:#337ab7">Nome do Paciente</span>',
+                    'format' => 'raw',
+                    'attribute' => 'pacienteNome',
+                    'value' => function ($data) {
+                        return Yii::$app->db->createCommand('SELECT nome FROM paciente WHERE id_paciente = ' . $data->id_paciente)->queryScalar();
                     }
-                    else{
-                        return Html::a(
-                            $nome, 
-                            Yii::$app->basePath.'/web/uploaded-files/outros/'.$data->path,
-                             [                                 // link options
-                             'title'=>'Download!',
-                             'target'=>'_blank',
-                             'class' => 'linksWithTarget',
-                             'data-pjax'=>"0"
-                           ]
-                        );
+                ],
+                [
+                    'header' => '<span style="color:#337ab7">CPF</span>',
+                    'format' => 'raw',
+                    'attribute' => 'pacienteCPF',
+                    'value' => function ($data) {
+                        return Yii::$app->db->createCommand('SELECT cpf FROM paciente WHERE id_paciente = ' . $data->id_paciente)->queryScalar();
                     }
-                }
+                ],
+                [
+                    'header' => '<span style="color:#337ab7">Tipo</span>',
+                    'value' => function ($data) {
+                        if (!empty($data->id_tipo_documento))
+                            return Yii::$app->db->createCommand('SELECT nome FROM tipo_documento WHERE id_tipo_documento = ' . $data->id_tipo_documento)->queryScalar();
+                    }
+                ],
+                [
+                    'header' => '<span style="color:#337ab7">Data</span>',
+                    'format' => 'raw',
+                    'contentOptions' => ['style' => 'text-align: center; width:10em;  min-width:10em;'],
+                    'attribute' => 'data',
+                ],
+                'observacao',
+                [
+                    'header' => '<span style="color:#337ab7">Download</span>',
+                    'format' => 'raw',
+                    'contentOptions' => ['style' => 'width:20em;  min-width:4em; text-align: center'],
+                    'value' => function ($data) {
+                        $nome = Yii::$app->db->createCommand('SELECT path FROM documento WHERE id_documento =' . $data->id_documento)->queryScalar();
+                        if (!empty($data->path)) {
+                            return Html::a(
+                                '<i class="fa fa-fw fa-download" style="text-align: center; font-size: 15px;"></i>',
+                                $data->path,
+                                [                                 // link options
+                                    'title' => 'Fazer download',
+                                    'target' => '_blank',
+                                    'class' => 'linksWithTarget',
+                                    'data-pjax' => "0"
+                                ]
+                            );
+                        } else {
+                            return Html::a(
+                                '<span style="color:#337ab7">Não há documento</span>',
+                                ''
+                            );
+                        }
+                    }
+                ],
             ],
-            [
-                'attribute' => 'projeto',
-                'format' => 'raw',
-                'value' => function($data){
-                    if(!empty($data->projeto_id))
-                        return Yii::$app->db->createCommand('SELECT nome FROM projeto WHERE id ='.$data->projeto_id)->queryScalar();
-                },
-            ],
-            [
-                'header' => '<span style="color:#337ab7">Área</span>',
-                'format' => 'raw',
-                'value' => function($data){
-                    if(!empty($data->projeto_id))
-                        return Yii::$app->db->createCommand('SELECT planta FROM projeto WHERE id ='.$data->projeto_id)->queryScalar(); 
-                    
-                }
-            ],
-            [
-                'header' => '<span style="color:#337ab7">Descrição do Projeto</span>',
-                'format' => 'raw',
-                'value' => function($data){
-                    if(!empty($data->projeto_id))
-                        return Yii::$app->db->createCommand('SELECT descricao FROM projeto WHERE id ='.$data->projeto_id)->queryScalar();
-                },
-            ],
-
-            [
-                'header' => '<span style="color:#337ab7">Revisão</span>',
-                'value' => function($data){
-                    if(!empty($data->revisao))
-                        return $data->revisao;
-                }
-            ], 
-            [
-                'header' => '<span style="color:#337ab7">Data</span>',
-                'value' => function($data){
-                    if(!empty($data->data))
-                        return date_format(DateTime::createFromFormat('Y-m-d', $data->data), 'd/m/Y');
-                }
-            ], 
-            [
-                'header' => '<span style="color:#337ab7">Tipo</span>',
-                'value' => function($data){
-                    if(!empty($data->tipo))
-                        return $data->tipo;
-                }
-            ], 
-            [
-                'attribute' => 'is_global',
-                'format' => 'raw',
-                'value' => function($data){
-                    return $data->is_global==1 ? 'Sim' : 'Não';
-                },
-            ],
-            // 'criado',
-            // 'modificado',
-
-            
-        ],
-    ]); ?>
-</div>
+        ]); ?>
+    </div>
 </div>
 
 <div class="documento-form">
 
-<div class="box box-primary">
-        <div class="box-header with-border">    
-    <?php $form = ActiveForm::begin(); ?>
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <?php $form = ActiveForm::begin(['action' => ['/documento/upload'], 'options' => ['method' => 'post']]); ?>
 
-     <div class="row">       
-        <div class="col-md-4">
-    <?= $form->field($model, 'projeto_id')->dropDownList($listProjetos,['prompt'=>'Selecione um Projeto']) ?>
- 
-    <?= $form->field($model, 'path[]')->fileInput(['class'=>'dropify', 'multiple' => true]); ?>
-    </div>
-    <div class="col-md-2">
-    <?= $form->field($model, 'revisao')->textInput() ?>   
-    
-    <?= $form->field($model, 'data')->widget(\yii\widgets\MaskedInput::className(), [
-                        'mask' => '99/99/9999',
-                    ]) ?>
-    </div>
-    <div class="col-md-2">
+            <div class="row">
 
-    <?= $form->field($model, 'tipo')->textInput(['maxlength' => true]) ?>
-     </div>
-         <div class="col-md-2">
-            <?= $form->field($model, 'is_global')->checkbox(['maxlength' => true]) ?>
-         </div>
-    </div>
-   
-    
-<br>
-    <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Cadastrar' : 'Cadastrar', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-success']) ?>
-    </div>
+                <div class="col-md-12">
 
-    <?php ActiveForm::end(); ?>
-</div>
+                    <div class="col-md-4">
+                    <div class="form-group col-md-3" style="width:300px;padding: 0" id="autocomplete_div_0">
+                        <?= $form->field($model, 'id_tipo_documento')->dropDownList($listTipoDoc, ['prompt' => 'Selecione um tipo']) ?>
+                    </div>
+            </div>
+                    <div class="col-md-4">
+                        <div class="form-group col-md-3" style="width:300px;padding: 0" id="autocomplete_div_0">
+                            <label>Outro</label>
+                            <input class="np_autocomplete form-control" id="outro_tipo" type="text" name="Documento[outro_tipo]" readonly=true>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                    <div class="form-group col-md-3" style="width:300px;padding: 0" id="autocomplete_div_0">
+                        <?= $form->field($model, 'data')->widget(\yii\widgets\MaskedInput::className(), [
+                            'mask' => '99/99/9999',
+                        ]) ?>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group col-md-4" style="width:300px;padding: 0" id="autocomplete_div_0">
+                            <label>CPF</label>
+                            <input class="np_autocomplete form-control" id="up_cpf" type="text" name="Documento[cpf]" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group col-md-3" style="width:300px;padding: 0" id="autocomplete_div_0">
+                            <label>Nome</label>
+                            <input class="np_autocomplete form-control" id="up_nome" type="text" name="Documento[nome]" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+
+                    <div class="form-group col-md-4">
+                        <?= $form->field($model, 'path')->fileInput(['class' => 'dropify', 'multiple' => true]); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group col-md-6">
+                            <?= $form->field($model, 'observacao')->textarea() ?>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="form-group" style="text-align: center">
+                <?= Html::submitButton('Cadastrar', ['class' => 'btn btn-success']) ?>
+            </div>
+        </div>
+        <br>
+        <?php ActiveForm::end(); ?>
+    </div>
 </div>
 </div>

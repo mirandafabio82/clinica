@@ -14,7 +14,7 @@ $this->registerJs('
     console.log("aa");
     $("#dbuser-password").text("");
 
-    document.title = "HCN - Contatos";
+    document.title = "Contatos";
   });
 ');
 ?>

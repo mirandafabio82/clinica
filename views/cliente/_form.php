@@ -14,7 +14,7 @@ use yii\helpers\Url;
 <?php
 $this->registerJs("
     $( document ).ready(function() {
-        document.title = 'HCN - Clientes';
+        document.title = 'Clientes';
     });
 
     $('td').click(function (e) {
