@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use yii\filters\AccessControl;
+
 /**
  * AgendaController implements the CRUD actions for Agenda model.
  */
@@ -80,6 +81,9 @@ class AgendaController extends Controller
         if (isset($_GET['pagination'])) $dataProvider->pagination = false;
 
         $model = new Agendamento();
+
+        // Cancelar agendamentos não confirmados
+        $status = Yii::$app->db->createCommand('UPDATE `agendamento` SET id_status = 3, descricao = "Paciente não confirmou o agendamento" WHERE horario < CURDATE() AND id_status = 1 AND descricao = ""')->execute();
 
         $status = Yii::$app->db->createCommand('SELECT id, status FROM agenda_status')->queryAll();
         $listStatus = ArrayHelper::map($status, 'id', 'status');
@@ -175,10 +179,6 @@ class AgendaController extends Controller
         $up_status = Yii::$app->request->post()['status'];
         $up_descricao = Yii::$app->request->post()['descricao'];
 
-        $pizza  = "piece1 piece2 piece3 piece4 piece5 piece6";
-        $pieces = explode(" ", $pizza);
-        $teste = $pieces[14]; // piece1
-
         Yii::$app->db->createCommand('UPDATE agendamento SET nome="' . $up_nome . '",cpf="' . $up_cpf . '",horario="' . $up_horario . '",tipo_atendimento="' . $up_tipo_atendimento . '",plano_particular="' . $up_plano_particular . '",id_status=' . $up_status . ',descricao="' . $up_descricao . '" WHERE id_agendamento=' . $id)->execute();
 
         return $this->redirect(['create']);
@@ -222,7 +222,7 @@ class AgendaController extends Controller
         return $this->redirect(['create']);
     }
 
-    public function actionDeleteOne()
+    public function actionDeleteone()
     {
 
         $id = Yii::$app->request->post()['id'];
@@ -237,7 +237,12 @@ class AgendaController extends Controller
 
         $id = Yii::$app->request->post()['id'];
 
-        Yii::$app->db->createCommand('UPDATE agendamento SET id_status = 2 WHERE id_agendamento= ' . $id)->execute();
+        $model =  $this->findModel($id);
+        if($model->descricao == '') {
+            Yii::$app->db->createCommand('UPDATE agendamento SET id_status = 2 WHERE id_agendamento= ' . $id)->execute();
+        } else if ($model->descricao == 'Paciente não confirmou o agendamento') {
+            Yii::$app->db->createCommand('UPDATE agendamento SET id_status = 2, descricao = "" WHERE id_agendamento= ' . $id)->execute();
+        }
 
         return $this->redirect(['create']);
     }
@@ -268,11 +273,14 @@ class AgendaController extends Controller
 
     public function actionUpdateevent()
     {
+
         if (Yii::$app->request->isAjax) {
             if (empty(Yii::$app->request->post()['horario'])) {
                 return json_encode(Yii::$app->db->createCommand('UPDATE agendamento SET horario="' . Yii::$app->request->post()['horario'] . '" WHERE id_agendamento=' . Yii::$app->request->post()['id'])->execute());
             }
         }
+
+        return $this->redirect(['create']);
     }
 
     public function actionGetagendamento()

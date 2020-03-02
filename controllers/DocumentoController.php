@@ -119,7 +119,7 @@ class DocumentoController extends Controller
         $tipo_docs = Yii::$app->db->createCommand('SELECT id_tipo_documento, nome FROM tipo_documento  UNION SELECT 1003,"Outro"')->queryAll();
         $listTipoDoc = ArrayHelper::map($tipo_docs, 'id_tipo_documento', 'nome');
         
-        return $this->redirect('create', [
+        return $this->render('create', [
             'model' => $model,
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,

@@ -121,6 +121,10 @@ $('#deleteEvent').click(function(){
   });
 });
 
+$('#forma_pagamento').click(function(){
+  $('#forma_pagamento_modal').modal('show');
+});
+
 
     $('#updateEvent').click(function(){       
       var up_nome = $('#up_nome').val();
@@ -130,7 +134,7 @@ $('#deleteEvent').click(function(){
       var up_plano_particular = $('#up_plano_particular').val();
       var up_status = $('#up_status').val();
       var up_descricao = $('#up_descricao').val();
-
+      up_horario = up_horario.replace('T',' ');
       var data =  {id: evento_id, nome: up_nome, tipo_atendimento: up_tipo_atendimento, cpf: up_cpf, horario: up_horario, plano_particular: up_plano_particular, status: up_status, descricao: up_descricao};
 
       console.log(data);
@@ -255,7 +259,7 @@ $('#deleteEvent').click(function(){
           if(event.end != null){
             var hr_final = event.end._i[0]+'-'+(event.end._i[1] + 1)+'-'+event.end._i[2]+' '+event.end._i[3]+':'+event.end._i[4]; 
           }
-          console.log(hr_inicio);
+
           $.ajax({
             url: 'index.php?r=agenda/updateevent',
             data: {id: event.id, hr_inicio: hr_inicio, hr_final: hr_final},
@@ -264,7 +268,6 @@ $('#deleteEvent').click(function(){
                  console.log('success');
             },
             error: function(request, status, error){
-              
             }
           });
       },
@@ -291,7 +294,7 @@ $('#deleteEvent').click(function(){
       },
 
       eventClick: function(calEvent, jsEvent, view) {
-        document.getElementById('update-form').action = '/web/index.php?r=agenda%2Fupdate%2F&id='+calEvent.id;
+
         evento_id = calEvent.id;
         $.ajax({ 
           url: 'index.php?r=agenda/getevent',
@@ -299,7 +302,6 @@ $('#deleteEvent').click(function(){
           type: 'POST',
           success: function(response){
             var resposta = $.parseJSON(response)
-            console.log(resposta);
             $('#up_nome').val(resposta['nome']);
             $('#up_tipo_atendimento').val(resposta['tipo_atendimento']);
             $('#up_cpf').val(resposta['cpf']);
@@ -607,8 +609,6 @@ Modal::end();
       </div>
       <div class="modal-body">
 
-        <?php $form = ActiveForm::begin();
-        $form->options['id'] = 'update-form'; ?>
         <div class="row">
           <div class="col-md-12">
             <div class="col-md-6">
@@ -656,7 +656,6 @@ Modal::end();
             </div>
 
           </div>
-          <?php ActiveForm::end(); ?>
           <div style="text-align: center">
             <button class="btn btn-primary" id="updateEvent">Alterar</button>
             <button style="margin-left: 10px;" class="btn btn-danger" id="deleteEvent">Excluir</button>
@@ -696,9 +695,9 @@ Modal::end();
                 <input type="datetime-local" id="conf_horario" name="Agenda[horario]" class="form-control" readonly>
               </div>
 
-              <div class="autocomplete col-md-3" style="width:300px;padding: 0; margin-top: 15px;">
-                <label>Responsável</label> <br>
-                <input type="number" id="conf_responsavel" name="Agenda[id_responsavel]" class="form-control" required>
+              <div class="autocomplete col-md-3" style="width:300px; padding: 0; margin-top: 15px;" id="autocomplete_div_0">
+                <label>Responsável</label>
+                <?= Html::dropDownList('Agenda[id_responsavel]', 'responsavel', $listResponsavel, ['id' => 'conf_responsavel', 'class' => 'form-control', 'prompt' => 'Selecione um responsavel']) ?>
               </div>
 
               <div class="autocomplete col-md-2" style="width:300px;padding: 0; margin-top: 15px;">
@@ -718,16 +717,16 @@ Modal::end();
                 <input type="number" id="conf_dente" name="Agenda[dente]" class="form-control" required>
               </div>
 
-              <div class="autocomplete col-md-2" style="width:300px;padding: 0; margin-top: 15px;">
+              <div class="autocomplete col-md-3" style="width:300px;padding: 0; margin-top: 15px;">
+                <label>Forma de pagamento</label> <br>
+                <input type="text" id="forma_pagamento" name="Agenda[forma_pagamento]" class="form-control" readonly>
+              </div>
+
+              <div class="autocomplete col-md-3" style="width:300px;padding: 0; margin-top: 15px;">
                 <label>Parcelamento</label>
                 <select class="form-control" id="conf_parcela" name="Agenda[parcela]"></select>
               </div>
 
-
-              <div class="autocomplete col-md-3" style="width:300px;padding: 0; margin-top: 15px;">
-                <label>Forma de pagamento</label> <br>
-                <input type="number" id="forma_pagamento" name="Agenda[forma_pagamento]" class="form-control" required>
-              </div>
             </div>
 
             <div class="col-md-12" style="margin-top: 15px">
@@ -745,6 +744,24 @@ Modal::end();
   </div>
 </div>
 
+<div id="forma_pagamento_modal" class="modal fade" role="dialog" style="z-index: 999999999">
+  <div class="modal-dialog" style="width:25%">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+        <h4 class="modal-title" style="text-align: center">Tratamento Realizado</h4>
+      </div>
+      <div class="modal-body">
+
+        <div style="text-align: center; margin-top: 15px">
+          <button class="btn btn-success" id="saveTratamento" onclick="finishAgendamento()">Salvar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 <script>
   var id_agendamento;
 
@@ -809,6 +826,7 @@ Modal::end();
         $('#conf_valor').attr("min", parseInt(resposta['valor_inicial']));
         $('#conf_valor').attr("max", parseInt(resposta['valor_final']));
         $('#conf_tratamento').val(resposta['nome_atendimento']);
+        $('#conf_responsavel').val(resposta['id_responsavel']);
         document.getElementById("up_tipo_atendimento").value = resposta['tipo_atendimento'];
 
         // Add options parcelamento

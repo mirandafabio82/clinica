@@ -55,10 +55,14 @@ class ImpressaoController extends Controller
     public function actionGeraratestadocomparecimento()
     {
         
-        $bm_page = $this->renderPartial('relatorio/_atestado');
+        $page = $this->renderPartial('relatorio/_atestado', [
+            'nome' => 'Rafael de Oliveira Bahia',
+            'rg' => '14.023.550-76',
+            'data' => '01/março/2020'
+        ]);
 
         $mpdf = new \Mpdf\Mpdf();
-        $mpdf->WriteHTML($bm_page);
+        $mpdf->WriteHTML($page);
         $mpdf->Output();
     }
 }

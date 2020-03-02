@@ -269,18 +269,18 @@ $usuario = Yii::$app->db->createCommand('SELECT * FROM user WHERE id=' . Yii::$a
           <li><a href="<?= Url::to(['tarefa/index']) ?>"><i class="fa fa-calendar"></i> <span>Gerenciamento das Atividades</span></a></li>
           <li><a href="<?= Url::to(['atividademodelo/create']) ?>"><i class="fa fa-tablet"></i> <span>Atividades Modelo</span></a></li> -->
           <!-- <li><a href="<?= Url::to(['paciente/create']) ?>"><i class="fa fa-user"></i> <span>Pacientes</span></a></li> -->
-
+        
           <li class="treeview">
             <a href="#">
-              <i class="fa fa-address-book"></i> <span>Pacientes</span>
+              <i class="fa fa-user"></i> <span>Pacientes</span>
               <span class="pull-right-container" style="margin-right: 20px;">
                 <i class="fa fa-angle-left pull-right"></i>
               </span>
             </a>
             <ul class="treeview-menu" style="display: none;">
-              <li><a href="<?= Url::to(['paciente/create']) ?>"><i class="fa fa-bar-chart"></i> Criar / Listar </a></li>
+              <li><a href="<?= Url::to(['paciente/create']) ?>"><i class="fa fa-user-plus"></i> Criar / Listar </a></li>
 
-              <!-- <li><a href="<?= Url::to(['paciente/profile']) ?>"><i class="fa fa-vcard"></i> Perfil </a></li> -->
+              <li><a href="<?= Url::to(['paciente/profile']) ?>"><i class="fa fa-vcard"></i> Histórico </a></li>
             </ul>
           </li>
 
