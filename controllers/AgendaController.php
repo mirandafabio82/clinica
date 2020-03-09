@@ -99,6 +99,8 @@ class AgendaController extends Controller
 
         $arrayEventos = Yii::$app->db->createCommand('SELECT * FROM agendamento a JOIN agenda_status s ON a.id_status = s.id WHERE a.id_status <> 3')->queryAll();
 
+        $bandeira = Yii::$app->db->createCommand('SELECT id_forma_pagamento, bandeira FROM forma_pagamento')->queryAll();
+        $listBandeira = ArrayHelper::map($bandeira, 'id_forma_pagamento', 'bandeira');
 
         $resp_autocomplete = '';
         foreach ($consultas as $key => $res) {
@@ -158,6 +160,7 @@ class AgendaController extends Controller
                 'arrayEventos' => $arrayEventos,
                 'listConsultas' => $listConsultas,
                 'resp_autocomplete' => $resp_autocomplete,
+                'listBandeira' => $listBandeira
             ]);
         }
     }
@@ -209,6 +212,22 @@ class AgendaController extends Controller
 
         Yii::$app->db->createCommand('UPDATE agendamento SET id_status = 4 WHERE id_agendamento= ' . $id)->execute();
 
+        $forma = Yii::$app->request->post()['forma_pagamento'];
+
+        $desconto = Yii::$app->request->post()['desconto_valor'];
+        $valor_final = Yii::$app->request->post()['valor_pago'];
+
+        if ($forma == 'money') {
+            Yii::$app->db->createCommand('INSERT INTO pagamento(id_agendamento, forma_pagamento, desconto, valor_pago) VALUES (' . $id . ', Dinheiro, ' . $desconto . ',' . $valor_final . ')')->execute();
+        } else {
+
+            $bandeira_card = Yii::$app->request->post()['bandeira_card'];
+            $transacao_card = Yii::$app->request->post()['transacao_card'];
+            $parcelamento_card = Yii::$app->request->post()['parcelamento_card'];
+
+            Yii::$app->db->createCommand('INSERT INTO pagamento(id_agendamento, forma_pagamento, id_bandeira, tipo_transacao, desconto, valor_pago, parcelamento) VALUES (' . $id . ', Cartao, ' . $bandeira_card . ',"' . $transacao_card . '",' . $desconto . ',' . $valor_final . ',' . $parcelamento_card . ')')->execute();
+        }
+
         return $this->redirect(['create']);
     }
 
@@ -238,7 +257,7 @@ class AgendaController extends Controller
         $id = Yii::$app->request->post()['id'];
 
         $model =  $this->findModel($id);
-        if($model->descricao == '') {
+        if ($model->descricao == '') {
             Yii::$app->db->createCommand('UPDATE agendamento SET id_status = 2 WHERE id_agendamento= ' . $id)->execute();
         } else if ($model->descricao == 'Paciente não confirmou o agendamento') {
             Yii::$app->db->createCommand('UPDATE agendamento SET id_status = 2, descricao = "" WHERE id_agendamento= ' . $id)->execute();
@@ -297,5 +316,23 @@ class AgendaController extends Controller
                 return json_encode(Yii::$app->db->createCommand('SELECT id_agendamento, nome, tipo_atendimento, cpf, DATE_FORMAT(horario, "%Y-%m-%dT%H:%i:%s") AS horario, plano_particular, c.id as status, descricao, c.cor FROM agendamento JOIN agenda_status c ON (agendamento.id_status = c.id) WHERE horario BETWEEN "'  . $dataStart . '" AND "' . $dataEnd . '" ORDER BY id_status ASC,  horario ASC')->queryAll());
             }
         }
+    }
+
+    public function actionGetformapagamento()
+    {
+        $bandeira = Yii::$app->request->post()['bandeira'];
+        $tipo_transacao = Yii::$app->db->createCommand('SELECT debito, credito_a_vista, credito_parcelado_2x6, credito_parcelado_7x12 FROM `forma_pagamento` WHERE id_forma_pagamento = ' . $bandeira)->queryAll();
+        $json = json_encode($tipo_transacao);
+
+        $retorno = "";
+
+        $myArr = array();
+
+        $tipo_transacao[0]['debito'] != '' ? array_push($myArr, "Debito") : "";
+        $tipo_transacao[0]['credito_a_vista'] != '' ?  array_push($myArr, "Credito a Vista") : "";
+        $tipo_transacao[0]['credito_parcelado_2x6'] != '' ?  array_push($myArr, "Credito Parcelado 2 a 6") : "";
+        $tipo_transacao[0]['credito_parcelado_7x12'] != '' ?  array_push($myArr, "Credito Parcelado 7 a 12") : "";
+
+        return json_encode($myArr);
     }
 }

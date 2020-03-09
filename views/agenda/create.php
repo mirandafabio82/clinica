@@ -22,6 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'resp_autocomplete' => $resp_autocomplete,
         'listProcedimento' => $listProcedimento,
+        'listBandeira' => $listBandeira
     ]) ?>
 
 </div>

@@ -121,10 +121,114 @@ $('#deleteEvent').click(function(){
   });
 });
 
-$('#forma_pagamento').click(function(){
-  $('#forma_pagamento_modal').modal('show');
+
+
+$('#save_forma_pagamento').click(function(){
+  var tipo;
+  if($('#conf_tipoPagamento').val() == 'money') {
+    tipo = 'Dinheiro';
+  } else {
+    tipo = 'Cartao';
+  }
+  $('#forma_pagamento').val(tipo + ' - ' + $('#valor_final').val());
+  
+  $('#forma_pagamento_modal').modal('toggle');
+  
 });
 
+$('#forma_pagamento').click(function(){
+  $('#forma_pagamento_modal').modal('show');
+  $('#valor_final').val(parseFloat($('#conf_valor').val()).toFixed(2));
+});
+
+$('#conf_tipoPagamento').change(function(){
+    if($('#conf_tipoPagamento').val() == 'card') {
+      $('#bandeira_cartao').removeAttr('hidden');
+    } else {
+      $('#bandeira_cartao').attr('hidden', 'true');
+      $('#div_tipo_transacao').attr('hidden', 'true');
+      $('#div_parcelamento').attr('hidden', 'true');  
+    }
+});
+
+$('#desconto_valor').change(function(){
+  var desconto = parseFloat($('#desconto_valor').val());
+  var valor = parseFloat($('#conf_valor').val());
+
+  if(desconto > valor) {
+    desconto = valor;
+  } 
+  valor_final = valor - desconto;
+  valor_final = valor_final.toFixed(2);
+
+  desconto = desconto.toFixed(2);
+  
+  $('#desconto_valor').val(desconto);
+  $('#valor_final').val(valor_final);
+
+  $('#conf_parcela').empty();
+
+  // Add options parcelamento
+  for (var i = 1; i <= 12; i++) {
+    var valor_parcela = valor_final / i;
+
+    if (valor_parcela < 50) break;
+
+    var select = document.getElementById('conf_parcela');
+    var option = document.createElement('option');
+    option.text = i + \"x de R$ \" + valor_parcela.toFixed(2);
+    select.add(option);
+
+  }
+});
+
+$('#conf_tipo_transacao').change(function(){
+    if($('#conf_tipo_transacao').val().includes('Credito')) {
+      $('#div_parcelamento').removeAttr('hidden');
+    } else {
+      $('#div_parcelamento').attr('hidden', 'true');
+    }
+});
+
+$('#conf_bandeira').change(function(){
+
+  $('#div_parcelamento').attr('hidden', 'true');
+
+  var tipo_transacao = 'tipo_transacao';
+  var bandeira_card = $('#conf_bandeira').val();
+  
+  $.ajax({ 
+    url: 'index.php?r=agenda/getformapagamento',
+    data: {tipo: tipo_transacao, bandeira: bandeira_card},
+    type: 'POST',
+    success: function(response){
+      console.log(response);
+      var resposta = $.parseJSON(response);
+      $('#conf_tipo_transacao').empty();
+      for(var i = 0; i < resposta.length; i++){
+        if(!resposta[i].includes('Parcelado')){
+
+          if(resposta[i].includes('Vista')) {
+            resposta[i] = 'Credito';
+          }
+
+          var select = document.getElementById(\"conf_tipo_transacao\");
+          var option = document.createElement(\"option\");
+          option.text = resposta[i];
+          select.add(option);
+        }
+      }
+
+      $('#div_tipo_transacao').removeAttr('hidden');
+      if($('#conf_tipo_transacao').val() == 'Credito') {
+        $('#div_parcelamento').removeAttr('hidden');
+      }
+    },
+    error: function(request, status, error){
+      console.log(error);
+    }
+  });
+});
 
     $('#updateEvent').click(function(){       
       var up_nome = $('#up_nome').val();
@@ -700,11 +804,6 @@ Modal::end();
                 <?= Html::dropDownList('Agenda[id_responsavel]', 'responsavel', $listResponsavel, ['id' => 'conf_responsavel', 'class' => 'form-control', 'prompt' => 'Selecione um responsavel']) ?>
               </div>
 
-              <div class="autocomplete col-md-2" style="width:300px;padding: 0; margin-top: 15px;">
-                <label>Valor</label>
-                <input class="form-control" id="conf_valor" type="number" name="Agenda[valor]">
-              </div>
-
             </div>
             <div class="col-md-6">
               <div class="autocomplete col-md-3" style="width:300px;padding: 0" id="autocomplete_div_0">
@@ -714,19 +813,13 @@ Modal::end();
 
               <div class="autocomplete col-md-3" style="width:300px;padding: 0; margin-top: 15px;">
                 <label>Dente</label> <br>
-                <input type="number" id="conf_dente" name="Agenda[dente]" class="form-control" required>
+                <input class="form-control" id="conf_dente" type="text" name="Agenda[dente]" required>
               </div>
 
               <div class="autocomplete col-md-3" style="width:300px;padding: 0; margin-top: 15px;">
                 <label>Forma de pagamento</label> <br>
-                <input type="text" id="forma_pagamento" name="Agenda[forma_pagamento]" class="form-control" readonly>
+                <input type="text" id="forma_pagamento" name="Agenda[forma_pagamento]" placeholder="Click to here" class="form-control" readonly>
               </div>
-
-              <div class="autocomplete col-md-3" style="width:300px;padding: 0; margin-top: 15px;">
-                <label>Parcelamento</label>
-                <select class="form-control" id="conf_parcela" name="Agenda[parcela]"></select>
-              </div>
-
             </div>
 
             <div class="col-md-12" style="margin-top: 15px">
@@ -744,24 +837,73 @@ Modal::end();
   </div>
 </div>
 
+
 <div id="forma_pagamento_modal" class="modal fade" role="dialog" style="z-index: 999999999">
-  <div class="modal-dialog" style="width:25%">
+  <div class="modal-dialog" style="width:50%">
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
 
-        <h4 class="modal-title" style="text-align: center">Tratamento Realizado</h4>
+        <h4 class="modal-title" style="text-align: center">Pagamento</h4>
       </div>
       <div class="modal-body">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="col-md-6">
 
+              <div class="autocomplete col-md-3" style="width:300px;padding: 0" id="autocomplete_div_0">
+                <label>Forma</label>
+                <select class="form-control" id="conf_tipoPagamento" name="Agenda[tipoPagamento]">
+                  <option value="money">Dinheiro</option>
+                  <option value="card">Cartao</option>
+                </select>
+
+              </div>
+
+              <div class="autocomplete col-md-3" style="width:300px; padding: 0; margin-top: 15px;" id="bandeira_cartao" hidden>
+                <label>Bandeira</label>
+                <?= Html::dropDownList('Agenda[id_bandeira]', 'bandeira', $listBandeira, ['id' => 'conf_bandeira', 'class' => 'form-control', 'prompt' => 'Selecione uma bandeira']) ?>
+              </div>
+
+              <div class="autocomplete col-md-3" style="width:300px;padding: 0; margin-top: 15px;">
+                <label>Desconto</label> <br>
+                <input class="form-control" id="desconto_valor" type="number" name="Agenda[desconto_valor]" required>
+              </div>
+
+              <div class="autocomplete col-md-3" style="width:300px;padding: 0; margin-top: 15px;" hidden id="div_parcelamento">
+                <label>Parcelamento</label>
+                <select class="form-control" id="conf_parcela" name="Agenda[parcela]"></select>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="autocomplete col-md-3" style="width:300px;padding: 0" id="autocomplete_div_0">
+                <label>Valor</label>
+                <input class="form-control" id="conf_valor" type="number" name="Agenda[valor]" readonly>
+              </div>
+
+              <div class="autocomplete col-md-3" style="width:300px;padding: 0; margin-top: 15px;" id="div_tipo_transacao" hidden>
+                <label>Tipo da transação</label>
+                <select class="form-control" id="conf_tipo_transacao" name="Agenda[tipo_transacao]"></select>
+              </div>
+
+              <div class="autocomplete col-md-3" style="width:300px;padding: 0; margin-top: 15px;">
+                <label>Valor Final</label> <br>
+                <input class="form-control" id="valor_final" type="number" name="Agenda[dente]" readonly>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
         <div style="text-align: center; margin-top: 15px">
-          <button class="btn btn-success" id="saveTratamento" onclick="finishAgendamento()">Salvar</button>
+          <button class="btn btn-success" id="save_forma_pagamento">Salvar</button>
         </div>
       </div>
     </div>
   </div>
 </div>
+
 <script>
   var id_agendamento;
 
@@ -786,6 +928,34 @@ Modal::end();
   function finishAgendamento() {
     var conf_dente = $('#conf_dente').val();
     var conf_tratamento = $('#conf_tratamento').val();
+
+    var forma = $('#conf_tipoPagamento').val();
+
+    var bandeira = '';
+    var transacao = '';
+    var parcelamento = '';
+
+    if (forma == 'card') {
+
+      bandeira = $('#conf_bandeira').val();
+      transacao = $('#conf_tipo_transacao').val();
+      parcelamento = $('#conf_parcela').val();
+    }
+
+    var desconto = $('#desconto_valor').val();
+    var valor_final = $('#valor_final').val();
+
+    if(desconto == '') {
+      desconto = 0;
+    }
+
+    console.log(forma);
+    console.log(bandeira);
+    console.log(transacao);
+    console.log(parcelamento);
+    console.log(desconto);
+    console.log(valor_final);
+
     if (conf_dente != '' && conf_tratamento != '') {
       $(document).ready(function() {
         $.ajax({
@@ -793,7 +963,13 @@ Modal::end();
           data: {
             id: id_agendamento,
             tratamento: conf_tratamento,
-            dente: conf_dente
+            dente: conf_dente,
+            forma_pagamento: forma,
+            bandeira_card: bandeira,
+            transacao_card: transacao,
+            parcelamento_card: parcelamento,
+            desconto_valor: desconto,
+            valor_pago: valor_final
           },
           type: 'POST',
           success: function(response) {
@@ -831,7 +1007,7 @@ Modal::end();
 
         // Add options parcelamento
         for (var i = 1; i <= 12; i++) {
-          var valor_parcela = resposta['valor_inicial'] / i;
+          var valor_parcela = resposta['valor_final'] / i;
 
           if (valor_parcela < 50) break;
 
