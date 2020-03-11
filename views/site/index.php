@@ -71,21 +71,6 @@ $this->title = 'Vital Sorrir';
   }
 </style>
 
-<?php
-$eventos = '';
-foreach ($arrayEventos as $key => $evt) {
-  $cor = 'blue';
-  $eventos .= "{
-                        id             : " . 4 . ",
-                        title          : '" . 'Teste' . "',
-                        start          : '" .'14:00' . "',
-                        end            : '" . '15:00' . "',
-                        backgroundColor: '" . $cor . "', 
-                        borderColor    : '" . $cor . "'
-                      },";
-}
-
-?>
 <div class="box-body no-padding">
 <img src="resources/dist/img/fundo_vital_sorrir.png">
 </div>

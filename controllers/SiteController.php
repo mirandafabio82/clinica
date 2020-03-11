@@ -58,139 +58,123 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $emitirAS = Yii::$app->db->createCommand('SELECT count(id) FROM projeto WHERE status=6')->queryScalar();
-        $aguardando = Yii::$app->db->createCommand('SELECT count(id) FROM projeto WHERE status=5')->queryScalar();
-        $concluido = Yii::$app->db->createCommand('SELECT count(id) FROM projeto WHERE status=2')->queryScalar();
-        $numBm = Yii::$app->db->createCommand('SELECT ultimo_bm FROM config')->queryScalar();
+        // $emitirAS = Yii::$app->db->createCommand('SELECT count(id) FROM projeto WHERE status=6')->queryScalar();
+        // $aguardando = Yii::$app->db->createCommand('SELECT count(id) FROM projeto WHERE status=5')->queryScalar();
+        // $concluido = Yii::$app->db->createCommand('SELECT count(id) FROM projeto WHERE status=2')->queryScalar();
+        // $numBm = Yii::$app->db->createCommand('SELECT ultimo_bm FROM config')->queryScalar();
 
-        $pagamentos_dia = Yii::$app->db->createCommand('SELECT * FROM bm_executante WHERE previsao_pgt BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 5 DAY) AND pago = 0 LIMIT 5')->queryAll();
+        // $pagamentos_dia = Yii::$app->db->createCommand('SELECT * FROM bm_executante WHERE previsao_pgt BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 5 DAY) AND pago = 0 LIMIT 5')->queryAll();
 
-        $logs = Yii::$app->db->createCommand('SELECT * FROM log ORDER BY id DESC LIMIT 5')->queryAll();
+        // $logs = Yii::$app->db->createCommand('SELECT * FROM log ORDER BY id DESC LIMIT 5')->queryAll();
 
-        $arrayEventos = Yii::$app->db->createCommand('SELECT * FROM agendamento')->queryAll();
+        // $arrayEventos = Yii::$app->db->createCommand('SELECT * FROM agendamento')->queryAll();
 
-        if(isset($_POST['contato']) && !empty($_POST['contato'])){
-                $contatos = Yii::$app->db->createCommand('SELECT id AS usuario_id FROM user WHERE nome = "'.$_POST['contato'].'" ORDER BY id DESC')->queryAll();                
-            }
-            else{
-                $contatos = Yii::$app->db->createCommand('SELECT usuario_id FROM contato ORDER BY usuario_id DESC')->queryAll();
-            }
+        // if(isset($_POST['contato']) && !empty($_POST['contato'])){
+        //         $contatos = Yii::$app->db->createCommand('SELECT id AS usuario_id FROM user WHERE nome = "'.$_POST['contato'].'" ORDER BY id DESC')->queryAll();                
+        //     }
+        //     else{
+        //         $contatos = Yii::$app->db->createCommand('SELECT usuario_id FROM contato ORDER BY usuario_id DESC')->queryAll();
+        //     }
 
 
-            $conts = '';            
-            foreach ($contatos as $key => $contato) { 
-                if(sizeof($contatos)-1 == 0){
-                    $conts .= $contato['usuario_id'];
-                    continue;
-                }     
-                if(empty($contato['usuario_id']) || sizeof($contatos)-1 == $key )      {
-                    $conts = substr($conts, 0, -1);
-                    continue;
-                }       
-                $conts .= $contato['usuario_id'].','; 
-            }
-
-           
-            $bm = ''; 
-            if(isset($_POST['bm']))
-                $bm = ' AND count(bm.id) > 0';            
-
-            $frs = ''; 
-            if(isset($_POST['frs']))
-                $frs = $_POST['frs'];
-
-            $mostrar_valor = ''; 
-            if(isset($_POST['valor']))
-                $mostrar_valor = $_POST['valor'];
-
-            $as_de = ''; 
-            if(!empty($_POST['as_de']))
-                $as_de = ' AND criado > "'.$_POST['as_de'].'"';
-
-            $as_ate = ''; 
-            if(!empty($_POST['as_ate']))
-                $as_ate = ' AND criado < "'.$_POST['as_ate'].'"';
-
-            $bm_de = ''; 
-            if(!empty($_POST['bm_de']))
-                $bm_de = ' AND data > "'.$_POST['bm_de'].'"';
-
-            $bm_ate = ''; 
-            if(!empty($_POST['bm_ate']))
-                $bm_ate = ' AND data < "'.$_POST['bm_ate'].'"';
+        //     $conts = '';            
+        //     foreach ($contatos as $key => $contato) { 
+        //         if(sizeof($contatos)-1 == 0){
+        //             $conts .= $contato['usuario_id'];
+        //             continue;
+        //         }     
+        //         if(empty($contato['usuario_id']) || sizeof($contatos)-1 == $key )      {
+        //             $conts = substr($conts, 0, -1);
+        //             continue;
+        //         }       
+        //         $conts .= $contato['usuario_id'].','; 
+        //     }
 
            
-            if(isset($_POST['projeto']) && !empty($_POST['projeto'])){  
-                $projetos = Yii::$app->db->createCommand('SELECT projeto.id AS projetoID, nome, projeto.descricao, site, projeto.contato, proposta, valor_proposta, projeto.qtd_km, nota_geral FROM projeto JOIN bm ON bm.projeto_id = projeto.id WHERE projeto.nome = "'.$_POST['projeto'].'" AND contato_id IN ('.$conts.') '.$as_de.' '.$as_ate.' '.$bm_de.' '.$bm_ate.' ORDER BY projeto.id DESC')->queryAll();
-            }
-            else{
-                $projetos = Yii::$app->db->createCommand('SELECT projeto.id AS projetoID, nome, projeto.descricao, site, projeto.contato, proposta, valor_proposta, projeto.qtd_km, nota_geral FROM projeto JOIN bm ON bm.projeto_id = projeto.id WHERE contato_id IN ('.$conts.') '.$as_de.' '.$as_ate.' '.$bm_de.' '.$bm_ate.' ORDER BY projeto.id DESC')->queryAll();
-            }
-                    $listProjetos = ArrayHelper::map($projetos,'id','nome');
+        //     $bm = ''; 
+        //     if(isset($_POST['bm']))
+        //         $bm = ' AND count(bm.id) > 0';            
 
-                    $prestadores = Yii::$app->db->createCommand('SELECT * FROM executante JOIN user ON user.id=executante.usuario_id WHERE is_prestador=1')->queryAll();
-               $listPrestadores = ArrayHelper::map($prestadores,'id','nome');
+        //     $frs = ''; 
+        //     if(isset($_POST['frs']))
+        //         $frs = $_POST['frs'];
 
-            //projetos com BM
-            $allProjetos = Yii::$app->db->createCommand('SELECT DISTINCT
-                projeto.id, 
-                CONCAT(projeto.nome, " (",(
-                SELECT DISTINCT
-                    CASE 
-                        WHEN projeto.is_conceitual=1 THEN "PCO"
-                        WHEN projeto.is_basico=1 THEN "PBA"
-                        WHEN projeto.is_detalhamento=1 THEN "PDE"
-                        WHEN projeto.is_detalhamento=1 AND projeto.is_configuracao=1 THEN "PDC"
-                        WHEN projeto.is_configuracao=1 THEN "CFG"  
-                        WHEN projeto.is_servico=1 THEN "SRV"
-                        ELSE ""
-                    END
+        //     $mostrar_valor = ''; 
+        //     if(isset($_POST['valor']))
+        //         $mostrar_valor = $_POST['valor'];
+
+        //     $as_de = ''; 
+        //     if(!empty($_POST['as_de']))
+        //         $as_de = ' AND criado > "'.$_POST['as_de'].'"';
+
+        //     $as_ate = ''; 
+        //     if(!empty($_POST['as_ate']))
+        //         $as_ate = ' AND criado < "'.$_POST['as_ate'].'"';
+
+        //     $bm_de = ''; 
+        //     if(!empty($_POST['bm_de']))
+        //         $bm_de = ' AND data > "'.$_POST['bm_de'].'"';
+
+        //     $bm_ate = ''; 
+        //     if(!empty($_POST['bm_ate']))
+        //         $bm_ate = ' AND data < "'.$_POST['bm_ate'].'"';
+
+           
+        //     if(isset($_POST['projeto']) && !empty($_POST['projeto'])){  
+        //         $projetos = Yii::$app->db->createCommand('SELECT projeto.id AS projetoID, nome, projeto.descricao, site, projeto.contato, proposta, valor_proposta, projeto.qtd_km, nota_geral FROM projeto JOIN bm ON bm.projeto_id = projeto.id WHERE projeto.nome = "'.$_POST['projeto'].'" AND contato_id IN ('.$conts.') '.$as_de.' '.$as_ate.' '.$bm_de.' '.$bm_ate.' ORDER BY projeto.id DESC')->queryAll();
+        //     }
+        //     else{
+        //         $projetos = Yii::$app->db->createCommand('SELECT projeto.id AS projetoID, nome, projeto.descricao, site, projeto.contato, proposta, valor_proposta, projeto.qtd_km, nota_geral FROM projeto JOIN bm ON bm.projeto_id = projeto.id WHERE contato_id IN ('.$conts.') '.$as_de.' '.$as_ate.' '.$bm_de.' '.$bm_ate.' ORDER BY projeto.id DESC')->queryAll();
+        //     }
+        //             $listProjetos = ArrayHelper::map($projetos,'id','nome');
+
+        //             $prestadores = Yii::$app->db->createCommand('SELECT * FROM executante JOIN user ON user.id=executante.usuario_id WHERE is_prestador=1')->queryAll();
+        //        $listPrestadores = ArrayHelper::map($prestadores,'id','nome');
+
+        //     //projetos com BM
+        //     $allProjetos = Yii::$app->db->createCommand('SELECT DISTINCT
+        //         projeto.id, 
+        //         CONCAT(projeto.nome, " (",(
+        //         SELECT DISTINCT
+        //             CASE 
+        //                 WHEN projeto.is_conceitual=1 THEN "PCO"
+        //                 WHEN projeto.is_basico=1 THEN "PBA"
+        //                 WHEN projeto.is_detalhamento=1 THEN "PDE"
+        //                 WHEN projeto.is_detalhamento=1 AND projeto.is_configuracao=1 THEN "PDC"
+        //                 WHEN projeto.is_configuracao=1 THEN "CFG"  
+        //                 WHEN projeto.is_servico=1 THEN "SRV"
+        //                 ELSE ""
+        //             END
                 
-                FROM escopo
-                    INNER JOIN atividademodelo ON atividademodelo.id = escopo.atividademodelo_id                
-                WHERE escopo.projeto_id = projeto.id
+        //         FROM escopo
+        //             INNER JOIN atividademodelo ON atividademodelo.id = escopo.atividademodelo_id                
+        //         WHERE escopo.projeto_id = projeto.id
                 
-                 ), ")") AS nome
+        //          ), ")") AS nome
                 
-            FROM
-                projeto
-            INNER JOIN escopo ON escopo.projeto_id = projeto.ID
-            INNER JOIN bm ON bm.projeto_id = projeto.ID
+        //     FROM
+        //         projeto
+        //     INNER JOIN escopo ON escopo.projeto_id = projeto.ID
+        //     INNER JOIN bm ON bm.projeto_id = projeto.ID
             
-            ORDER BY id DESC')->queryAll();
+        //     ORDER BY id DESC')->queryAll();
         
-               $listAllProjetos = ArrayHelper::map($allProjetos,'id','nome');
+        //        $listAllProjetos = ArrayHelper::map($allProjetos,'id','nome');
 
-               $proj_autocomplete = '';
-                foreach ($allProjetos as $key => $pr) {  
-                        $proj_autocomplete .= '"'.$pr['nome'].'", ';
-                } 
+        //        $proj_autocomplete = '';
+        //         foreach ($allProjetos as $key => $pr) {  
+        //                 $proj_autocomplete .= '"'.$pr['nome'].'", ';
+        //         } 
 
-               $contato = Yii::$app->db->createCommand('SELECT * FROM contato JOIN user ON user.id = contato.usuario_id')->queryAll();
-               $listContatos = ArrayHelper::map($contato,'id','nome');
+        //        $contato = Yii::$app->db->createCommand('SELECT * FROM contato JOIN user ON user.id = contato.usuario_id')->queryAll();
+        //        $listContatos = ArrayHelper::map($contato,'id','nome');
 
-               $cont_autocomplete = '';
-                foreach ($contato as $key => $cont) {  
-                    $cont_autocomplete .= '"'.$cont['nome'].'", ';
-                } 
+        //        $cont_autocomplete = '';
+        //         foreach ($contato as $key => $cont) {  
+        //             $cont_autocomplete .= '"'.$cont['nome'].'", ';
+        //         } 
 
-        return $this->render('index', [
-            'emitirAS' => $emitirAS,
-            'aguardando' => $aguardando,
-            'concluido' => $concluido,
-            'numBm' => $numBm,
-            'logs' => $logs,
-            'pagamentos_dia' => $pagamentos_dia,
-            'arrayEventos' => $arrayEventos,
-            'projetos' => $projetos,
-            'listProjetos' => $listProjetos,
-            'com_bm' => $bm,
-            'com_frs' => $frs,
-            'mostrar_valor' => $mostrar_valor,
-            'proj_autocomplete' => $proj_autocomplete,
-            'cont_autocomplete' => $cont_autocomplete,
-            'listAllProjetos' => $listAllProjetos
-        ]);
+        return $this->render('index');
     }
 
     /**

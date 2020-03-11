@@ -218,14 +218,18 @@ class AgendaController extends Controller
         $valor_final = Yii::$app->request->post()['valor_pago'];
 
         if ($forma == 'money') {
-            Yii::$app->db->createCommand('INSERT INTO pagamento(id_agendamento, forma_pagamento, desconto, valor_pago) VALUES (' . $id . ', Dinheiro, ' . $desconto . ',' . $valor_final . ')')->execute();
+            Yii::$app->db->createCommand('INSERT INTO pagamento(id_agendamento, forma_pagamento, desconto, valor_pago) VALUES (' . $id . ', "Dinheiro", ' . $desconto . ',' . $valor_final . ')')->execute();
         } else {
 
             $bandeira_card = Yii::$app->request->post()['bandeira_card'];
             $transacao_card = Yii::$app->request->post()['transacao_card'];
             $parcelamento_card = Yii::$app->request->post()['parcelamento_card'];
+            $parcelamento_card = explode("x", $parcelamento_card)[0];
 
-            Yii::$app->db->createCommand('INSERT INTO pagamento(id_agendamento, forma_pagamento, id_bandeira, tipo_transacao, desconto, valor_pago, parcelamento) VALUES (' . $id . ', Cartao, ' . $bandeira_card . ',"' . $transacao_card . '",' . $desconto . ',' . $valor_final . ',' . $parcelamento_card . ')')->execute();
+            
+
+
+            Yii::$app->db->createCommand('INSERT INTO pagamento(id_agendamento, forma_pagamento, id_bandeira, tipo_transacao, desconto, valor_pago, parcelamento) VALUES (' . $id . ', "Cartao", ' . $bandeira_card . ', "' . $transacao_card . '" ,' . $desconto . ',' . $valor_final . ',' . $parcelamento_card . ')')->execute();
         }
 
         return $this->redirect(['create']);

@@ -311,6 +311,7 @@ $this->registerJs("
         </div>
     </div>
 </div>
+
 <div class="form-group" style="text-align: center">
     <?= Html::submitButton($model->isNewRecord ? '<i class="fa fa-floppy-o" aria-hidden="true"></i> Cadastrar' : '<i class="fa fa-floppy-o" aria-hidden="true"></i> Salvar', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-barra', 'id' => $model->isNewRecord ? 'btnCreate' : 'btnUpdate']) ?>
 </div>

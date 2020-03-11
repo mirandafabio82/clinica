@@ -10,7 +10,7 @@ $this->title = 'Paciente';
 $this->params['breadcrumbs'][] = ['label' => 'Pacientes', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="paciente-create">
+<div class="paciente-create" style="background-color: white;">
 
   
     <?= $this->render('_form', [

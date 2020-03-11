@@ -270,7 +270,9 @@ $usuario = Yii::$app->db->createCommand('SELECT * FROM user WHERE id=' . Yii::$a
           <li><a href="<?= Url::to(['atividademodelo/create']) ?>"><i class="fa fa-tablet"></i> <span>Atividades Modelo</span></a></li> -->
           <!-- <li><a href="<?= Url::to(['paciente/create']) ?>"><i class="fa fa-user"></i> <span>Pacientes</span></a></li> -->
         
-          <li class="treeview">
+          <li><a href="<?= Url::to(['paciente/create']) ?>"><i class="fa fa-user"></i> <span>Paciente</span></a></li>
+
+          <!-- <li class="treeview">
             <a href="#">
               <i class="fa fa-user"></i> <span>Pacientes</span>
               <span class="pull-right-container" style="margin-right: 20px;">
@@ -282,7 +284,7 @@ $usuario = Yii::$app->db->createCommand('SELECT * FROM user WHERE id=' . Yii::$a
 
               <li><a href="<?= Url::to(['paciente/profile']) ?>"><i class="fa fa-vcard"></i> Histórico </a></li>
             </ul>
-          </li>
+          </li> -->
 
           <li class="treeview">
             <a href="#">
