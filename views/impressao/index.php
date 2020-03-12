@@ -32,18 +32,10 @@ $this->params['breadcrumbs'][] = $this->title;
         <div style="background-color: #337ab7;color:white;padding: 10px"><i class="fa fa-bar-chart"></i> Impressão </div>
         <div style="margin-top:1em">
             <?php $form = ActiveForm::begin(); ?>
-            <div class="row">
-                <div class="col-md-12">
-                    <label>Arquivo FRS</label>
-                </div>
-            </div>
-            <div class="row">
+            <div class="row" style="align-items: center">
                 <div class="col-md-4">
-
-                </div>
-                <div class="col-md-4">
-                    <?= Html::dropDownList('Impressao[type]', 'inputType', $listStatus, ['class' => 'form-control', 'id' => 'inputType']) ?>
-                    <?= Html::a('<span class="btn-label"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Visualizar BM</span>', ['geraratestadocomparecimento'], ['class' => 'btn btn-barra', 'target' => '_blank', 'style' => ' margin-right: 1em']) ?>
+                    <?= Html::dropDownList('Impressao[type]', 'inputType', $listDocumentos, ['class' => 'form-control', 'id' => 'inputType']) ?>
+                    <?= Html::a('<span class="btn-label"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Visualizar Documento</span>', ['geraratestadocomparecimento'], ['class' => 'btn btn-barra', 'target' => '_blank', 'style' => ' margin-right: 1em']) ?>
                 </div>
             </div>
             <?php ActiveForm::end(); ?>

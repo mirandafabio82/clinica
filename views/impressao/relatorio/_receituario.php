@@ -1,0 +1,1 @@
+<img src="resources/dist/img/background_receituario.jpg" width="100%">

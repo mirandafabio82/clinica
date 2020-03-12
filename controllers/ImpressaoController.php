@@ -37,11 +37,11 @@ class ImpressaoController extends Controller
 
     public function actionIndex()
     {
-        $status = Yii::$app->db->createCommand('SELECT id, status FROM agenda_status')->queryAll();
-        $listStatus = ArrayHelper::map($status, 'id', 'status');
+        $documentos = Yii::$app->db->createCommand('SELECT id_tipo_impressao, nome_documento FROM tipo_impressao')->queryAll();
+        $listDocumentos = ArrayHelper::map($documentos, 'id_tipo_impressao', 'nome_documento');
 
         return $this->render('index', [
-            'listStatus' => $listStatus,
+            'listDocumentos' => $listDocumentos,
         ]);
     }
 
@@ -52,17 +52,36 @@ class ImpressaoController extends Controller
         return parent::beforeAction($action);
     }
 
-    public function actionGeraratestadocomparecimento()
+    public function actionGerarfileanaminese()
     {
-        
-        $page = $this->renderPartial('relatorio/_atestado', [
-            'nome' => 'Rafael de Oliveira Bahia',
-            'rg' => '14.023.550-76',
-            'data' => '01/março/2020'
-        ]);
 
-        $mpdf = new \Mpdf\Mpdf();
-        $mpdf->WriteHTML($page);
-        $mpdf->Output();
+        // This will need to be the path relative to the root of your app.
+        $filePath = '/views/impressao/relatorio/';
+        // Might need to change '@app' for another alias
+        $completePath = Yii::getAlias('@app' . $filePath . 'VS_Bloco Anaminese_21x30.pdf');
+
+        return Yii::$app->response->sendFile($completePath, null, ['inline' => true]);
+    }
+
+    public function actionGerarfileatestado()
+    {
+
+        // This will need to be the path relative to the root of your app.
+        $filePath = '/views/impressao/relatorio/';
+        // Might need to change '@app' for another alias
+        $completePath = Yii::getAlias('@app' . $filePath . 'VS_Bloco Atestado_15x21.pdf');
+
+        return Yii::$app->response->sendFile($completePath, null, ['inline' => true]);
+    }
+
+    public function actionGerarfilereceituario()
+    {
+
+        // This will need to be the path relative to the root of your app.
+        $filePath = '/views/impressao/relatorio/';
+        // Might need to change '@app' for another alias
+        $completePath = Yii::getAlias('@app' . $filePath . 'VS_Bloco Receituario_15x21.pdf');
+
+        return Yii::$app->response->sendFile($completePath, null, ['inline' => true]);
     }
 }

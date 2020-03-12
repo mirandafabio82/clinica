@@ -269,7 +269,7 @@ $usuario = Yii::$app->db->createCommand('SELECT * FROM user WHERE id=' . Yii::$a
           <li><a href="<?= Url::to(['tarefa/index']) ?>"><i class="fa fa-calendar"></i> <span>Gerenciamento das Atividades</span></a></li>
           <li><a href="<?= Url::to(['atividademodelo/create']) ?>"><i class="fa fa-tablet"></i> <span>Atividades Modelo</span></a></li> -->
           <!-- <li><a href="<?= Url::to(['paciente/create']) ?>"><i class="fa fa-user"></i> <span>Pacientes</span></a></li> -->
-        
+
           <li><a href="<?= Url::to(['paciente/create']) ?>"><i class="fa fa-user"></i> <span>Paciente</span></a></li>
 
           <!-- <li class="treeview">
@@ -302,7 +302,21 @@ $usuario = Yii::$app->db->createCommand('SELECT * FROM user WHERE id=' . Yii::$a
 
           <li><a href="<?= Url::to(['documento/create']) ?>"><i class="fa fa-file"></i> <span>Documentos</span></a></li>
 
-          <li><a href="<?= Url::to(['impressao/index']) ?>"><i class="fa fa-print"></i> <span>Impressão</span></a></li>
+          <!-- <li><a href="<?= Url::to(['impressao/geraratestadocomparecimento']) ?>" target="_blank"><i class="fa fa-print"></i> <span>Impressão</span></a></li> -->
+
+          <li class="treeview">
+            <a href="#">
+              <i class="fa fa-print"></i> <span>Impressão</span>
+              <span class="pull-right-container" style="margin-right: 20px;">
+                <i class="fa fa-angle-left pull-right"></i>
+              </span>
+            </a>
+            <ul class="treeview-menu" style="display: none;">
+              <li><a href="<?= Url::to(['impressao/gerarfileanaminese']) ?>" target="_blank"><i class="fa fa-file"></i> Anaminese </a></li>
+              <li><a href="<?= Url::to(['impressao/gerarfileatestado']) ?> " target="_blank"><i class="fa fa-file"></i>Atestado</a></li>
+              <li><a href="<?= Url::to(['impressao/gerarfilereceituario']) ?> " target="_blank"><i class="fa fa-file"></i>Receituario</a></li>
+            </ul>
+          </li>
 
           <!-- <li><a href="<?= Url::to(['executante/create']) ?>"><i class="fa fa-user"></i> <span>Executantes</span></a></li> --
           
