@@ -97,6 +97,9 @@ class DocumentoController extends Controller
             mkdir($target, 0700, true);
         }
 
+        $fileName = str_replace("-", "_", $fileName);
+        $fileName = str_replace(" ", "_", $fileName);
+
         $fileTarget = $target . $fileName;
         $tempFileName = $_FILES["Documento"]["tmp_name"]['path'];
         $result = move_uploaded_file($tempFileName, $fileTarget);
