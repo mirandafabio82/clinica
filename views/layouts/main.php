@@ -238,6 +238,36 @@ $usuario = Yii::$app->db->createCommand('SELECT * FROM user WHERE id=' . Yii::$a
 
   <div class="wrap">
 
+    <header class="main-header">
+      <!-- Header Navbar: style can be found in header.less -->
+      <nav class="navbar">
+        <!-- Sidebar toggle button-->
+        <a href="#" style="background-color: #5fb2bd; color: gray; border-radius: 10%; margin-top: 2%; margin-left: 2%" class="sidebar-toggle" data-toggle="push-menu" role="button">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </a>
+
+        <div class="navbar-custom-menu">
+          <ul class="nav navbar-nav">
+            <!-- Messages: style can be found in dropdown.less-->
+
+
+
+            <!-- User Account: style can be found in dropdown.less -->
+            <li class="dropdown user user-menu">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              </a>
+              <ul class="dropdown-menu">
+
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </header>
+
     <!-- Left side column. contains the sidebar -->
     <aside class="main-sidebar" style="padding-top: 0px; background-color: #e1e4e4;">
       <!-- sidebar: style can be found in sidebar.less -->
@@ -359,14 +389,6 @@ $usuario = Yii::$app->db->createCommand('SELECT * FROM user WHERE id=' . Yii::$a
       <!-- /.content -->
 
     </div>
-    <!-- 
-<footer class="footer">
-  <div class="container">
-    <p class="pull-left">Todos os direitos reservados &copy; <span style="color: #3c8dbc">HCN </span><?= date('Y') ?></p>
-
-    <p class="pull-right">Desenvolvido por <span style="color: #3c8dbc">F-Sistemas </span></p>
-  </div>
-</footer> -->
     </a>
 
     <!-- jQuery 3 -->
