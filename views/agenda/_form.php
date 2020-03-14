@@ -202,7 +202,7 @@ $('#conf_bandeira').change(function(){
     data: {tipo: tipo_transacao, bandeira: bandeira_card},
     type: 'POST',
     success: function(response){
-      console.log(response);
+      
       var resposta = $.parseJSON(response);
       $('#conf_tipo_transacao').empty();
       for(var i = 0; i < resposta.length; i++){
@@ -241,7 +241,7 @@ $('#conf_bandeira').change(function(){
       up_horario = up_horario.replace('T',' ');
       var data =  {id: evento_id, nome: up_nome, tipo_atendimento: up_tipo_atendimento, cpf: up_cpf, horario: up_horario, plano_particular: up_plano_particular, status: up_status, descricao: up_descricao};
 
-      console.log(data);
+      
 
       $.ajax({ 
         url: 'index.php?r=agenda/update',
@@ -255,6 +255,27 @@ $('#conf_bandeira').change(function(){
         }
       });
     });
+
+    $('#cpf').focusout(function(){
+      var cpf = $('#cpf').val();
+      
+      if(!cpf.includes('_')) {
+          $.ajax({ 
+              url: 'index.php?r=paciente/getdatapaciente',
+              data: {cpf: cpf},
+              type: 'POST',
+              success: function(response){
+                  var resposta = $.parseJSON(response);
+                  
+                  $('#nome').val(resposta[0]['nome']);  
+                  // $('#nome').attr('readonly', 'true');
+              },
+              error: function(request, status, error){
+                console.log(request.responseText);
+              }
+          });
+      }
+  });
 
       
     $(function () {
@@ -382,7 +403,7 @@ $('#conf_bandeira').change(function(){
           if(event.end != null){
             var hr_final = event.end._i[0]+'-'+(event.end._i[1] + 1)+'-'+event.end._i[2]+' '+event.end._i[3]+':'+event.end._i[4]; 
           }
-          console.log(hr_inicio);
+          
           $.ajax({ 
             url: 'index.php?r=agenda/updateevent',
             data: {id: event.id, hr_inicio: hr_inicio, hr_final: hr_final},
@@ -645,13 +666,13 @@ Modal::end();
             <div class="col-md-6">
 
               <div class="autocomplete col-md-3" style="width:300px;padding: 0" id="autocomplete_div_0">
-                <label>Nome</label>
-                <input class="np_autocomplete form-control" id="nome" type="text" name="Agenda[nome]" placeholder="Insira o Nome" required>
+                <label>CPF</label>
+                <input class="np_autocomplete form-control" id="cpf" type="number" name="Agenda[cpf]" placeholder="Insira o CPF" required>
               </div>
 
               <div class="autocomplete col-md-3" style="width:300px;padding: 0; margin-top: 15px;" id="autocomplete_div_0">
-                <label>CPF</label>
-                <input class="np_autocomplete form-control" id="cpf" type="number" name="Agenda[cpf]" placeholder="Insira o CPF" required>
+                <label>Nome</label>
+                <input class="np_autocomplete form-control" id="nome" type="text" name="Agenda[nome]" placeholder="Insira o Nome" required>
               </div>
 
               <div class="autocomplete col-md-3" style="width:300px;padding: 0; margin-top: 15px;">
@@ -945,16 +966,16 @@ Modal::end();
     var desconto = $('#desconto_valor').val();
     var valor_final = $('#valor_final').val();
 
-    if(desconto == '') {
+    if (desconto == '') {
       desconto = 0;
     }
 
-    console.log(forma);
-    console.log(bandeira);
-    console.log(transacao);
-    console.log(parcelamento);
-    console.log(desconto);
-    console.log(valor_final);
+    // console.log(forma);
+    // console.log(bandeira);
+    // console.log(transacao);
+    // console.log(parcelamento);
+    // console.log(desconto);
+    // console.log(valor_final);
 
     if (conf_dente != '' && conf_tratamento != '') {
       $(document).ready(function() {
@@ -998,7 +1019,7 @@ Modal::end();
         $('#conf_nome').val(resposta['nome']);
         $('#conf_cpf').val(resposta['cpf']);
         $('#conf_horario').val(resposta['horario']);
-        $('#conf_valor').val(resposta['valor_inicial']);
+        $('#conf_valor').val(resposta['valor_final']);
         $('#conf_valor').attr("min", parseInt(resposta['valor_inicial']));
         $('#conf_valor').attr("max", parseInt(resposta['valor_final']));
         $('#conf_tratamento').val(resposta['nome_atendimento']);

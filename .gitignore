@@ -25,3 +25,4 @@ Thumbs.db
 
 tests/_output/*
 tests/_support/_generated
+vendor/kartik-v/yii2-grid
