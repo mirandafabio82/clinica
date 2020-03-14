@@ -77,8 +77,8 @@ class DocumentoController extends Controller
         $model->observacao = Yii::$app->request->post()['Documento']['observacao'];
         $model->data = Yii::$app->request->post()['Documento']['data'];
 
-        if($model->id_tipo_documento == '1003') {
-            $tipo_documento =Yii::$app->request->post()['Documento']['outro_tipo'];
+        if ($model->id_tipo_documento == '1003') {
+            $tipo_documento = Yii::$app->request->post()['Documento']['outro_tipo'];
             Yii::$app->db->createCommand('INSERT INTO tipo_documento (nome) VALUES ("' . $tipo_documento  . '");')->execute();
         }
 
@@ -99,6 +99,7 @@ class DocumentoController extends Controller
 
         $fileName = str_replace("-", "_", $fileName);
         $fileName = str_replace(" ", "_", $fileName);
+        $fileName = $this->stripAccents($fileName);
 
         $fileTarget = $target . $fileName;
         $tempFileName = $_FILES["Documento"]["tmp_name"]['path'];
@@ -121,7 +122,7 @@ class DocumentoController extends Controller
 
         $tipo_docs = Yii::$app->db->createCommand('SELECT id_tipo_documento, nome FROM tipo_documento  UNION SELECT 1003,"Outro"')->queryAll();
         $listTipoDoc = ArrayHelper::map($tipo_docs, 'id_tipo_documento', 'nome');
-        
+
         return $this->render('create', [
             'model' => $model,
             'searchModel' => $searchModel,
@@ -195,7 +196,7 @@ class DocumentoController extends Controller
 
         $tipo_docs = Yii::$app->db->createCommand('SELECT id_tipo_documento, nome FROM tipo_documento  UNION SELECT 1003,"Outro"')->queryAll();
         $listTipoDoc = ArrayHelper::map($tipo_docs, 'id_tipo_documento', 'nome');
-        
+
         return $this->render('create', [
             'model' => $model,
             'searchModel' => $searchModel,
@@ -218,5 +219,17 @@ class DocumentoController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    protected function stripAccents($string)
+    {
+
+        $string = strtr(
+            utf8_decode($string),
+            utf8_decode('ŠŒŽšœžŸ¥µÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýÿ'),
+            'SOZsozYYuAAAAAAACEEEEIIIIDNOOOOOOUUUUYsaaaaaaaceeeeiiiionoooooouuuuyy'
+        );
+
+        return $string;
     }
 }
