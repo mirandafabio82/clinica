@@ -90,6 +90,12 @@ $usuario = Yii::$app->db->createCommand('SELECT * FROM user WHERE id=' . Yii::$a
   <style>
     @import "https://fonts.googleapis.com/css?family=Righteous:300,400,500,600,700";
 
+    @media screen and (min-width: 760px) {
+      #button_menu {
+        display: none;
+      }
+    }
+
 
     .sidebar-form,
     .sidebar-menu>li.header {
@@ -242,7 +248,7 @@ $usuario = Yii::$app->db->createCommand('SELECT * FROM user WHERE id=' . Yii::$a
       <!-- Header Navbar: style can be found in header.less -->
       <nav class="navbar">
         <!-- Sidebar toggle button-->
-        <a href="#" style="background-color: #5fb2bd; color: gray; border-radius: 10%; margin-top: 2%; margin-left: 2%" class="sidebar-toggle" data-toggle="push-menu" role="button">
+        <a href="#" id="button_menu" style="background-color: #5fb2bd; color: gray; border-radius: 10%; margin-top: 2%; margin-left: 2%" class="sidebar-toggle" data-toggle="push-menu" role="button">
           <span class="sr-only">Toggle navigation</span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
@@ -332,7 +338,7 @@ $usuario = Yii::$app->db->createCommand('SELECT * FROM user WHERE id=' . Yii::$a
 
           <li><a href="<?= Url::to(['documento/create']) ?>"><i class="fa fa-file"></i> <span>Documentos</span></a></li>
 
-          <!-- <li><a href="<?= Url::to(['impressao/geraratestadocomparecimento']) ?>" target="_blank"><i class="fa fa-print"></i> <span>Impressão</span></a></li> -->
+          <li><a href="<?= Url::to(['impressao/index']) ?>"><i class="fa fa-print"></i> <span>Impressão</span></a></li>
 
           <li class="treeview">
             <a href="#">
@@ -348,12 +354,13 @@ $usuario = Yii::$app->db->createCommand('SELECT * FROM user WHERE id=' . Yii::$a
             </ul>
           </li>
 
+          <li><a href="../views/impressao/index.php" target="_blank"><i class="fa fa-file-pdf-o"></i> <span>Relatórios</span></a></li>
           <!-- <li><a href="<?= Url::to(['executante/create']) ?>"><i class="fa fa-user"></i> <span>Executantes</span></a></li> --
           
             <li><a href="<?= Url::to(['tipoexecutante/create']) ?>"><i class="fa fa-vcard"></i> <span>Especialidades</span></a></li
 
           
-            <li><a href="<?= Url::to(['relatorio/index']) ?>"><i class="fa fa-file-pdf-o"></i> <span>Relatórios</span></a></li>
+            
 
             
  <li><a href="<? //= Url::to(['config/create']) 

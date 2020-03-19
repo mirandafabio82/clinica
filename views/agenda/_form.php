@@ -64,7 +64,7 @@ foreach ($arrayEventos as $key => $evt) {
                         id             : " . $evt['id_agendamento'] . ",
                         title          : '" . $evt['nome'] . "',
                         start          : '" . $evt['horario'] . "',
-                        end            : '" . $evt['horario'] . "',
+                        end            : '" . $evt['horario_final'] . "',
                         backgroundColor: '" . $cor . "', 
                         borderColor    : '" . $cor . "'
                       },";
@@ -74,6 +74,20 @@ foreach ($arrayEventos as $key => $evt) {
 $this->registerJs("
 
     var evento_id = '';
+
+    $(document).ready(function() { 
+      var width = window.innerWidth;
+  
+      var modal = document.getElementsByClassName('modal-dialog');
+      
+      for(var i = 1; i < modal.length; i++) {
+        if(width <= 1200) {
+          modal[i].style.width = '80%';
+        } else {
+          modal[i].style.width = '50%';
+        }
+      }
+      });
 
     $('#conf_valor').change(function(){
       var valor_min =  $('#conf_valor').attr('min');
@@ -419,8 +433,8 @@ $('#conf_bandeira').change(function(){
       },
 
       eventClick: function(calEvent, jsEvent, view) {
-
         evento_id = calEvent.id;
+
         $.ajax({ 
           url: 'index.php?r=agenda/getevent',
           data: {id: calEvent.id},
@@ -442,6 +456,13 @@ $('#conf_bandeira').change(function(){
         }
       });
       },
+      dayClick: function(date, allDay, jsEvent, view) {
+        console.log(date._i);
+        var hr_inicio = date._i[0] + '-' + ('00' + (date._i[1] + 1)).slice(-2) + '-' + ('00' + date._i[2]).slice(-2) + 'T' + ('00' + date._i[3]).slice(-2) + ':' + ('00' + date._i[4]).slice(-2) + ':00'; 
+        $('#cadastrar #start').val(hr_inicio);
+        $('#cadastrar').modal('show');
+        console.log(hr_inicio);
+    },
       selectable: true,
       selectHelper: true,
       select: function(start, end){       
@@ -546,7 +567,7 @@ Modal::end();
 </style>
 <!-- mask so funciona com isso -->
 <?php $this->head() ?>
-<div class="box box-primary">
+<div class="box box-primary" onload="loadScreen()">
   <div class="box-header with-border">
     <div style="background-color: #337ab7;border-radius: 10px;color:white;padding: 10px"><i class="fa fa-calendar"></i> Agenda </div>
 
@@ -723,7 +744,7 @@ Modal::end();
 
 
 <div id="atualizar" class="modal fade" role="dialog" style="z-index: 999999999">
-  <div class="modal-dialog" style="width:50%">
+  <div class="modal-dialog">
 
     <!-- Modal content-->
     <div class="modal-content">
@@ -794,7 +815,7 @@ Modal::end();
 </div>
 
 <div id="tratamento_realizado" class="modal fade" role="dialog" style="z-index: 999999999">
-  <div class="modal-dialog" style="width:50%">
+  <div class="modal-dialog">
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
@@ -860,7 +881,7 @@ Modal::end();
 
 
 <div id="forma_pagamento_modal" class="modal fade" role="dialog" style="z-index: 999999999">
-  <div class="modal-dialog" style="width:50%">
+  <div class="modal-dialog">
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">

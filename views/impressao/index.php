@@ -35,7 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="row" style="align-items: center">
                 <div class="col-md-4">
                     <?= Html::dropDownList('Impressao[type]', 'inputType', $listDocumentos, ['class' => 'form-control', 'id' => 'inputType']) ?>
-                    <?= Html::a('<span class="btn-label"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Visualizar Documento</span>', ['geraratestadocomparecimento'], ['class' => 'btn btn-barra', 'target' => '_blank', 'style' => ' margin-right: 1em']) ?>
+                    <?= Html::a('<span class="btn-label"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Visualizar Documento</span>', ['teste'], ['class' => 'btn btn-barra', 'target' => '_blank', 'style' => ' margin-right: 1em']) ?>
                 </div>
             </div>
             <?php ActiveForm::end(); ?>

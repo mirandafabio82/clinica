@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use DateTime;
 use Yii;
 use app\models\Agendamento;
 use app\models\search\AgendaSearch;
@@ -113,6 +114,10 @@ class AgendaController extends Controller
 
             $model->horario = str_replace('T', ' ', $_POST['Agenda']['horario']);
 
+            $data = new DateTime($model->horario);
+            $data->modify('+1 hour');
+            $model->horario_final = $data->format('Y-m-d H:i:s');
+
             if (!$model->save()) {
                 print_r($model->getErrors());
                 die();
@@ -182,7 +187,11 @@ class AgendaController extends Controller
         $up_status = Yii::$app->request->post()['status'];
         $up_descricao = Yii::$app->request->post()['descricao'];
 
-        Yii::$app->db->createCommand('UPDATE agendamento SET nome="' . $up_nome . '",cpf="' . $up_cpf . '",horario="' . $up_horario . '",tipo_atendimento="' . $up_tipo_atendimento . '",plano_particular="' . $up_plano_particular . '",id_status=' . $up_status . ',descricao="' . $up_descricao . '" WHERE id_agendamento=' . $id)->execute();
+        $data = new DateTime($up_horario);
+        $data->modify('+1 hour');
+        $horario_final = $data->format('Y-m-d H:i:s');
+
+        Yii::$app->db->createCommand('UPDATE agendamento SET nome="' . $up_nome . '",cpf="' . $up_cpf . '",horario="' . $up_horario . '",horario_final="' . $horario_final . '",tipo_atendimento="' . $up_tipo_atendimento . '",plano_particular="' . $up_plano_particular . '",id_status=' . $up_status . ',descricao="' . $up_descricao . '" WHERE id_agendamento=' . $id)->execute();
 
         return $this->redirect(['create']);
     }

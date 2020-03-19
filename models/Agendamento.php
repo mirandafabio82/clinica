@@ -11,6 +11,7 @@ use Yii;
  * @property string $nome
  * @property string $cpf
  * @property string $horario
+ * @property string $horario_final
  * @property string $tipo_atendimento
  * @property string $plano_particular
  * @property int $id_status
@@ -37,7 +38,7 @@ class Agendamento extends \yii\db\ActiveRecord
     {
         return [
             [['nome', 'horario', 'id_responsavel'], 'required'],
-            [['horario'], 'safe'],
+            [['horario', 'horario_final'], 'safe'],
             [['id_status'], 'integer'],
             [['nome', 'id_responsavel'], 'string', 'max' => 55],
             [['cpf'], 'string', 'max' => 15],
