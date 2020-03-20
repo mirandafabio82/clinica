@@ -3,8 +3,9 @@
     #header {
         position: absolute;
         margin-top: 0px;
-        right: 15px;
-        top: 20px;
+        right: 0px;
+        top: 0px;
+        
     }
 
     #cabecalho {
@@ -43,7 +44,7 @@
 </style>
 
 <div id="header" class="center img">
-    <img src="resources/dist/img/cabecalho_anamnese.png">
+    <img width="730px" src="resources/dist/img/cabecalho_anamnese.png">
 </div>
 
 <div id="cabecalho">

@@ -71,9 +71,21 @@ Modal::end();
 <?php
 $this->registerJs("
 
-$(document).ready(function(){
+$(document).ready(function() { 
+    var width = window.innerWidth;
 
-});
+    var modal = document.getElementsByClassName('modal-dialog');
+    
+    for(var i = 1; i < modal.length; i++) {
+      if(width > 400 && width <= 1200) {
+        modal[i].style.width = '85%';
+      } else if(width <= 400) {
+        modal[i].style.width = '100%';
+      } else {
+        modal[i].style.width = '55%';
+      }
+    }
+    });
 
 var id;
 
@@ -150,7 +162,14 @@ $('#saveTratamento').click(function (e) {
                             return Yii::$app->db->createCommand('SELECT nome FROM agendamento WHERE id_agendamento=' . $data->id_agendamento)->queryScalar();
                         },
                     ],
-                    'dente',
+                    [
+                        'header' => '<span style="color:#337ab7">CPF</span>',
+                        'attribute' => 'cpf',
+                        'format' => 'raw',
+                        'value' => function ($data) {
+                            return Yii::$app->db->createCommand('SELECT cpf FROM agendamento WHERE id_agendamento=' . $data->id_agendamento)->queryScalar();
+                        },
+                    ],
                     'tratamento_realizado',
                     [
                         'header' => '<span style="color:#337ab7; text-align: center">Visualizar</span>',
@@ -158,7 +177,7 @@ $('#saveTratamento').click(function (e) {
                         'contentOptions' => ['style' => 'width:10em;  min-width:4em; text-align: center'],
                         'value' => function ($data) {
                             return Html::tag(
-                                'i class="fa fa-fw fa-eye" style="text-align: center; font-size: 15px;"'
+                                'i class="fa fa-fw fa-eye" id= style="text-align: center; font-size: 15px;"'
                             );
                         }
                     ],
@@ -203,7 +222,7 @@ $('#saveTratamento').click(function (e) {
 
                                 <div class="form-group col-md-3" style="width:300px;padding: 0; margin-top: 15px;">
                                     <label>Dente</label> <br>
-                                    <input type="number" id="conf_dente" name="TratamentoRealizado[dente]" class="form-control" required>
+                                    <input type="text" id="conf_dente" name="TratamentoRealizado[dente]" class="form-control" required>
                                 </div>
                             </div>
                             <div class="col-md-12" style="margin-top: 15px">

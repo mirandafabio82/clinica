@@ -71,6 +71,23 @@ Modal::end();
 <?php
 $this->registerJs("
 
+
+$(document).ready(function() { 
+    var width = window.innerWidth;
+
+    var modal = document.getElementsByClassName('modal-dialog');
+    
+    for(var i = 1; i < modal.length; i++) {
+      if(width > 400 && width <= 1200) {
+        modal[i].style.width = '85%';
+      } else if(width <= 400) {
+        modal[i].style.width = '100%';
+      } else {
+        modal[i].style.width = '55%';
+      }
+    }
+    });
+
 var id_tratamento;
 
     $('#createNewPlanejamento').click(function(e) {

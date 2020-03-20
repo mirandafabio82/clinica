@@ -73,6 +73,7 @@ class DocumentoController extends Controller
         $fileName = $_FILES["Documento"]["name"]['path'];
 
         $cpf = Yii::$app->request->post()['Documento']['cpf'];
+        $nome = Yii::$app->request->post()['Documento']['nome'];
         $model->id_tipo_documento = Yii::$app->request->post()['Documento']['id_tipo_documento'];
         $model->observacao = Yii::$app->request->post()['Documento']['observacao'];
         $model->data = Yii::$app->request->post()['Documento']['data'];
@@ -88,7 +89,7 @@ class DocumentoController extends Controller
         $cpf = str_replace(".", "", $cpf);
         $cpf = str_replace("-", "", $cpf);
 
-        $model->id_paciente = Yii::$app->db->createCommand('SELECT id_paciente FROM paciente WHERE cpf= "' . $cpf . '"')->queryOne()['id_paciente'];
+        $model->id_paciente = Yii::$app->db->createCommand('SELECT id_paciente FROM paciente WHERE cpf= "' . $cpf . '" AND nome= "' . $nome . '"')->queryOne()['id_paciente'];
 
         $target = '../../Documentos/' . $model->id_paciente . '/';
 

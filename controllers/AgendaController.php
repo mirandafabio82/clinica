@@ -217,7 +217,7 @@ class AgendaController extends Controller
         $tratamento = Yii::$app->request->post()['tratamento'];
         $dente = Yii::$app->request->post()['dente'];
 
-        Yii::$app->db->createCommand('INSERT INTO tratamento_realizado(id_agendamento, dente, tratamento_realizado) VALUES (' . $id . ',' . $dente . ',"' . $tratamento . '")')->execute();
+        Yii::$app->db->createCommand('INSERT INTO tratamento_realizado(id_agendamento, dente, tratamento_realizado) VALUES (' . $id . ',"' . $dente . '","' . $tratamento . '")')->execute();
 
         Yii::$app->db->createCommand('UPDATE agendamento SET id_status = 4 WHERE id_agendamento= ' . $id)->execute();
 

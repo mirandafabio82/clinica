@@ -75,7 +75,9 @@ $this->registerJs("
 
     $('#paciente-cpf').focusout(function(){
         var cpf = $('#paciente-cpf').val();
+        console.log(cpf);
         if(!cpf.includes('_')) {
+            if(cpf != '123.456.789-00'){
             $.ajax({ 
                 url: 'index.php?r=paciente/getdata',
                 data: {cpf: cpf},
@@ -89,6 +91,9 @@ $this->registerJs("
                   console.log(request.responseText);
                 }
             });
+        } else {
+            $('#nome').val('');  
+          }
         }
     });
 

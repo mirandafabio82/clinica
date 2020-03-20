@@ -81,10 +81,12 @@ $this->registerJs("
       var modal = document.getElementsByClassName('modal-dialog');
       
       for(var i = 1; i < modal.length; i++) {
-        if(width <= 1200) {
-          modal[i].style.width = '80%';
+        if(width > 400 && width <= 1200) {
+          modal[i].style.width = '85%';
+        } else if(width <= 400) {
+          modal[i].style.width = '100%';
         } else {
-          modal[i].style.width = '50%';
+          modal[i].style.width = '55%';
         }
       }
       });
@@ -272,8 +274,9 @@ $('#conf_bandeira').change(function(){
 
     $('#cpf').focusout(function(){
       var cpf = $('#cpf').val();
-      
+
       if(!cpf.includes('_')) {
+        if(cpf != '12345678900'){
           $.ajax({ 
               url: 'index.php?r=paciente/getdatapaciente',
               data: {cpf: cpf},
@@ -288,6 +291,9 @@ $('#conf_bandeira').change(function(){
                 console.log(request.responseText);
               }
           });
+        } else {
+          $('#nome').val('');  
+        }
       }
   });
 
@@ -457,11 +463,9 @@ $('#conf_bandeira').change(function(){
       });
       },
       dayClick: function(date, allDay, jsEvent, view) {
-        console.log(date._i);
         var hr_inicio = date._i[0] + '-' + ('00' + (date._i[1] + 1)).slice(-2) + '-' + ('00' + date._i[2]).slice(-2) + 'T' + ('00' + date._i[3]).slice(-2) + ':' + ('00' + date._i[4]).slice(-2) + ':00'; 
         $('#cadastrar #start').val(hr_inicio);
         $('#cadastrar').modal('show');
-        console.log(hr_inicio);
     },
       selectable: true,
       selectHelper: true,

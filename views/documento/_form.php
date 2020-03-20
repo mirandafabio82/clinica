@@ -69,6 +69,7 @@ $this->registerJs("
       $('#up_cpf').focusout(function(){
         var cpf = $('#up_cpf').val();
         if(!cpf.includes('_')) {
+            if((cpf != '12345678900') && (cpf != '123.456.789-00')){
             $.ajax({ 
                 url: 'index.php?r=paciente/getdatapaciente',
                 data: {cpf: cpf},
@@ -81,11 +82,21 @@ $this->registerJs("
                     ao_cpf = ao_cpf.replace( /(\d{3})(\d{1,2})$/ , '$1-$2'); //Coloca um hífen entre o terceiro e o quarto dígitos
                     $('#up_cpf').val(ao_cpf);
                     $('#up_nome').val(resposta[0]['nome']);  
+                    $('#up_nome').attr('readonly', true);
                 },
                 error: function(request, status, error){
                   console.log(request.responseText);
                 }
             });
+        } else {
+            var ao_cpf = cpf; 
+            ao_cpf = ao_cpf.replace( /(\d{3})(\d)/ , '$1.$2'); //Coloca um ponto entre o terceiro e o quarto dígitos
+            ao_cpf = ao_cpf.replace( /(\d{3})(\d)/ , '$1.$2'); //Coloca um ponto entre o terceiro e o quarto dígitos
+            ao_cpf = ao_cpf.replace( /(\d{3})(\d{1,2})$/ , '$1-$2'); //Coloca um hífen entre o terceiro e o quarto dígitos
+            $('#up_cpf').val(ao_cpf);
+            $('#up_nome').removeAttr('readonly');
+            $('#up_nome').val('');
+          }
         }
     });
 ");
@@ -179,10 +190,10 @@ $this->registerJs("
                 <div class="col-md-12">
 
                     <div class="col-md-4">
-                    <div class="form-group col-md-3" style="width:300px;padding: 0" id="autocomplete_div_0">
-                        <?= $form->field($model, 'id_tipo_documento')->dropDownList($listTipoDoc, ['prompt' => 'Selecione um tipo']) ?>
+                        <div class="form-group col-md-3" style="width:300px;padding: 0" id="autocomplete_div_0">
+                            <?= $form->field($model, 'id_tipo_documento')->dropDownList($listTipoDoc, ['prompt' => 'Selecione um tipo']) ?>
+                        </div>
                     </div>
-            </div>
                     <div class="col-md-4">
                         <div class="form-group col-md-3" style="width:300px;padding: 0" id="autocomplete_div_0">
                             <label>Outro</label>
@@ -191,10 +202,10 @@ $this->registerJs("
                     </div>
 
                     <div class="col-md-4">
-                    <div class="form-group col-md-3" style="width:300px;padding: 0" id="autocomplete_div_0">
-                        <?= $form->field($model, 'data')->widget(\yii\widgets\MaskedInput::className(), [
-                            'mask' => '99/99/9999',
-                        ]) ?>
+                        <div class="form-group col-md-3" style="width:300px;padding: 0" id="autocomplete_div_0">
+                            <?= $form->field($model, 'data')->widget(\yii\widgets\MaskedInput::className(), [
+                                'mask' => '99/99/9999',
+                            ]) ?>
                         </div>
                     </div>
 
